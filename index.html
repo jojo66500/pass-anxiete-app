@@ -580,6 +580,62 @@
             color: white;
         }
 
+        .control-btn.fullscreen {
+            background: var(--primary);
+            color: white;
+        }
+
+        .control-btn.fullscreen:hover {
+            background: #5a8bc4;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Styles plein écran EMDR */
+        .emdr-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: #000 !important;
+        }
+
+        .emdr-fullscreen #emdr-canvas-portrait {
+            height: 80vh !important;
+            width: 95vw !important;
+            margin: 0 auto !important;
+        }
+
+        .emdr-fullscreen .session-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+        }
+
+        .emdr-fullscreen .session-info-portrait {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            background: rgba(0,0,0,0.9);
+        }
+
+        .emdr-fullscreen .floating-instruction {
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+
         /* Suivi */
         .stats-header {
             background: white;
@@ -1674,10 +1730,14 @@
                 </div>
 
                 <div class="floating-instruction" id="floating-instruction-portrait">
-                    Suivez le point avec vos yeux, sans bouger la tête
+                    Suivez le point avec vos yeux, sans bouger la tête<br>
+                    <small style="opacity: 0.8;">💡 Appuyez sur F pour le plein écran</small>
                 </div>
 
                 <div class="session-controls">
+                    <button class="control-btn fullscreen" onclick="toggleFullscreen()" id="fullscreen-btn">
+                        📺 Plein Écran
+                    </button>
                     <button class="control-btn stop" onclick="stopEMDRSession()">■ Arrêter</button>
                 </div>
             </div>
@@ -2393,6 +2453,152 @@
         }
 
         // ============ FIN SYSTÈME WAKE LOCK ============
+
+        // ============ SYSTÈME PLEIN ÉCRAN EMDR ============
+
+        let isFullscreen = false;
+
+        // Basculer en mode plein écran
+        async function toggleFullscreen() {
+            try {
+                if (!isFullscreen) {
+                    // Entrer en plein écran
+                    const emdrSession = document.getElementById('emdr-session');
+                    
+                    if (emdrSession.requestFullscreen) {
+                        await emdrSession.requestFullscreen();
+                    } else if (emdrSession.webkitRequestFullscreen) {
+                        await emdrSession.webkitRequestFullscreen();
+                    } else if (emdrSession.msRequestFullscreen) {
+                        await emdrSession.msRequestFullscreen();
+                    }
+                    
+                    // Appliquer les styles plein écran
+                    emdrSession.classList.add('emdr-fullscreen');
+                    isFullscreen = true;
+                    
+                    // Mettre à jour les boutons
+                    updateFullscreenButtons('📱 Quitter Plein Écran');
+                    
+                    // Notification
+                    showFullscreenNotification('📺 Mode plein écran activé - Appuyez sur Échap pour quitter');
+                    
+                } else {
+                    // Quitter le plein écran
+                    await exitFullscreen();
+                }
+            } catch (error) {
+                console.log('Plein écran non supporté:', error);
+                // Fallback: plein écran simulé
+                toggleSimulatedFullscreen();
+            }
+        }
+
+        // Quitter le plein écran
+        async function exitFullscreen() {
+            try {
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    await document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    await document.msExitFullscreen();
+                }
+            } catch (error) {
+                console.log('Erreur sortie plein écran:', error);
+            }
+            
+            // Retirer les styles plein écran
+            const emdrSession = document.getElementById('emdr-session');
+            emdrSession.classList.remove('emdr-fullscreen');
+            isFullscreen = false;
+            
+            // Mettre à jour les boutons
+            updateFullscreenButtons('📺 Plein Écran');
+        }
+
+        // Plein écran simulé (fallback)
+        function toggleSimulatedFullscreen() {
+            const emdrSession = document.getElementById('emdr-session');
+            
+            if (!isFullscreen) {
+                emdrSession.classList.add('emdr-fullscreen');
+                isFullscreen = true;
+                updateFullscreenButtons('📱 Quitter Plein Écran');
+                showFullscreenNotification('📺 Mode plein écran simulé activé');
+            } else {
+                emdrSession.classList.remove('emdr-fullscreen');
+                isFullscreen = false;
+                updateFullscreenButtons('📺 Plein Écran');
+            }
+        }
+
+        // Mettre à jour le texte des boutons plein écran
+        function updateFullscreenButtons(text) {
+            const btn1 = document.getElementById('fullscreen-btn');
+            const btn2 = document.getElementById('fullscreen-btn-landscape');
+            
+            if (btn1) btn1.textContent = text;
+            if (btn2) btn2.textContent = text;
+        }
+
+        // Notification plein écran
+        function showFullscreenNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.9);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 15px;
+                z-index: 10001;
+                font-size: 1.1rem;
+                text-align: center;
+                max-width: 80%;
+                animation: fadeIn 0.5s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Gérer les événements de changement de plein écran
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            const isDocumentFullscreen = !!(document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.msFullscreenElement);
+            
+            if (!isDocumentFullscreen && isFullscreen) {
+                // L'utilisateur a quitté le plein écran (ex: touche Échap)
+                exitFullscreen();
+            }
+        }
+
+        // Raccourci clavier pour plein écran (F11 ou F)
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('emdr-session').classList.contains('active')) {
+                if (e.key === 'F11' || (e.key === 'f' || e.key === 'F')) {
+                    e.preventDefault();
+                    toggleFullscreen();
+                }
+                
+                // Échap pour quitter
+                if (e.key === 'Escape' && isFullscreen) {
+                    exitFullscreen();
+                }
+            }
+        });
+
+        // ============ FIN SYSTÈME PLEIN ÉCRAN ============
 
         // ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============
 
