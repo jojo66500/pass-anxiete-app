@@ -957,11 +957,64 @@
             cursor: pointer;
         }
 
-        /* Responsive TCC */
-        @media (max-width: 768px) {
-            .emotions-grid { grid-template-columns: 1fr; }
-            .techniques-grid { grid-template-columns: 1fr; }
-            .journal-actions { flex-direction: column; }
+        /* EMDR Mobile Paysage - Corrections */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-canvas {
+                width: 95vw !important;
+                height: 60vh !important;
+                max-height: 300px;
+                margin: 10px auto !important;
+            }
+            
+            #emdr-canvas-portrait {
+                width: 95vw !important;
+                height: 60vh !important;
+                max-height: 300px;
+            }
+            
+            .session-info-portrait {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+                margin-bottom: 5px;
+            }
+            
+            .session-controls {
+                margin-top: 10px;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .floating-instruction {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+                bottom: 80px;
+            }
+            
+            /* Plein écran en mode horizontal */
+            .emdr-fullscreen #emdr-canvas-portrait {
+                width: 98vw !important;
+                height: 75vh !important;
+                max-height: none;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 10px;
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+            
+            .emdr-fullscreen .session-controls {
+                bottom: 10px;
+            }
+            
+            .emdr-fullscreen .floating-instruction {
+                bottom: 60px;
+                font-size: 0.8rem;
+            }
         }
 
         /* Historique des exercices de pensées */
@@ -2598,6 +2651,52 @@
             }
         });
 
+        // Adapter les dimensions du canvas selon l'orientation
+        function resizeEMDRCanvas() {
+            const canvas = document.getElementById('emdr-canvas-portrait');
+            if (!canvas) return;
+            
+            const container = canvas.parentElement;
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile && isLandscape) {
+                // Mobile en mode paysage - priorité à la largeur
+                canvas.width = Math.min(window.innerWidth * 0.95, 800);
+                canvas.height = Math.min(window.innerHeight * 0.6, 300);
+                console.log('📱 Mobile Paysage - Canvas:', canvas.width, 'x', canvas.height);
+            } else if (isMobile) {
+                // Mobile en mode portrait
+                canvas.width = Math.min(window.innerWidth * 0.9, 400);
+                canvas.height = Math.min(window.innerHeight * 0.4, 300);
+                console.log('📱 Mobile Portrait - Canvas:', canvas.width, 'x', canvas.height);
+            } else {
+                // Desktop
+                canvas.width = Math.min(container.clientWidth * 0.9, 600);
+                canvas.height = Math.min(container.clientHeight * 0.6, 400);
+                console.log('🖥️ Desktop - Canvas:', canvas.width, 'x', canvas.height);
+            }
+            
+            // Réinitialiser le contexte du canvas après redimensionnement
+            if (emdrCtx) {
+                emdrCtx.fillStyle = '#000';
+                emdrCtx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // Écouter les changements d'orientation
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                resizeEMDRCanvas();
+                console.log('🔄 Orientation changée - Canvas redimensionné');
+            }, 100);
+        });
+
+        // Écouter le redimensionnement de fenêtre
+        window.addEventListener('resize', () => {
+            resizeEMDRCanvas();
+        });
+
         // ============ FIN SYSTÈME PLEIN ÉCRAN ============
 
         // ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============
@@ -3096,6 +3195,11 @@
             sudBefore = parseInt(document.getElementById('sud-before').value);
             const mode = document.getElementById('emdr-mode').value;
             
+            // Redimensionner le canvas avant de commencer
+            setTimeout(() => {
+                resizeEMDRCanvas();
+            }, 100);
+            
             switch(mode) {
                 case 'professional':
                     totalSeries = 4;
@@ -3498,6 +3602,11 @@
             updateCurrentTime();
             setInterval(updateCurrentTime, 60000);
             updateRecommendations();
+            
+            // Redimensionner le canvas EMDR au chargement
+            setTimeout(() => {
+                resizeEMDRCanvas();
+            }, 500);
             
             // Nettoyage wake lock à la fermeture
             window.addEventListener('beforeunload', () => {
