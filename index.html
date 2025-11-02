@@ -656,12 +656,16 @@
             transform: translateX(-50%);
             background: rgba(0,0,0,0.8);
             color: white;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
             text-align: center;
             z-index: 10;
             pointer-events: none;
+            max-width: 280px;
+            line-height: 1.1;
+            height: auto;
+            min-height: auto;
         }
 
         /* Container EMDR avec positionnement relatif */
@@ -777,107 +781,54 @@
             left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 10001 !important;
-            background: rgba(0,0,0,0.75) !important;
+            background: rgba(0,0,0,0.6) !important;
             color: white !important;
-            padding: 8px 16px !important;
-            border-radius: 15px !important;
-            font-size: 0.9rem !important;
+            padding: 2px 6px !important;
+            border-radius: 6px !important;
+            font-size: 0.7rem !important;
             text-align: center !important;
-            backdrop-filter: blur(6px) !important;
+            backdrop-filter: blur(4px) !important;
             border: 1px solid rgba(255,255,255,0.1) !important;
+            max-width: 280px !important;
+            line-height: 1.1 !important;
+            height: auto !important;
+            min-height: auto !important;
         }
 
-        /* Mobile Portrait - Plein écran optimisé */
+        /* Mobile Portrait - Instructions ultra-compactes en hauteur */
         @media (max-width: 768px) and (orientation: portrait) {
-            .emdr-fullscreen .session-info-portrait {
-                top: 15px !important;
-                font-size: 0.9rem !important;
-                padding: 6px 16px !important;
-            }
-            
-            .emdr-fullscreen .session-controls {
-                bottom: 15px !important;
-                padding: 8px 16px !important;
-                gap: 12px !important;
-            }
-            
-            .emdr-fullscreen .control-btn {
-                padding: 8px 16px !important;
-                font-size: 0.9rem !important;
-            }
-            
             .emdr-fullscreen .floating-instruction {
                 bottom: 70px !important;
-                font-size: 0.8rem !important;
-                padding: 6px 12px !important;
+                font-size: 0.65rem !important;
+                padding: 1px 4px !important;
+                max-width: 240px !important;
+                border-radius: 4px !important;
+                line-height: 1.05 !important;
             }
         }
 
-        /* Mobile Landscape - Interface ultra-compacte */
+        /* Mobile Landscape - Instructions hyper-compactes */
         @media (max-width: 768px) and (orientation: landscape) {
-            .emdr-fullscreen .session-info-portrait {
-                top: 8px !important;
-                font-size: 0.8rem !important;
-                padding: 4px 12px !important;
-            }
-            
-            .emdr-fullscreen .session-controls {
-                bottom: 8px !important;
-                padding: 6px 12px !important;
-                gap: 8px !important;
-            }
-            
-            .emdr-fullscreen .control-btn {
-                padding: 6px 12px !important;
-                font-size: 0.8rem !important;
-            }
-            
             .emdr-fullscreen .floating-instruction {
                 bottom: 50px !important;
-                font-size: 0.7rem !important;
-                padding: 4px 8px !important;
+                font-size: 0.6rem !important;
+                padding: 1px 3px !important;
+                max-width: 200px !important;
+                border-radius: 3px !important;
+                background: rgba(0,0,0,0.5) !important;
+                line-height: 1.0 !important;
             }
         }
 
-        /* Desktop/Tablette - Interface élégante */
+        /* Desktop - Instructions discrètes mais lisibles */
         @media (min-width: 769px) {
-            .emdr-fullscreen .session-info-portrait {
-                top: 20px !important;
-                font-size: 1.1rem !important;
-                padding: 10px 24px !important;
-            }
-            
-            .emdr-fullscreen .session-controls {
-                bottom: 30px !important;
-                padding: 14px 28px !important;
-                gap: 20px !important;
-            }
-            
-            .emdr-fullscreen .control-btn {
-                padding: 12px 24px !important;
-                font-size: 1.1rem !important;
-            }
-            
             .emdr-fullscreen .floating-instruction {
                 bottom: 100px !important;
-                font-size: 1rem !important;
-                padding: 10px 20px !important;
-            }
-        }
-
-        /* Tablette Landscape - Interface optimisée */
-        @media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
-            .emdr-fullscreen .session-info-portrait {
-                top: 15px !important;
-                font-size: 1rem !important;
-            }
-            
-            .emdr-fullscreen .session-controls {
-                bottom: 20px !important;
-            }
-            
-            .emdr-fullscreen .floating-instruction {
-                bottom: 80px !important;
+                font-size: 0.8rem !important;
+                padding: 3px 8px !important;
+                max-width: 320px !important;
+                border-radius: 8px !important;
+                line-height: 1.15 !important;
             }
         }
 
@@ -1253,8 +1204,36 @@
             cursor: pointer;
         }
 
-        /* Mobile optimisations EMDR */
+        /* Instruction EMDR - Fixe sous le canvas */
+        .emdr-instruction {
+            text-align: center;
+            color: #666;
+            font-size: 1rem;
+            margin: 15px 0;
+            padding: 0 20px;
+            font-style: italic;
+        }
+
+        /* Mobile - Instruction adaptée */
         @media (max-width: 768px) {
+            .emdr-instruction {
+                font-size: 0.9rem;
+                margin: 10px 0;
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-instruction {
+                font-size: 0.8rem;
+                margin: 8px 0;
+            }
+        }
+
+        /* Mode plein écran - Masquer l'instruction fixe */
+        .emdr-fullscreen .emdr-instruction {
+            display: none !important;
+        }
             .emdr-container {
                 min-height: 300px;
             }
@@ -2080,17 +2059,17 @@
                         <div class="session-timer" id="session-timer-portrait">2:00</div>
                     </div>
 
-                    <div class="floating-instruction" id="floating-instruction-portrait">
-                        Suivez le point avec vos yeux, sans bouger la tête<br>
-                        <small style="opacity: 0.8; display: none;" id="keyboard-hint">💡 Appuyez sur F pour le plein écran</small>
-                    </div>
-
                     <div class="session-controls">
                         <button class="control-btn fullscreen" onclick="toggleFullscreen()" id="fullscreen-btn">
                             📺 Plein Écran
                         </button>
                         <button class="control-btn stop" onclick="stopEMDRSession()">■ Arrêter</button>
                     </div>
+                </div>
+                
+                <div class="emdr-instruction">
+                    Suivez le point avec vos yeux, sans bouger la tête
+                    <span style="opacity: 0.7; display: none;" id="keyboard-hint"> • Touche F pour le plein écran</span>
                 </div>
             </div>
         </div>
