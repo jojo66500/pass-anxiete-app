@@ -352,6 +352,22 @@
             border-radius: 20px;
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Mobile - Hauteurs adaptées */
+        @media (max-width: 768px) {
+            #emdr-canvas, #emdr-canvas-portrait {
+                min-height: 250px;
+                border-radius: 15px;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            #emdr-canvas, #emdr-canvas-portrait {
+                min-height: 200px;
+                border-radius: 10px;
+            }
         }
         #emdr-canvas-landscape {
             flex: 1;
@@ -3388,72 +3404,75 @@
             const dot = document.getElementById('emdr-dot-portrait');
             const canvas = document.getElementById('emdr-canvas-portrait');
             
-            // Dimensions du point lui-même (50px par défaut)
-            const dotSize = 50;
-            const margin = dotSize / 2; // Marge = rayon du point pour qu'il ne sorte pas
-            
-            let canvasWidth = canvas.offsetWidth;
-            let canvasHeight = canvas.offsetHeight;
-            let maxPositionX = canvasWidth - margin;
-            let minPositionX = margin;
-            let position = { x: minPositionX, y: canvasHeight / 2 - (dotSize / 2) };
-            let direction = { x: 1, y: 0 };
-            
-            const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
-            const cycleDuration = speedConfig[speed];
-            
-            console.log(`🎯 EMDR Setup: Canvas ${canvasWidth}x${canvasHeight}, Point ${dotSize}px, Zone: ${minPositionX} → ${maxPositionX}`);
-            
-            function animate() {
-                // Recalculer les dimensions dynamiquement (important pour rotation/plein écran)
-                canvasWidth = canvas.offsetWidth;
-                canvasHeight = canvas.offsetHeight;
-                maxPositionX = canvasWidth - margin;
-                minPositionX = margin;
-                
-                // Distance totale à parcourir
-                const totalDistance = maxPositionX - minPositionX;
-                const increment = totalDistance / (cycleDuration / 50);
-                
-                // Mouvement avec vérification des limites
-                if (direction.x > 0) {
-                    // Vers la droite
-                    position.x += increment;
-                    if (position.x >= maxPositionX) {
-                        position.x = maxPositionX;
-                        direction.x = -1;
-                    }
-                } else {
-                    // Vers la gauche
-                    position.x -= increment;
-                    if (position.x <= minPositionX) {
-                        position.x = minPositionX;
-                        direction.x = 1;
-                    }
-                }
-                
-                // Centrage vertical parfait
-                position.y = (canvasHeight / 2) - (dotSize / 2);
-                
-                // Application de la position (en tenant compte que le point est positionné par son coin supérieur gauche)
-                dot.style.left = (position.x - dotSize / 2) + 'px';
-                dot.style.top = position.y + 'px';
-                
-                // Debug occasionnel
-                if (Math.random() < 0.001) { // 1 fois sur 1000
-                    console.log(`🎯 Point: ${Math.round(position.x)}px dans canvas ${canvasWidth}px (${Math.round(minPositionX)} → ${Math.round(maxPositionX)})`);
-                }
+            if (!dot || !canvas) {
+                console.error('❌ Éléments EMDR introuvables');
+                return;
             }
             
-            // Initialiser la position du point correctement avant de démarrer l'animation
-            position.x = minPositionX;
-            position.y = (canvasHeight / 2) - (dotSize / 2);
-            dot.style.left = (position.x - dotSize / 2) + 'px';
-            dot.style.top = position.y + 'px';
+            // Attendre que les dimensions soient stables
+            setTimeout(() => {
+                let canvasRect = canvas.getBoundingClientRect();
+                const dotSize = 50;
+                
+                // Position réelle du point (centre du point)
+                let currentX = dotSize / 2; // Commence au bord gauche
+                let direction = 1; // 1 = droite, -1 = gauche
+                
+                const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
+                const totalDuration = speedConfig[speed];
+                
+                console.log(`🎯 EMDR Setup: Canvas ${Math.round(canvasRect.width)}x${Math.round(canvasRect.height)}`);
+                
+                function animate() {
+                    // Recalculer les dimensions du canvas à chaque frame
+                    canvasRect = canvas.getBoundingClientRect();
+                    const canvasWidth = canvasRect.width;
+                    const canvasHeight = canvasRect.height;
+                    
+                    // Limites réelles (centre du point)
+                    const minX = dotSize / 2;
+                    const maxX = canvasWidth - (dotSize / 2);
+                    
+                    // Mouvement fluide
+                    const speed = (maxX - minX) / (totalDuration / 50); // pixels par frame
+                    currentX += speed * direction;
+                    
+                    // Rebond aux limites
+                    if (currentX >= maxX) {
+                        currentX = maxX;
+                        direction = -1;
+                    } else if (currentX <= minX) {
+                        currentX = minX;
+                        direction = 1;
+                    }
+                    
+                    // Position CSS (coin supérieur gauche du point)
+                    const cssX = currentX - (dotSize / 2);
+                    const cssY = (canvasHeight / 2) - (dotSize / 2);
+                    
+                    // Application
+                    dot.style.left = cssX + 'px';
+                    dot.style.top = cssY + 'px';
+                    
+                    // Debug rare
+                    if (Math.random() < 0.002) {
+                        console.log(`🔄 Point: centre à ${Math.round(currentX)}px (CSS: ${Math.round(cssX)}px), canvas: ${Math.round(canvasWidth)}px`);
+                    }
+                }
+                
+                // Position initiale
+                const initialY = (canvasRect.height / 2) - (dotSize / 2);
+                dot.style.left = '0px';
+                dot.style.top = initialY + 'px';
+                
+                console.log(`🚀 Démarrage EMDR: ${Math.round(canvasRect.width)}px de large, point de 0 à ${Math.round(canvasRect.width - dotSize)}px`);
+            }, 100);
             
-            console.log(`🚀 Animation EMDR démarrée: Canvas ${canvasWidth}x${canvasHeight}, Zone ${minPositionX}→${maxPositionX}`);
-            
-            emdrInterval = setInterval(animate, 50);
+                console.log(`🚀 Démarrage EMDR: ${Math.round(canvasRect.width)}px de large, point de 0 à ${Math.round(canvasRect.width - dotSize)}px`);
+                
+                // Démarrer l'animation
+                emdrInterval = setInterval(animate, 50);
+            }, 100);
             
             emdrTimerInterval = setInterval(() => {
                 emdrTimeRemaining--;
