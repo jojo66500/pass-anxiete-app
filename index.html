@@ -346,14 +346,12 @@
 
         #emdr-canvas, #emdr-canvas-portrait {
             background: #000;
-            height: 300px;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
             border-radius: 20px;
-            margin: 20px 0;
             position: relative;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         #emdr-canvas-landscape {
             flex: 1;
@@ -595,7 +593,68 @@
             align-items: center;
         }
 
-        /* Styles plein écran EMDR */
+        /* EMDR - Interface non-intrusive */
+        .emdr-canvas {
+            background: #000;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .session-info-portrait {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .session-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+            background: rgba(0,0,0,0.8);
+            padding: 8px 15px;
+            border-radius: 25px;
+        }
+
+        .floating-instruction {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Container EMDR avec positionnement relatif */
+        .emdr-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        /* Styles plein écran EMDR - Interface non-intrusive */
         .emdr-fullscreen {
             position: fixed !important;
             top: 0 !important;
@@ -607,72 +666,89 @@
             overflow: hidden !important;
         }
 
-        .emdr-fullscreen #emdr-canvas-portrait {
-            width: 100vw !important;
-            height: 85vh !important;
-            margin: 0 !important;
-            display: block !important;
+        .emdr-fullscreen .emdr-container {
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
         }
 
-        .emdr-fullscreen .session-controls {
-            position: fixed;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-            background: rgba(0,0,0,0.8);
-            padding: 8px 15px;
-            border-radius: 25px;
+        .emdr-fullscreen #emdr-canvas-portrait {
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
         }
 
         .emdr-fullscreen .session-info-portrait {
-            position: fixed;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-            background: rgba(0,0,0,0.8);
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .emdr-fullscreen .session-controls {
+            bottom: 5px;
+            padding: 5px 10px;
+            background: rgba(0,0,0,0.7);
         }
 
         .emdr-fullscreen .floating-instruction {
-            position: fixed;
-            bottom: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            z-index: 10000;
+            bottom: 50px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            background: rgba(0,0,0,0.7);
         }
 
-        /* Plein écran spécifique mobile horizontal */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .emdr-fullscreen #emdr-canvas-portrait {
-                width: 100vw !important;
-                height: 100vh !important;
-                margin: 0 !important;
+        /* Mobile optimisations */
+        @media (max-width: 768px) {
+            .emdr-container {
+                min-height: 300px;
             }
             
-            .emdr-fullscreen .session-info-portrait {
+            .session-info-portrait {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .control-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .floating-instruction {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Mobile horizontal - Interface minimale */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-container {
+                min-height: 250px;
+            }
+            
+            .session-info-portrait {
                 top: 5px;
                 font-size: 0.7rem;
-                padding: 5px 10px;
+                padding: 4px 8px;
             }
             
-            .emdr-fullscreen .session-controls {
+            .session-controls {
                 bottom: 5px;
-                padding: 5px 10px;
+                padding: 4px 8px;
             }
             
-            .emdr-fullscreen .floating-instruction {
-                bottom: 45px;
+            .control-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .floating-instruction {
+                bottom: 35px;
                 font-size: 0.7rem;
-                padding: 5px 10px;
+                padding: 4px 8px;
             }
         }
 
@@ -997,63 +1073,64 @@
             cursor: pointer;
         }
 
-        /* EMDR Mobile Paysage - Corrections */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .emdr-canvas {
-                width: 95vw !important;
-                height: 60vh !important;
-                max-height: 300px;
-                margin: 10px auto !important;
+        /* Mobile optimisations EMDR */
+        @media (max-width: 768px) {
+            .emdr-container {
+                min-height: 300px;
             }
             
             #emdr-canvas-portrait {
-                width: 95vw !important;
-                height: 60vh !important;
-                max-height: 300px;
+                min-height: 250px;
+                border-radius: 15px;
             }
             
             .session-info-portrait {
-                font-size: 0.9rem;
-                padding: 8px 15px;
-                margin-bottom: 5px;
-            }
-            
-            .session-controls {
-                margin-top: 10px;
-                gap: 10px;
+                font-size: 0.8rem;
+                padding: 6px 12px;
             }
             
             .control-btn {
-                padding: 8px 15px;
+                padding: 8px 12px;
                 font-size: 0.9rem;
             }
             
             .floating-instruction {
-                font-size: 0.9rem;
-                padding: 8px 15px;
-                bottom: 80px;
-            }
-            
-            /* Plein écran en mode horizontal */
-            .emdr-fullscreen #emdr-canvas-portrait {
-                width: 98vw !important;
-                height: 75vh !important;
-                max-height: none;
-            }
-            
-            .emdr-fullscreen .session-info-portrait {
-                top: 10px;
                 font-size: 0.8rem;
-                padding: 5px 10px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Mobile horizontal - Interface minimale et canvas optimal */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-container {
+                min-height: 200px;
             }
             
-            .emdr-fullscreen .session-controls {
-                bottom: 10px;
+            #emdr-canvas-portrait {
+                min-height: 180px;
+                border-radius: 10px;
             }
             
-            .emdr-fullscreen .floating-instruction {
-                bottom: 60px;
+            .session-info-portrait {
+                top: 5px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            
+            .session-controls {
+                bottom: 5px;
+                padding: 4px 8px;
+            }
+            
+            .control-btn {
+                padding: 6px 10px;
                 font-size: 0.8rem;
+            }
+            
+            .floating-instruction {
+                bottom: 35px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
             }
         }
 
@@ -1813,25 +1890,27 @@
                 <h1>Session EMDR</h1>
             </header>
             <div class="container">
-                <div class="session-info-portrait">
-                    <div>Série: <span id="current-series-portrait">1</span>/<span id="total-series-portrait">4</span></div>
-                    <div class="session-timer" id="session-timer-portrait">2:00</div>
-                </div>
+                <div class="emdr-container">
+                    <div id="emdr-canvas-portrait">
+                        <div id="emdr-dot-portrait"></div>
+                    </div>
+                    
+                    <div class="session-info-portrait">
+                        <div>Série: <span id="current-series-portrait">1</span>/<span id="total-series-portrait">4</span></div>
+                        <div class="session-timer" id="session-timer-portrait">2:00</div>
+                    </div>
 
-                <div id="emdr-canvas-portrait">
-                    <div id="emdr-dot-portrait"></div>
-                </div>
+                    <div class="floating-instruction" id="floating-instruction-portrait">
+                        Suivez le point avec vos yeux, sans bouger la tête<br>
+                        <small style="opacity: 0.8; display: none;" id="keyboard-hint">💡 Appuyez sur F pour le plein écran</small>
+                    </div>
 
-                <div class="floating-instruction" id="floating-instruction-portrait">
-                    Suivez le point avec vos yeux, sans bouger la tête<br>
-                    <small style="opacity: 0.8; display: none;" id="keyboard-hint">💡 Appuyez sur F pour le plein écran</small>
-                </div>
-
-                <div class="session-controls">
-                    <button class="control-btn fullscreen" onclick="toggleFullscreen()" id="fullscreen-btn">
-                        📺 Plein Écran
-                    </button>
-                    <button class="control-btn stop" onclick="stopEMDRSession()">■ Arrêter</button>
+                    <div class="session-controls">
+                        <button class="control-btn fullscreen" onclick="toggleFullscreen()" id="fullscreen-btn">
+                            📺 Plein Écran
+                        </button>
+                        <button class="control-btn stop" onclick="stopEMDRSession()">■ Arrêter</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2717,37 +2796,34 @@
             const canvas = document.getElementById('emdr-canvas-portrait');
             if (!canvas) return;
             
-            const container = canvas.parentElement;
-            const isLandscape = window.innerWidth > window.innerHeight;
-            const isMobile = window.innerWidth <= 768;
+            const container = document.querySelector('.emdr-container');
+            if (!container) return;
+            
             const isFullscreen = container.closest('.emdr-fullscreen') !== null;
             
             if (isFullscreen) {
                 // Mode plein écran - utiliser TOUTE la surface
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                console.log('📺 Plein Écran - Canvas:', canvas.width, 'x', canvas.height);
-            } else if (isMobile && isLandscape) {
-                // Mobile en mode paysage - priorité à la largeur
-                canvas.width = Math.min(window.innerWidth * 0.95, 800);
-                canvas.height = Math.min(window.innerHeight * 0.6, 300);
-                console.log('📱 Mobile Paysage - Canvas:', canvas.width, 'x', canvas.height);
-            } else if (isMobile) {
-                // Mobile en mode portrait
-                canvas.width = Math.min(window.innerWidth * 0.9, 400);
-                canvas.height = Math.min(window.innerHeight * 0.4, 300);
-                console.log('📱 Mobile Portrait - Canvas:', canvas.width, 'x', canvas.height);
+                canvas.style.width = '100vw';
+                canvas.style.height = '100vh';
+                canvas.style.minHeight = '100vh';
+                console.log('📺 Plein Écran - Canvas: 100vw x 100vh');
             } else {
-                // Desktop
-                canvas.width = Math.min(container.clientWidth * 0.9, 600);
-                canvas.height = Math.min(container.clientHeight * 0.6, 400);
-                console.log('🖥️ Desktop - Canvas:', canvas.width, 'x', canvas.height);
-            }
-            
-            // Réinitialiser le contexte du canvas après redimensionnement
-            if (emdrCtx) {
-                emdrCtx.fillStyle = '#000';
-                emdrCtx.fillRect(0, 0, canvas.width, canvas.height);
+                // Mode normal - s'adapter au container
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                const isLandscape = window.innerWidth > window.innerHeight;
+                const isMobile = window.innerWidth <= 768;
+                
+                if (isMobile && isLandscape) {
+                    canvas.style.minHeight = '180px';
+                    console.log('📱 Mobile Paysage - Canvas: 100% container, min 180px');
+                } else if (isMobile) {
+                    canvas.style.minHeight = '250px';
+                    console.log('📱 Mobile Portrait - Canvas: 100% container, min 250px');
+                } else {
+                    canvas.style.minHeight = '400px';
+                    console.log('🖥️ Desktop - Canvas: 100% container, min 400px');
+                }
             }
         }
 
@@ -3299,28 +3375,39 @@
             const dot = document.getElementById('emdr-dot-portrait');
             const canvas = document.getElementById('emdr-canvas-portrait');
             
+            // Marges minimales pour éviter que le point touche les bords
+            const margin = 15;
             let canvasWidth = canvas.offsetWidth;
-            let maxPositionX = canvasWidth - 70;
-            let position = { x: 20, y: canvas.offsetHeight / 2 - 25 };
+            let maxPositionX = canvasWidth - margin;
+            let minPositionX = margin;
+            let position = { x: minPositionX, y: canvas.offsetHeight / 2 - 25 };
             let direction = { x: 1, y: 0 };
             
             const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
             const cycleDuration = speedConfig[speed];
             
+            console.log(`🎯 EMDR Animation: Canvas ${canvasWidth}px, Point: ${minPositionX} → ${maxPositionX}`);
+            
             function animate() {
+                // Recalculer les dimensions dynamiquement
                 canvasWidth = canvas.offsetWidth;
-                maxPositionX = canvasWidth - 70;
+                maxPositionX = canvasWidth - margin;
+                minPositionX = margin;
                 
-                const increment = maxPositionX / (cycleDuration / 50);
+                // Utiliser TOUTE la largeur disponible
+                const increment = (maxPositionX - minPositionX) / (cycleDuration / 50);
                 position.x += increment * direction.x;
                 
                 if (position.x >= maxPositionX) {
                     position.x = maxPositionX;
                     direction.x = -1;
-                } else if (position.x <= 20) {
-                    position.x = 20;
+                } else if (position.x <= minPositionX) {
+                    position.x = minPositionX;
                     direction.x = 1;
                 }
+                
+                // Centrer verticalement toujours
+                position.y = canvas.offsetHeight / 2 - 25;
                 
                 dot.style.left = position.x + 'px';
                 dot.style.top = position.y + 'px';
