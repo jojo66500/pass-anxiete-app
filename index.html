@@ -25,8 +25,20 @@
         }
 
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .screen { display: none; min-height: 100vh; }
-        .screen.active { display: block; }
+        .screen {
+            display: none !important;
+            min-height: 100vh;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* Header */
         header {
@@ -896,6 +908,140 @@
             .journal-actions { flex-direction: column; }
         }
 
+        /* Historique des exercices de pensées */
+        .thoughts-history-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .history-header h3 {
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thoughts-history-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .thought-history-item {
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 15px 0;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .thought-history-item:hover {
+            background: #f0f7ff;
+            transform: translateX(5px);
+        }
+
+        .thought-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .thought-date {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .thought-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thought-action-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .thought-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .thought-action-btn.delete {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .thought-action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .thought-content {
+            margin: 15px 0;
+        }
+
+        .thought-section {
+            margin: 12px 0;
+        }
+
+        .thought-section-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .thought-section-content {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .thought-section-content.alternative {
+            border-left-color: var(--success);
+            background: #f0fff4;
+        }
+
+        .thoughts-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .thoughts-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
         /* ============ FIN STYLES TCC ============ */
 
         /* ============ STYLES SYSTÈME ACTIVATION ============ */
@@ -1192,63 +1338,6 @@
             transform: translateY(-2px);
         }
 
-        /* Écran de vérification */
-        .verification-screen {
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-        }
-
-        .verification-container {
-            max-width: 400px;
-            padding: 40px;
-        }
-
-        .verification-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 30px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .verification-container h2 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        #verification-status {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .verification-progress {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: white;
-            width: 0%;
-            transition: width 0.3s;
-            border-radius: 3px;
-        }
-
         /* Responsive activation */
         @media (max-width: 768px) {
             .activation-card {
@@ -1356,18 +1445,6 @@
         </div>
     </div>
 
-    <!-- Écran de vérification -->
-    <div id="verification-screen" class="screen verification-screen">
-        <div class="verification-container">
-            <div class="verification-spinner"></div>
-            <h2>🔍 Vérification en cours...</h2>
-            <p id="verification-status">Authentification de votre carte unique</p>
-            <div class="verification-progress">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- ============ FIN SYSTÈME ACTIVATION ============ -->
 
     <!-- Écran NFC (masqué par défaut maintenant) -->
@@ -1456,8 +1533,8 @@
                 </button>
                 <button class="emergency-btn" data-emergency="emdr">
                     <span class="emergency-icon">👁️</span>
-                    <h3>EMDR Rapide</h3>
-                    <p>2 minutes</p>
+                    <h3>EMDR Complet</h3>
+                    <p>Session guidée professionnelle</p>
                 </button>
             </div>
             <button class="btn-back" data-back="home-screen">Retour</button>
@@ -1876,8 +1953,52 @@
             <button class="btn-primary" onclick="saveThoughtExercise()">
                 💾 Sauvegarder cet exercice
             </button>
+            <button class="btn-secondary" onclick="showThoughtHistory()">
+                📚 Voir mes exercices sauvegardés
+            </button>
             <button class="btn-secondary" onclick="goToScreen('distortions-screen')">
                 🔍 Voir les distorsions cognitives
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Historique des Exercices de Pensées -->
+    <div id="thoughts-history-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="thoughts-screen">←</button>
+            <h1>📚 Historique des Exercices de Pensées</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>📖 Vos derniers exercices de restructuration cognitive</strong></p>
+                <p>Relisez vos progrès et observez l'évolution de votre travail sur les pensées négatives.</p>
+            </div>
+
+            <div class="thoughts-history-container">
+                <div class="history-header">
+                    <h3>💭 Mes Exercices (Limite : 10 derniers)</h3>
+                    <div class="history-actions">
+                        <button class="action-btn" onclick="exportThoughts()">📤 Exporter</button>
+                        <button class="action-btn" onclick="clearThoughtsHistory()">🗑️ Effacer tout</button>
+                    </div>
+                </div>
+
+                <div id="thoughts-history-list" class="thoughts-history-list">
+                    <!-- Sera rempli par JavaScript -->
+                </div>
+            </div>
+
+            <div class="emdr-info-box success">
+                <p><strong>💡 Conseil thérapeutique :</strong></p>
+                <p>Relire vos anciens exercices vous aide à :</p>
+                <p>• <strong>Voir vos progrès</strong> dans la restructuration cognitive</p>
+                <p>• <strong>Identifier les patterns</strong> de pensées récurrentes</p>
+                <p>• <strong>Réutiliser les pensées alternatives</strong> efficaces</p>
+                <p>• <strong>Renforcer les apprentissages</strong> positifs</p>
+            </div>
+
+            <button class="btn-primary" onclick="goToScreen('thoughts-screen')">
+                ✍️ Nouvel exercice de pensées
             </button>
         </div>
     </div>
@@ -2202,6 +2323,76 @@
         let breathingInterval = null;
         let breathingCycles = 0;
         let isActivated = false;
+        let wakeLock = null; // Pour maintenir l'écran allumé
+
+        // ============ SYSTÈME WAKE LOCK (ÉCRAN ALLUMÉ) ============
+
+        // Demander de maintenir l'écran allumé
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('🔋 Écran maintenu allumé');
+                    
+                    // Écouter si le wake lock est libéré
+                    wakeLock.addEventListener('release', () => {
+                        console.log('💤 Wake Lock libéré');
+                    });
+                    
+                    return true;
+                } else {
+                    console.log('⚠️ Wake Lock API non supportée');
+                    return false;
+                }
+            } catch (err) {
+                console.error('❌ Erreur Wake Lock:', err);
+                return false;
+            }
+        }
+
+        // Libérer le wake lock
+        async function releaseWakeLock() {
+            if (wakeLock !== null) {
+                try {
+                    await wakeLock.release();
+                    wakeLock = null;
+                    console.log('💤 Wake Lock libéré manuellement');
+                } catch (err) {
+                    console.error('❌ Erreur libération Wake Lock:', err);
+                }
+            }
+        }
+
+        // Réactiver le wake lock quand l'onglet redevient visible
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('🔋 Wake Lock réactivé');
+                } catch (err) {
+                    console.error('❌ Erreur réactivation Wake Lock:', err);
+                }
+            }
+        });
+
+        // Gérer le wake lock selon l'écran actif
+        function manageWakeLockForScreen(screenId) {
+            const wakeLockScreens = [
+                'emdr-session', 
+                'emdr-simple', 
+                'breathing-screen'
+            ];
+            
+            if (wakeLockScreens.includes(screenId)) {
+                // Activer le wake lock pour les écrans thérapeutiques
+                requestWakeLock();
+            } else {
+                // Libérer le wake lock pour les autres écrans
+                releaseWakeLock();
+            }
+        }
+
+        // ============ FIN SYSTÈME WAKE LOCK ============
 
         // ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============
 
@@ -2344,7 +2535,7 @@
             }
         }
 
-        // Effectuer l'activation réussie
+        // Effectuer l'activation réussie (transition directe)
         function performActivation(method, identifier) {
             const activationData = {
                 activated: true,
@@ -2367,45 +2558,27 @@
             // Log l'activation
             logActivationAttempt('successful_activation', activationData);
             
-            // Afficher l'écran de vérification
-            showVerificationScreen();
+            // Transition directe vers l'application avec animation
+            showActivationTransition();
         }
 
-        // Afficher l'écran de vérification
-        function showVerificationScreen() {
-            goToScreen('verification-screen');
+        // Animation de transition d'activation
+        function showActivationTransition() {
+            const activationScreen = document.getElementById('activation-screen');
             
-            const statusEl = document.getElementById('verification-status');
-            const progressBar = document.getElementById('progress-bar');
+            // Animation de fondu sortant
+            activationScreen.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            activationScreen.style.opacity = '0';
+            activationScreen.style.transform = 'scale(0.95)';
             
-            const steps = [
-                { text: 'Vérification de l\'authenticité...', progress: 20 },
-                { text: 'Validation de la carte unique...', progress: 40 },
-                { text: 'Chargement du contenu personnalisé...', progress: 60 },
-                { text: 'Configuration de votre profil...', progress: 80 },
-                { text: 'Finalisation de l\'activation...', progress: 100 }
-            ];
-            
-            let currentStep = 0;
-            
-            const stepInterval = setInterval(() => {
-                if (currentStep < steps.length) {
-                    statusEl.textContent = steps[currentStep].text;
-                    progressBar.style.width = steps[currentStep].progress + '%';
-                    currentStep++;
-                } else {
-                    clearInterval(stepInterval);
-                    // Activation terminée, aller à l'écran principal
-                    setTimeout(() => {
-                        isActivated = true;
-                        goToScreen('home-screen');
-                        showActivationSuccess();
-                    }, 1000);
-                }
-            }, 1200);
+            setTimeout(() => {
+                isActivated = true;
+                goToScreen('home-screen');
+                showActivationSuccess();
+            }, 800);
         }
 
-        // Afficher le message de succès
+        // Afficher le message de succès avec info wake lock
         function showActivationSuccess() {
             // Créer une notification de succès temporaire
             const notification = document.createElement('div');
@@ -2413,7 +2586,7 @@
                 position: fixed;
                 top: 20px;
                 left: 50%;
-                transform: translateX(-50%);
+                transform: translateX(-50%) translateY(-100%);
                 background: linear-gradient(135deg, #4CAF50, #8BC34A);
                 color: white;
                 padding: 20px 30px;
@@ -2421,16 +2594,33 @@
                 box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
                 z-index: 10000;
                 font-weight: 600;
-                animation: slideDown 0.5s ease;
+                max-width: 90%;
+                text-align: center;
+                transition: all 0.5s ease;
+                opacity: 0;
             `;
-            notification.innerHTML = '✨ Activation réussie ! Bienvenue dans votre Pass Anxiété Pro';
+            
+            const wakeLockSupported = 'wakeLock' in navigator;
+            const wakeLockMessage = wakeLockSupported ? 
+                '<br><small style="opacity: 0.9;">💡 L\'écran restera allumé pendant vos sessions thérapeutiques</small>' :
+                '<br><small style="opacity: 0.9;">⚠️ Ajustez vos paramètres d\'écran pour éviter la mise en veille</small>';
+            
+            notification.innerHTML = '✨ Bienvenue dans votre Pass Anxiété Pro !' + wakeLockMessage;
             
             document.body.appendChild(notification);
             
-            // Retirer après 4 secondes
+            // Animation d'entrée
             setTimeout(() => {
-                notification.remove();
-            }, 4000);
+                notification.style.transform = 'translateX(-50%) translateY(0)';
+                notification.style.opacity = '1';
+            }, 100);
+            
+            // Animation de sortie et suppression
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-50%) translateY(-100%)';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
         }
 
         // Afficher/masquer erreurs
@@ -2617,7 +2807,7 @@
             document.getElementById('orientation-recommendation').classList.remove('show');
         }
 
-        // Navigation avec vérification d'activation
+        // Navigation avec vérification d'activation et gestion wake lock
         function goToScreen(screenId) {
             // Vérifier l'activation avant d'accéder aux écrans protégés
             const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen', 'tracking-screen', 'tcc-screen'];
@@ -2631,6 +2821,9 @@
             });
             const screen = document.getElementById(screenId);
             screen.classList.add('active');
+            
+            // Gérer le wake lock selon l'écran
+            manageWakeLockForScreen(screenId);
             
             if (screenId === 'emdr-session') {
                 recommendationDismissed = false;
@@ -3079,13 +3272,18 @@
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
+            // D'abord masquer TOUS les écrans
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
             // Vérifier l'activation en premier
             if (checkActivationStatus()) {
                 // Déjà activé, aller directement à l'accueil
                 goToScreen('home-screen');
             } else {
-                // Pas activé, rester sur l'écran d'activation
-                goToScreen('activation-screen');
+                // Pas activé, afficher UNIQUEMENT l'écran d'activation
+                document.getElementById('activation-screen').classList.add('active');
             }
             
             // Configuration du système d'activation
@@ -3094,6 +3292,18 @@
             updateCurrentTime();
             setInterval(updateCurrentTime, 60000);
             updateRecommendations();
+            
+            // Nettoyage wake lock à la fermeture
+            window.addEventListener('beforeunload', () => {
+                releaseWakeLock();
+            });
+            
+            // Afficher un indicateur si wake lock est actif
+            if ('wakeLock' in navigator) {
+                console.log('✅ Wake Lock API disponible - L\'écran restera allumé pendant les sessions');
+            } else {
+                console.log('⚠️ Wake Lock API non disponible - L\'écran peut s\'éteindre pendant les sessions');
+            }
             
             // Skip NFC (maintenant désactivé par défaut)
             const skipNfc = document.getElementById('skip-nfc');
@@ -3118,7 +3328,8 @@
                         'thoughts': 'thoughts-screen',
                         'emotions': 'emotions-screen',
                         'journal': 'journal-screen',
-                        'techniques': 'techniques-screen'
+                        'techniques': 'techniques-screen',
+                        'thoughts-history': 'thoughts-history-screen'
                     };
                     if (screenMap[tool]) {
                         goToScreen(screenMap[tool]);
@@ -3142,8 +3353,8 @@
                     if (tool === 'breathing') {
                         goToScreen('breathing-screen');
                     } else if (tool === 'emdr') {
-                        goToScreen('emdr-simple');
-                        document.getElementById('emdr-duration-simple').value = '2';
+                        // Rediriger vers EMDR Pro complet au lieu d'EMDR simple
+                        goToScreen('emdr-distance');
                     }
                 });
             });
@@ -3238,7 +3449,7 @@
             }
         }
 
-        // Sauvegarder exercice de pensées
+        // Sauvegarder exercice de pensées (limité à 10)
         function saveThoughtExercise() {
             const currentThought = document.getElementById('current-thought').value;
             const alternativeThought = document.getElementById('alternative-thought').value;
@@ -3252,22 +3463,195 @@
                 type: 'thought-exercise',
                 date: new Date().toISOString(),
                 currentThought: currentThought,
-                alternativeThought: alternativeThought
+                alternativeThought: alternativeThought,
+                id: 'thought_' + Date.now()
             };
 
-            // Sauvegarder dans le localStorage
-            let exercises = JSON.parse(localStorage.getItem('tccExercises') || '[]');
-            exercises.push(exercise);
-            localStorage.setItem('tccExercises', JSON.stringify(exercises));
+            // Récupérer les exercices existants
+            let exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            
+            // Ajouter le nouvel exercice au début
+            exercises.unshift(exercise);
+            
+            // Limiter à 10 exercices maximum
+            if (exercises.length > 10) {
+                exercises = exercises.slice(0, 10);
+            }
+            
+            // Sauvegarder
+            localStorage.setItem('tccThoughtExercises', JSON.stringify(exercises));
 
             // Log pour le suivi général
             DataManager.logToolUsage('tcc-thoughts');
 
-            alert('✅ Exercice sauvegardé ! Bien joué pour ce travail sur vos pensées.');
+            alert('✅ Exercice sauvegardé ! Bien joué pour ce travail sur vos pensées.\n\n💡 Vous pouvez revoir vos exercices dans l\'historique.');
             
             // Réinitialiser le formulaire
             document.getElementById('current-thought').value = '';
             document.getElementById('alternative-thought').value = '';
+        }
+
+        // Afficher l'historique des exercices de pensées
+        function showThoughtHistory() {
+            goToScreen('thoughts-history-screen');
+            displayThoughtHistory();
+        }
+
+        // Afficher la liste des exercices de pensées
+        function displayThoughtHistory() {
+            const historyList = document.getElementById('thoughts-history-list');
+            const exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            
+            if (exercises.length === 0) {
+                historyList.innerHTML = `
+                    <div class="thoughts-empty">
+                        <div class="thoughts-empty-icon">💭</div>
+                        <h3>Aucun exercice sauvegardé</h3>
+                        <p>Commencez par faire un exercice de restructuration cognitive pour le voir apparaître ici.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = exercises.map((exercise, index) => {
+                const date = new Date(exercise.date);
+                const dateStr = date.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                return `
+                    <div class="thought-history-item" data-id="${exercise.id}">
+                        <div class="thought-history-header">
+                            <div class="thought-date">📅 ${dateStr}</div>
+                            <div class="thought-actions">
+                                <button class="thought-action-btn" onclick="reuseThought('${exercise.id}')">
+                                    🔄 Réutiliser
+                                </button>
+                                <button class="thought-action-btn delete" onclick="deleteThought('${exercise.id}')">
+                                    🗑️ Supprimer
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="thought-content">
+                            <div class="thought-section">
+                                <div class="thought-section-title">💭 Pensée négative :</div>
+                                <div class="thought-section-content">
+                                    ${exercise.currentThought || 'Non renseigné'}
+                                </div>
+                            </div>
+                            
+                            ${exercise.alternativeThought ? `
+                                <div class="thought-section">
+                                    <div class="thought-section-title">✨ Pensée alternative :</div>
+                                    <div class="thought-section-content alternative">
+                                        ${exercise.alternativeThought}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Réutiliser un exercice de pensée
+        function reuseThought(thoughtId) {
+            const exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            const exercise = exercises.find(ex => ex.id === thoughtId);
+            
+            if (exercise) {
+                // Aller à l'écran d'exercice et pré-remplir
+                goToScreen('thoughts-screen');
+                
+                setTimeout(() => {
+                    document.getElementById('current-thought').value = exercise.currentThought || '';
+                    document.getElementById('alternative-thought').value = exercise.alternativeThought || '';
+                    
+                    // Scroll vers le haut pour voir les champs
+                    document.getElementById('current-thought').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }, 100);
+                
+                alert('💡 Exercice rechargé ! Vous pouvez le modifier et le sauvegarder à nouveau.');
+            }
+        }
+
+        // Supprimer un exercice de pensée
+        function deleteThought(thoughtId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) {
+                let exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+                exercises = exercises.filter(ex => ex.id !== thoughtId);
+                localStorage.setItem('tccThoughtExercises', JSON.stringify(exercises));
+                
+                // Rafraîchir l'affichage
+                displayThoughtHistory();
+                
+                alert('🗑️ Exercice supprimé.');
+            }
+        }
+
+        // Exporter les exercices de pensées
+        function exportThoughts() {
+            const exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            
+            if (exercises.length === 0) {
+                alert('Aucun exercice à exporter.');
+                return;
+            }
+
+            // Créer le contenu texte
+            let content = '# 💭 Mes Exercices de Pensées - Pass Anxiété\n\n';
+            content += `Exporté le : ${new Date().toLocaleDateString('fr-FR')}\n`;
+            content += `Nombre d'exercices : ${exercises.length}\n\n`;
+            content += '---\n\n';
+
+            exercises.forEach((exercise, index) => {
+                const date = new Date(exercise.date);
+                const dateStr = date.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                content += `## Exercice ${index + 1} - ${dateStr}\n\n`;
+                content += `**💭 Pensée négative :**\n${exercise.currentThought}\n\n`;
+                
+                if (exercise.alternativeThought) {
+                    content += `**✨ Pensée alternative :**\n${exercise.alternativeThought}\n\n`;
+                }
+                
+                content += '---\n\n';
+            });
+
+            // Créer et télécharger le fichier
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `exercices-pensees-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('📤 Exercices exportés ! Le fichier a été téléchargé.');
+        }
+
+        // Effacer tout l'historique des pensées
+        function clearThoughtsHistory() {
+            if (confirm('⚠️ Attention !\n\nÊtes-vous sûr de vouloir supprimer TOUS vos exercices de pensées ?\n\nCette action est irréversible.')) {
+                localStorage.removeItem('tccThoughtExercises');
+                displayThoughtHistory();
+                alert('🗑️ Historique effacé.');
+            }
         }
 
         // Sauvegarder exercice d'émotions
