@@ -1230,6 +1230,120 @@
             }
         }
 
+        /* Mode plein écran - Contrôles dans les coins supérieurs */
+        .emdr-fullscreen .session-controls {
+            position: fixed !important;
+            top: 15px !important;
+            right: 15px !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            padding: 8px 12px !important;
+            border-radius: 20px !important;
+            display: flex !important;
+            gap: 10px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        .emdr-fullscreen .control-btn {
+            padding: 8px 16px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            border-radius: 15px !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+
+        /* Session info dans le coin supérieur gauche en plein écran */
+        .emdr-fullscreen .session-info-portrait {
+            position: fixed !important;
+            top: 15px !important;
+            left: 15px !important;
+            right: auto !important;
+            transform: none !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        /* Mobile Portrait - Contrôles compacts dans les coins */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .emdr-fullscreen .session-controls {
+                top: 10px !important;
+                right: 10px !important;
+                padding: 6px 8px !important;
+                gap: 8px !important;
+            }
+            
+            .emdr-fullscreen .control-btn {
+                padding: 6px 12px !important;
+                font-size: 0.8rem !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 10px !important;
+                left: 10px !important;
+                padding: 6px 12px !important;
+                font-size: 0.8rem !important;
+            }
+        }
+
+        /* Mobile Landscape - Interface ultra-compacte en coins */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-fullscreen .session-controls {
+                top: 8px !important;
+                right: 8px !important;
+                padding: 4px 6px !important;
+                gap: 6px !important;
+            }
+            
+            .emdr-fullscreen .control-btn {
+                padding: 4px 8px !important;
+                font-size: 0.7rem !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 8px !important;
+                left: 8px !important;
+                padding: 4px 8px !important;
+                font-size: 0.7rem !important;
+            }
+        }
+
+        /* Desktop - Interface élégante dans les coins */
+        @media (min-width: 769px) {
+            .emdr-fullscreen .session-controls {
+                top: 20px !important;
+                right: 20px !important;
+                padding: 10px 16px !important;
+                gap: 12px !important;
+            }
+            
+            .emdr-fullscreen .control-btn {
+                padding: 10px 20px !important;
+                font-size: 1rem !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 20px !important;
+                left: 20px !important;
+                padding: 10px 20px !important;
+                font-size: 1rem !important;
+            }
+        }
+
         /* Mode plein écran - Masquer l'instruction fixe */
         .emdr-fullscreen .emdr-instruction {
             display: none !important;
