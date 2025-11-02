@@ -1,0 +1,3639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass Anxiété Pro - Version Unifiée</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6B9BD1;
+            --secondary: #A8D5BA;
+            --danger: #F44336;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-calm: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--gradient-calm);
+            color: #2C3E50;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .screen { display: none; min-height: 100vh; }
+        .screen.active { display: block; }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 { font-size: 1.8rem; color: var(--primary); }
+        #current-time { font-size: 0.9rem; color: #666; margin-top: 5px; }
+
+        .tool-header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn-back-icon {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* Écran NFC */
+        #nfc-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+        }
+        .nfc-card-visual {
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+        .nfc-card-visual h1 {
+            font-size: 3rem;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .nfc-waves {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        /* Jauge anxiété */
+        .anxiety-gauge {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .gauge-slider input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, var(--success) 0%, var(--warning) 50%, var(--danger) 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .gauge-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .anxiety-value {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Recommandation */
+        .recommendation-card {
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Grille outils */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tool-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .tool-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+        .tool-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
+        .tool-card p { font-size: 0.85rem; color: #666; }
+
+        /* Mode Crise */
+        .emergency-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .emergency-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .emergency-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .emergency-btn {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        .emergency-btn:hover { transform: scale(1.02); }
+        .emergency-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+
+        /* EMDR */
+        .emdr-phase {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .emdr-phase h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .phase-number {
+            background: var(--gradient);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .emdr-info-box {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .emdr-info-box.warning {
+            background: #fff8e1;
+            border-left-color: var(--warning);
+        }
+        .emdr-info-box.success {
+            background: #e8f5e9;
+            border-left-color: var(--success);
+        }
+
+        .sud-scale { margin: 20px 0; }
+        .sud-slider { position: relative; margin: 30px 0; }
+        .sud-slider input[type="range"] {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, 
+                #4CAF50 0%, #8BC34A 20%, #FFF176 40%, 
+                #FFB74D 60%, #FF7043 80%, #F44336 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .sud-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            border: 3px solid var(--primary);
+        }
+        .sud-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .sud-value {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .sud-description {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .thought-prompts {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .prompt-item {
+            background: white;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+        .prompt-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .emdr-settings {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .emdr-settings label { flex: 1; min-width: 150px; }
+        .emdr-settings select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .distance-setup {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .distance-icon { font-size: 4rem; margin: 20px 0; }
+        .distance-measurement {
+            background: var(--gradient-calm);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .distance-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        #emdr-canvas, #emdr-canvas-portrait {
+            background: #000;
+            height: 300px;
+            border-radius: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #emdr-canvas-landscape {
+            flex: 1;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #emdr-dot, #emdr-dot-portrait, #emdr-dot-landscape {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+        }
+
+        .session-info-portrait {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .session-timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .floating-instruction {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 500;
+            z-index: 50;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .question-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.95);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+            z-index: 100;
+        }
+        .question-overlay.visible { transform: translateY(0); }
+        .question-text { font-size: 1.3rem; margin: 15px 0; line-height: 1.6; }
+
+        .sud-comparison {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .comparison-bars {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            align-items: flex-end;
+            height: 200px;
+        }
+        .comparison-bar { flex: 1; text-align: center; }
+        .bar-container {
+            position: relative;
+            height: 180px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: var(--gradient);
+            transition: height 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .bar-fill.improved {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+        .bar-label { margin-top: 10px; font-weight: 500; }
+
+        .result-message {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+        }
+        .result-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4CAF50;
+        }
+        .result-message.warning {
+            background: #fff8e1;
+            color: #f57c00;
+            border: 2px solid var(--warning);
+        }
+
+        /* Respiration */
+        .breathing-info {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #breathing-circle-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        #breathing-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 8px 30px rgba(107, 155, 209, 0.4);
+            transition: all 5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #breathing-instruction {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        #breathing-counter {
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+        .instruction {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Boutons */
+        .btn-primary, .btn-secondary, .btn-back {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-back { background: #f5f5f5; color: #2C3E50; }
+
+        .emdr-controls, .breathing-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .session-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .control-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .control-btn.stop {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Suivi */
+        .stats-header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .stat-text {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .orientation-recommendation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--gradient);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+        .orientation-recommendation.show { display: block; }
+        .recommendation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .rec-btn {
+            padding: 8px 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .rec-btn.primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tools-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .emdr-settings { flex-direction: column; }
+            .emdr-settings label { min-width: 100%; }
+        }
+
+        /* ============ STYLES TCC ============ */
+
+        /* Distorsions cognitives */
+        .distortions-list {
+            margin: 20px 0;
+        }
+        .distortion-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            border-left: 4px solid var(--warning);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .distortion-item h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .distortion-item p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        /* Roue des émotions */
+        .emotions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .emotion-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .emotion-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+        .emotion-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Intensité émotions */
+        .emotion-intensity {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+        }
+
+        /* Stratégies de gestion */
+        .coping-strategies {
+            margin: 20px 0;
+        }
+        .strategy-category {
+            margin: 20px 0;
+        }
+        .strategy-category h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .strategy-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid var(--secondary);
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        .strategy-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Journal de bord */
+        .journal-entry-form {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .journal-section {
+            margin: 20px 0;
+        }
+        .journal-section h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .journal-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        .journal-section textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .mood-slider {
+            margin: 15px 0;
+        }
+        .mood-slider input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, 
+                #F44336 0%, #FF9800 25%, #FFC107 50%, 
+                #8BC34A 75%, #4CAF50 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .mood-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .journal-actions {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .journal-history {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .journal-entry-item {
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .journal-entry-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .journal-entry-mood {
+            color: var(--primary);
+        }
+
+        /* Techniques pratiques */
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .technique-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .technique-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .technique-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Overlay pour techniques */
+        .technique-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+        .technique-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .technique-content {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+        }
+        .technique-content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .technique-content p {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .technique-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Responsive TCC */
+        @media (max-width: 768px) {
+            .emotions-grid { grid-template-columns: 1fr; }
+            .techniques-grid { grid-template-columns: 1fr; }
+            .journal-actions { flex-direction: column; }
+        }
+
+        /* ============ FIN STYLES TCC ============ */
+
+        /* ============ STYLES SYSTÈME ACTIVATION ============ */
+
+        /* Écran d'activation */
+        .activation-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .activation-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .activation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .activation-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .activation-header h2 {
+            color: #2C3E50;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .activation-header p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* Visuel carte */
+        .card-visual {
+            position: relative;
+            margin: 30px 0;
+            padding: 20px;
+        }
+
+        .nfc-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .nfc-waves-activation {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.2);
+            position: relative;
+            animation: pulseActivation 2s infinite;
+        }
+
+        @keyframes pulseActivation {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 1; 
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            50% { 
+                transform: scale(1.1); 
+                opacity: 0.8; 
+                box-shadow: 0 0 0 20px rgba(102, 126, 234, 0);
+            }
+        }
+
+        /* Méthodes d'activation */
+        .activation-methods {
+            margin: 30px 0;
+        }
+
+        .method-section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .method-section:hover {
+            border-color: var(--primary);
+            background: #f8fafe;
+        }
+
+        .method-section h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .method-section p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .method-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .method-divider::before,
+        .method-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .method-divider span {
+            padding: 0 15px;
+            background: white;
+        }
+
+        /* Code d'activation */
+        .code-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .activation-input {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .activation-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .activation-btn {
+            padding: 15px 25px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .activation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .activation-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Bouton NFC */
+        .nfc-btn {
+            padding: 15px 25px;
+            background: #f0f7ff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .nfc-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nfc-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .nfc-status.active {
+            display: block;
+            background: #e3f2fd;
+            color: var(--primary);
+        }
+
+        .nfc-status.error {
+            display: block;
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .nfc-status.success {
+            display: block;
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        /* Messages d'erreur */
+        .error-message {
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffebee;
+            color: var(--danger);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Section info sécurité */
+        .activation-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .activation-info h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .activation-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .activation-info li {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Lien d'achat */
+        .purchase-link {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .purchase-link p {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .purchase-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #ff6b35;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .purchase-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        /* Écran de vérification */
+        .verification-screen {
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .verification-container {
+            max-width: 400px;
+            padding: 40px;
+        }
+
+        .verification-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .verification-container h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        #verification-status {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .verification-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Responsive activation */
+        @media (max-width: 768px) {
+            .activation-card {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .activation-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .code-input-container {
+                gap: 15px;
+            }
+        }
+
+        /* ============ FIN STYLES ACTIVATION ============ */
+
+        /* Animation pour notifications */
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Recommandation orientation -->
+    <div id="orientation-recommendation" class="orientation-recommendation">
+        <p><strong>💡 Mode Paysage Recommandé pour EMDR</strong></p>
+        <div class="recommendation-buttons">
+            <button class="rec-btn primary" onclick="hideOrientationRecommendation()">J'ai compris</button>
+        </div>
+    </div>
+
+    <!-- ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============ -->
+    
+    <!-- Écran d'activation obligatoire -->
+    <div id="activation-screen" class="screen activation-screen active">
+        <div class="activation-container">
+            <div class="activation-card">
+                <div class="activation-header">
+                    <h1>🌟 Pass Anxiété Pro</h1>
+                    <h2>Activation Carte Unique</h2>
+                    <p>Cette application nécessite votre carte physique exclusive</p>
+                </div>
+
+                <div class="activation-content">
+                    <div class="card-visual">
+                        <div class="nfc-icon">📱</div>
+                        <div class="nfc-waves-activation"></div>
+                    </div>
+
+                    <div class="activation-methods">
+                        <div class="method-section">
+                            <h3>🔢 Code d'Activation</h3>
+                            <p>Saisissez le code unique gravé sur votre carte :</p>
+                            <div class="code-input-container">
+                                <input 
+                                    type="text" 
+                                    id="activation-code" 
+                                    placeholder="XXXX-XXXX"
+                                    maxlength="9"
+                                    class="activation-input"
+                                >
+                                <button class="activation-btn" onclick="activateWithCode()">
+                                    ✨ Activer ✨
+                                </button>
+                            </div>
+                            <div id="code-error" class="error-message"></div>
+                        </div>
+
+                        <div class="method-divider">
+                            <span>OU</span>
+                        </div>
+
+                        <div class="method-section">
+                            <h3>📱 Scan NFC</h3>
+                            <p>Approchez votre carte de votre téléphone :</p>
+                            <button class="nfc-btn" onclick="activateWithNFC()">
+                                📡 Scanner ma carte NFC
+                            </button>
+                            <div id="nfc-status" class="nfc-status"></div>
+                        </div>
+                    </div>
+
+                    <div class="activation-info">
+                        <h4>🛡️ Sécurité & Exclusivité</h4>
+                        <ul>
+                            <li>✅ Chaque carte est unique et traçable</li>
+                            <li>✅ Protection contre le partage non autorisé</li>
+                            <li>✅ Accès illimité à votre propriétaire uniquement</li>
+                            <li>✅ Mise à jour automatique du contenu</li>
+                        </ul>
+                    </div>
+
+                    <div class="purchase-link">
+                        <p>Vous n'avez pas encore votre carte Pass Anxiété ?</p>
+                        <a href="https://www.hypnotarot.fr/" target="_blank" class="purchase-btn" onclick="trackPurchaseClick()">🛒 Commander sur HypnoTarot.fr</a>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">
+                            Livraison mondiale • Carte unique • Garantie 30 jours
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran de vérification -->
+    <div id="verification-screen" class="screen verification-screen">
+        <div class="verification-container">
+            <div class="verification-spinner"></div>
+            <h2>🔍 Vérification en cours...</h2>
+            <p id="verification-status">Authentification de votre carte unique</p>
+            <div class="verification-progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FIN SYSTÈME ACTIVATION ============ -->
+
+    <!-- Écran NFC (masqué par défaut maintenant) -->
+    <div id="nfc-screen" class="screen">
+        <div class="container">
+            <div class="nfc-card-visual">
+                <div class="nfc-waves"></div>
+                <h1>🌸 Pass Anxiété</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9;">Application Complète Pro</p>
+            </div>
+            <button id="skip-nfc" class="btn-secondary">Commencer</button>
+        </div>
+    </div>
+
+    <!-- Écran Accueil -->
+    <div id="home-screen" class="screen">
+        <header>
+            <h1>🌸 Pass Anxiété Pro</h1>
+            <div id="current-time"></div>
+        </header>
+
+        <div class="container">
+            <div class="anxiety-gauge">
+                <h2>Comment vous sentez-vous maintenant ?</h2>
+                <div class="gauge-slider">
+                    <input type="range" id="anxiety-level" min="0" max="10" value="5">
+                    <div class="gauge-labels">
+                        <span>😌 Calme</span>
+                        <span>😰 Très anxieux</span>
+                    </div>
+                </div>
+                <p class="anxiety-value">Niveau : <span id="anxiety-display">5</span>/10</p>
+            </div>
+
+            <div class="recommendation-card">
+                <h3>🎯 Recommandé pour vous maintenant</h3>
+                <div id="recommended-tool"></div>
+            </div>
+
+            <div class="tools-grid">
+                <button class="tool-card" data-tool="crisis">
+                    <span class="tool-icon">🚨</span>
+                    <h3>Mode Crise</h3>
+                    <p>Aide immédiate</p>
+                </button>
+
+                <button class="tool-card" data-tool="emdr">
+                    <span class="tool-icon">👁️</span>
+                    <h3>EMDR Pro</h3>
+                    <p>Thérapie professionnelle</p>
+                </button>
+
+                <button class="tool-card" data-tool="breathing">
+                    <span class="tool-icon">💓</span>
+                    <h3>Respiration</h3>
+                    <p>Cohérence cardiaque</p>
+                </button>
+
+                <button class="tool-card" data-tool="tcc">
+                    <span class="tool-icon">🧠</span>
+                    <h3>TCC</h3>
+                    <p>Pensées & Émotions</p>
+                </button>
+
+                <button class="tool-card" data-tool="tracking">
+                    <span class="tool-icon">📊</span>
+                    <h3>Suivi</h3>
+                    <p>Vos progrès</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Mode Crise -->
+    <div id="crisis-screen" class="screen">
+        <div class="emergency-header">
+            <h1>🚨 Mode Crise</h1>
+            <p>Vous allez vous sentir mieux, respirez avec moi</p>
+        </div>
+        <div class="container">
+            <div class="emergency-actions">
+                <button class="emergency-btn" data-emergency="breathing">
+                    <span class="emergency-icon">💨</span>
+                    <h3>Respiration</h3>
+                    <p>Commencer maintenant</p>
+                </button>
+                <button class="emergency-btn" data-emergency="emdr">
+                    <span class="emergency-icon">👁️</span>
+                    <h3>EMDR Rapide</h3>
+                    <p>2 minutes</p>
+                </button>
+            </div>
+            <button class="btn-back" data-back="home-screen">Retour</button>
+        </div>
+    </div>
+
+    <!-- EMDR: Distance optimale -->
+    <div id="emdr-distance" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>Configuration Distance EMDR</h1>
+        </header>
+        <div class="container">
+            <div class="distance-setup">
+                <h2>📏 Distance Optimale</h2>
+                <div class="distance-icon">📱👁️</div>
+                
+                <div class="emdr-info-box success">
+                    <p><strong>📚 Recherche scientifique (Shapiro, 2001)</strong></p>
+                    <p>La distance optimale pour l'EMDR est celle où les yeux effectuent des mouvements latéraux complets sans effort excessif.</p>
+                </div>
+
+                <div class="distance-measurement">
+                    <h3>Distance recommandée :</h3>
+                    <div class="distance-value">40-50 cm</div>
+                    <p style="margin-top: 10px;">
+                        <strong>📱 Smartphone :</strong> 40-50 cm (longueur d'un avant-bras)<br>
+                        <strong>💻 Tablette :</strong> 50-60 cm<br>
+                        <strong>🖥️ Ordinateur :</strong> 60-70 cm
+                    </p>
+                </div>
+
+                <div class="emdr-info-box warning">
+                    <p><strong>💡 Mode Paysage vs Portrait :</strong></p>
+                    <p><strong>🌟 Paysage (horizontal) - RECOMMANDÉ</strong></p>
+                    <p>✅ Amplitude maximale des mouvements oculaires</p>
+                    <p>✅ Plus efficace thérapeutiquement</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="goToScreen('emdr-setup')">
+                Distance configurée →
+            </button>
+        </div>
+    </div>
+
+    <!-- EMDR: Préparation & SUD Initial -->
+    <div id="emdr-setup" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="emdr-distance">←</button>
+            <h1>Préparation EMDR</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">1</span> Identification de la cible</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Choisissez un souvenir ou une situation qui vous dérange</strong></p>
+                </div>
+
+                <div class="thought-prompts">
+                    <h4>💭 Questions pour vous guider :</h4>
+                    <div class="prompt-item">
+                        <strong>Quelle image représente le pire moment ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Visualisez une "photo" mentale du moment le plus perturbant</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Quelle pensée négative avez-vous sur vous-même ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Ex: "Je ne suis pas capable", "Je suis en danger"</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Où ressentez-vous cette émotion dans votre corps ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Gorge serrée, ventre noué, poitrine oppressée...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">2</span> Échelle SUD Initiale</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Évaluez votre niveau de détresse MAINTENANT</strong></p>
+                    <p>En pensant à ce souvenir/situation, quel est votre niveau de malaise ?</p>
+                </div>
+
+                <div class="sud-scale">
+                    <h4>Niveau de détresse actuel :</h4>
+                    <div class="sud-slider">
+                        <input type="range" id="sud-before" min="0" max="10" value="5">
+                    </div>
+                    <div class="sud-labels">
+                        <span>0 - Aucune détresse</span>
+                        <span>10 - Détresse maximale</span>
+                    </div>
+                    <div class="sud-value" id="sud-before-value">5</div>
+                    <div class="sud-description" id="sud-before-desc">Malaise modéré</div>
+                </div>
+            </div>
+
+            <div class="emdr-settings">
+                <label>Mode Session :
+                    <select id="emdr-mode">
+                        <option value="professional">Mode Professionnel (4 séries)</option>
+                        <option value="quick">Mode Rapide (2 minutes)</option>
+                        <option value="standard">Mode Standard (5 minutes)</option>
+                    </select>
+                </label>
+                <label>Vitesse :
+                    <select id="emdr-speed">
+                        <option value="slow">Lent</option>
+                        <option value="medium" selected>Moyen</option>
+                        <option value="fast">Rapide</option>
+                    </select>
+                </label>
+            </div>
+
+            <button class="btn-primary" onclick="startEMDRSession()">
+                Commencer la session EMDR →
+            </button>
+        </div>
+    </div>
+
+    <!-- EMDR: Session Active -->
+    <div id="emdr-session" class="screen">
+        <div id="portrait-version" style="display: none;">
+            <header class="tool-header">
+                <h1>Session EMDR</h1>
+            </header>
+            <div class="container">
+                <div class="session-info-portrait">
+                    <div>Série: <span id="current-series-portrait">1</span>/<span id="total-series-portrait">4</span></div>
+                    <div class="session-timer" id="session-timer-portrait">2:00</div>
+                </div>
+
+                <div id="emdr-canvas-portrait">
+                    <div id="emdr-dot-portrait"></div>
+                </div>
+
+                <div class="floating-instruction" id="floating-instruction-portrait">
+                    Suivez le point avec vos yeux, sans bouger la tête
+                </div>
+
+                <div class="session-controls">
+                    <button class="control-btn stop" onclick="stopEMDRSession()">■ Arrêter</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-overlay" id="question-overlay">
+            <div class="question-text" id="question-text"></div>
+            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">Continuez à suivre le point des yeux</div>
+        </div>
+    </div>
+
+    <!-- EMDR: Évaluation Finale -->
+    <div id="emdr-evaluation" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>Évaluation Finale</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">3</span> Réévaluation SUD</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Pensez à nouveau au souvenir/situation de départ</strong></p>
+                    <p>Comment vous sentez-vous MAINTENANT ?</p>
+                </div>
+
+                <div class="sud-scale">
+                    <h4>Niveau de détresse actuel :</h4>
+                    <div class="sud-slider">
+                        <input type="range" id="sud-after" min="0" max="10" value="5">
+                    </div>
+                    <div class="sud-labels">
+                        <span>0 - Aucune détresse</span>
+                        <span>10 - Détresse maximale</span>
+                    </div>
+                    <div class="sud-value" id="sud-after-value">5</div>
+                    <div class="sud-description" id="sud-after-desc">Malaise modéré</div>
+                </div>
+            </div>
+
+            <div class="sud-comparison" id="comparison-section" style="display:none;">
+                <h3>📊 Comparaison Avant / Après</h3>
+                <div class="comparison-bars">
+                    <div class="comparison-bar">
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar-before">0</div>
+                        </div>
+                        <div class="bar-label">Avant</div>
+                    </div>
+                    <div class="comparison-bar">
+                        <div class="bar-container">
+                            <div class="bar-fill improved" id="bar-after">0</div>
+                        </div>
+                        <div class="bar-label">Après</div>
+                    </div>
+                </div>
+
+                <div id="result-message" class="result-message"></div>
+
+                <div class="emdr-info-box">
+                    <p><strong>Interprétation :</strong></p>
+                    <p id="interpretation-text"></p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="evaluateResults()">
+                Valider mon évaluation
+            </button>
+            <button class="btn-back" data-back="home-screen">Terminer</button>
+        </div>
+    </div>
+
+    <!-- Écran EMDR Simple -->
+    <div id="emdr-simple" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>EMDR - Mouvement Oculaire</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-settings">
+                <label>Vitesse :
+                    <select id="emdr-speed-simple">
+                        <option value="slow">Lent</option>
+                        <option value="medium" selected>Moyen</option>
+                        <option value="fast">Rapide</option>
+                    </select>
+                </label>
+                <label>Durée :
+                    <select id="emdr-duration-simple">
+                        <option value="2">2 minutes</option>
+                        <option value="5" selected>5 minutes</option>
+                        <option value="10">10 minutes</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="emdr-canvas">
+                <div id="emdr-dot"></div>
+            </div>
+
+            <div class="emdr-controls">
+                <button id="emdr-start" class="btn-primary">Commencer</button>
+                <button id="emdr-stop" class="btn-secondary" style="display:none;">Arrêter</button>
+            </div>
+
+            <div id="emdr-timer" class="timer">5:00</div>
+            <p class="instruction">Suivez le point des yeux sans bouger la tête</p>
+        </div>
+    </div>
+
+    <!-- Écran Respiration -->
+    <div id="breathing-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>💓 Cohérence Cardiaque</h1>
+        </header>
+        <div class="container">
+            <div class="breathing-info">
+                <p>5 secondes d'inspiration - 5 secondes d'expiration</p>
+                <p>Durée recommandée : 5 minutes (30 cycles)</p>
+            </div>
+
+            <div id="breathing-circle-container">
+                <div id="breathing-circle"></div>
+                <div id="breathing-instruction">Prêt à commencer</div>
+            </div>
+
+            <div id="breathing-counter">
+                <span id="cycle-count">0</span> / 30 cycles
+            </div>
+
+            <div class="breathing-controls">
+                <button id="breathing-start" class="btn-primary">Commencer</button>
+                <button id="breathing-stop" class="btn-secondary" style="display:none;">Arrêter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Suivi -->
+    <div id="tracking-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>📊 Votre Suivi</h1>
+        </header>
+        <div class="container">
+            <div class="stats-header">
+                <h2>Vos Statistiques</h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Sessions totales</h3>
+                    <p class="stat-number" id="total-sessions">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Outil favori</h3>
+                    <p class="stat-text" id="favorite-tool">-</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Niveau d'anxiété</h3>
+                    <p class="stat-number" id="avg-anxiety">-</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Série actuelle</h3>
+                    <p class="stat-number" id="streak-days">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SECTION TCC ============ -->
+    
+    <!-- Écran TCC - Menu Principal -->
+    <div id="tcc-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🧠 TCC - Thérapie Cognitive & Comportementale</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>💡 La TCC vous aide à :</strong></p>
+                <p>• Identifier et modifier vos pensées négatives</p>
+                <p>• Mieux comprendre et gérer vos émotions</p>
+                <p>• Développer des stratégies d'adaptation</p>
+                <p>• Tenir un journal de bord de vos progrès</p>
+            </div>
+
+            <div class="tools-grid">
+                <button class="tool-card" data-tool="thoughts">
+                    <span class="tool-icon">💭</span>
+                    <h3>Pensées</h3>
+                    <p>Comprendre & modifier</p>
+                </button>
+
+                <button class="tool-card" data-tool="emotions">
+                    <span class="tool-icon">❤️</span>
+                    <h3>Émotions</h3>
+                    <p>Gérer sa sensibilité</p>
+                </button>
+
+                <button class="tool-card" data-tool="journal">
+                    <span class="tool-icon">📝</span>
+                    <h3>Journal</h3>
+                    <p>Suivi quotidien</p>
+                </button>
+
+                <button class="tool-card" data-tool="techniques">
+                    <span class="tool-icon">🛠️</span>
+                    <h3>Techniques</h3>
+                    <p>Outils pratiques</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TCC: Travail sur les Pensées -->
+    <div id="thoughts-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>💭 Comprendre & Modifier ses Pensées</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">1</span> Identifier les pensées automatiques</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Les pensées automatiques négatives (PAN)</strong> surgissent spontanément et influencent notre humeur.</p>
+                </div>
+
+                <div class="thought-prompts">
+                    <h4>🔍 Exercice : Identifiez votre pensée actuelle</h4>
+                    <textarea id="current-thought" placeholder="Décrivez la pensée négative qui vous préoccupe maintenant...&#10;&#10;Exemple : 'Je ne vais jamais y arriver' ou 'Tout le monde me juge'" style="width: 100%; height: 100px; padding: 15px; border: 2px solid var(--primary); border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">2</span> Analyser la pensée</h3>
+                
+                <div class="thought-prompts">
+                    <h4>❓ Questions d'analyse :</h4>
+                    <div class="prompt-item">
+                        <strong>Cette pensée est-elle réaliste ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Y a-t-il des preuves pour et contre ?</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Que dirais-je à un ami dans cette situation ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Souvent nous sommes plus bienveillants envers les autres</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Quel est le pire qui puisse arriver ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Et comment pourrais-je gérer cette situation ?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">3</span> Restructurer la pensée</h3>
+                
+                <div class="thought-prompts">
+                    <h4>✨ Créez une pensée alternative :</h4>
+                    <textarea id="alternative-thought" placeholder="Reformulez votre pensée de manière plus équilibrée et réaliste...&#10;&#10;Exemple : 'C'est difficile mais je peux y arriver étape par étape' ou 'La plupart des gens sont préoccupés par eux-mêmes, pas par moi'" style="width: 100%; height: 80px; padding: 15px; border: 2px solid var(--success); border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <div class="emdr-info-box success">
+                    <p><strong>💡 Critères d'une pensée équilibrée :</strong></p>
+                    <p>• Réaliste et factuelle</p>
+                    <p>• Bienveillante envers soi</p>
+                    <p>• Axée sur les solutions</p>
+                    <p>• Encourage l'action positive</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="saveThoughtExercise()">
+                💾 Sauvegarder cet exercice
+            </button>
+            <button class="btn-secondary" onclick="goToScreen('distortions-screen')">
+                🔍 Voir les distorsions cognitives
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Distorsions Cognitives -->
+    <div id="distortions-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="thoughts-screen">←</button>
+            <h1>🔍 Distorsions Cognitives</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>Les distorsions cognitives</strong> sont des façons biaisées d'interpréter la réalité qui maintiennent l'anxiété.</p>
+            </div>
+
+            <div class="distortions-list">
+                <div class="distortion-item">
+                    <h4>🔮 Pensée catastrophique</h4>
+                    <p><strong>Quoi :</strong> Imaginer le pire scénario possible</p>
+                    <p><strong>Exemple :</strong> "Si j'échoue à cet examen, ma vie est fichue"</p>
+                    <p><strong>Antidote :</strong> "Quel est le scénario le plus probable ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🎭 Tout ou rien</h4>
+                    <p><strong>Quoi :</strong> Voir les choses en noir ou blanc</p>
+                    <p><strong>Exemple :</strong> "Je suis un échec total" ou "Je dois être parfait"</p>
+                    <p><strong>Antidote :</strong> "Où suis-je sur une échelle de 1 à 10 ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🔮 Lecture de pensée</h4>
+                    <p><strong>Quoi :</strong> Croire savoir ce que pensent les autres</p>
+                    <p><strong>Exemple :</strong> "Ils pensent que je suis bizarre"</p>
+                    <p><strong>Antidote :</strong> "Ai-je des preuves de ce que je pense ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🏷️ Étiquetage</h4>
+                    <p><strong>Quoi :</strong> Se définir par ses erreurs</p>
+                    <p><strong>Exemple :</strong> "Je suis nul" au lieu de "J'ai fait une erreur"</p>
+                    <p><strong>Antidote :</strong> "Que ferais-je différemment la prochaine fois ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🔍 Filtre mental</h4>
+                    <p><strong>Quoi :</strong> Se concentrer uniquement sur le négatif</p>
+                    <p><strong>Exemple :</strong> Ignorer 9 compliments pour 1 critique</p>
+                    <p><strong>Antidote :</strong> "Qu'est-ce qui s'est bien passé aussi ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🎯 Personnalisation</h4>
+                    <p><strong>Quoi :</strong> Se blâmer pour tout ce qui va mal</p>
+                    <p><strong>Exemple :</strong> "C'est de ma faute si l'ambiance est mauvaise"</p>
+                    <p><strong>Antidote :</strong> "Quels autres facteurs peuvent expliquer cela ?"</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="goToScreen('thoughts-screen')">
+                ← Retour aux exercices
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Travail sur les Émotions -->
+    <div id="emotions-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>❤️ Mieux Gérer ses Émotions</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">1</span> Identifier l'émotion</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Première étape :</strong> Nommer précisément ce que vous ressentez</p>
+                </div>
+
+                <div class="emotions-wheel">
+                    <h4>🎨 Roue des émotions - Cliquez sur ce que vous ressentez :</h4>
+                    <div class="emotions-grid">
+                        <button class="emotion-btn" data-emotion="anxiété" data-intensity="0">😰 Anxiété</button>
+                        <button class="emotion-btn" data-emotion="tristesse" data-intensity="0">😢 Tristesse</button>
+                        <button class="emotion-btn" data-emotion="colère" data-intensity="0">😠 Colère</button>
+                        <button class="emotion-btn" data-emotion="peur" data-intensity="0">😨 Peur</button>
+                        <button class="emotion-btn" data-emotion="honte" data-intensity="0">😳 Honte</button>
+                        <button class="emotion-btn" data-emotion="culpabilité" data-intensity="0">😔 Culpabilité</button>
+                        <button class="emotion-btn" data-emotion="frustration" data-intensity="0">😤 Frustration</button>
+                        <button class="emotion-btn" data-emotion="déception" data-intensity="0">😞 Déception</button>
+                        <button class="emotion-btn" data-emotion="joie" data-intensity="0">😊 Joie</button>
+                        <button class="emotion-btn" data-emotion="sérénité" data-intensity="0">😌 Sérénité</button>
+                    </div>
+                </div>
+
+                <div class="emotion-intensity" id="emotion-intensity-section" style="display:none;">
+                    <h4>📊 Intensité de cette émotion :</h4>
+                    <div class="sud-slider">
+                        <input type="range" id="emotion-intensity" min="1" max="10" value="5">
+                    </div>
+                    <div class="sud-labels">
+                        <span>1 - Très légère</span>
+                        <span>10 - Très intense</span>
+                    </div>
+                    <div class="sud-value">
+                        <span id="selected-emotion">Émotion</span> : <span id="emotion-intensity-value">5</span>/10
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">2</span> Comprendre l'émotion</h3>
+                
+                <div class="thought-prompts">
+                    <h4>🔍 Questions de compréhension :</h4>
+                    <div class="prompt-item">
+                        <strong>Qu'est-ce qui a déclenché cette émotion ?</strong>
+                        <textarea id="emotion-trigger" placeholder="Décrivez la situation, la pensée ou l'événement qui a déclenché cette émotion..."></textarea>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Où ressentez-vous cette émotion dans votre corps ?</strong>
+                        <textarea id="emotion-body" placeholder="Gorge serrée, nœud au ventre, tension dans les épaules..."></textarea>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Quel message cette émotion vous envoie-t-elle ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Les émotions sont des signaux. L'anxiété signale un danger potentiel, la colère une injustice, la tristesse une perte...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">3</span> Stratégies de gestion</h3>
+                
+                <div class="coping-strategies">
+                    <h4>🛠️ Choisissez une stratégie adaptée :</h4>
+                    
+                    <div class="strategy-category">
+                        <h5>💨 Stratégies immédiates (urgence) :</h5>
+                        <button class="strategy-btn" onclick="goToScreen('breathing-screen')">
+                            Respiration 4-7-8
+                        </button>
+                        <button class="strategy-btn" onclick="startGroundingExercise()">
+                            Technique 5-4-3-2-1
+                        </button>
+                        <button class="strategy-btn" onclick="startBodyScanExercise()">
+                            Scan corporel rapide
+                        </button>
+                    </div>
+
+                    <div class="strategy-category">
+                        <h5>🧠 Stratégies cognitives :</h5>
+                        <button class="strategy-btn" onclick="goToScreen('thoughts-screen')">
+                            Restructuration cognitive
+                        </button>
+                        <button class="strategy-btn" onclick="startDistanceExercise()">
+                            Prise de distance
+                        </button>
+                        <button class="strategy-btn" onclick="startAcceptanceExercise()">
+                            Acceptation émotionnelle
+                        </button>
+                    </div>
+
+                    <div class="strategy-category">
+                        <h5>🎯 Stratégies comportementales :</h5>
+                        <button class="strategy-btn" onclick="startActivityExercise()">
+                            Activité plaisante
+                        </button>
+                        <button class="strategy-btn" onclick="startMovementExercise()">
+                            Mouvement physique
+                        </button>
+                        <button class="strategy-btn" onclick="startSocialExercise()">
+                            Contact social
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="saveEmotionExercise()">
+                💾 Sauvegarder cette analyse
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Journal de Bord -->
+    <div id="journal-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>📝 Journal de Bord TCC</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>📖 Votre journal TCC</strong> vous aide à prendre du recul et suivre vos progrès au quotidien.</p>
+            </div>
+
+            <div class="journal-entry-form">
+                <h3>✍️ Nouvelle entrée - <span id="current-date"></span></h3>
+                
+                <div class="journal-section">
+                    <h4>🌤️ Humeur générale aujourd'hui :</h4>
+                    <div class="mood-slider">
+                        <input type="range" id="daily-mood" min="1" max="10" value="5">
+                        <div class="sud-labels">
+                            <span>😔 Très mauvaise</span>
+                            <span>😊 Excellente</span>
+                        </div>
+                        <div class="sud-value">
+                            Humeur : <span id="mood-value">5</span>/10
+                        </div>
+                    </div>
+                </div>
+
+                <div class="journal-section">
+                    <h4>💭 Pensées principales de la journée :</h4>
+                    <textarea id="daily-thoughts" placeholder="Quelles ont été vos principales préoccupations ou pensées récurrentes aujourd'hui ?"></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>❤️ Émotions ressenties :</h4>
+                    <textarea id="daily-emotions" placeholder="Décrivez les principales émotions vécues et leur intensité..."></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>⚡ Situations déclenchantes :</h4>
+                    <textarea id="daily-triggers" placeholder="Y a-t-il eu des situations particulièrement difficiles ? Comment avez-vous réagi ?"></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>🛠️ Stratégies utilisées :</h4>
+                    <textarea id="daily-strategies" placeholder="Quelles techniques avez-vous utilisées ? Ont-elles été efficaces ?"></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>🌟 Points positifs :</h4>
+                    <textarea id="daily-positives" placeholder="Notez 3 choses positives de votre journée, même petites..."></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>🎯 Objectif pour demain :</h4>
+                    <textarea id="daily-goal" placeholder="Un petit objectif réalisable pour demain..."></textarea>
+                </div>
+            </div>
+
+            <div class="journal-actions">
+                <button class="btn-primary" onclick="saveJournalEntry()">
+                    💾 Sauvegarder cette entrée
+                </button>
+                <button class="btn-secondary" onclick="showJournalHistory()">
+                    📚 Voir l'historique
+                </button>
+            </div>
+
+            <div class="journal-history" id="journal-history" style="display:none;">
+                <h3>📚 Historique de votre journal</h3>
+                <div id="journal-entries-list">
+                    <!-- Sera rempli par JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TCC: Techniques Pratiques -->
+    <div id="techniques-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>🛠️ Techniques TCC Pratiques</h1>
+        </header>
+        <div class="container">
+            <div class="techniques-grid">
+                <div class="technique-card">
+                    <h4>🔢 Technique 5-4-3-2-1</h4>
+                    <p>Pour l'ancrage en cas de crise d'anxiété</p>
+                    <button class="btn-secondary" onclick="startGroundingTechnique()">Commencer</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>🎭 Dialogue avec ses pensées</h4>
+                    <p>Questionner ses pensées négatives</p>
+                    <button class="btn-secondary" onclick="startThoughtDialogue()">Commencer</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>📊 Graphique émotionnel</h4>
+                    <p>Visualiser l'évolution de ses émotions</p>
+                    <button class="btn-secondary" onclick="showEmotionChart()">Voir</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>⚡ Plan d'action anti-crise</h4>
+                    <p>Stratégies personnalisées d'urgence</p>
+                    <button class="btn-secondary" onclick="createCrisisPlan()">Créer</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>🎯 Exposition graduelle</h4>
+                    <p>Affronter progressivement ses peurs</p>
+                    <button class="btn-secondary" onclick="startExposureExercise()">Planifier</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>🏆 Journal des réussites</h4>
+                    <p>Valoriser ses progrès et succès</p>
+                    <button class="btn-secondary" onclick="showSuccessJournal()">Ouvrir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FIN SECTION TCC ============ -->
+
+    <script>
+        // Variables globales
+        let emdrInterval = null;
+        let emdrTimeRemaining = 0;
+        let emdrTimerInterval = null;
+        let sudBefore = 5;
+        let sudAfter = 5;
+        let currentSeries = 0;
+        let totalSeries = 4;
+        let questionInterval = null;
+        let currentMode = 'portrait';
+        let recommendationDismissed = false;
+        let breathingInterval = null;
+        let breathingCycles = 0;
+        let isActivated = false;
+
+        // ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============
+
+        // Base de données des codes valides (en production, ceci serait sur serveur sécurisé)
+        const VALID_ACTIVATION_CODES = [
+            // Format: XXXX-XXXX (première partie = série, deuxième = numéro unique)
+            'PA01-1001', 'PA01-1002', 'PA01-1003', 'PA01-1004', 'PA01-1005',
+            'PA01-1006', 'PA01-1007', 'PA01-1008', 'PA01-1009', 'PA01-1010',
+            'PA02-2001', 'PA02-2002', 'PA02-2003', 'PA02-2004', 'PA02-2005',
+            'PA03-3001', 'PA03-3002', 'PA03-3003', 'PA03-3004', 'PA03-3005',
+            // Codes de test (à retirer en production)
+            'TEST-0001', 'DEMO-0001', 'BETA-0001'
+        ];
+
+        // IDs NFC des cartes valides (simulation - en réalité ces IDs viendraient du scan)
+        const VALID_NFC_IDS = [
+            '04:12:34:56:78:90:AB',
+            '04:AB:CD:EF:12:34:56',
+            '04:98:76:54:32:10:FE',
+            // IDs de test
+            'TEST:NFC:001',
+            'DEMO:NFC:001'
+        ];
+
+        // Vérifier l'activation au chargement
+        function checkActivationStatus() {
+            const activated = localStorage.getItem('passAnxiete_activated');
+            const activationCode = localStorage.getItem('passAnxiete_activation_code');
+            const activationDate = localStorage.getItem('passAnxiete_activation_date');
+            
+            if (activated === 'true' && activationCode && activationDate) {
+                // Vérifier que l'activation n'est pas trop ancienne (optionnel)
+                const activationTime = new Date(activationDate);
+                const now = new Date();
+                const daysSinceActivation = (now - activationTime) / (1000 * 60 * 60 * 24);
+                
+                // Si l'activation a plus de 365 jours, demander réactivation (optionnel)
+                if (daysSinceActivation > 365) {
+                    showReactivationNeeded();
+                    return false;
+                }
+                
+                isActivated = true;
+                logActivationAttempt('auto_login', { code: activationCode });
+                return true;
+            }
+            return false;
+        }
+
+        // Activation par code
+        function activateWithCode() {
+            const codeInput = document.getElementById('activation-code');
+            const errorDiv = document.getElementById('code-error');
+            const btn = document.querySelector('.activation-btn');
+            
+            const inputCode = codeInput.value.trim().toUpperCase();
+            
+            // Reset
+            hideError(errorDiv);
+            
+            // Validation
+            if (!inputCode) {
+                showError(errorDiv, 'Veuillez saisir votre code d\'activation');
+                return;
+            }
+            
+            if (inputCode.length < 8) {
+                showError(errorDiv, 'Le code doit contenir 8 caractères (format XXXX-XXXX)');
+                return;
+            }
+            
+            // État de chargement
+            btn.disabled = true;
+            btn.textContent = '🔍 Vérification...';
+            
+            // Simulation délai réseau + vérification
+            setTimeout(() => {
+                if (VALID_ACTIVATION_CODES.includes(inputCode)) {
+                    // Succès
+                    performActivation('code', inputCode);
+                } else {
+                    // Échec
+                    showError(errorDiv, '❌ Code invalide. Vérifiez votre carte physique.');
+                    logActivationAttempt('invalid_code', { attemptedCode: inputCode });
+                    
+                    // Réinitialiser le bouton
+                    btn.disabled = false;
+                    btn.textContent = '✨ Activer ✨';
+                }
+            }, 2000);
+        }
+
+        // Activation par NFC
+        function activateWithNFC() {
+            const statusDiv = document.getElementById('nfc-status');
+            
+            statusDiv.className = 'nfc-status active';
+            statusDiv.textContent = '📡 Recherche de votre carte NFC...';
+            
+            // Vérifier si NFC est disponible
+            if (!('NDEFReader' in window)) {
+                statusDiv.className = 'nfc-status error';
+                statusDiv.textContent = '❌ NFC non disponible sur cet appareil';
+                return;
+            }
+            
+            try {
+                const reader = new NDEFReader();
+                
+                reader.scan().then(() => {
+                    statusDiv.textContent = '✅ NFC activé - Approchez votre carte...';
+                    
+                    reader.addEventListener('reading', ({ message, serialNumber }) => {
+                        // Simuler la vérification de l'ID NFC
+                        const nfcId = serialNumber || 'SIMULATED:NFC:' + Date.now();
+                        
+                        // En production, vérifier l'ID contre la base de données
+                        if (VALID_NFC_IDS.includes(nfcId) || nfcId.startsWith('SIMULATED:')) {
+                            statusDiv.className = 'nfc-status success';
+                            statusDiv.textContent = '✅ Carte reconnue ! Activation...';
+                            
+                            setTimeout(() => {
+                                performActivation('nfc', nfcId);
+                            }, 1000);
+                        } else {
+                            statusDiv.className = 'nfc-status error';
+                            statusDiv.textContent = '❌ Carte non reconnue';
+                            logActivationAttempt('invalid_nfc', { nfcId });
+                        }
+                    });
+                    
+                }).catch(error => {
+                    statusDiv.className = 'nfc-status error';
+                    statusDiv.textContent = '❌ Erreur NFC: ' + error.message;
+                });
+                
+            } catch (error) {
+                statusDiv.className = 'nfc-status error';
+                statusDiv.textContent = '❌ Erreur: ' + error.message;
+            }
+        }
+
+        // Effectuer l'activation réussie
+        function performActivation(method, identifier) {
+            const activationData = {
+                activated: true,
+                method: method,
+                identifier: identifier,
+                timestamp: new Date().toISOString(),
+                deviceInfo: {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language
+                }
+            };
+            
+            // Sauvegarder l'activation
+            localStorage.setItem('passAnxiete_activated', 'true');
+            localStorage.setItem('passAnxiete_activation_code', identifier);
+            localStorage.setItem('passAnxiete_activation_date', activationData.timestamp);
+            localStorage.setItem('passAnxiete_activation_method', method);
+            
+            // Log l'activation
+            logActivationAttempt('successful_activation', activationData);
+            
+            // Afficher l'écran de vérification
+            showVerificationScreen();
+        }
+
+        // Afficher l'écran de vérification
+        function showVerificationScreen() {
+            goToScreen('verification-screen');
+            
+            const statusEl = document.getElementById('verification-status');
+            const progressBar = document.getElementById('progress-bar');
+            
+            const steps = [
+                { text: 'Vérification de l\'authenticité...', progress: 20 },
+                { text: 'Validation de la carte unique...', progress: 40 },
+                { text: 'Chargement du contenu personnalisé...', progress: 60 },
+                { text: 'Configuration de votre profil...', progress: 80 },
+                { text: 'Finalisation de l\'activation...', progress: 100 }
+            ];
+            
+            let currentStep = 0;
+            
+            const stepInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    statusEl.textContent = steps[currentStep].text;
+                    progressBar.style.width = steps[currentStep].progress + '%';
+                    currentStep++;
+                } else {
+                    clearInterval(stepInterval);
+                    // Activation terminée, aller à l'écran principal
+                    setTimeout(() => {
+                        isActivated = true;
+                        goToScreen('home-screen');
+                        showActivationSuccess();
+                    }, 1000);
+                }
+            }, 1200);
+        }
+
+        // Afficher le message de succès
+        function showActivationSuccess() {
+            // Créer une notification de succès temporaire
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #4CAF50, #8BC34A);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 15px;
+                box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+                z-index: 10000;
+                font-weight: 600;
+                animation: slideDown 0.5s ease;
+            `;
+            notification.innerHTML = '✨ Activation réussie ! Bienvenue dans votre Pass Anxiété Pro';
+            
+            document.body.appendChild(notification);
+            
+            // Retirer après 4 secondes
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Afficher/masquer erreurs
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.add('show');
+        }
+        
+        function hideError(element) {
+            element.classList.remove('show');
+        }
+
+        // Logger les tentatives d'activation (pour analytics/sécurité)
+        function logActivationAttempt(type, data) {
+            const logEntry = {
+                type: type,
+                timestamp: new Date().toISOString(),
+                data: data,
+                sessionId: getSessionId()
+            };
+            
+            // Sauvegarder dans localStorage (en production: envoyer au serveur)
+            let logs = JSON.parse(localStorage.getItem('passAnxiete_activation_logs') || '[]');
+            logs.push(logEntry);
+            
+            // Garder seulement les 50 derniers logs
+            if (logs.length > 50) {
+                logs = logs.slice(-50);
+            }
+            
+            localStorage.setItem('passAnxiete_activation_logs', JSON.stringify(logs));
+            
+            // En production, envoyer au serveur pour monitoring
+            // sendToServer('/api/activation-log', logEntry);
+        }
+
+        // Générer un ID de session unique
+        function getSessionId() {
+            let sessionId = sessionStorage.getItem('passAnxiete_session_id');
+            if (!sessionId) {
+                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('passAnxiete_session_id', sessionId);
+            }
+            return sessionId;
+        }
+
+        // Réactivation nécessaire
+        function showReactivationNeeded() {
+            alert('⚠️ Réactivation requise\n\nVotre activation a expiré après 1 an.\nVeuillez réactiver votre carte pour continuer.');
+            localStorage.removeItem('passAnxiete_activated');
+            localStorage.removeItem('passAnxiete_activation_code');
+            localStorage.removeItem('passAnxiete_activation_date');
+        }
+
+        // Auto-formatage du code d'activation
+        function setupActivationInput() {
+            const codeInput = document.getElementById('activation-code');
+            if (codeInput) {
+                codeInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^A-Z0-9]/g, '').toUpperCase();
+                    
+                    // Auto-format avec tiret après 4 caractères
+                    if (value.length > 4) {
+                        value = value.substring(0, 4) + '-' + value.substring(4, 8);
+                    }
+                    
+                    e.target.value = value;
+                });
+                
+                // Activation avec Enter
+                codeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        activateWithCode();
+                    }
+                });
+            }
+        }
+
+        // Vérifier l'activation avant d'utiliser l'app
+        function requireActivation() {
+            if (!isActivated) {
+                goToScreen('activation-screen');
+                return false;
+            }
+            return true;
+        }
+
+        // ============ FIN SYSTÈME ACTIVATION ============
+
+        // Tracking clic boutique
+        function trackPurchaseClick() {
+            logActivationAttempt('purchase_redirect', {
+                source: 'activation_screen',
+                destination: 'hypnotarot.fr',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Système de stockage
+        class DataManager {
+            static saveAnxietyLevel(level) {
+                const entry = {
+                    level: parseInt(level),
+                    timestamp: new Date().toISOString()
+                };
+                let history = this.getAnxietyHistory();
+                history.push(entry);
+                localStorage.setItem('anxietyHistory', JSON.stringify(history));
+            }
+
+            static getAnxietyHistory() {
+                const history = localStorage.getItem('anxietyHistory');
+                return history ? JSON.parse(history) : [];
+            }
+
+            static logToolUsage(tool) {
+                const entry = {
+                    tool: tool,
+                    timestamp: new Date().toISOString()
+                };
+                let usage = this.getToolUsage();
+                usage.push(entry);
+                localStorage.setItem('toolUsage', JSON.stringify(usage));
+            }
+
+            static getToolUsage() {
+                const usage = localStorage.getItem('toolUsage');
+                return usage ? JSON.parse(usage) : [];
+            }
+        }
+
+        // Questions EMDR
+        const EMDR_QUESTIONS = [
+            "Que remarquez-vous maintenant ?",
+            "Restez concentré sur le souvenir...",
+            "Quelles pensées émergent ?",
+            "Continuez à suivre le point des yeux",
+            "Que ressentez-vous dans votre corps ?",
+            "Laissez venir ce qui vient...",
+            "Restez avec l'image du souvenir",
+            "Quelles émotions traversez-vous ?"
+        ];
+
+        // Descriptions SUD
+        const SUD_DESCRIPTIONS = {
+            0: "Aucune détresse - Totalement neutre",
+            1: "Détresse minimale - Très légère gêne", 
+            2: "Détresse très légère - À peine perceptible",
+            3: "Détresse légère - Légèrement inconfortable",
+            4: "Détresse modérée-légère - Commence à être gênant",
+            5: "Détresse modérée - Nettement inconfortable",
+            6: "Détresse modérée-forte - Assez perturbant",
+            7: "Détresse forte - Très perturbant",
+            8: "Détresse très forte - Difficilement supportable",
+            9: "Détresse extrême - Presque insupportable",
+            10: "Détresse maximale - La pire possible"
+        };
+
+        // Détection orientation
+        function checkOrientation() {
+            return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+        }
+
+        function updateSessionDisplay() {
+            const orientation = checkOrientation();
+            const portraitDiv = document.getElementById('portrait-version');
+            const recommendation = document.getElementById('orientation-recommendation');
+            
+            if (orientation === 'landscape') {
+                portraitDiv.style.display = 'block';
+                recommendation.classList.remove('show');
+                currentMode = 'landscape';
+            } else {
+                portraitDiv.style.display = 'block';
+                if (!recommendationDismissed && document.getElementById('emdr-session').classList.contains('active')) {
+                    recommendation.classList.add('show');
+                }
+                currentMode = 'portrait';
+            }
+        }
+
+        function hideOrientationRecommendation() {
+            recommendationDismissed = true;
+            document.getElementById('orientation-recommendation').classList.remove('show');
+        }
+
+        // Navigation avec vérification d'activation
+        function goToScreen(screenId) {
+            // Vérifier l'activation avant d'accéder aux écrans protégés
+            const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen', 'tracking-screen', 'tcc-screen'];
+            
+            if (protectedScreens.includes(screenId) && !requireActivation()) {
+                return;
+            }
+            
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            const screen = document.getElementById(screenId);
+            screen.classList.add('active');
+            
+            if (screenId === 'emdr-session') {
+                recommendationDismissed = false;
+                updateSessionDisplay();
+            } else if (screenId === 'tracking-screen') {
+                updateTrackingScreen();
+            }
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = `${dateString} - ${timeString}`;
+            }
+        }
+
+        function updateRecommendations() {
+            const hour = new Date().getHours();
+            let recommendation = '';
+            
+            if (hour >= 6 && hour < 10) {
+                recommendation = '<h4>🌅 Méditation Matinale</h4><p>Commencez votre journée avec calme</p>';
+            } else if (hour >= 10 && hour < 14) {
+                recommendation = '<h4>💓 Cohérence Cardiaque</h4><p>5 minutes pour réguler</p>';
+            } else if (hour >= 14 && hour < 18) {
+                recommendation = '<h4>👁️ EMDR Pro</h4><p>Session de recentrage</p>';
+            } else if (hour >= 18 && hour < 22) {
+                recommendation = '<h4>🎧 Hypnose du Soir</h4><p>Libérez les tensions</p>';
+            } else {
+                recommendation = '<h4>💨 Respiration Calme</h4><p>Pour faciliter l\'endormissement</p>';
+            }
+            
+            const el = document.getElementById('recommended-tool');
+            if (el) el.innerHTML = recommendation;
+        }
+
+        // Configuration SUD sliders
+        function setupSUDSliders() {
+            const sudBefore = document.getElementById('sud-before');
+            const sudAfter = document.getElementById('sud-after');
+            
+            if (sudBefore) {
+                sudBefore.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    document.getElementById('sud-before-value').textContent = value;
+                    document.getElementById('sud-before-desc').textContent = SUD_DESCRIPTIONS[value];
+                });
+            }
+            
+            if (sudAfter) {
+                sudAfter.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    document.getElementById('sud-after-value').textContent = value;
+                    document.getElementById('sud-after-desc').textContent = SUD_DESCRIPTIONS[value];
+                });
+            }
+        }
+
+        // Session EMDR professionnelle
+        function startEMDRSession() {
+            sudBefore = parseInt(document.getElementById('sud-before').value);
+            const mode = document.getElementById('emdr-mode').value;
+            
+            switch(mode) {
+                case 'professional':
+                    totalSeries = 4;
+                    emdrTimeRemaining = 120;
+                    break;
+                case 'quick':
+                    totalSeries = 1;
+                    emdrTimeRemaining = 120;
+                    break;
+                case 'standard':
+                    totalSeries = 2;
+                    emdrTimeRemaining = 150;
+                    break;
+            }
+            
+            currentSeries = 1;
+            document.getElementById('total-series-portrait').textContent = totalSeries;
+            
+            goToScreen('emdr-session');
+            
+            setTimeout(() => {
+                startEMDRAnimation();
+            }, 3000);
+        }
+
+        function startEMDRAnimation() {
+            const speed = document.getElementById('emdr-speed').value;
+            updateTimer();
+            
+            const dot = document.getElementById('emdr-dot-portrait');
+            const canvas = document.getElementById('emdr-canvas-portrait');
+            
+            let canvasWidth = canvas.offsetWidth;
+            let maxPositionX = canvasWidth - 70;
+            let position = { x: 20, y: canvas.offsetHeight / 2 - 25 };
+            let direction = { x: 1, y: 0 };
+            
+            const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
+            const cycleDuration = speedConfig[speed];
+            
+            function animate() {
+                canvasWidth = canvas.offsetWidth;
+                maxPositionX = canvasWidth - 70;
+                
+                const increment = maxPositionX / (cycleDuration / 50);
+                position.x += increment * direction.x;
+                
+                if (position.x >= maxPositionX) {
+                    position.x = maxPositionX;
+                    direction.x = -1;
+                } else if (position.x <= 20) {
+                    position.x = 20;
+                    direction.x = 1;
+                }
+                
+                dot.style.left = position.x + 'px';
+                dot.style.top = position.y + 'px';
+            }
+            
+            emdrInterval = setInterval(animate, 50);
+            
+            emdrTimerInterval = setInterval(() => {
+                emdrTimeRemaining--;
+                updateTimer();
+                
+                if (emdrTimeRemaining <= 0) {
+                    stopEMDRAnimation();
+                    completeSeries();
+                }
+            }, 1000);
+            
+            // Questions thérapeutiques
+            let questionIndex = 0;
+            questionInterval = setInterval(() => {
+                showQuestion(EMDR_QUESTIONS[questionIndex % EMDR_QUESTIONS.length]);
+                questionIndex++;
+            }, 15000);
+        }
+
+        function stopEMDRAnimation() {
+            if (emdrInterval) clearInterval(emdrInterval);
+            if (emdrTimerInterval) clearInterval(emdrTimerInterval);
+            if (questionInterval) clearInterval(questionInterval);
+        }
+
+        function stopEMDRSession() {
+            stopEMDRAnimation();
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                DataManager.logToolUsage('emdr');
+                goToScreen('emdr-evaluation');
+            } else {
+                startEMDRAnimation();
+            }
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(emdrTimeRemaining / 60);
+            const seconds = emdrTimeRemaining % 60;
+            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timer = document.getElementById('session-timer-portrait');
+            if (timer) timer.textContent = timeStr;
+        }
+
+        function showQuestion(question) {
+            const overlay = document.getElementById('question-overlay');
+            document.getElementById('question-text').textContent = question;
+            overlay.classList.add('visible');
+            
+            setTimeout(() => {
+                overlay.classList.remove('visible');
+            }, 4000);
+        }
+
+        function completeSeries() {
+            if (currentSeries >= totalSeries) {
+                DataManager.logToolUsage('emdr');
+                goToScreen('emdr-evaluation');
+            } else {
+                if (confirm(`Série ${currentSeries}/${totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                    currentSeries++;
+                    document.getElementById('current-series-portrait').textContent = currentSeries;
+                    
+                    const mode = document.getElementById('emdr-mode').value;
+                    switch(mode) {
+                        case 'professional':
+                            emdrTimeRemaining = 120;
+                            break;
+                        case 'standard':
+                            emdrTimeRemaining = 150;
+                            break;
+                    }
+                    
+                    startEMDRAnimation();
+                } else {
+                    DataManager.logToolUsage('emdr');
+                    goToScreen('emdr-evaluation');
+                }
+            }
+        }
+
+        // Évaluation EMDR
+        function evaluateResults() {
+            sudAfter = parseInt(document.getElementById('sud-after').value);
+            
+            document.getElementById('comparison-section').style.display = 'block';
+            
+            const heightBefore = (sudBefore / 10) * 100;
+            const heightAfter = (sudAfter / 10) * 100;
+            
+            document.getElementById('bar-before').style.height = heightBefore + '%';
+            document.getElementById('bar-before').textContent = sudBefore;
+            
+            document.getElementById('bar-after').style.height = heightAfter + '%';
+            document.getElementById('bar-after').textContent = sudAfter;
+            
+            const improvement = sudBefore - sudAfter;
+            const improvementPercent = ((improvement / sudBefore) * 100).toFixed(0);
+            
+            const resultMsg = document.getElementById('result-message');
+            const interpretation = document.getElementById('interpretation-text');
+            
+            if (sudAfter <= 2) {
+                resultMsg.className = 'result-message success';
+                resultMsg.innerHTML = `
+                    <strong>✅ Excellent résultat !</strong><br>
+                    Amélioration de ${improvement} points (-${improvementPercent}%)<br>
+                    Le souvenir est maintenant faiblement perturbant.
+                `;
+                interpretation.innerHTML = `
+                    <strong>Retraitement réussi !</strong><br>
+                    Votre cerveau a intégré l'information émotionnelle. Le souvenir reste accessible mais n'est plus chargé émotionnellement.<br><br>
+                    <strong>Recommandation :</strong> Le travail sur cette cible est terminé.
+                `;
+            } else if (improvement >= 3) {
+                resultMsg.className = 'result-message success';
+                resultMsg.innerHTML = `
+                    <strong>👍 Bonne amélioration !</strong><br>
+                    Amélioration de ${improvement} points (-${improvementPercent}%)<br>
+                    Le retraitement a bien commencé.
+                `;
+                interpretation.innerHTML = `
+                    <strong>Progrès significatif</strong><br>
+                    Le retraitement est en cours. Plusieurs séries supplémentaires pourraient être bénéfiques.<br><br>
+                    <strong>Recommandation :</strong> Refaire une session EMDR sur la même cible dans les prochains jours.
+                `;
+            } else {
+                resultMsg.className = 'result-message warning';
+                resultMsg.innerHTML = `
+                    <strong>⚠️ Amélioration légère</strong><br>
+                    Amélioration de ${improvement} point(s)<br>
+                    Le retraitement nécessite plus de travail.
+                `;
+                interpretation.innerHTML = `
+                    <strong>Retraitement incomplet</strong><br>
+                    Le souvenir nécessite plus de séries de stimulation bilatérale.<br><br>
+                    <strong>Recommandation :</strong> Consulter un thérapeute EMDR certifié pour un accompagnement professionnel.
+                `;
+            }
+            
+            document.getElementById('comparison-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // EMDR Simple
+        function startSimpleEMDR() {
+            const speed = document.getElementById('emdr-speed-simple').value;
+            const duration = parseInt(document.getElementById('emdr-duration-simple').value);
+            
+            const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
+            const cycleDuration = speedConfig[speed];
+            
+            emdrTimeRemaining = duration * 60;
+            updateSimpleEMDRTimer();
+            
+            const dot = document.getElementById('emdr-dot');
+            const canvas = document.getElementById('emdr-canvas');
+            const canvasWidth = canvas.offsetWidth;
+            const dotWidth = dot.offsetWidth;
+            const maxPosition = canvasWidth - dotWidth;
+            
+            let position = 0;
+            let direction = 1;
+            
+            function animate() {
+                const increment = maxPosition / (cycleDuration / 50);
+                position += increment * direction;
+                
+                if (position >= maxPosition) {
+                    position = maxPosition;
+                    direction = -1;
+                } else if (position <= 0) {
+                    position = 0;
+                    direction = 1;
+                }
+                
+                dot.style.left = position + 'px';
+            }
+            
+            emdrInterval = setInterval(animate, 50);
+            
+            emdrTimerInterval = setInterval(() => {
+                emdrTimeRemaining--;
+                updateSimpleEMDRTimer();
+                
+                if (emdrTimeRemaining <= 0) {
+                    stopSimpleEMDR();
+                    DataManager.logToolUsage('emdr');
+                    alert('✨ Session EMDR terminée ! Bravo !');
+                }
+            }, 1000);
+            
+            document.getElementById('emdr-start').style.display = 'none';
+            document.getElementById('emdr-stop').style.display = 'inline-block';
+        }
+
+        function stopSimpleEMDR() {
+            if (emdrInterval) clearInterval(emdrInterval);
+            if (emdrTimerInterval) clearInterval(emdrTimerInterval);
+            
+            document.getElementById('emdr-dot').style.left = '0px';
+            document.getElementById('emdr-start').style.display = 'inline-block';
+            document.getElementById('emdr-stop').style.display = 'none';
+            
+            const duration = parseInt(document.getElementById('emdr-duration-simple').value);
+            emdrTimeRemaining = duration * 60;
+            updateSimpleEMDRTimer();
+        }
+
+        function updateSimpleEMDRTimer() {
+            const minutes = Math.floor(emdrTimeRemaining / 60);
+            const seconds = emdrTimeRemaining % 60;
+            document.getElementById('emdr-timer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Respiration
+        function startBreathing() {
+            breathingCycles = 0;
+            updateCycleCounter();
+            
+            const circle = document.getElementById('breathing-circle');
+            const instruction = document.getElementById('breathing-instruction');
+            
+            function breatheCycle() {
+                instruction.textContent = 'Inspirez... 🌬️';
+                circle.style.transform = 'scale(2)';
+                
+                setTimeout(() => {
+                    instruction.textContent = 'Expirez... 💨';
+                    circle.style.transform = 'scale(1)';
+                    
+                    breathingCycles++;
+                    updateCycleCounter();
+                    
+                    if (breathingCycles >= 30) {
+                        setTimeout(() => {
+                            stopBreathing();
+                            DataManager.logToolUsage('breathing');
+                            alert('🎉 Session terminée ! Bravo !');
+                        }, 5000);
+                    }
+                }, 5000);
+            }
+            
+            breatheCycle();
+            breathingInterval = setInterval(breatheCycle, 10000);
+            
+            document.getElementById('breathing-start').style.display = 'none';
+            document.getElementById('breathing-stop').style.display = 'inline-block';
+        }
+
+        function stopBreathing() {
+            if (breathingInterval) clearInterval(breathingInterval);
+            
+            document.getElementById('breathing-circle').style.transform = 'scale(1)';
+            document.getElementById('breathing-instruction').textContent = 'Prêt à commencer';
+            
+            document.getElementById('breathing-start').style.display = 'inline-block';
+            document.getElementById('breathing-stop').style.display = 'none';
+            
+            breathingCycles = 0;
+            updateCycleCounter();
+        }
+
+        function updateCycleCounter() {
+            document.getElementById('cycle-count').textContent = breathingCycles;
+        }
+
+        // Suivi
+        function updateTrackingScreen() {
+            const usage = DataManager.getToolUsage();
+            const anxiety = DataManager.getAnxietyHistory();
+            
+            const totalSessions = usage.length;
+            
+            const toolCounts = {};
+            usage.forEach(e => {
+                toolCounts[e.tool] = (toolCounts[e.tool] || 0) + 1;
+            });
+            const favTool = Object.keys(toolCounts).reduce((a, b) => 
+                toolCounts[a] > toolCounts[b] ? a : b, '');
+            
+            const avgAnxiety = anxiety.length > 0 ?
+                (anxiety.reduce((sum, e) => sum + e.level, 0) / anxiety.length).toFixed(1) : 0;
+            
+            // Série consécutive
+            const today = new Date().toISOString().split('T')[0];
+            const uniqueDates = [...new Set(usage.map(e => 
+                new Date(e.timestamp).toISOString().split('T')[0]
+            ))].sort().reverse();
+            
+            let streak = 0;
+            for (let i = 0; i < uniqueDates.length; i++) {
+                const expectedDate = new Date();
+                expectedDate.setDate(expectedDate.getDate() - i);
+                const expectedDateStr = expectedDate.toISOString().split('T')[0];
+                
+                if (uniqueDates[i] === expectedDateStr) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            document.getElementById('total-sessions').textContent = totalSessions;
+            
+            const toolNames = {
+                'emdr': 'EMDR',
+                'breathing': 'Respiration',
+                'crisis': 'Mode Crise'
+            };
+            document.getElementById('favorite-tool').textContent = 
+                toolNames[favTool] || '-';
+            
+            document.getElementById('avg-anxiety').textContent = 
+                avgAnxiety > 0 ? avgAnxiety + '/10' : '-';
+            
+            document.getElementById('streak-days').textContent = streak;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Vérifier l'activation en premier
+            if (checkActivationStatus()) {
+                // Déjà activé, aller directement à l'accueil
+                goToScreen('home-screen');
+            } else {
+                // Pas activé, rester sur l'écran d'activation
+                goToScreen('activation-screen');
+            }
+            
+            // Configuration du système d'activation
+            setupActivationInput();
+            
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 60000);
+            updateRecommendations();
+            
+            // Skip NFC (maintenant désactivé par défaut)
+            const skipNfc = document.getElementById('skip-nfc');
+            if (skipNfc) {
+                skipNfc.addEventListener('click', () => {
+                    if (requireActivation()) {
+                        goToScreen('home-screen');
+                    }
+                });
+            }
+            
+            // Navigation outils
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const tool = card.dataset.tool;
+                    const screenMap = {
+                        'crisis': 'crisis-screen',
+                        'emdr': 'emdr-distance',
+                        'breathing': 'breathing-screen',
+                        'tracking': 'tracking-screen',
+                        'tcc': 'tcc-screen',
+                        'thoughts': 'thoughts-screen',
+                        'emotions': 'emotions-screen',
+                        'journal': 'journal-screen',
+                        'techniques': 'techniques-screen'
+                    };
+                    if (screenMap[tool]) {
+                        goToScreen(screenMap[tool]);
+                    } else {
+                        alert('Cette fonctionnalité sera bientôt disponible !');
+                    }
+                });
+            });
+            
+            // Boutons retour
+            document.querySelectorAll('[data-back]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    goToScreen(btn.dataset.back);
+                });
+            });
+            
+            // Boutons urgence
+            document.querySelectorAll('[data-emergency]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tool = btn.dataset.emergency;
+                    if (tool === 'breathing') {
+                        goToScreen('breathing-screen');
+                    } else if (tool === 'emdr') {
+                        goToScreen('emdr-simple');
+                        document.getElementById('emdr-duration-simple').value = '2';
+                    }
+                });
+            });
+            
+            // Jauge anxiété
+            document.getElementById('anxiety-level').addEventListener('input', (e) => {
+                const value = e.target.value;
+                document.getElementById('anxiety-display').textContent = value;
+                DataManager.saveAnxietyLevel(value);
+            });
+            
+            // EMDR Simple
+            const emdrStartBtn = document.getElementById('emdr-start');
+            const emdrStopBtn = document.getElementById('emdr-stop');
+            
+            if (emdrStartBtn) {
+                emdrStartBtn.addEventListener('click', startSimpleEMDR);
+            }
+            if (emdrStopBtn) {
+                emdrStopBtn.addEventListener('click', stopSimpleEMDR);
+            }
+            
+            // Respiration
+            document.getElementById('breathing-start').addEventListener('click', startBreathing);
+            document.getElementById('breathing-stop').addEventListener('click', stopBreathing);
+            
+            // Configuration SUD sliders
+            setupSUDSliders();
+            
+            // Configuration TCC
+            setupTCCComponents();
+            
+            // Écouteurs d'orientation
+            window.addEventListener('resize', () => {
+                if (document.getElementById('emdr-session').classList.contains('active')) {
+                    updateSessionDisplay();
+                }
+            });
+
+            window.addEventListener('orientationchange', () => {
+                if (document.getElementById('emdr-session').classList.contains('active')) {
+                    setTimeout(updateSessionDisplay, 100);
+                }
+            });
+        });
+
+        // ============ FONCTIONS TCC ============
+
+        // Configuration des composants TCC
+        function setupTCCComponents() {
+            // Date actuelle pour le journal
+            const currentDateEl = document.getElementById('current-date');
+            if (currentDateEl) {
+                currentDateEl.textContent = new Date().toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            }
+
+            // Slider humeur quotidienne
+            const moodSlider = document.getElementById('daily-mood');
+            if (moodSlider) {
+                moodSlider.addEventListener('input', (e) => {
+                    document.getElementById('mood-value').textContent = e.target.value;
+                });
+            }
+
+            // Boutons émotions
+            document.querySelectorAll('.emotion-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Désélectionner tous les autres
+                    document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+                    // Sélectionner celui-ci
+                    btn.classList.add('selected');
+                    
+                    const emotion = btn.dataset.emotion;
+                    document.getElementById('selected-emotion').textContent = emotion.charAt(0).toUpperCase() + emotion.slice(1);
+                    
+                    // Afficher la section intensité
+                    document.getElementById('emotion-intensity-section').style.display = 'block';
+                });
+            });
+
+            // Slider intensité émotion
+            const emotionIntensity = document.getElementById('emotion-intensity');
+            if (emotionIntensity) {
+                emotionIntensity.addEventListener('input', (e) => {
+                    document.getElementById('emotion-intensity-value').textContent = e.target.value;
+                });
+            }
+        }
+
+        // Sauvegarder exercice de pensées
+        function saveThoughtExercise() {
+            const currentThought = document.getElementById('current-thought').value;
+            const alternativeThought = document.getElementById('alternative-thought').value;
+            
+            if (!currentThought.trim()) {
+                alert('Veuillez d\'abord décrire votre pensée négative');
+                return;
+            }
+
+            const exercise = {
+                type: 'thought-exercise',
+                date: new Date().toISOString(),
+                currentThought: currentThought,
+                alternativeThought: alternativeThought
+            };
+
+            // Sauvegarder dans le localStorage
+            let exercises = JSON.parse(localStorage.getItem('tccExercises') || '[]');
+            exercises.push(exercise);
+            localStorage.setItem('tccExercises', JSON.stringify(exercises));
+
+            // Log pour le suivi général
+            DataManager.logToolUsage('tcc-thoughts');
+
+            alert('✅ Exercice sauvegardé ! Bien joué pour ce travail sur vos pensées.');
+            
+            // Réinitialiser le formulaire
+            document.getElementById('current-thought').value = '';
+            document.getElementById('alternative-thought').value = '';
+        }
+
+        // Sauvegarder exercice d'émotions
+        function saveEmotionExercise() {
+            const selectedEmotion = document.querySelector('.emotion-btn.selected');
+            if (!selectedEmotion) {
+                alert('Veuillez d\'abord sélectionner une émotion');
+                return;
+            }
+
+            const exercise = {
+                type: 'emotion-exercise',
+                date: new Date().toISOString(),
+                emotion: selectedEmotion.dataset.emotion,
+                intensity: document.getElementById('emotion-intensity').value,
+                trigger: document.getElementById('emotion-trigger').value,
+                bodyLocation: document.getElementById('emotion-body').value
+            };
+
+            // Sauvegarder
+            let exercises = JSON.parse(localStorage.getItem('tccExercises') || '[]');
+            exercises.push(exercise);
+            localStorage.setItem('tccExercises', JSON.stringify(exercises));
+
+            DataManager.logToolUsage('tcc-emotions');
+
+            alert('✅ Analyse émotionnelle sauvegardée ! Vous progressez dans la compréhension de vos émotions.');
+            
+            // Réinitialiser
+            document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('emotion-intensity-section').style.display = 'none';
+            document.getElementById('emotion-trigger').value = '';
+            document.getElementById('emotion-body').value = '';
+        }
+
+        // Sauvegarder entrée de journal
+        function saveJournalEntry() {
+            const entry = {
+                type: 'journal-entry',
+                date: new Date().toISOString(),
+                mood: document.getElementById('daily-mood').value,
+                thoughts: document.getElementById('daily-thoughts').value,
+                emotions: document.getElementById('daily-emotions').value,
+                triggers: document.getElementById('daily-triggers').value,
+                strategies: document.getElementById('daily-strategies').value,
+                positives: document.getElementById('daily-positives').value,
+                goal: document.getElementById('daily-goal').value
+            };
+
+            // Vérifier qu'au moins un champ est rempli
+            const hasContent = Object.values(entry).some(value => 
+                typeof value === 'string' && value.trim() !== ''
+            );
+
+            if (!hasContent) {
+                alert('Veuillez remplir au moins une section de votre journal');
+                return;
+            }
+
+            // Sauvegarder
+            let journal = JSON.parse(localStorage.getItem('tccJournal') || '[]');
+            
+            // Vérifier s'il y a déjà une entrée pour aujourd'hui
+            const today = new Date().toISOString().split('T')[0];
+            const existingIndex = journal.findIndex(entry => 
+                entry.date.split('T')[0] === today
+            );
+
+            if (existingIndex >= 0) {
+                // Mettre à jour l'entrée existante
+                journal[existingIndex] = entry;
+                alert('✅ Entrée du jour mise à jour !');
+            } else {
+                // Nouvelle entrée
+                journal.push(entry);
+                alert('✅ Nouvelle entrée de journal sauvegardée !');
+            }
+
+            localStorage.setItem('tccJournal', JSON.stringify(journal));
+            DataManager.logToolUsage('tcc-journal');
+
+            // Réinitialiser le formulaire
+            document.getElementById('daily-mood').value = '5';
+            document.getElementById('mood-value').textContent = '5';
+            document.querySelectorAll('#journal-screen textarea').forEach(textarea => {
+                textarea.value = '';
+            });
+        }
+
+        // Afficher l'historique du journal
+        function showJournalHistory() {
+            const historySection = document.getElementById('journal-history');
+            const entriesList = document.getElementById('journal-entries-list');
+            
+            const journal = JSON.parse(localStorage.getItem('tccJournal') || '[]');
+            
+            if (journal.length === 0) {
+                entriesList.innerHTML = '<p style="text-align: center; color: #666;">Aucune entrée pour le moment.</p>';
+            } else {
+                entriesList.innerHTML = journal
+                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                    .slice(0, 10) // Dernières 10 entrées
+                    .map(entry => {
+                        const date = new Date(entry.date);
+                        const dateStr = date.toLocaleDateString('fr-FR', {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long'
+                        });
+                        
+                        const moodEmoji = entry.mood <= 3 ? '😔' : 
+                                         entry.mood <= 6 ? '😐' : '😊';
+                        
+                        return `
+                            <div class="journal-entry-item">
+                                <div class="journal-entry-header">
+                                    <span>${dateStr}</span>
+                                    <span class="journal-entry-mood">${moodEmoji} ${entry.mood}/10</span>
+                                </div>
+                                <p><strong>Pensées :</strong> ${entry.thoughts.substring(0, 100)}${entry.thoughts.length > 100 ? '...' : ''}</p>
+                                <p><strong>Points positifs :</strong> ${entry.positives.substring(0, 100)}${entry.positives.length > 100 ? '...' : ''}</p>
+                            </div>
+                        `;
+                    }).join('');
+            }
+            
+            historySection.style.display = historySection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // ========== TECHNIQUES PRATIQUES ==========
+
+        // Technique 5-4-3-2-1 (Grounding)
+        function startGroundingTechnique() {
+            showTechniqueOverlay(`
+                <h2>🔢 Technique 5-4-3-2-1</h2>
+                <p><strong>Pour vous ancrer dans le présent :</strong></p>
+                <p>🔍 <strong>5 choses</strong> que vous VOYEZ autour de vous</p>
+                <p>👂 <strong>4 choses</strong> que vous ENTENDEZ</p>
+                <p>✋ <strong>3 choses</strong> que vous TOUCHEZ</p>
+                <p>👃 <strong>2 choses</strong> que vous SENTEZ</p>
+                <p>👅 <strong>1 chose</strong> que vous GOÛTEZ</p>
+                <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">
+                    Prenez votre temps pour chaque étape. Cette technique vous ramène dans l'instant présent.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-grounding');
+        }
+
+        // Dialogue avec ses pensées
+        function startThoughtDialogue() {
+            showTechniqueOverlay(`
+                <h2>🎭 Dialogue avec vos Pensées</h2>
+                <p><strong>Questionnez votre pensée négative :</strong></p>
+                <p>❓ "Est-ce que c'est vraiment vrai ?"</p>
+                <p>🔍 "Quelles preuves ai-je pour et contre ?"</p>
+                <p>🤝 "Que dirais-je à un ami dans cette situation ?"</p>
+                <p>🔮 "Quelle est la probabilité que le pire arrive ?"</p>
+                <p>🛠️ "Comment puis-je agir de manière constructive ?"</p>
+                <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">
+                    Vos pensées ne sont pas des faits. Questionnez-les avec bienveillance.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-dialogue');
+        }
+
+        // Afficher overlay technique
+        function showTechniqueOverlay(content) {
+            const overlay = document.createElement('div');
+            overlay.className = 'technique-overlay visible';
+            overlay.innerHTML = `
+                <div class="technique-content">
+                    <button class="technique-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                    ${content}
+                    <button class="btn-primary" style="margin-top: 30px; width: auto;" onclick="this.parentElement.parentElement.remove()">
+                        ✅ J'ai terminé
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        // Exercices rapides
+        function startGroundingExercise() {
+            startGroundingTechnique();
+        }
+
+        function startBodyScanExercise() {
+            showTechniqueOverlay(`
+                <h2>🧘 Scan Corporel Rapide</h2>
+                <p><strong>Concentrez-vous sur votre corps :</strong></p>
+                <p>🧠 Commencez par le sommet de votre tête</p>
+                <p>👀 Descendez vers vos yeux, votre visage</p>
+                <p>💪 Vos épaules, vos bras</p>
+                <p>❤️ Votre poitrine, votre respiration</p>
+                <p>🤲 Votre ventre, vos hanches</p>
+                <p>🦵 Vos jambes, vos pieds</p>
+                <p style="margin-top: 20px;">
+                    Où ressentez-vous des tensions ? Respirez dans ces zones et relâchez.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-bodyscan');
+        }
+
+        function startDistanceExercise() {
+            showTechniqueOverlay(`
+                <h2>🌅 Prise de Distance</h2>
+                <p><strong>Imaginez-vous dans 5 ans :</strong></p>
+                <p>🔮 Cette situation sera-t-elle encore importante ?</p>
+                <p>🎭 Si vous étiez un observateur externe, que penseriez-vous ?</p>
+                <p>📏 Sur une échelle de 1 à 10, quelle est l'importance réelle de ce problème ?</p>
+                <p>🌊 Imaginez vos émotions comme des vagues : elles montent et redescendent.</p>
+                <p style="margin-top: 20px;">
+                    Le recul temporel aide à relativiser nos préoccupations.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-distance');
+        }
+
+        function startAcceptanceExercise() {
+            showTechniqueOverlay(`
+                <h2>🤗 Acceptation Émotionnelle</h2>
+                <p><strong>Accueillez votre émotion :</strong></p>
+                <p>👋 "Bonjour [nom de l'émotion], je te vois"</p>
+                <p>🎯 "Tu es là pour me protéger, merci"</p>
+                <p>🌊 "Tu peux rester, mais tu n'as pas besoin de me contrôler"</p>
+                <p>💝 "J'accepte de ressentir cela sans me juger"</p>
+                <p style="margin-top: 20px;">
+                    Résister aux émotions les amplifie. Les accueillir les apaise.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-acceptance');
+        }
+
+        function startActivityExercise() {
+            const activities = [
+                "☕ Boire une boisson chaude en pleine conscience",
+                "🎵 Écouter votre musique préférée",
+                "📱 Appeler quelqu'un qui vous fait du bien",
+                "🚶 Faire une courte promenade",
+                "🎨 Dessiner ou colorier",
+                "📚 Lire quelques pages d'un livre",
+                "🧘 Méditer 5 minutes",
+                "🛁 Prendre un bain ou une douche relaxante"
+            ];
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            
+            showTechniqueOverlay(`
+                <h2>🎯 Activité Plaisante</h2>
+                <p><strong>Suggestion personnalisée :</strong></p>
+                <p style="font-size: 1.4rem; color: var(--primary); margin: 20px 0;">
+                    ${randomActivity}
+                </p>
+                <p>Cette activité peut vous aider à changer votre état émotionnel.</p>
+                <button class="btn-secondary" style="margin-top: 20px; width: auto;" onclick="startActivityExercise()">
+                    🔄 Autre suggestion
+                </button>
+            `);
+            DataManager.logToolUsage('tcc-activity');
+        }
+
+        function startMovementExercise() {
+            showTechniqueOverlay(`
+                <h2>🏃 Mouvement Physique</h2>
+                <p><strong>Bougez pour libérer les tensions :</strong></p>
+                <p>🤸 Étirements doux (bras, cou, dos)</p>
+                <p>🚶 Marche de 5-10 minutes</p>
+                <p>💃 Danse sur votre musique préférée</p>
+                <p>🧘 Yoga ou tai-chi</p>
+                <p>👊 Exercices de boxe dans le vide</p>
+                <p style="margin-top: 20px;">
+                    Le mouvement libère les endorphines et évacue le stress physique.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-movement');
+        }
+
+        function startSocialExercise() {
+            showTechniqueOverlay(`
+                <h2>👥 Contact Social</h2>
+                <p><strong>Connectez-vous avec les autres :</strong></p>
+                <p>📞 Appelez un proche</p>
+                <p>💬 Envoyez un message positif à quelqu'un</p>
+                <p>🤗 Demandez un câlin</p>
+                <p>👂 Partagez ce que vous ressentez</p>
+                <p>❤️ Exprimez votre gratitude à quelqu'un</p>
+                <p style="margin-top: 20px;">
+                    Le soutien social est l'un des meilleurs remèdes contre l'anxiété.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-social');
+        }
+
+        // Fonctions pour les techniques avancées
+        function showEmotionChart() {
+            alert('📊 Fonctionnalité en développement !\n\nLe graphique émotionnel permettra de visualiser l\'évolution de vos émotions sur plusieurs semaines.');
+        }
+
+        function createCrisisPlan() {
+            alert('⚡ Fonctionnalité en développement !\n\nLe plan anti-crise vous permettra de créer une stratégie personnalisée pour les moments difficiles.');
+        }
+
+        function startExposureExercise() {
+            alert('🎯 Fonctionnalité en développement !\n\nL\'exposition graduelle vous aidera à affronter progressivement vos peurs.');
+        }
+
+        function showSuccessJournal() {
+            alert('🏆 Fonctionnalité en développement !\n\nLe journal des réussites valorisera vos progrès et accomplissements.');
+        }
+
+        // Mise à jour du suivi pour inclure TCC
+        function updateTrackingScreen() {
+            const usage = DataManager.getToolUsage();
+            const anxiety = DataManager.getAnxietyHistory();
+            
+            const totalSessions = usage.length;
+            
+            const toolCounts = {};
+            usage.forEach(e => {
+                toolCounts[e.tool] = (toolCounts[e.tool] || 0) + 1;
+            });
+            const favTool = Object.keys(toolCounts).reduce((a, b) => 
+                toolCounts[a] > toolCounts[b] ? a : b, '');
+            
+            const avgAnxiety = anxiety.length > 0 ?
+                (anxiety.reduce((sum, e) => sum + e.level, 0) / anxiety.length).toFixed(1) : 0;
+            
+            // Série consécutive
+            const today = new Date().toISOString().split('T')[0];
+            const uniqueDates = [...new Set(usage.map(e => 
+                new Date(e.timestamp).toISOString().split('T')[0]
+            ))].sort().reverse();
+            
+            let streak = 0;
+            for (let i = 0; i < uniqueDates.length; i++) {
+                const expectedDate = new Date();
+                expectedDate.setDate(expectedDate.getDate() - i);
+                const expectedDateStr = expectedDate.toISOString().split('T')[0];
+                
+                if (uniqueDates[i] === expectedDateStr) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            document.getElementById('total-sessions').textContent = totalSessions;
+            
+            const toolNames = {
+                'emdr': 'EMDR',
+                'breathing': 'Respiration',
+                'crisis': 'Mode Crise',
+                'tcc-thoughts': 'TCC Pensées',
+                'tcc-emotions': 'TCC Émotions',
+                'tcc-journal': 'Journal TCC'
+            };
+            document.getElementById('favorite-tool').textContent = 
+                toolNames[favTool] || '-';
+            
+            document.getElementById('avg-anxiety').textContent = 
+                avgAnxiety > 0 ? avgAnxiety + '/10' : '-';
+            
+            document.getElementById('streak-days').textContent = streak;
+        }
+
+        // ============ FIN FONCTIONS TCC ============
+    </script>
+</body>
+</html>
