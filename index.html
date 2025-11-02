@@ -604,36 +604,76 @@
             height: 100vh !important;
             z-index: 9999 !important;
             background: #000 !important;
+            overflow: hidden !important;
         }
 
         .emdr-fullscreen #emdr-canvas-portrait {
-            height: 80vh !important;
-            width: 95vw !important;
-            margin: 0 auto !important;
+            width: 100vw !important;
+            height: 85vh !important;
+            margin: 0 !important;
+            display: block !important;
         }
 
         .emdr-fullscreen .session-controls {
             position: fixed;
-            bottom: 20px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10000;
+            background: rgba(0,0,0,0.8);
+            padding: 8px 15px;
+            border-radius: 25px;
         }
 
         .emdr-fullscreen .session-info-portrait {
             position: fixed;
-            top: 20px;
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10000;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.8);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
         }
 
         .emdr-fullscreen .floating-instruction {
-            top: 50%;
-            transform: translateX(-50%) translateY(-50%);
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(0,0,0,0.8);
             color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            z-index: 10000;
+        }
+
+        /* Plein écran spécifique mobile horizontal */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-fullscreen #emdr-canvas-portrait {
+                width: 100vw !important;
+                height: 100vh !important;
+                margin: 0 !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 5px;
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
+            
+            .emdr-fullscreen .session-controls {
+                bottom: 5px;
+                padding: 5px 10px;
+            }
+            
+            .emdr-fullscreen .floating-instruction {
+                bottom: 45px;
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
         }
 
         /* Suivi */
@@ -1784,7 +1824,7 @@
 
                 <div class="floating-instruction" id="floating-instruction-portrait">
                     Suivez le point avec vos yeux, sans bouger la tête<br>
-                    <small style="opacity: 0.8;">💡 Appuyez sur F pour le plein écran</small>
+                    <small style="opacity: 0.8; display: none;" id="keyboard-hint">💡 Appuyez sur F pour le plein écran</small>
                 </div>
 
                 <div class="session-controls">
@@ -2530,11 +2570,16 @@
                     emdrSession.classList.add('emdr-fullscreen');
                     isFullscreen = true;
                     
+                    // Redimensionner le canvas pour le plein écran
+                    setTimeout(() => {
+                        resizeEMDRCanvas();
+                    }, 100);
+                    
                     // Mettre à jour les boutons
                     updateFullscreenButtons('📱 Quitter Plein Écran');
                     
                     // Notification
-                    showFullscreenNotification('📺 Mode plein écran activé - Appuyez sur Échap pour quitter');
+                    showFullscreenNotification('📺 Mode plein écran activé');
                     
                 } else {
                     // Quitter le plein écran
@@ -2566,6 +2611,11 @@
             emdrSession.classList.remove('emdr-fullscreen');
             isFullscreen = false;
             
+            // Redimensionner le canvas pour le mode normal
+            setTimeout(() => {
+                resizeEMDRCanvas();
+            }, 100);
+            
             // Mettre à jour les boutons
             updateFullscreenButtons('📺 Plein Écran');
         }
@@ -2578,11 +2628,21 @@
                 emdrSession.classList.add('emdr-fullscreen');
                 isFullscreen = true;
                 updateFullscreenButtons('📱 Quitter Plein Écran');
-                showFullscreenNotification('📺 Mode plein écran simulé activé');
+                showFullscreenNotification('📺 Mode plein écran activé');
+                
+                // Redimensionner le canvas
+                setTimeout(() => {
+                    resizeEMDRCanvas();
+                }, 100);
             } else {
                 emdrSession.classList.remove('emdr-fullscreen');
                 isFullscreen = false;
                 updateFullscreenButtons('📺 Plein Écran');
+                
+                // Redimensionner le canvas
+                setTimeout(() => {
+                    resizeEMDRCanvas();
+                }, 100);
             }
         }
 
@@ -2636,15 +2696,16 @@
             }
         }
 
-        // Raccourci clavier pour plein écran (F11 ou F)
+        // Raccourci clavier pour plein écran (Desktop uniquement)
         document.addEventListener('keydown', (e) => {
-            if (document.getElementById('emdr-session').classList.contains('active')) {
+            // Vérifier si on est sur desktop (largeur > 768px)
+            if (window.innerWidth > 768 && document.getElementById('emdr-session').classList.contains('active')) {
                 if (e.key === 'F11' || (e.key === 'f' || e.key === 'F')) {
                     e.preventDefault();
                     toggleFullscreen();
                 }
                 
-                // Échap pour quitter
+                // Échap pour quitter (Desktop uniquement)
                 if (e.key === 'Escape' && isFullscreen) {
                     exitFullscreen();
                 }
@@ -2659,8 +2720,14 @@
             const container = canvas.parentElement;
             const isLandscape = window.innerWidth > window.innerHeight;
             const isMobile = window.innerWidth <= 768;
+            const isFullscreen = container.closest('.emdr-fullscreen') !== null;
             
-            if (isMobile && isLandscape) {
+            if (isFullscreen) {
+                // Mode plein écran - utiliser TOUTE la surface
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                console.log('📺 Plein Écran - Canvas:', canvas.width, 'x', canvas.height);
+            } else if (isMobile && isLandscape) {
                 // Mobile en mode paysage - priorité à la largeur
                 canvas.width = Math.min(window.innerWidth * 0.95, 800);
                 canvas.height = Math.min(window.innerHeight * 0.6, 300);
@@ -3606,6 +3673,14 @@
             // Redimensionner le canvas EMDR au chargement
             setTimeout(() => {
                 resizeEMDRCanvas();
+                
+                // Afficher l'indication clavier uniquement sur desktop
+                if (window.innerWidth > 768) {
+                    const keyboardHint = document.getElementById('keyboard-hint');
+                    if (keyboardHint) {
+                        keyboardHint.style.display = 'inline';
+                    }
+                }
             }, 500);
             
             // Nettoyage wake lock à la fermeture
