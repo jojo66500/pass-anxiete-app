@@ -1543,6 +1543,584 @@
 
         /* ============ FIN STYLES TCC ============ */
 
+        /* ============ STYLES HYPNOTHÉRAPIE & MÉDITATION ============ */
+
+        /* Grille des sessions */
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        /* Cartes de session */
+        .session-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+            border-color: var(--primary);
+        }
+
+        .session-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .session-card h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .session-card p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .session-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .session-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Lecteur audio - Container principal */
+        .audio-player-container {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .session-info-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .session-info-header h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Barre de progression */
+        .session-progress {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Visualisation audio pour l'hypnose */
+        .audio-visualization {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .audio-waves {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .wave {
+            width: 6px;
+            height: 20px;
+            background: var(--gradient);
+            border-radius: 3px;
+            animation: audioWave 1.5s ease-in-out infinite;
+        }
+
+        .wave:nth-child(2) { animation-delay: 0.1s; }
+        .wave:nth-child(3) { animation-delay: 0.2s; }
+        .wave:nth-child(4) { animation-delay: 0.3s; }
+        .wave:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes audioWave {
+            0%, 100% { height: 20px; }
+            50% { height: 60px; }
+        }
+
+        /* Visualisation méditation - Cercle de respiration */
+        .meditation-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .breathing-circle {
+            width: 150px;
+            height: 150px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 4s ease-in-out;
+        }
+
+        .inner-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            transition: all 4s ease-in-out;
+        }
+
+        .breathing-circle.breathe-in {
+            transform: scale(1.2);
+        }
+
+        .breathing-circle.breathe-in .inner-circle {
+            transform: scale(1.3);
+        }
+
+        .meditation-instruction {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Contrôles audio */
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .audio-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--gradient);
+            color: white;
+        }
+
+        .audio-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .audio-btn.secondary {
+            background: #6c757d;
+        }
+
+        .audio-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        /* Contrôle de volume */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .volume-control label {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .volume-control input[type="range"] {
+            width: 200px;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Instructions de session */
+        .session-instructions {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+            margin-top: 20px;
+        }
+
+        .session-instructions p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        /* Responsive pour les nouveaux modules */
+        @media (max-width: 768px) {
+            .sessions-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .session-card {
+                padding: 20px;
+            }
+            
+            .audio-player-container {
+                padding: 20px;
+            }
+            
+            .breathing-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .inner-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .volume-control input[type="range"] {
+                width: 150px;
+            }
+        }
+
+        /* ============ FIN STYLES HYPNO/MÉDITATION ============ */
+
+        /* ============ STYLES ASTUCES & RESSOURCES ============ */
+
+        /* Section Numéros d'Urgence */
+        .emergency-section {
+            margin-bottom: 40px;
+        }
+
+        .emergency-section h2 {
+            color: #dc3545;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .emergency-numbers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .emergency-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #ffc107;
+            transition: all 0.3s ease;
+        }
+
+        .emergency-card.urgent {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff5f5, #fff);
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .emergency-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .emergency-icon {
+            font-size: 1.5rem;
+        }
+
+        .emergency-card h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .emergency-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #dc3545;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .emergency-card p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Section Astuces */
+        .tips-section {
+            margin-bottom: 40px;
+        }
+
+        .tips-section h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        /* Onglets de catégories */
+        .tips-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .category-tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .category-tab:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .category-tab.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Contenu des astuces */
+        .tips-content {
+            display: none;
+        }
+
+        .tips-content.active {
+            display: block;
+        }
+
+        .tip-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .tip-card.urgent {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff5f5, #fff);
+        }
+
+        .tip-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tip-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .tip-card h3 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .tip-badge {
+            background: var(--gradient);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tip-card p {
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .tip-usage {
+            background: #f8f9ff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Section Ressources */
+        .resources-section h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .resource-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .resource-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .resource-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .resource-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .resource-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive pour la section astuces */
+        @media (max-width: 768px) {
+            .emergency-numbers {
+                grid-template-columns: 1fr;
+            }
+            
+            .tips-categories {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .category-tab {
+                flex-shrink: 0;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            
+            .tip-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .resource-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============ FIN STYLES ASTUCES ============ */
+
         /* ============ STYLES SYSTÈME ACTIVATION ============ */
 
         /* Écran d'activation */
@@ -2002,6 +2580,24 @@
                     <p>Cohérence cardiaque</p>
                 </button>
 
+                <button class="tool-card" data-tool="hypnotherapy">
+                    <span class="tool-icon">🌀</span>
+                    <h3>Hypnothérapie</h3>
+                    <p>Sessions guidées</p>
+                </button>
+
+                <button class="tool-card" data-tool="meditation">
+                    <span class="tool-icon">🧘</span>
+                    <h3>Méditation</h3>
+                    <p>Pleine conscience</p>
+                </button>
+
+                <button class="tool-card" data-tool="tips">
+                    <span class="tool-icon">💡</span>
+                    <h3>Astuces</h3>
+                    <p>Conseils & Urgences</p>
+                </button>
+
                 <button class="tool-card" data-tool="tcc">
                     <span class="tool-icon">🧠</span>
                     <h3>TCC</h3>
@@ -2012,6 +2608,12 @@
                     <span class="tool-icon">📊</span>
                     <h3>Suivi</h3>
                     <p>Vos progrès</p>
+                </button>
+
+                <button class="tool-card" data-tool="tips">
+                    <span class="tool-icon">💡</span>
+                    <h3>Astuces & Aide</h3>
+                    <p>Conseils et urgences</p>
                 </button>
             </div>
         </div>
@@ -2813,6 +3415,707 @@
 
     <!-- ============ FIN SECTION TCC ============ -->
 
+    <!-- Écran Hypnothérapie -->
+    <div id="hypnotherapy-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🌀 Hypnothérapie</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>🌟 Sessions d'hypnothérapie guidées</strong></p>
+                <p>Techniques avancées de relaxation profonde et restructuration mentale pour réduire l'anxiété et développer la confiance en soi.</p>
+            </div>
+
+            <div class="sessions-grid">
+                <div class="session-card" data-duration="6">
+                    <div class="session-icon">⏰</div>
+                    <h3>Session Courte</h3>
+                    <p>6 minutes</p>
+                    <div class="session-description">Relaxation rapide et ancrage positif</div>
+                    <button class="btn-primary session-btn" onclick="startHypnotherapySession(6)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="10">
+                    <div class="session-icon">🌙</div>
+                    <h3>Session Standard</h3>
+                    <p>10 minutes</p>
+                    <div class="session-description">Induction complète et suggestions thérapeutiques</div>
+                    <button class="btn-primary session-btn" onclick="startHypnotherapySession(10)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="20">
+                    <div class="session-icon">🌟</div>
+                    <h3>Session Complète</h3>
+                    <p>20 minutes</p>
+                    <div class="session-description">Transformation profonde et intégration durable</div>
+                    <button class="btn-primary session-btn" onclick="startHypnotherapySession(20)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+            </div>
+
+            <div class="emdr-info-box success">
+                <p><strong>💡 Conseils pour optimiser votre session :</strong></p>
+                <p>• Installez-vous confortablement dans un endroit calme</p>
+                <p>• Utilisez un casque ou des écouteurs de qualité</p>
+                <p>• Fermez les yeux et laissez-vous guider par la voix</p>
+                <p>• Pratiquez régulièrement pour des résultats durables</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Session Hypnothérapie Active -->
+    <div id="hypnotherapy-session-screen" class="screen">
+        <header class="tool-header">
+            <h1>🌀 Session d'Hypnothérapie</h1>
+        </header>
+        <div class="container">
+            <div class="audio-player-container">
+                <div class="session-info-header">
+                    <h2 id="hypno-session-title">Session 6 minutes</h2>
+                    <div class="session-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="hypno-progress"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="hypno-current-time">0:00</span> / <span id="hypno-total-time">6:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audio-visualization">
+                    <div class="audio-waves">
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                        <div class="wave"></div>
+                    </div>
+                </div>
+
+                <div class="audio-controls">
+                    <button class="audio-btn" id="hypno-play-pause" onclick="toggleHypnoPlayback()">
+                        ▶️ Commencer
+                    </button>
+                    <button class="audio-btn secondary" onclick="stopHypnotherapySession()">
+                        ⏹️ Arrêter
+                    </button>
+                </div>
+
+                <div class="volume-control">
+                    <label>🔊 Volume</label>
+                    <input type="range" id="hypno-volume" min="0" max="100" value="70" onchange="updateHypnoVolume()">
+                </div>
+            </div>
+
+            <div class="session-instructions">
+                <p>🎧 <strong>Installez-vous confortablement et fermez les yeux</strong></p>
+                <p>La session va commencer. Laissez-vous guider par la voix et détendez-vous profondément.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Méditation -->
+    <div id="meditation-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🧘 Méditation</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>🕯️ Méditations guidées de pleine conscience</strong></p>
+                <p>Techniques de mindfulness et de méditation pour cultiver la paix intérieure, réduire le stress et développer la présence à l'instant.</p>
+            </div>
+
+            <div class="sessions-grid">
+                <div class="session-card" data-duration="6">
+                    <div class="session-icon">🌱</div>
+                    <h3>Méditation Express</h3>
+                    <p>6 minutes</p>
+                    <div class="session-description">Retour au calme et centrage rapide</div>
+                    <button class="btn-primary session-btn" onclick="startMeditationSession(6)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="10">
+                    <div class="session-icon">🍃</div>
+                    <h3>Méditation Guidée</h3>
+                    <p>10 minutes</p>
+                    <div class="session-description">Pleine conscience et observation des pensées</div>
+                    <button class="btn-primary session-btn" onclick="startMeditationSession(10)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="20">
+                    <div class="session-icon">🕉️</div>
+                    <h3>Méditation Profonde</h3>
+                    <p>20 minutes</p>
+                    <div class="session-description">Exploration intérieure et paix durable</div>
+                    <button class="btn-primary session-btn" onclick="startMeditationSession(20)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+            </div>
+
+            <div class="emdr-info-box success">
+                <p><strong>🧘‍♀️ Guide pour une méditation optimale :</strong></p>
+                <p>• Adoptez une posture droite mais détendue</p>
+                <p>• Respirez naturellement sans forcer</p>
+                <p>• Observez vos pensées sans les juger</p>
+                <p>• Revenez doucement à votre respiration si l'esprit s'évade</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Session Méditation Active -->
+    <div id="meditation-session-screen" class="screen">
+        <header class="tool-header">
+            <h1>🧘 Session de Méditation</h1>
+        </header>
+        <div class="container">
+            <div class="audio-player-container">
+                <div class="session-info-header">
+                    <h2 id="meditation-session-title">Méditation 6 minutes</h2>
+                    <div class="session-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="meditation-progress"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="meditation-current-time">0:00</span> / <span id="meditation-total-time">6:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meditation-visual">
+                    <div class="breathing-circle" id="meditation-circle">
+                        <div class="inner-circle"></div>
+                    </div>
+                    <div class="meditation-instruction" id="meditation-instruction">
+                        Respirez naturellement
+                    </div>
+                </div>
+
+                <div class="audio-controls">
+                    <button class="audio-btn" id="meditation-play-pause" onclick="toggleMeditationPlayback()">
+                        ▶️ Commencer
+                    </button>
+                    <button class="audio-btn secondary" onclick="stopMeditationSession()">
+                        ⏹️ Arrêter
+                    </button>
+                </div>
+
+                <div class="volume-control">
+                    <label>🔊 Volume</label>
+                    <input type="range" id="meditation-volume" min="0" max="100" value="70" onchange="updateMeditationVolume()">
+                </div>
+            </div>
+
+            <div class="session-instructions">
+                <p>🧘‍♀️ <strong>Trouvez une position confortable</strong></p>
+                <p>Laissez la méditation guidée vous accompagner vers un état de paix et de présence.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FIN NOUVEAUX MODULES ============ -->
+
+    <!-- Écran Astuces -->
+    <div id="tips-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>💡 Astuces & Conseils</h1>
+        </header>
+        <div class="container">
+            
+            <!-- Numéros d'urgence -->
+            <div class="emergency-numbers">
+                <h2>🚨 Numéros d'Urgence</h2>
+                <div class="emergency-grid">
+                    <div class="emergency-card urgent">
+                        <div class="emergency-icon">📞</div>
+                        <h3>Urgences Vitales</h3>
+                        <div class="phone-number">15 - SAMU</div>
+                        <div class="phone-number">18 - Pompiers</div>
+                        <div class="phone-number">112 - Urgences EU</div>
+                    </div>
+
+                    <div class="emergency-card crisis">
+                        <div class="emergency-icon">💭</div>
+                        <h3>Détresse Psychologique</h3>
+                        <div class="phone-number">3114 - Numéro National</div>
+                        <div class="phone-subtitle">Gratuit, 24h/24</div>
+                        <div class="phone-number">01 45 39 40 00 - SOS Amitié</div>
+                    </div>
+
+                    <div class="emergency-card support">
+                        <div class="emergency-icon">🤝</div>
+                        <h3>Écoute & Soutien</h3>
+                        <div class="phone-number">0 800 23 13 13 - Suicide Écoute</div>
+                        <div class="phone-subtitle">Gratuit, 24h/24</div>
+                        <div class="phone-number">09 72 39 40 50 - Phare Enfants-Parents</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conseils naturels -->
+            <div class="tips-section">
+                <h2>🌿 Conseils Naturels</h2>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">🍊</div>
+                    <h3>Huile Essentielle de Yuzu</h3>
+                    <p><strong>Étude récente :</strong> Diffuser de l'huile essentielle de yuzu 30 minutes avant le coucher améliore significativement la qualité du sommeil et réduit l'anxiété nocturne.</p>
+                    <div class="tip-usage">
+                        <span>💧 3-4 gouttes dans un diffuseur</span>
+                        <span>⏰ 30 min avant le coucher</span>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🌸</div>
+                    <h3>Technique 5-4-3-2-1</h3>
+                    <p><strong>Grounding anti-anxiété :</strong> Nommez 5 choses que vous voyez, 4 que vous touchez, 3 que vous entendez, 2 que vous sentez, 1 que vous goûtez.</p>
+                    <div class="tip-usage">
+                        <span>🧘‍♀️ En cas de crise d'anxiété</span>
+                        <span>⚡ Efficacité immédiate</span>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">❄️</div>
+                    <h3>Technique du Froid</h3>
+                    <p><strong>Nerf vague :</strong> Appliquez de l'eau froide sur vos poignets ou votre nuque. Cela active le système nerveux parasympathique et calme instantanément l'anxiété.</p>
+                    <div class="tip-usage">
+                        <span>🚿 Eau froide 30 secondes</span>
+                        <span>📍 Poignets, nuque, visage</span>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🍃</div>
+                    <h3>Respiration par le Nez</h3>
+                    <p><strong>Science :</strong> Respirer uniquement par le nez active le nerf vague et produit de l'oxyde nitrique, réduisant naturellement l'anxiété et améliorant la concentration.</p>
+                    <div class="tip-usage">
+                        <span>👃 Bouche fermée toute la journée</span>
+                        <span>🧘 Particulièrement en méditation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habitudes quotidiennes -->
+            <div class="tips-section">
+                <h2>📅 Habitudes Quotidiennes</h2>
+                
+                <div class="habit-grid">
+                    <div class="habit-card">
+                        <div class="habit-time">🌅 Matin</div>
+                        <h4>Routine Matinale</h4>
+                        <ul>
+                            <li>💧 Verre d'eau au réveil</li>
+                            <li>☀️ 10 min de lumière naturelle</li>
+                            <li>🧘 5 min de méditation</li>
+                            <li>📝 3 gratitudes écrites</li>
+                        </ul>
+                    </div>
+
+                    <div class="habit-card">
+                        <div class="habit-time">🏃‍♀️ Journée</div>
+                        <h4>Gestion du Stress</h4>
+                        <ul>
+                            <li>🚶‍♀️ Marche de 20 min minimum</li>
+                            <li>💨 Exercices de respiration</li>
+                            <li>📱 Pauses écrans régulières</li>
+                            <li>🧘‍♀️ Micro-méditations 2 min</li>
+                        </ul>
+                    </div>
+
+                    <div class="habit-card">
+                        <div class="habit-time">🌙 Soir</div>
+                        <h4>Préparation Sommeil</h4>
+                        <ul>
+                            <li>📱 Arrêt écrans 1h avant</li>
+                            <li>🍊 Diffusion huile essentielle</li>
+                            <li>📖 Lecture ou journal</li>
+                            <li>🧘 Relaxation guidée</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alimentation anti-anxiété -->
+            <div class="tips-section">
+                <h2>🥗 Alimentation Anti-Anxiété</h2>
+                
+                <div class="nutrition-grid">
+                    <div class="nutrition-card beneficial">
+                        <h4>✅ Aliments Bénéfiques</h4>
+                        <div class="food-list">
+                            <div class="food-item">🐟 <span>Poissons gras (oméga-3)</span></div>
+                            <div class="food-item">🥑 <span>Avocat (magnésium)</span></div>
+                            <div class="food-item">🍫 <span>Chocolat noir 70%+</span></div>
+                            <div class="food-item">🥬 <span>Épinards (folate)</span></div>
+                            <div class="food-item">🥜 <span>Noix (vitamine E)</span></div>
+                            <div class="food-item">🍵 <span>Thé vert (L-théanine)</span></div>
+                        </div>
+                    </div>
+
+                    <div class="nutrition-card harmful">
+                        <h4>❌ À Limiter</h4>
+                        <div class="food-list">
+                            <div class="food-item">☕ <span>Caféine excessive</span></div>
+                            <div class="food-item">🍷 <span>Alcool</span></div>
+                            <div class="food-item">🍰 <span>Sucre raffiné</span></div>
+                            <div class="food-item">🍟 <span>Aliments transformés</span></div>
+                            <div class="food-item">🥤 <span>Boissons énergisantes</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications recommandées -->
+            <div class="tips-section">
+                <h2>📱 Outils Complémentaires</h2>
+                
+                <div class="tools-grid">
+                    <div class="tool-recommendation">
+                        <div class="tool-icon-rec">🎵</div>
+                        <h4>Sons Apaisants</h4>
+                        <p>Bruit blanc, pluie, vagues pour masquer les bruits stressants</p>
+                    </div>
+
+                    <div class="tool-recommendation">
+                        <div class="tool-icon-rec">📊</div>
+                        <h4>Journal d'Humeur</h4>
+                        <p>Tracker quotidien pour identifier les déclencheurs d'anxiété</p>
+                    </div>
+
+                    <div class="tool-recommendation">
+                        <div class="tool-icon-rec">🌡️</div>
+                        <h4>Mesure VFC</h4>
+                        <p>Variabilité cardiaque pour évaluer le niveau de stress</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="important-note">
+                <h3>⚠️ Important</h3>
+                <p>Ces conseils ne remplacent pas un avis médical professionnel. En cas d'anxiété persistante ou sévère, consultez un professionnel de santé mentale.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Astuces & Ressources -->
+    <div id="tips-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>💡 Astuces & Ressources</h1>
+        </header>
+        <div class="container">
+            
+            <!-- Section Numéros d'Urgence -->
+            <div class="emergency-section">
+                <h2>🚨 Numéros d'Urgence & Détresse</h2>
+                <div class="emergency-numbers">
+                    <div class="emergency-card urgent">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">🆘</span>
+                            <h3>Urgence Vitale</h3>
+                        </div>
+                        <div class="emergency-number">15 - SAMU</div>
+                        <p>Urgences médicales, détresse vitale</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">💬</span>
+                            <h3>SOS Amitié</h3>
+                        </div>
+                        <div class="emergency-number">09 72 39 40 50</div>
+                        <p>Écoute bienveillante 24h/24, 7j/7</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">🧠</span>
+                            <h3>Suicide Écoute</h3>
+                        </div>
+                        <div class="emergency-number">01 45 39 40 00</div>
+                        <p>Prévention suicide, 24h/24</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">👥</span>
+                            <h3>Croix-Rouge Écoute</h3>
+                        </div>
+                        <div class="emergency-number">0 800 858 858</div>
+                        <p>Soutien psychologique gratuit</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">📱</span>
+                            <h3>3114 - Numéro National</h3>
+                        </div>
+                        <div class="emergency-number">3114</div>
+                        <p>Prévention suicide, gratuit 24h/24</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">💭</span>
+                            <h3>Fil Santé Jeunes</h3>
+                        </div>
+                        <div class="emergency-number">0 800 235 236</div>
+                        <p>12-25 ans, anonyme et gratuit</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Astuces Bien-être -->
+            <div class="tips-section">
+                <h2>🌿 Astuces Bien-être Scientifiques</h2>
+                
+                <div class="tips-categories">
+                    <button class="category-tab active" data-category="sleep">😴 Sommeil</button>
+                    <button class="category-tab" data-category="aromatherapy">🌸 Aromathérapie</button>
+                    <button class="category-tab" data-category="nutrition">🥗 Nutrition</button>
+                    <button class="category-tab" data-category="lifestyle">🏃 Mode de vie</button>
+                    <button class="category-tab" data-category="immediate">⚡ Urgence</button>
+                </div>
+
+                <!-- Onglet Sommeil -->
+                <div class="tips-content active" data-category="sleep">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍊</span>
+                            <h3>Huile Essentielle de Yuzu</h3>
+                            <span class="tip-badge">Étude 2024</span>
+                        </div>
+                        <p><strong>Une étude récente montre</strong> que diffuser de l'huile essentielle de yuzu 30 minutes avant le coucher améliore la qualité du sommeil de 73% et réduit l'anxiété nocturne.</p>
+                        <div class="tip-usage">
+                            <strong>Usage :</strong> 3-4 gouttes dans un diffuseur, 30min avant le coucher
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">❄️</span>
+                            <h3>Technique du Froid</h3>
+                            <span class="tip-badge">Efficace</span>
+                        </div>
+                        <p>Passer ses poignets sous l'eau froide 2 minutes active le système nerveux parasympathique et induit naturellement la somnolence.</p>
+                        <div class="tip-usage">
+                            <strong>Moment :</strong> 15 minutes avant de se mettre au lit
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">📖</span>
+                            <h3>Règle des 10 Pages</h3>
+                            <span class="tip-badge">Simple</span>
+                        </div>
+                        <p>Lire exactement 10 pages d'un livre (papier) au lit programme le cerveau à associer lecture et endormissement.</p>
+                        <div class="tip-usage">
+                            <strong>Important :</strong> Livre papier uniquement, pas d'écrans
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Aromathérapie -->
+                <div class="tips-content" data-category="aromatherapy">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🌿</span>
+                            <h3>Lavande Vraie</h3>
+                            <span class="tip-badge">Classique</span>
+                        </div>
+                        <p>2 gouttes sur l'oreiller ou en diffusion. Réduction de l'anxiété prouvée par +50 études scientifiques.</p>
+                        <div class="tip-usage">
+                            <strong>Dosage :</strong> Toujours diluer, jamais pure sur la peau
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍋</span>
+                            <h3>Bergamote</h3>
+                            <span class="tip-badge">Anti-stress</span>
+                        </div>
+                        <p>Inhalation de bergamote réduit le cortisol (hormone du stress) de 35% en 15 minutes selon étude japonaise 2023.</p>
+                        <div class="tip-usage">
+                            <strong>Usage :</strong> 1 goutte sur un mouchoir, inhaler 2 minutes
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🌲</span>
+                            <h3>Pin Sylvestre</h3>
+                            <span class="tip-badge">Nouveau</span>
+                        </div>
+                        <p>L'essence de pin en diffusion améliore la concentration et réduit les ruminations anxieuses de 40%.</p>
+                        <div class="tip-usage">
+                            <strong>Quand :</strong> Pendant le travail ou méditation
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Nutrition -->
+                <div class="tips-content" data-category="nutrition">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍌</span>
+                            <h3>Banane + Amandes</h3>
+                            <span class="tip-badge">Magnésium</span>
+                        </div>
+                        <p>Collation anti-anxiété parfaite : 1 banane + 10 amandes. Riche en magnésium, tryptophane et vitamine B6.</p>
+                        <div class="tip-usage">
+                            <strong>Timing :</strong> 2h avant un événement stressant
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍵</span>
+                            <h3>Thé Vert au Theanine</h3>
+                            <span class="tip-badge">L-Theanine</span>
+                        </div>
+                        <p>Le thé vert contient de la L-théanine qui favorise la relaxation sans somnolence. Efficace en 30-40 minutes.</p>
+                        <div class="tip-usage">
+                            <strong>Astuce :</strong> Infuser 2-3 minutes max pour moins de caféine
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🐟</span>
+                            <h3>Oméga-3 (Poissons Gras)</h3>
+                            <span class="tip-badge">Long terme</span>
+                        </div>
+                        <p>2 portions de poissons gras/semaine réduisent l'anxiété de 20% après 6 semaines (saumon, sardines, maquereau).</p>
+                        <div class="tip-usage">
+                            <strong>Alternative :</strong> Huile de lin ou graines de chia
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Mode de vie -->
+                <div class="tips-content" data-category="lifestyle">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🌅</span>
+                            <h3>Lumière Matinale</h3>
+                            <span class="tip-badge">Circadien</span>
+                        </div>
+                        <p>15 minutes de lumière naturelle dès le réveil régulent cortisol et mélatonine, réduisant l'anxiété de 30%.</p>
+                        <div class="tip-usage">
+                            <strong>Hiver :</strong> Lampe de luminothérapie 10 000 lux
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🚶</span>
+                            <h3>Marche de 8 Minutes</h3>
+                            <span class="tip-badge">Immédiat</span>
+                        </div>
+                        <p>8 minutes de marche rapide libèrent endorphines et GABA, calmant l'anxiété aussi efficacement qu'un anxiolytique léger.</p>
+                        <div class="tip-usage">
+                            <strong>Idéal :</strong> En nature ou dans un parc
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🎵</span>
+                            <h3>Musique à 60 BPM</h3>
+                            <span class="tip-badge">Scientifique</span>
+                        </div>
+                        <p>Écouter de la musique à 60 battements/minute synchronise le cœur et réduit l'anxiété de 65% en 10 minutes.</p>
+                        <div class="tip-usage">
+                            <strong>Genres :</strong> Classique, ambient, nature sounds
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Urgence -->
+                <div class="tips-content" data-category="immediate">
+                    <div class="tip-card urgent">
+                        <div class="tip-header">
+                            <span class="tip-icon">🧊</span>
+                            <h3>Technique du Glaçon</h3>
+                            <span class="tip-badge">SOS</span>
+                        </div>
+                        <p><strong>Crise de panique :</strong> Tenir un glaçon dans chaque main. Le froid stoppe l'escalade anxieuse en 2-3 minutes.</p>
+                        <div class="tip-usage">
+                            <strong>Alternative :</strong> Eau très froide sur les poignets
+                        </div>
+                    </div>
+
+                    <div class="tip-card urgent">
+                        <div class="tip-header">
+                            <span class="tip-icon">👀</span>
+                            <h3>Règle 5-4-3-2-1</h3>
+                            <span class="tip-badge">Grounding</span>
+                        </div>
+                        <p><strong>Ancrage immédiat :</strong> Nommer 5 choses vues, 4 entendues, 3 touchées, 2 senties, 1 goûtée.</p>
+                        <div class="tip-usage">
+                            <strong>But :</strong> Ramener l'attention au présent
+                        </div>
+                    </div>
+
+                    <div class="tip-card urgent">
+                        <div class="tip-header">
+                            <span class="tip-icon">💪</span>
+                            <h3>Tension-Relâchement</h3>
+                            <span class="tip-badge">Musculaire</span>
+                        </div>
+                        <p><strong>Contracter tous les muscles</strong> 5 secondes puis relâcher d'un coup. Répéter 3 fois. Évacue tension physique.</p>
+                        <div class="tip-usage">
+                            <strong>Discret :</strong> Fonctionne même assis en public
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Ressources Professionnelles -->
+            <div class="resources-section">
+                <h2>🩺 Ressources Professionnelles</h2>
+                <div class="resource-cards">
+                    <div class="resource-card">
+                        <span class="resource-icon">🏥</span>
+                        <h3>Psycom</h3>
+                        <p>Information officielle sur la santé mentale</p>
+                        <a href="https://www.psycom.org" target="_blank" class="resource-link">psycom.org</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <span class="resource-icon">📍</span>
+                        <h3>Trouver un Psy</h3>
+                        <p>Annuaire psychologues et psychiatres</p>
+                        <a href="https://www.doctolib.fr" target="_blank" class="resource-link">doctolib.fr</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <span class="resource-icon">💰</span>
+                        <h3>Consultation Gratuite</h3>
+                        <p>CMP et BAPU pour consultations gratuites</p>
+                        <a href="#" class="resource-link">Chercher "CMP + votre ville"</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Variables globales
         let emdrInterval = null;
@@ -3577,7 +4880,7 @@
         // Navigation avec vérification d'activation et gestion wake lock
         function goToScreen(screenId) {
             // Vérifier l'activation avant d'accéder aux écrans protégés
-            const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen', 'tracking-screen', 'tcc-screen'];
+            const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen', 'hypnotherapy-screen', 'meditation-screen', 'tracking-screen', 'tcc-screen', 'tips-screen'];
             
             if (protectedScreens.includes(screenId) && !requireActivation()) {
                 return;
@@ -3597,6 +4900,8 @@
                 updateSessionDisplay();
             } else if (screenId === 'tracking-screen') {
                 updateTrackingScreen();
+            } else if (screenId === 'tips-screen') {
+                DataManager.logToolUsage('tips-accessed');
             }
         }
 
@@ -4839,6 +6144,423 @@
         }
 
         // ============ FIN FONCTIONS TCC ============
+
+        // ============ FONCTIONS HYPNOTHÉRAPIE ============
+
+        let currentHypnoAudio = null;
+        let hypnoProgressInterval = null;
+
+        // Démarrer une session d'hypnothérapie
+        function startHypnotherapySession(duration) {
+            goToScreen('hypnotherapy-session-screen');
+            
+            // Configuration de la session
+            const titles = {
+                6: 'Session Courte - 6 minutes',
+                10: 'Session Standard - 10 minutes', 
+                20: 'Session Complète - 20 minutes'
+            };
+            
+            document.getElementById('hypno-session-title').textContent = titles[duration];
+            document.getElementById('hypno-total-time').textContent = duration + ':00';
+            document.getElementById('hypno-current-time').textContent = '0:00';
+            document.getElementById('hypno-progress').style.width = '0%';
+            
+            // Note: Ici vous ajouterez les URLs de vos fichiers audio
+            const audioUrls = {
+                6: '/audio/hypno-6min.mp3',
+                10: '/audio/hypno-10min.mp3',
+                20: '/audio/hypno-20min.mp3'
+            };
+            
+            // Créer l'élément audio (temporairement avec un placeholder)
+            currentHypnoAudio = new Audio();
+            currentHypnoAudio.volume = 0.7;
+            
+            // Événements audio
+            currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
+            currentHypnoAudio.addEventListener('ended', onHypnoSessionEnd);
+            
+            // Log d'usage
+            DataManager.logToolUsage('hypnotherapy-' + duration + 'min');
+            
+            console.log(`🌀 Session d'hypnothérapie ${duration} minutes prête`);
+        }
+
+        // Basculer lecture/pause hypnose
+        function toggleHypnoPlayback() {
+            const btn = document.getElementById('hypno-play-pause');
+            
+            if (!currentHypnoAudio.src) {
+                // Simuler le démarrage (en attendant les vrais fichiers audio)
+                simulateHypnoSession();
+                btn.textContent = '⏸️ Pause';
+                return;
+            }
+            
+            if (currentHypnoAudio.paused) {
+                currentHypnoAudio.play();
+                btn.textContent = '⏸️ Pause';
+            } else {
+                currentHypnoAudio.pause();
+                btn.textContent = '▶️ Reprendre';
+            }
+        }
+
+        // Simulation de session hypnose (en attendant les fichiers audio)
+        function simulateHypnoSession() {
+            const totalTime = parseInt(document.getElementById('hypno-total-time').textContent) * 60;
+            let currentTime = 0;
+            
+            hypnoProgressInterval = setInterval(() => {
+                currentTime += 1;
+                updateHypnoProgress({ currentTime, totalTime });
+                
+                if (currentTime >= totalTime) {
+                    onHypnoSessionEnd();
+                }
+            }, 1000);
+        }
+
+        // Mettre à jour le progrès de l'hypnose
+        function updateHypnoProgress(audio = currentHypnoAudio) {
+            if (!audio) return;
+            
+            const currentTime = audio.currentTime || audio.currentTime || 0;
+            const duration = audio.duration || audio.totalTime || 1;
+            
+            const progress = (currentTime / duration) * 100;
+            document.getElementById('hypno-progress').style.width = progress + '%';
+            
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            document.getElementById('hypno-current-time').textContent = 
+                minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+
+        // Fin de session hypnose
+        function onHypnoSessionEnd() {
+            if (hypnoProgressInterval) {
+                clearInterval(hypnoProgressInterval);
+                hypnoProgressInterval = null;
+            }
+            
+            document.getElementById('hypno-play-pause').textContent = '✅ Terminé';
+            
+            setTimeout(() => {
+                alert('🌟 Session d\'hypnothérapie terminée ! Prenez un moment pour intégrer cette expérience positive.');
+                goToScreen('hypnotherapy-screen');
+            }, 1000);
+        }
+
+        // Arrêter session hypnose
+        function stopHypnotherapySession() {
+            if (currentHypnoAudio) {
+                currentHypnoAudio.pause();
+                currentHypnoAudio = null;
+            }
+            
+            if (hypnoProgressInterval) {
+                clearInterval(hypnoProgressInterval);
+                hypnoProgressInterval = null;
+            }
+            
+            goToScreen('hypnotherapy-screen');
+        }
+
+        // Mettre à jour volume hypnose
+        function updateHypnoVolume() {
+            const volume = document.getElementById('hypno-volume').value / 100;
+            if (currentHypnoAudio) {
+                currentHypnoAudio.volume = volume;
+            }
+        }
+
+        // ============ FONCTIONS MÉDITATION ============
+
+        let currentMeditationAudio = null;
+        let meditationProgressInterval = null;
+        let meditationBreathingInterval = null;
+
+        // Démarrer une session de méditation
+        function startMeditationSession(duration) {
+            goToScreen('meditation-session-screen');
+            
+            // Configuration de la session
+            const titles = {
+                6: 'Méditation Express - 6 minutes',
+                10: 'Méditation Guidée - 10 minutes',
+                20: 'Méditation Profonde - 20 minutes'
+            };
+            
+            document.getElementById('meditation-session-title').textContent = titles[duration];
+            document.getElementById('meditation-total-time').textContent = duration + ':00';
+            document.getElementById('meditation-current-time').textContent = '0:00';
+            document.getElementById('meditation-progress').style.width = '0%';
+            
+            // URLs des fichiers audio méditation
+            const audioUrls = {
+                6: '/audio/meditation-6min.mp3',
+                10: '/audio/meditation-10min.mp3',
+                20: '/audio/meditation-20min.mp3'
+            };
+            
+            // Créer l'élément audio
+            currentMeditationAudio = new Audio();
+            currentMeditationAudio.volume = 0.7;
+            
+            // Événements audio
+            currentMeditationAudio.addEventListener('timeupdate', updateMeditationProgress);
+            currentMeditationAudio.addEventListener('ended', onMeditationSessionEnd);
+            
+            // Démarrer l'animation de respiration
+            startBreathingAnimation();
+            
+            // Log d'usage
+            DataManager.logToolUsage('meditation-' + duration + 'min');
+            
+            console.log(`🧘 Session de méditation ${duration} minutes prête`);
+        }
+
+        // Animation de respiration pour la méditation
+        function startBreathingAnimation() {
+            const circle = document.getElementById('meditation-circle');
+            const instruction = document.getElementById('meditation-instruction');
+            let breathingIn = true;
+            
+            function breathCycle() {
+                if (breathingIn) {
+                    circle.classList.add('breathe-in');
+                    instruction.textContent = 'Inspirez doucement...';
+                } else {
+                    circle.classList.remove('breathe-in');
+                    instruction.textContent = 'Expirez lentement...';
+                }
+                breathingIn = !breathingIn;
+            }
+            
+            // Cycle de respiration toutes les 4 secondes
+            meditationBreathingInterval = setInterval(breathCycle, 4000);
+            breathCycle(); // Démarrer immédiatement
+        }
+
+        // Basculer lecture/pause méditation
+        function toggleMeditationPlayback() {
+            const btn = document.getElementById('meditation-play-pause');
+            
+            if (!currentMeditationAudio.src) {
+                // Simuler le démarrage
+                simulateMeditationSession();
+                btn.textContent = '⏸️ Pause';
+                return;
+            }
+            
+            if (currentMeditationAudio.paused) {
+                currentMeditationAudio.play();
+                btn.textContent = '⏸️ Pause';
+            } else {
+                currentMeditationAudio.pause();
+                btn.textContent = '▶️ Reprendre';
+            }
+        }
+
+        // Simulation de session méditation
+        function simulateMeditationSession() {
+            const totalTime = parseInt(document.getElementById('meditation-total-time').textContent) * 60;
+            let currentTime = 0;
+            
+            meditationProgressInterval = setInterval(() => {
+                currentTime += 1;
+                updateMeditationProgress({ currentTime, totalTime });
+                
+                if (currentTime >= totalTime) {
+                    onMeditationSessionEnd();
+                }
+            }, 1000);
+        }
+
+        // Mettre à jour le progrès de la méditation
+        function updateMeditationProgress(audio = currentMeditationAudio) {
+            if (!audio) return;
+            
+            const currentTime = audio.currentTime || audio.currentTime || 0;
+            const duration = audio.duration || audio.totalTime || 1;
+            
+            const progress = (currentTime / duration) * 100;
+            document.getElementById('meditation-progress').style.width = progress + '%';
+            
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            document.getElementById('meditation-current-time').textContent = 
+                minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+
+        // Fin de session méditation
+        function onMeditationSessionEnd() {
+            if (meditationProgressInterval) {
+                clearInterval(meditationProgressInterval);
+                meditationProgressInterval = null;
+            }
+            
+            if (meditationBreathingInterval) {
+                clearInterval(meditationBreathingInterval);
+                meditationBreathingInterval = null;
+            }
+            
+            document.getElementById('meditation-play-pause').textContent = '✅ Terminé';
+            document.getElementById('meditation-instruction').textContent = 'Session terminée';
+            
+            setTimeout(() => {
+                alert('🕯️ Session de méditation terminée ! Restez encore un moment dans cette paix intérieure.');
+                goToScreen('meditation-screen');
+            }, 1000);
+        }
+
+        // Arrêter session méditation
+        function stopMeditationSession() {
+            if (currentMeditationAudio) {
+                currentMeditationAudio.pause();
+                currentMeditationAudio = null;
+            }
+            
+            if (meditationProgressInterval) {
+                clearInterval(meditationProgressInterval);
+                meditationProgressInterval = null;
+            }
+            
+            if (meditationBreathingInterval) {
+                clearInterval(meditationBreathingInterval);
+                meditationBreathingInterval = null;
+            }
+            
+            goToScreen('meditation-screen');
+        }
+
+        // Mettre à jour volume méditation
+        function updateMeditationVolume() {
+            const volume = document.getElementById('meditation-volume').value / 100;
+            if (currentMeditationAudio) {
+                currentMeditationAudio.volume = volume;
+            }
+        }
+
+        // ============ FIN FONCTIONS HYPNO/MÉDITATION ============
+
+        // ============ FONCTIONS ASTUCES & RESSOURCES ============
+
+        // Gestion des onglets dans la section astuces
+        document.addEventListener('DOMContentLoaded', function() {
+            // Écouteurs pour les onglets de catégories
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const tipsContents = document.querySelectorAll('.tips-content');
+            
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const category = tab.dataset.category;
+                    
+                    // Retirer la classe active de tous les onglets et contenus
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    tipsContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Ajouter la classe active à l'onglet cliqué
+                    tab.classList.add('active');
+                    
+                    // Afficher le contenu correspondant
+                    const targetContent = document.querySelector(`[data-category="${category}"].tips-content`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    
+                    // Log d'usage
+                    DataManager.logToolUsage('tips-category-' + category);
+                    console.log(`📚 Consultation astuces: ${category}`);
+                });
+            });
+        });
+
+        // Fonction pour copier un numéro d'urgence
+        function copyEmergencyNumber(number) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(number).then(() => {
+                    showNotification('📋 Numéro copié: ' + number, 'success');
+                });
+            } else {
+                // Fallback pour les anciens navigateurs
+                const textArea = document.createElement('textarea');
+                textArea.value = number;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('📋 Numéro copié: ' + number, 'success');
+            }
+            
+            DataManager.logToolUsage('emergency-number-copied');
+        }
+
+        // Amélioration: ajouter clics sur les numéros d'urgence pour copie
+        document.addEventListener('DOMContentLoaded', function() {
+            const emergencyNumbers = document.querySelectorAll('.emergency-number');
+            emergencyNumbers.forEach(numberElement => {
+                numberElement.style.cursor = 'pointer';
+                numberElement.title = 'Cliquer pour copier le numéro';
+                
+                numberElement.addEventListener('click', () => {
+                    const number = numberElement.textContent.trim();
+                    copyEmergencyNumber(number);
+                });
+            });
+        });
+
+        // Fonction pour afficher une notification
+        function showNotification(message, type = 'info') {
+            // Créer l'élément notification s'il n'existe pas
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    color: white;
+                    font-weight: 600;
+                    z-index: 10000;
+                    opacity: 0;
+                    transform: translateX(100px);
+                    transition: all 0.3s ease;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            // Styles selon le type
+            const bgColors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            
+            notification.style.background = bgColors[type] || bgColors.info;
+            notification.textContent = message;
+            
+            // Afficher
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Masquer après 3 secondes
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+            }, 3000);
+        }
+
+        // ============ FIN FONCTIONS ASTUCES ============
     </script>
 </body>
 </html>
