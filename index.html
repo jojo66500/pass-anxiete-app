@@ -6787,7 +6787,8 @@
                         'emotions': 'emotions-screen',
                         'journal': 'journal-screen',
                         'techniques': 'techniques-screen',
-                        'thoughts-history': 'thoughts-history-screen'
+                        'thoughts-history': 'thoughts-history-screen',
+                        'therapist': 'therapist-screen'
                     };
                     if (screenMap[tool]) {
                         goToScreen(screenMap[tool]);
@@ -8765,6 +8766,7 @@
                     
                     const screenMap = {
                         'breathing': 'breathing-screen',
+                        'emdr': 'emdr-simple', // Écran EMDR existant
                         'hypnotherapy': 'hypnotherapy-screen',
                         'meditation': 'meditation-screen',
                         'tips': 'tips-screen',
@@ -8781,9 +8783,12 @@
                     if (screenMap[tool]) {
                         goToScreen(screenMap[tool]);
                         
-                        // Log d'usage pour le thérapeute
+                        // Log d'usage pour tous les outils
+                        DataManager.logToolUsage(tool + '-visit');
+                        console.log(`🔧 Visite de l'outil: ${tool}`);
+                        
+                        // Log spécial pour le thérapeute
                         if (tool === 'therapist') {
-                            DataManager.logToolUsage('therapist-visit');
                             console.log('👨‍⚕️ Visite du profil thérapeute');
                         }
                     } else {
