@@ -2121,6 +2121,635 @@
 
         /* ============ FIN STYLES ASTUCES ============ */
 
+        /* ============ STYLES MODE CRISE AMÉLIORÉ ============ */
+
+        /* Évaluation du niveau de crise */
+        .crisis-assessment {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .crisis-assessment h2 {
+            color: #d63031;
+            margin-bottom: 20px;
+        }
+
+        .crisis-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .crisis-level {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .crisis-level:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .crisis-level.mild {
+            border-color: #fdcb6e;
+        }
+
+        .crisis-level.mild:hover {
+            background: #ffeaa7;
+        }
+
+        .crisis-level.moderate {
+            border-color: #e17055;
+        }
+
+        .crisis-level.moderate:hover {
+            background: #fab1a0;
+        }
+
+        .crisis-level.severe {
+            border-color: #d63031;
+        }
+
+        .crisis-level.severe:hover {
+            background: #ff7675;
+            color: white;
+        }
+
+        .level-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .crisis-level h3 {
+            margin: 10px 0 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .crisis-level p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        /* Groupes d'actions par niveau */
+        .crisis-actions-group {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .crisis-actions-group h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Alerte médicale urgente */
+        .medical-alert {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .medical-alert h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .medical-alert ul {
+            text-align: left;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .medical-alert li {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .medical-emergency-btn {
+            background: #fff;
+            color: #d63031;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            animation: urgentPulse 2s infinite;
+        }
+
+        .medical-emergency-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.3);
+        }
+
+        @keyframes urgentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Boutons d'urgence spécialisés */
+        .emergency-btn.severe {
+            border: 2px solid #d63031;
+            background: linear-gradient(135deg, #fff, #fff5f5);
+        }
+
+        .emergency-btn.severe:hover {
+            background: linear-gradient(135deg, #d63031, #b71c1c);
+            color: white;
+        }
+
+        /* Instructions de crise */
+        .crisis-instructions {
+            margin: 30px 0;
+        }
+
+        .instruction-card {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .instruction-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .instruction-card ul {
+            text-align: left;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .instruction-card li {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        /* Respiration d'urgence */
+        .emergency-breathing-container {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .breathing-instruction {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 30px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emergency-breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #d63031;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 3s ease-in-out;
+        }
+
+        .emergency-breathing-circle .inner-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border-radius: 50%;
+            transition: all 3s ease-in-out;
+        }
+
+        .emergency-breathing-circle.inhale {
+            transform: scale(1.3);
+        }
+
+        .emergency-breathing-circle.inhale .inner-circle {
+            transform: scale(1.4);
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+
+        .breathing-counter {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin: 20px 0;
+        }
+
+        .breathing-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        /* Container technique spécialisée */
+        .technique-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Responsive mode crise */
+        @media (max-width: 768px) {
+            .crisis-levels {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .crisis-level {
+                padding: 15px;
+            }
+            
+            .level-icon {
+                font-size: 2rem;
+            }
+            
+            .emergency-breathing-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .emergency-breathing-circle .inner-circle {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .breathing-instruction {
+                font-size: 1.2rem;
+            }
+            
+            .medical-alert {
+                padding: 15px;
+            }
+            
+            .crisis-actions-group {
+                padding: 15px;
+            }
+        }
+
+        /* ============ FIN STYLES MODE CRISE ============ */
+
+        /* ============ STYLES COHÉRENCE CARDIAQUE BULLE ============ */
+
+        /* Container principal cohérence */
+        .coherence-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 400px;
+            justify-content: center;
+        }
+
+        /* Animation bulle respiration */
+        .breathing-bubble {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bubble-inner {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 50%;
+            transition: all 5s ease-in-out;
+            box-shadow: 0 4px 20px rgba(116, 185, 255, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .bubble-glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(116, 185, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transition: all 5s ease-in-out;
+            z-index: 1;
+        }
+
+        /* Animation inspiration - bulle monte et grossit */
+        .breathing-bubble.inhale .bubble-inner {
+            transform: translateY(-20px) scale(1.5);
+            background: linear-gradient(135deg, #55efc4, #00b894);
+            box-shadow: 0 8px 30px rgba(85, 239, 196, 0.6);
+        }
+
+        .breathing-bubble.inhale .bubble-glow {
+            transform: translateY(-20px) scale(1.8);
+            background: radial-gradient(circle, rgba(85, 239, 196, 0.4) 0%, transparent 70%);
+        }
+
+        /* Animation expiration - bulle descend et diminue */
+        .breathing-bubble.exhale .bubble-inner {
+            transform: translateY(15px) scale(0.7);
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            box-shadow: 0 2px 15px rgba(253, 121, 168, 0.5);
+        }
+
+        .breathing-bubble.exhale .bubble-glow {
+            transform: translateY(15px) scale(0.9);
+            background: radial-gradient(circle, rgba(253, 121, 168, 0.3) 0%, transparent 70%);
+        }
+
+        /* Instructions de respiration */
+        .breathing-instruction {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breathing-phase {
+            font-size: 1rem;
+            color: var(--secondary);
+            text-align: center;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        /* Compteurs cohérence */
+        .coherence-counter {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .counter-item {
+            text-align: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 120px;
+        }
+
+        .counter-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .counter-item span:last-child {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Bénéfices de la cohérence cardiaque */
+        .breathing-benefits {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .breathing-benefits h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9ff;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .benefit-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        /* Améliorations styles breathing existants */
+        .breathing-info {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .breathing-info p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .breathing-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Améliorations animations respiration d'urgence - DURÉES EXACTES */
+        .emergency-breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #74b9ff;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* TRANSITION DYNAMIQUE - sera modifiée par JavaScript */
+            transition: all 1s ease-in-out;
+            position: relative;
+        }
+
+        .emergency-breathing-circle .inner-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 50%;
+            /* TRANSITION DYNAMIQUE - sera modifiée par JavaScript */
+            transition: all 1s ease-in-out;
+            box-shadow: 0 4px 20px rgba(116, 185, 255, 0.4);
+        }
+
+        /* Classes pour durées spécifiques - appliquées dynamiquement */
+        .emergency-breathing-circle.duration-4s,
+        .emergency-breathing-circle.duration-4s .inner-circle {
+            transition: all 4s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-5s,
+        .emergency-breathing-circle.duration-5s .inner-circle {
+            transition: all 5s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-7s,
+        .emergency-breathing-circle.duration-7s .inner-circle {
+            transition: all 7s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-8s,
+        .emergency-breathing-circle.duration-8s .inner-circle {
+            transition: all 8s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-10s,
+        .emergency-breathing-circle.duration-10s .inner-circle {
+            transition: all 10s ease-in-out;
+        }
+
+        /* Animation inspiration - CHANGEMENT VISIBLE ET FLUIDE */
+        .emergency-breathing-circle.inhale {
+            transform: scale(1.4);
+            border-color: #55efc4;
+        }
+
+        .emergency-breathing-circle.inhale .inner-circle {
+            transform: scale(1.5);
+            background: linear-gradient(135deg, #55efc4, #00b894);
+            box-shadow: 0 8px 30px rgba(85, 239, 196, 0.6);
+        }
+
+        /* Animation expiration - CHANGEMENT VISIBLE ET FLUIDE */
+        .emergency-breathing-circle.exhale {
+            transform: scale(0.7);
+            border-color: #fd79a8;
+        }
+
+        .emergency-breathing-circle.exhale .inner-circle {
+            transform: scale(0.6);
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            box-shadow: 0 2px 15px rgba(253, 121, 168, 0.5);
+        }
+
+        /* Instructions d'urgence - plus visibles et stables */
+        .breathing-instruction {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(116, 185, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(116, 185, 255, 0.3);
+            /* TRANSITION DOUCE POUR LE TEXTE */
+            transition: background-color 0.3s ease;
+        }
+
+        /* Compteur d'urgence */
+        .breathing-counter {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-align: center;
+            margin: 20px 0;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive cohérence cardiaque */
+        @media (max-width: 768px) {
+            .coherence-container {
+                padding: 20px 10px;
+                min-height: 300px;
+            }
+            
+            .breathing-bubble {
+                width: 100px;
+                height: 100px;
+                margin: 20px auto;
+            }
+            
+            .bubble-inner {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .bubble-glow {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .breathing-instruction {
+                font-size: 1.1rem;
+                margin: 15px 0;
+            }
+            
+            .coherence-counter {
+                gap: 20px;
+            }
+            
+            .counter-item {
+                padding: 10px 15px;
+                min-width: 100px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .breathing-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .breathing-controls button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        /* ============ FIN STYLES COHÉRENCE CARDIAQUE ============ */
+
         /* ============ STYLES SYSTÈME ACTIVATION ============ */
 
         /* Écran d'activation */
@@ -2617,22 +3246,194 @@
     <div id="crisis-screen" class="screen">
         <div class="emergency-header">
             <h1>🚨 Mode Crise</h1>
-            <p>Vous allez vous sentir mieux, respirez avec moi</p>
+            <p>Vous allez vous sentir mieux, nous sommes là pour vous aider</p>
         </div>
         <div class="container">
-            <div class="emergency-actions">
-                <button class="emergency-btn" data-emergency="breathing">
-                    <span class="emergency-icon">💨</span>
-                    <h3>Respiration</h3>
-                    <p>Commencer maintenant</p>
-                </button>
-                <button class="emergency-btn" data-emergency="emdr">
-                    <span class="emergency-icon">👁️</span>
-                    <h3>EMDR Complet</h3>
-                    <p>Session guidée professionnelle</p>
-                </button>
+            
+            <!-- Évaluation rapide du niveau de crise -->
+            <div class="crisis-assessment">
+                <h2>📊 Évaluez votre état actuel</h2>
+                <div class="crisis-levels">
+                    <button class="crisis-level mild" onclick="showCrisisActions('mild')">
+                        <span class="level-icon">😰</span>
+                        <h3>Anxiété Légère</h3>
+                        <p>Stress, inquiétude, tension</p>
+                    </button>
+                    
+                    <button class="crisis-level moderate" onclick="showCrisisActions('moderate')">
+                        <span class="level-icon">😨</span>
+                        <h3>Crise d'Angoisse</h3>
+                        <p>Panique, oppression, vertiges</p>
+                    </button>
+                    
+                    <button class="crisis-level severe" onclick="showCrisisActions('severe')">
+                        <span class="level-icon">🆘</span>
+                        <h3>Crise Sévère</h3>
+                        <p>Tétanie, tachycardie, souffle coupé</p>
+                    </button>
+                </div>
             </div>
-            <button class="btn-back" data-back="home-screen">Retour</button>
+
+            <!-- Actions pour anxiété légère -->
+            <div id="mild-actions" class="crisis-actions-group" style="display: none;">
+                <h2>🌱 Techniques de Gestion Rapide</h2>
+                <div class="emergency-actions">
+                    <button class="emergency-btn" onclick="startCrisisBreathing('4-7-8')">
+                        <span class="emergency-icon">💨</span>
+                        <h3>Respiration 4-7-8</h3>
+                        <p>Calme immédiat en 2 minutes</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startGrounding()">
+                        <span class="emergency-icon">🌍</span>
+                        <h3>Ancrage 5-4-3-2-1</h3>
+                        <p>Reconnexion avec le présent</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startColdWater()">
+                        <span class="emergency-icon">❄️</span>
+                        <h3>Technique du Froid</h3>
+                        <p>Activation nerf vague</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions pour crise d'angoisse -->
+            <div id="moderate-actions" class="crisis-actions-group" style="display: none;">
+                <h2>🆘 Gestion Crise d'Angoisse</h2>
+                <div class="emergency-actions">
+                    <button class="emergency-btn" onclick="startCrisisBreathing('anti-panic')">
+                        <span class="emergency-icon">🫁</span>
+                        <h3>Respiration Anti-Panique</h3>
+                        <p>Régulation système nerveux</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startProgressiveRelaxation()">
+                        <span class="emergency-icon">🧘‍♀️</span>
+                        <h3>Relaxation Progressive</h3>
+                        <p>Détente musculaire guidée</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startRealityCheck()">
+                        <span class="emergency-icon">✅</span>
+                        <h3>Test de Réalité</h3>
+                        <p>Décatastrophisation cognitive</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="goToScreen('emdr-distance')">
+                        <span class="emergency-icon">👁️</span>
+                        <h3>EMDR d'Urgence</h3>
+                        <p>Session rapide 2 minutes</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions pour crise sévère -->
+            <div id="severe-actions" class="crisis-actions-group" style="display: none;">
+                <h2>🚨 Crise Sévère - Actions Immédiates</h2>
+                
+                <!-- Alerte urgence médicale -->
+                <div class="medical-alert">
+                    <h3>⚠️ Si vous ressentez :</h3>
+                    <ul>
+                        <li>💓 Douleur thoracique intense</li>
+                        <li>🫀 Battements cardiaques très irréguliers</li>
+                        <li>🫁 Difficulté respiratoire sévère</li>
+                        <li>🧠 Perte de conscience imminente</li>
+                    </ul>
+                    <button class="medical-emergency-btn" onclick="callEmergency()">
+                        📞 APPELER LE 15 MAINTENANT
+                    </button>
+                </div>
+
+                <div class="emergency-actions">
+                    <button class="emergency-btn severe" onclick="startSevereBreathing()">
+                        <span class="emergency-icon">🆘</span>
+                        <h3>Respiration d'Urgence</h3>
+                        <p>Contrôle hyperventilation</p>
+                    </button>
+                    
+                    <button class="emergency-btn severe" onclick="startTetanieHelp()">
+                        <span class="emergency-icon">🤲</span>
+                        <h3>Aide Tétanie</h3>
+                        <p>Exercices anti-contractures</p>
+                    </button>
+                    
+                    <button class="emergency-btn severe" onclick="startTachycardiaHelp()">
+                        <span class="emergency-icon">💓</span>
+                        <h3>Tachycardie</h3>
+                        <p>Techniques ralentissement</p>
+                    </button>
+                    
+                    <button class="emergency-btn severe" onclick="contactSupport()">
+                        <span class="emergency-icon">📞</span>
+                        <h3>3114 - Urgence</h3>
+                        <p>Ligne de crise gratuite</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions générales toujours visibles -->
+            <div class="crisis-instructions">
+                <div class="instruction-card">
+                    <h3>🧠 Rappelez-vous :</h3>
+                    <ul>
+                        <li>Cette crise est temporaire et va passer</li>
+                        <li>Vous n'êtes pas en danger de mort</li>
+                        <li>Concentrez-vous sur votre respiration</li>
+                        <li>Vous avez déjà survécu à cela avant</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn-back" data-back="home-screen">← Retour Accueil</button>
+        </div>
+    </div>
+
+    <!-- Écran Respiration d'Urgence -->
+    <div id="emergency-breathing-screen" class="screen">
+        <header class="tool-header">
+            <h1>🆘 Respiration d'Urgence</h1>
+        </header>
+        <div class="container">
+            <div class="emergency-breathing-container">
+                <div class="breathing-instruction" id="emergency-breathing-text">
+                    Sélectionnez votre technique et appuyez sur "Commencer"
+                </div>
+                
+                <div class="emergency-breathing-circle" id="emergency-circle">
+                    <div class="inner-circle"></div>
+                </div>
+                
+                <div class="breathing-counter">
+                    Cycle: <span id="emergency-cycle-count">0</span><span id="emergency-cycle-total">/8</span>
+                </div>
+                
+                <div class="breathing-controls">
+                    <button class="btn-primary" onclick="startEmergencyBreathing()">
+                        ▶️ Commencer
+                    </button>
+                    <button class="btn-secondary" onclick="stopEmergencyBreathing()" style="display: none;">
+                        ⏹️ Arrêter
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn-back" onclick="goToScreen('crisis-screen')">← Retour Mode Crise</button>
+        </div>
+    </div>
+
+    <!-- Écran Techniques Spécialisées -->
+    <div id="specialized-techniques-screen" class="screen">
+        <header class="tool-header">
+            <h1 id="technique-title">🧘‍♀️ Technique Spécialisée</h1>
+        </header>
+        <div class="container">
+            <div class="technique-container" id="technique-content">
+                <!-- Le contenu sera injecté dynamiquement -->
+            </div>
+            
+            <button class="btn-back" onclick="goToScreen('crisis-screen')">← Retour Mode Crise</button>
         </div>
     </div>
 
@@ -2897,22 +3698,68 @@
         </header>
         <div class="container">
             <div class="breathing-info">
-                <p>5 secondes d'inspiration - 5 secondes d'expiration</p>
-                <p>Durée recommandée : 5 minutes (30 cycles)</p>
+                <p><strong>🫁 Technique :</strong> 5 secondes inspiration (nez) - 5 secondes expiration (bouche)</p>
+                <p><strong>⏱️ Durée :</strong> 5 minutes (30 cycles) pour optimiser la variabilité cardiaque</p>
             </div>
 
-            <div id="breathing-circle-container">
-                <div id="breathing-circle"></div>
-                <div id="breathing-instruction">Prêt à commencer</div>
+            <div class="coherence-container" id="coherence-container">
+                <div class="breathing-bubble" id="breathing-bubble">
+                    <div class="bubble-inner"></div>
+                    <div class="bubble-glow"></div>
+                </div>
+                
+                <div class="breathing-instruction" id="breathing-instruction">
+                    Prêt à commencer la cohérence cardiaque
+                </div>
+                
+                <div class="breathing-phase" id="breathing-phase">
+                    Phase : Préparation
+                </div>
             </div>
 
-            <div id="breathing-counter">
-                <span id="cycle-count">0</span> / 30 cycles
+            <div class="coherence-counter">
+                <div class="counter-item">
+                    <span class="counter-label">Cycle :</span>
+                    <span id="cycle-count">0</span> / 30
+                </div>
+                <div class="counter-item">
+                    <span class="counter-label">Temps :</span>
+                    <span id="time-remaining">5:00</span>
+                </div>
             </div>
 
             <div class="breathing-controls">
-                <button id="breathing-start" class="btn-primary">Commencer</button>
-                <button id="breathing-stop" class="btn-secondary" style="display:none;">Arrêter</button>
+                <button class="btn-primary" id="start-breathing-btn" onclick="startCoherenceCardiaque()">
+                    ▶️ Commencer
+                </button>
+                <button class="btn-secondary" id="stop-breathing-btn" onclick="stopCoherenceCardiaque()" style="display: none;">
+                    ⏹️ Arrêter
+                </button>
+                <button class="btn-secondary" onclick="resetCoherenceCardiaque()">
+                    🔄 Recommencer
+                </button>
+            </div>
+
+            <div class="breathing-benefits">
+                <h3>🌟 Bienfaits de la Cohérence Cardiaque :</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">❤️</span>
+                        <span>Régulation cardiaque</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">😌</span>
+                        <span>Réduction stress</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🧠</span>
+                        <span>Clarté mentale</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">💤</span>
+                        <span>Meilleur sommeil</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -6442,6 +7289,912 @@
         }
 
         // ============ FIN FONCTIONS HYPNO/MÉDITATION ============
+
+        // ============ FONCTIONS MODE CRISE AMÉLIORÉ ============
+
+        let emergencyBreathingInterval = null;
+        let emergencyCycleCount = 0;
+
+        // Afficher les actions selon le niveau de crise
+        function showCrisisActions(level) {
+            // Masquer tous les groupes d'actions
+            document.querySelectorAll('.crisis-actions-group').forEach(group => {
+                group.style.display = 'none';
+            });
+            
+            // Afficher le groupe correspondant
+            const targetGroup = document.getElementById(level + '-actions');
+            if (targetGroup) {
+                targetGroup.style.display = 'block';
+                targetGroup.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Log d'usage
+            DataManager.logToolUsage('crisis-' + level);
+            
+            console.log(`🚨 Mode crise ${level} activé`);
+        }
+
+        // Techniques de respiration d'urgence - ATTENTE DU BOUTON COMMENCER
+        let selectedBreathingType = null;
+
+        function startCrisisBreathing(type) {
+            // Stocker le type de respiration choisi
+            selectedBreathingType = type;
+            
+            // Aller sur l'écran mais NE PAS démarrer
+            goToScreen('emergency-breathing-screen');
+            
+            // Préparer l'interface selon le type
+            const instruction = document.getElementById('emergency-breathing-text');
+            const counter = document.getElementById('emergency-cycle-count');
+            const total = document.getElementById('emergency-cycle-total');
+            
+            if (type === '4-7-8') {
+                instruction.textContent = '🌱 Technique 4-7-8 - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/8';
+            } else if (type === 'anti-panic') {
+                instruction.textContent = '🆘 Respiration Anti-Panique - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/10';
+            } else {
+                instruction.textContent = '🚨 Contrôle Hyperventilation - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/12';
+            }
+        }
+
+        // Respiration 4-7-8 pour calmer - ANIMATION AUX DURÉES EXACTES
+        function startBreathing478() {
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            
+            let cycle = 0;
+            const maxCycles = 8;
+            let isRunning = true;
+            
+            // Nettoyage préventif avec log
+            circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+            console.log('🌱 4-7-8 démarré - cercle nettoyé');
+            
+            function doCycle() {
+                if (!isRunning || cycle >= maxCycles) {
+                    instruction.textContent = '✅ Exercice terminé - Vous devriez vous sentir mieux';
+                    circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('✅ 4-7-8 terminé');
+                    return;
+                }
+                
+                cycle++;
+                counter.textContent = cycle;
+                console.log(`🔄 Cycle ${cycle}/8 commencé`);
+                
+                // ===== PHASE 1: INSPIRATION (4 secondes exactes) =====
+                instruction.textContent = `🌱 Inspirez par le nez... (${cycle}/8)`;
+                // ANIMATION SUIT LA DURÉE EXACTE : 4 secondes
+                circle.classList.remove('exhale', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                circle.classList.add('duration-4s', 'inhale');
+                console.log('🌱 INSPIRATION 4s - classe duration-4s + inhale ajoutée');
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 2: RÉTENTION (7 secondes exactes) =====
+                    instruction.textContent = '🫁 Retenez votre souffle... 7 secondes';
+                    // ANIMATION RESTE en inspiration - PAS DE CHANGEMENT
+                    console.log('🫁 RÉTENTION 7s - animation reste en inspiration');
+                    
+                }, 4000); // EXACTEMENT 4 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 3: EXPIRATION (8 secondes exactes) =====
+                    instruction.textContent = '🌸 Expirez par la bouche... 8 secondes';
+                    // ANIMATION SUIT LA DURÉE EXACTE : 8 secondes
+                    circle.classList.remove('inhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-10s');
+                    circle.classList.add('duration-8s', 'exhale');
+                    console.log('🌸 EXPIRATION 8s - classe duration-8s + exhale ajoutée');
+                    
+                }, 11000); // EXACTEMENT 4+7 = 11 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 4: PAUSE (3 secondes) =====
+                    if (cycle >= maxCycles) {
+                        instruction.textContent = '✅ Exercice terminé - Vous devriez vous sentir mieux';
+                        circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                        console.log('✅ Exercice terminé - animation nettoyée');
+                        return;
+                    }
+                    
+                    instruction.textContent = `💪 Cycle ${cycle} terminé. Préparez-vous...`;
+                    // ANIMATION REDEVIENT NEUTRE IMMÉDIATEMENT
+                    circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('💪 PAUSE - animation neutre');
+                    
+                    setTimeout(() => {
+                        if (isRunning) doCycle();
+                    }, 3000);
+                    
+                }, 19000); // EXACTEMENT 4+7+8 = 19 secondes
+            }
+            
+            // Démarrage avec compte à rebours
+            instruction.textContent = '🆘 Technique 4-7-8 - Début dans 3...';
+            console.log('🆘 Démarrage 4-7-8 avec compte à rebours');
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '2...';
+            }, 1000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '1...';
+            }, 2000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = 'C\'est parti ! Suivez le rythme...';
+                setTimeout(() => {
+                    if (isRunning) doCycle();
+                }, 1000);
+            }, 3000);
+            
+            // Fonction d'arrêt
+            window.stopCurrent478 = () => {
+                isRunning = false;
+                console.log('🛑 4-7-8 arrêté par l\'utilisateur');
+            };
+        }
+
+        // Respiration anti-panique - ANIMATION AUX DURÉES EXACTES
+        function startPanicBreathing() {
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            
+            let cycle = 0;
+            const maxCycles = 10;
+            let isRunning = true;
+            
+            // Nettoyage préventif avec log
+            circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+            console.log('🆘 Anti-panique démarré - cercle nettoyé');
+            
+            function doCycle() {
+                if (!isRunning || cycle >= maxCycles) {
+                    instruction.textContent = '✅ Votre respiration est maintenant régulée et calme';
+                    circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('✅ Anti-panique terminé');
+                    return;
+                }
+                
+                cycle++;
+                counter.textContent = cycle;
+                console.log(`🔄 Cycle ${cycle}/10 commencé`);
+                
+                // ===== PHASE 1: INSPIRATION (5 secondes exactes) =====
+                instruction.textContent = `🌱 Inspirez lentement par le nez... (${cycle}/10)`;
+                // ANIMATION SUIT LA DURÉE EXACTE : 5 secondes
+                circle.classList.remove('exhale', 'duration-4s', 'duration-7s', 'duration-8s', 'duration-10s');
+                circle.classList.add('duration-5s', 'inhale');
+                console.log('🌱 INSPIRATION 5s - classe duration-5s + inhale ajoutée');
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 2: EXPIRATION (7 secondes exactes) =====
+                    instruction.textContent = '🌸 Expirez doucement par la bouche... 7 secondes';
+                    // ANIMATION SUIT LA DURÉE EXACTE : 7 secondes
+                    circle.classList.remove('inhale', 'duration-4s', 'duration-5s', 'duration-8s', 'duration-10s');
+                    circle.classList.add('duration-7s', 'exhale');
+                    console.log('🌸 EXPIRATION 7s - classe duration-7s + exhale ajoutée');
+                    
+                }, 5000); // EXACTEMENT 5 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 3: PAUSE (3 secondes) =====
+                    if (cycle >= maxCycles) {
+                        instruction.textContent = '✅ Votre respiration est maintenant régulée et calme';
+                        circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                        console.log('✅ Exercice terminé - animation nettoyée');
+                        return;
+                    }
+                    
+                    instruction.textContent = `💪 Excellent ! ${cycle} cycles - Vous reprenez le contrôle`;
+                    // ANIMATION REDEVIENT NEUTRE IMMÉDIATEMENT
+                    circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('💪 PAUSE - animation neutre');
+                    
+                    setTimeout(() => {
+                        if (isRunning) doCycle();
+                    }, 3000);
+                    
+                }, 12000); // EXACTEMENT 5+7 = 12 secondes
+            }
+            
+            // Démarrage avec compte à rebours
+            instruction.textContent = '🆘 Anti-panique - Début dans 3...';
+            console.log('🆘 Démarrage anti-panique avec compte à rebours');
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '2...';
+            }, 1000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '1...';
+            }, 2000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = 'C\'est parti ! Respirez avec moi, très calmement...';
+                setTimeout(() => {
+                    if (isRunning) doCycle();
+                }, 1000);
+            }, 3000);
+            
+            // Fonction d'arrêt
+            window.stopCurrentPanic = () => {
+                isRunning = false;
+                console.log('🛑 Anti-panique arrêté par l\'utilisateur');
+            };
+        }
+
+        // Technique de grounding 5-4-3-2-1
+        function startGrounding() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '🌍 Ancrage 5-4-3-2-1';
+            
+            const content = `
+                <div class="grounding-technique">
+                    <h2>Technique d'Ancrage au Présent</h2>
+                    <div class="grounding-step active" id="step-5">
+                        <h3>👀 Nommez 5 choses que vous VOYEZ</h3>
+                        <p>Regardez autour de vous et décrivez 5 objets précis</p>
+                        <div class="grounding-examples">Ex: "Une lampe bleue", "Mes chaussures noires", "Un livre rouge"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(4)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-4">
+                        <h3>🤲 Nommez 4 choses que vous TOUCHEZ</h3>
+                        <p>Touchez et décrivez la texture de 4 objets</p>
+                        <div class="grounding-examples">Ex: "Mon téléphone lisse", "La table rugueuse"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(3)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-3">
+                        <h3>👂 Nommez 3 choses que vous ENTENDEZ</h3>
+                        <p>Concentrez-vous sur 3 sons différents</p>
+                        <div class="grounding-examples">Ex: "Le tic-tac de l'horloge", "Des voitures au loin"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(2)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-2">
+                        <h3>👃 Nommez 2 choses que vous SENTEZ</h3>
+                        <p>Identifiez 2 odeurs ou parfums</p>
+                        <div class="grounding-examples">Ex: "L'odeur du café", "Mon parfum"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(1)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-1">
+                        <h3>👅 Nommez 1 chose que vous GOÛTEZ</h3>
+                        <p>Concentrez-vous sur le goût dans votre bouche</p>
+                        <div class="grounding-examples">Ex: "Le goût mentholé de mon dentifrice"</div>
+                        <button class="btn-primary" onclick="completeGrounding()">Terminer ✅</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-complete">
+                        <h3>🎉 Excellente Technique !</h3>
+                        <p>Vous êtes maintenant ancré dans le présent. Votre esprit s'est reconnecté avec la réalité.</p>
+                        <div class="success-message">Cette technique aide à sortir des pensées catastrophiques et à revenir au moment présent.</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        function nextGroundingStep(step) {
+            document.querySelectorAll('.grounding-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step-' + step).classList.add('active');
+        }
+
+        function completeGrounding() {
+            document.querySelectorAll('.grounding-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step-complete').classList.add('active');
+        }
+
+        // Technique du froid
+        function startColdWater() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '❄️ Technique du Froid';
+            
+            const content = `
+                <div class="cold-technique">
+                    <h2>Activation du Nerf Vague</h2>
+                    <div class="cold-instructions">
+                        <div class="cold-step">
+                            <span class="step-icon">🚿</span>
+                            <h3>1. Eau Froide</h3>
+                            <p>Faites couler de l'eau froide sur vos poignets pendant 30 secondes</p>
+                        </div>
+                        
+                        <div class="cold-step">
+                            <span class="step-icon">🧊</span>
+                            <h3>2. Nuque et Tempes</h3>
+                            <p>Appliquez de l'eau froide sur votre nuque et vos tempes</p>
+                        </div>
+                        
+                        <div class="cold-step">
+                            <span class="step-icon">😌</span>
+                            <h3>3. Respirez</h3>
+                            <p>Prenez 3 respirations profondes pendant l'application</p>
+                        </div>
+                    </div>
+                    
+                    <div class="science-explanation">
+                        <h4>🧠 Pourquoi ça marche ?</h4>
+                        <p>Le froid active le système nerveux parasympathique via le nerf vague, ce qui:</p>
+                        <ul>
+                            <li>Ralentit le rythme cardiaque</li>
+                            <li>Diminue la production de cortisol</li>
+                            <li>Calme l'état d'hypervigilance</li>
+                            <li>Procure un soulagement en 60-90 secondes</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Relaxation progressive pour crise modérée
+        function startProgressiveRelaxation() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '🧘‍♀️ Relaxation Progressive';
+            
+            const content = `
+                <div class="relaxation-technique">
+                    <h2>Détente Musculaire Guidée</h2>
+                    <div class="relaxation-timer">
+                        <div class="timer-display" id="relaxation-timer">8:00</div>
+                        <button class="btn-primary" onclick="startRelaxationTimer()">Commencer la Relaxation</button>
+                    </div>
+                    
+                    <div class="relaxation-instructions" id="relaxation-text">
+                        Installez-vous confortablement et fermez les yeux...
+                    </div>
+                    
+                    <div class="muscle-groups">
+                        <h4>🎯 Groupes Musculaires (Dans l'ordre) :</h4>
+                        <ol>
+                            <li>Pieds et mollets</li>
+                            <li>Cuisses et fessiers</li>
+                            <li>Abdomen et dos</li>
+                            <li>Mains et avant-bras</li>
+                            <li>Épaules et cou</li>
+                            <li>Visage et tête</li>
+                        </ol>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Aide spécialisée pour tétanie
+        function startTetanieHelp() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '🤲 Aide Tétanie';
+            
+            const content = `
+                <div class="tetanie-help">
+                    <h2>Gestion Crise de Tétanie</h2>
+                    
+                    <div class="warning-box">
+                        <h3>⚠️ Important</h3>
+                        <p>Si les symptômes persistent ou s'aggravent, contactez immédiatement le 15</p>
+                    </div>
+                    
+                    <div class="tetanie-steps">
+                        <div class="step-card">
+                            <h3>1. 🫁 Respiration Contrôlée</h3>
+                            <p><strong>Respirez dans un sac en papier</strong> ou joignez vos mains en coupe devant votre bouche</p>
+                            <ul>
+                                <li>Inspiration lente 4 secondes</li>
+                                <li>Pause 2 secondes</li>
+                                <li>Expiration lente 6 secondes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3>2. 🤲 Massage des Mains</h3>
+                            <p><strong>Massez vigoureusement :</strong></p>
+                            <ul>
+                                <li>La paume de vos mains</li>
+                                <li>Entre les doigts</li>
+                                <li>Les poignets en cercle</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3>3. 🦵 Étirements Doux</h3>
+                            <p><strong>Étirez progressivement :</strong></p>
+                            <ul>
+                                <li>Ouvrez et fermez les mains lentement</li>
+                                <li>Bougez doucement les orteils</li>
+                                <li>Rotation douce des épaules</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3>4. 🌡️ Réchauffement</h3>
+                            <p><strong>Réchauffez les extrémités :</strong></p>
+                            <ul>
+                                <li>Frottez vos mains ensemble</li>
+                                <li>Bougez pieds et mains</li>
+                                <li>Couvrez-vous si possible</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Aide pour tachycardie
+        function startTachycardiaHelp() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '💓 Aide Tachycardie';
+            
+            const content = `
+                <div class="tachycardia-help">
+                    <h2>Techniques de Ralentissement Cardiaque</h2>
+                    
+                    <div class="warning-box">
+                        <h3>🚨 Attention</h3>
+                        <p>Si votre rythme cardiaque dépasse 150 bpm ou si vous ressentez des douleurs thoraciques, appelez le 15 immédiatement</p>
+                    </div>
+                    
+                    <div class="tachycardia-techniques">
+                        <div class="technique-card">
+                            <h3>1. 🧊 Manœuvre de Valsalva Douce</h3>
+                            <p><strong>Technique du "souffle froid" :</strong></p>
+                            <ul>
+                                <li>Inspirez profondément</li>
+                                <li>Soufflez doucement comme pour refroidir une soupe chaude</li>
+                                <li>Maintenez 10-15 secondes</li>
+                                <li>Répétez 3 fois</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <h3>2. ❄️ Réflexe de Plongée</h3>
+                            <p><strong>Stimulation du nerf vague :</strong></p>
+                            <ul>
+                                <li>Aspergez d'eau très froide votre visage</li>
+                                <li>Ou appliquez une poche de glace sur les yeux fermés</li>
+                                <li>Maintenez 15-30 secondes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <h3>3. 🙏 Massage Carotidien Doux</h3>
+                            <p><strong>ATTENTION: Seulement si vous savez faire :</strong></p>
+                            <ul>
+                                <li>Massage très doux du cou (côté droit)</li>
+                                <li>Pression légère 5-10 secondes</li>
+                                <li>JAMAIS les deux côtés ensemble</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <h3>4. 🧘‍♀️ Position Anti-Tachycardie</h3>
+                            <p><strong>Position optimale :</strong></p>
+                            <ul>
+                                <li>Allongez-vous, jambes surélevées</li>
+                                <li>Tête légèrement inclinée vers le bas</li>
+                                <li>Respiration abdominale lente</li>
+                                <li>Relaxation complète</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Appel d'urgence
+        function callEmergency() {
+            if (confirm('Voulez-vous appeler le 15 (SAMU) maintenant ?')) {
+                window.location.href = 'tel:15';
+            }
+        }
+
+        // Contact support
+        function contactSupport() {
+            if (confirm('Voulez-vous appeler le 3114 (ligne de crise gratuite) ?')) {
+                window.location.href = 'tel:3114';
+            }
+        }
+
+        // Test de réalité pour crise modérée
+        function startRealityCheck() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '✅ Test de Réalité';
+            
+            const content = `
+                <div class="reality-check">
+                    <h2>Décatastrophisation Cognitive</h2>
+                    
+                    <div class="check-questions">
+                        <div class="question-card">
+                            <h3>🤔 Questions à vous poser :</h3>
+                            <div class="question-list">
+                                <div class="question-item">
+                                    <strong>1. Suis-je réellement en danger de mort ?</strong>
+                                    <p class="answer">Non, c'est de l'anxiété, pas un danger réel</p>
+                                </div>
+                                
+                                <div class="question-item">
+                                    <strong>2. Est-ce que le pire scénario que j'imagine va vraiment arriver ?</strong>
+                                    <p class="answer">Très probablement non, c'est mon anxiété qui exagère</p>
+                                </div>
+                                
+                                <div class="question-item">
+                                    <strong>3. Ai-je déjà survécu à cette sensation ?</strong>
+                                    <p class="answer">Oui, et je vais m'en sortir cette fois aussi</p>
+                                </div>
+                                
+                                <div class="question-item">
+                                    <strong>4. Que dirais-je à un ami qui vit la même chose ?</strong>
+                                    <p class="answer">Je lui dirais que ça va passer, qu'il est fort</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="affirmation-card">
+                            <h3>💪 Affirmations Positives :</h3>
+                            <ul>
+                                <li>"Cette crise est temporaire"</li>
+                                <li>"Je suis en sécurité"</li>
+                                <li>"Mon corps sait comment se calmer"</li>
+                                <li>"J'ai les ressources pour gérer cela"</li>
+                                <li>"Dans une heure, je me sentirai mieux"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Respiration sévère (hyperventilation) - ANIMATION AUX DURÉES EXACTES
+        function startSevereBreathing() {
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            
+            let cycle = 0;
+            const maxCycles = 12;
+            let isRunning = true;
+            
+            // Nettoyage préventif avec log
+            circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+            console.log('🚨 Anti-hyperventilation démarré - cercle nettoyé');
+            
+            function severeCycle() {
+                if (!isRunning || cycle >= maxCycles) {
+                    instruction.textContent = '✅ Hyperventilation contrôlée - Vous respirez maintenant normalement';
+                    circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('✅ Anti-hyperventilation terminé');
+                    return;
+                }
+                
+                cycle++;
+                counter.textContent = cycle;
+                console.log(`🔄 Cycle ${cycle}/12 commencé`);
+                
+                // ===== PHASE 1: INSPIRATION ULTRA-LENTE (7 secondes exactes) =====
+                instruction.textContent = `🐌 Inspirez TRÈS lentement par le nez... (${cycle}/12)`;
+                // ANIMATION SUIT LA DURÉE EXACTE : 7 secondes
+                circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-8s', 'duration-10s');
+                circle.classList.add('duration-7s', 'inhale');
+                console.log('🐌 INSPIRATION 7s - classe duration-7s + inhale ajoutée');
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 2: RÉTENTION (4 secondes exactes) =====
+                    instruction.textContent = '⏸️ Retenez doucement... 4 secondes';
+                    // ANIMATION RESTE en inspiration - PAS DE CHANGEMENT
+                    console.log('⏸️ RÉTENTION 4s - animation reste en inspiration');
+                    
+                }, 7000); // EXACTEMENT 7 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 3: EXPIRATION ULTRA-LENTE (10 secondes exactes) =====
+                    instruction.textContent = '🐌 Expirez TRÈS lentement par la bouche... 10 secondes';
+                    // ANIMATION SUIT LA DURÉE EXACTE : 10 secondes
+                    circle.classList.remove('inhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s');
+                    circle.classList.add('duration-10s', 'exhale');
+                    console.log('🐌 EXPIRATION 10s - classe duration-10s + exhale ajoutée');
+                    
+                }, 11000); // EXACTEMENT 7+4 = 11 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 4: PAUSE (4 secondes) =====
+                    if (cycle >= maxCycles) {
+                        instruction.textContent = '✅ Hyperventilation contrôlée - Vous respirez maintenant normalement';
+                        circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                        console.log('✅ Exercice terminé - animation nettoyée');
+                        return;
+                    }
+                    
+                    instruction.textContent = `💪 Excellent contrôle ! ${cycle}/12 - Vous maîtrisez votre respiration`;
+                    // ANIMATION REDEVIENT NEUTRE IMMÉDIATEMENT
+                    circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('💪 PAUSE - animation neutre');
+                    
+                    setTimeout(() => {
+                        if (isRunning) severeCycle();
+                    }, 4000);
+                    
+                }, 21000); // EXACTEMENT 7+4+10 = 21 secondes
+            }
+            
+            // Démarrage ultra-rassurant avec compte à rebours
+            instruction.textContent = '🆘 Contrôle hyperventilation - Début dans 3...';
+            console.log('🆘 Démarrage anti-hyperventilation avec compte à rebours');
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '2...';
+            }, 1000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '1...';
+            }, 2000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = 'C\'est parti ! Suivez mon rythme ultra-lent...';
+                setTimeout(() => {
+                    if (isRunning) severeCycle();
+                }, 1000);
+            }, 3000);
+            
+            // Fonction d'arrêt
+            window.stopCurrentSevere = () => {
+                isRunning = false;
+                console.log('🛑 Anti-hyperventilation arrêté par l\'utilisateur');
+            };
+        }
+
+        // Arrêter respiration d'urgence - ARRÊT IMMÉDIAT ET PROPRE
+        function stopEmergencyBreathing() {
+            // Arrêter toutes les fonctions en cours
+            if (window.stopCurrent478) window.stopCurrent478();
+            if (window.stopCurrentPanic) window.stopCurrentPanic();
+            if (window.stopCurrentSevere) window.stopCurrentSevere();
+            
+            // Nettoyer TOUS les timeouts du navigateur (méthode radicale mais efficace)
+            const maxTimeoutId = setTimeout(() => {}, 0);
+            for (let i = 0; i <= maxTimeoutId; i++) {
+                clearTimeout(i);
+            }
+            
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            const startBtn = document.querySelector('#emergency-breathing-screen .btn-primary');
+            const stopBtn = document.querySelector('#emergency-breathing-screen .btn-secondary');
+            
+            // Reset interface immédiat
+            if (instruction) instruction.textContent = 'Exercice arrêté - Respirez naturellement';
+            if (circle) circle.classList.remove('inhale', 'exhale');
+            if (counter) counter.textContent = '0';
+            
+            // Reset boutons
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            console.log('🛑 Respiration d\'urgence arrêtée - Arrêt immédiat');
+        }
+
+        // Démarrer respiration d'urgence - SELON TYPE SÉLECTIONNÉ
+        function startEmergencyBreathing() {
+            // Arrêter toute respiration en cours
+            stopEmergencyBreathing();
+            
+            // Changer le bouton
+            const startBtn = document.querySelector('#emergency-breathing-screen .btn-primary');
+            const stopBtn = document.querySelector('#emergency-breathing-screen .btn-secondary');
+            
+            if (startBtn) startBtn.style.display = 'none';
+            if (stopBtn) stopBtn.style.display = 'inline-block';
+            
+            // Démarrer selon le type sélectionné
+            setTimeout(() => {
+                if (selectedBreathingType === '4-7-8') {
+                    startBreathing478();
+                } else if (selectedBreathingType === 'anti-panic') {
+                    startPanicBreathing();
+                } else {
+                    startSevereBreathing();
+                }
+            }, 500);
+        }
+
+        // ============ FIN FONCTIONS MODE CRISE ============
+
+        // ============ FONCTIONS COHÉRENCE CARDIAQUE SYNCHRONISÉE ============
+
+        let coherenceInterval = null;
+        let coherenceTimeInterval = null;
+        let coherenceCycles = 0;
+        let coherenceTimeRemaining = 300; // 5 minutes en secondes
+
+        // Démarrer la cohérence cardiaque
+        function startCoherenceCardiaque() {
+            const bubble = document.getElementById('breathing-bubble');
+            const instruction = document.getElementById('breathing-instruction');
+            const phase = document.getElementById('breathing-phase');
+            const cycleCount = document.getElementById('cycle-count');
+            const timeDisplay = document.getElementById('time-remaining');
+            const startBtn = document.getElementById('start-breathing-btn');
+            const stopBtn = document.getElementById('stop-breathing-btn');
+            
+            // Reset et initialisation
+            coherenceCycles = 0;
+            coherenceTimeRemaining = 300;
+            
+            // Interface
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            
+            console.log('🫁 Démarrage cohérence cardiaque');
+            
+            // Fonction de cycle respiration
+            function breathingCycle() {
+                if (coherenceCycles >= 30) {
+                    // Fin de session
+                    instruction.textContent = '✅ Session terminée ! Excellent travail !';
+                    phase.textContent = 'Session complète - Bienfaits activés';
+                    bubble.classList.remove('inhale', 'exhale');
+                    stopCoherenceCardiaque();
+                    
+                    // Log de fin
+                    DataManager.logToolUsage('coherence-complete');
+                    return;
+                }
+                
+                coherenceCycles++;
+                cycleCount.textContent = coherenceCycles;
+                
+                // PHASE 1: INSPIRATION (5 secondes)
+                instruction.textContent = '🌱 Inspirez lentement par le nez...';
+                phase.textContent = 'Phase: Inspiration';
+                bubble.classList.remove('exhale');
+                bubble.classList.add('inhale');
+                
+                // Après 5 secondes: EXPIRATION
+                setTimeout(() => {
+                    if (!coherenceInterval) return; // Vérifier si pas arrêté
+                    
+                    instruction.textContent = '🌸 Expirez doucement par la bouche...';
+                    phase.textContent = 'Phase: Expiration';
+                    bubble.classList.remove('inhale');
+                    bubble.classList.add('exhale');
+                }, 5000);
+                
+                // Programmer le cycle suivant après 10 secondes (5+5)
+                setTimeout(() => {
+                    if (coherenceInterval) {
+                        breathingCycle();
+                    }
+                }, 10000);
+            }
+            
+            // Compte à rebours du temps
+            function updateTimer() {
+                const minutes = Math.floor(coherenceTimeRemaining / 60);
+                const seconds = coherenceTimeRemaining % 60;
+                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                coherenceTimeRemaining--;
+                
+                if (coherenceTimeRemaining < 0) {
+                    stopCoherenceCardiaque();
+                }
+            }
+            
+            // Démarrer les timers
+            coherenceInterval = setTimeout(() => {
+                instruction.textContent = 'Préparez-vous... La session commence';
+                phase.textContent = 'Phase: Préparation';
+                
+                setTimeout(breathingCycle, 2000); // Commencer après 2 secondes
+            }, 1000);
+            
+            coherenceTimeInterval = setInterval(updateTimer, 1000);
+            
+            // Log de démarrage
+            DataManager.logToolUsage('coherence-start');
+        }
+
+        // Arrêter la cohérence cardiaque
+        function stopCoherenceCardiaque() {
+            if (coherenceInterval) {
+                clearTimeout(coherenceInterval);
+                coherenceInterval = null;
+            }
+            
+            if (coherenceTimeInterval) {
+                clearInterval(coherenceTimeInterval);
+                coherenceTimeInterval = null;
+            }
+            
+            const bubble = document.getElementById('breathing-bubble');
+            const instruction = document.getElementById('breathing-instruction');
+            const phase = document.getElementById('breathing-phase');
+            const startBtn = document.getElementById('start-breathing-btn');
+            const stopBtn = document.getElementById('stop-breathing-btn');
+            
+            // Reset interface
+            bubble.classList.remove('inhale', 'exhale');
+            instruction.textContent = 'Session arrêtée - Reprenez quand vous voulez';
+            phase.textContent = 'Phase: Arrêt';
+            
+            // Boutons
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+            
+            console.log('🫁 Cohérence cardiaque arrêtée');
+        }
+
+        // Reset complet
+        function resetCoherenceCardiaque() {
+            stopCoherenceCardiaque();
+            
+            // Reset compteurs
+            coherenceCycles = 0;
+            coherenceTimeRemaining = 300;
+            
+            document.getElementById('cycle-count').textContent = '0';
+            document.getElementById('time-remaining').textContent = '5:00';
+            document.getElementById('breathing-instruction').textContent = 'Prêt à commencer la cohérence cardiaque';
+            document.getElementById('breathing-phase').textContent = 'Phase: Préparation';
+            
+            console.log('🔄 Cohérence cardiaque reset');
+        }
+
+        // ============ FIN COHÉRENCE CARDIAQUE ============
 
         // ============ FONCTIONS ASTUCES & RESSOURCES ============
 
