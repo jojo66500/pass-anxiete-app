@@ -3232,12 +3232,13 @@
             border-radius: 20px 20px 0 0;
             transition: height 0.5s ease;
             margin-bottom: 10px;
+            opacity: 0.7; /* Transparence pour voir les infos derrière */
         }
 
-        .bar-fill.joy { background: #4CAF50; }
-        .bar-fill.sadness { background: #2196F3; }
-        .bar-fill.anxiety { background: #FF9800; }
-        .bar-fill.anger { background: #F44336; }
+        .bar-fill.joy { background: rgba(76, 175, 80, 0.7); } /* Vert transparent */
+        .bar-fill.sadness { background: rgba(33, 150, 243, 0.7); } /* Bleu transparent */
+        .bar-fill.anxiety { background: rgba(255, 152, 0, 0.7); } /* Orange transparent */
+        .bar-fill.anger { background: rgba(244, 67, 54, 0.7); } /* Rouge transparent */
 
         .bar-label {
             font-size: 1.5rem;
@@ -3453,7 +3454,42 @@
         }
 
         .success-category-badge.social { background: #e3f2fd; color: #1976d2; }
-        .success-category-badge.anxiete { background: #e8f5e9; color: #388e3c; }
+        .success-category-badge.professionnel { background: #fff3e0; color: #f57c00; }
+        .success-category-badge.personnel { background: #e8f5e9; color: #388e3c; }
+        .success-category-badge.autre { background: #f3e5f5; color: #7b1fa2; }
+
+        .no-success {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .no-success p {
+            margin: 10px 0;
+        }
+
+        .journal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #pride-text {
+            font-weight: 600;
+            color: var(--primary);
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
 
         .success-text {
             margin: 10px 0;
@@ -3524,6 +3560,266 @@
         }
 
         /* ============ FIN STYLES MODALS TCC ============ */
+
+        /* ============ STYLES HISTORIQUES ============ */
+
+        .emotion-history, .crisis-plan-history {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .emotion-history-entry, .crisis-history-entry {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .emotion-history-header, .crisis-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .emotion-date, .crisis-date {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .emotion-rank {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .crisis-completeness {
+            background: #e8f5e9;
+            color: #388e3c;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .emotion-values {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .emotion-value {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .emotion-value.joy { background: rgba(76, 175, 80, 0.2); }
+        .emotion-value.sadness { background: rgba(33, 150, 243, 0.2); }
+        .emotion-value.anxiety { background: rgba(255, 152, 0, 0.2); }
+        .emotion-value.anger { background: rgba(244, 67, 54, 0.2); }
+
+        .emotion-summary {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .crisis-preview {
+            margin: 10px 0;
+        }
+
+        .crisis-section-preview {
+            font-size: 0.9rem;
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .crisis-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-mini {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-mini:hover {
+            background: var(--primary-dark);
+        }
+
+        .no-emotion-history, .no-crisis-history {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Exposition graduelle */
+        .exposure-explanation {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .explanation-box {
+            margin-top: 15px;
+        }
+
+        .explanation-box p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .fear-examples {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .fear-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .fear-tag {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .fear-tag:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .ladder-instruction {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+        }
+
+        .button-help {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        #track-exposure-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-progress {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-indicator {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step-status {
+            display: flex;
+            gap: 10px;
+        }
+
+        .step-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .step-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Responsive pour historiques */
+        @media (max-width: 768px) {
+            .emotion-values {
+                gap: 8px;
+            }
+            
+            .emotion-value {
+                font-size: 0.8rem;
+                padding: 3px 6px;
+            }
+            
+            .crisis-actions {
+                flex-direction: column;
+            }
+            
+            .fear-tags {
+                gap: 5px;
+            }
+            
+            .fear-tag {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* ============ FIN STYLES HISTORIQUES ============ */
 
         /* ============ STYLES SYSTÈME ACTIVATION ============ */
 
@@ -7854,9 +8150,11 @@
 
         // ============ TECHNIQUES TCC AVANCÉES FONCTIONNELLES ============
 
-        // 📊 Graphique émotionnel interactif
+        // 📊 Graphique émotionnel interactif avec historique
         function showEmotionChart() {
-            // Créer une modal avec graphique émotionnel
+            // Charger l'historique existant
+            const emotionHistory = JSON.parse(localStorage.getItem('emotion-history') || '[]');
+            
             const modal = document.createElement('div');
             modal.className = 'tcc-modal';
             modal.innerHTML = `
@@ -7920,30 +8218,61 @@
                             <p id="emotion-analysis">Analysez vos émotions en temps réel...</p>
                         </div>
                         
-                        <button class="btn-primary" onclick="saveEmotionData()">💾 Sauvegarder cette évaluation</button>
+                        <button class="btn-primary" id="save-emotion-btn">💾 Sauvegarder cette évaluation</button>
+                        
+                        <div class="emotion-history">
+                            <h4>📈 Historique des évaluations (${emotionHistory.length}/5) :</h4>
+                            <div id="emotion-history-list">
+                                ${generateEmotionHistory(emotionHistory)}
+                            </div>
+                            ${emotionHistory.length > 0 ? `
+                                <button class="btn-secondary" id="clear-emotion-history-btn">🗑️ Vider l'historique</button>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
             `;
             document.body.appendChild(modal);
             modal.style.display = 'flex';
             
-            // Initialiser le graphique
+            // Initialiser le graphique et les événements
             setTimeout(() => {
                 updateEmotionChart();
+                
+                // Ajouter l'événement de sauvegarde
+                const saveBtn = document.getElementById('save-emotion-btn');
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        console.log('💾 Sauvegarde émotion cliquée');
+                        saveEmotionData();
+                    });
+                }
+                
+                // Ajouter l'événement pour vider l'historique
+                const clearBtn = document.getElementById('clear-emotion-history-btn');
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function() {
+                        console.log('🗑️ Vider historique émotionnel cliqué');
+                        clearEmotionHistory();
+                    });
+                }
             }, 100);
             
             DataManager.logToolUsage('tcc-emotion-chart');
         }
 
-        // ⚡ Plan d'action anti-crise personnalisé
+        // ⚡ Plan d'action anti-crise personnalisé avec historique
         function createCrisisPlan() {
+            // Charger l'historique des plans
+            const planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            
             const modal = document.createElement('div');
             modal.className = 'tcc-modal';
             modal.innerHTML = `
                 <div class="tcc-modal-content crisis-plan">
                     <div class="modal-header">
                         <h3>⚡ Plan d'Action Anti-Crise</h3>
-                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                        <button class="modal-close" id="close-crisis-modal">&times;</button>
                     </div>
                     
                     <div class="crisis-plan-form">
@@ -7976,8 +8305,18 @@
                         </div>
                         
                         <div class="plan-buttons">
-                            <button class="btn-primary" onclick="saveCrisisPlan()">💾 Sauvegarder mon plan</button>
-                            <button class="btn-secondary" onclick="showNotification('Plan de crise sauvegardé !', 'success')">📄 Télécharger PDF</button>
+                            <button class="btn-primary" id="save-crisis-btn">💾 Sauvegarder mon plan</button>
+                            <button class="btn-secondary" id="download-crisis-btn">📄 Télécharger PDF</button>
+                        </div>
+                        
+                        <div class="crisis-plan-history">
+                            <h4>📚 Historique de mes plans (${planHistory.length}/5) :</h4>
+                            <div id="crisis-history-list">
+                                ${generateCrisisHistory(planHistory)}
+                            </div>
+                            ${planHistory.length > 0 ? `
+                                <button class="btn-secondary" id="clear-crisis-history-btn">🗑️ Vider l'historique</button>
+                            ` : ''}
                         </div>
                     </div>
                 </div>
@@ -7985,10 +8324,84 @@
             document.body.appendChild(modal);
             modal.style.display = 'flex';
             
+            // Charger le plan le plus récent si disponible
+            if (planHistory.length > 0) {
+                const latestPlan = planHistory[0];
+                document.getElementById('warning-signs').value = latestPlan.warningSignes || '';
+                document.getElementById('coping-tools').value = latestPlan.copingTools || '';
+                document.getElementById('support-contacts').value = latestPlan.supportContacts || '';
+                
+                // Recocher les actions immédiales
+                if (latestPlan.immediateActions) {
+                    latestPlan.immediateActions.forEach(action => {
+                        const checkbox = Array.from(document.querySelectorAll('.action-checklist input')).find(cb => 
+                            cb.parentElement.textContent.trim().includes(action.trim())
+                        );
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+            }
+            
+            // Ajouter les événements
+            setTimeout(() => {
+                const saveBtn = document.getElementById('save-crisis-btn');
+                const downloadBtn = document.getElementById('download-crisis-btn');
+                const closeBtn = document.getElementById('close-crisis-modal');
+                const clearHistoryBtn = document.getElementById('clear-crisis-history-btn');
+                
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        console.log('💾 Sauvegarde plan de crise cliquée');
+                        saveCrisisPlan();
+                    });
+                }
+                
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', function() {
+                        console.log('📄 Téléchargement plan de crise cliqué');
+                        downloadCrisisPlan();
+                    });
+                }
+                
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        console.log('❌ Fermeture plan de crise cliquée');
+                        closeTCCModal();
+                    });
+                }
+                
+                if (clearHistoryBtn) {
+                    clearHistoryBtn.addEventListener('click', function() {
+                        console.log('🗑️ Vider historique plans de crise cliqué');
+                        clearCrisisHistory();
+                    });
+                }
+                
+                // Ajouter les événements pour les boutons d'historique
+                const loadButtons = document.querySelectorAll('[data-action="load"]');
+                const downloadButtons = document.querySelectorAll('[data-action="download"]');
+                
+                loadButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-plan-index'));
+                        console.log(`📋 Charger plan ${index} cliqué`);
+                        loadCrisisPlan(index);
+                    });
+                });
+                
+                downloadButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-plan-index'));
+                        console.log(`📄 Télécharger plan ${index} cliqué`);
+                        downloadSpecificCrisisPlan(index);
+                    });
+                });
+            }, 100);
+            
             DataManager.logToolUsage('tcc-crisis-plan');
         }
 
-        // 🎯 Exposition graduelle avec niveaux de difficulté
+        // 🎯 Exposition graduelle avec explication claire du processus
         function startExposureExercise() {
             const modal = document.createElement('div');
             modal.className = 'tcc-modal';
@@ -8000,60 +8413,81 @@
                     </div>
                     
                     <div class="exposure-container">
+                        <div class="exposure-explanation">
+                            <h4>🧠 Comment ça marche ?</h4>
+                            <div class="explanation-box">
+                                <p><strong>🎯 Objectif :</strong> Surmonter progressivement vos peurs en vous y exposant étape par étape</p>
+                                <p><strong>📝 "Créer mon plan" :</strong> Définir votre peur et créer 5 étapes de difficulté croissante</p>
+                                <p><strong>📊 "Commencer le suivi" :</strong> Utiliser votre plan pour pratiquer et marquer vos progrès</p>
+                            </div>
+                        </div>
+                        
                         <h4>🏔️ Planifiez votre progression :</h4>
                         
                         <div class="fear-identification">
                             <h5>1. 😨 Quelle peur souhaitez-vous travailler ?</h5>
                             <input type="text" id="main-fear" placeholder="Ex: Parler en public, prendre l'avion, rencontrer de nouvelles personnes...">
+                            <div class="fear-examples">
+                                <p><strong>💡 Exemples de peurs courantes :</strong></p>
+                                <div class="fear-tags">
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Parler en public'">🎤 Parler en public</span>
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Passer des entretiens'">💼 Entretiens</span>
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Rencontrer de nouvelles personnes'">👥 Nouvelles rencontres</span>
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Prendre l\\'avion'">✈️ Avion</span>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="exposure-ladder">
                             <h5>2. 📈 Échelle d'exposition (du plus facile au plus difficile) :</h5>
+                            <p class="ladder-instruction">✨ <strong>Astuce :</strong> Commencez par quelque chose de très facile (niveau 2-3/10) et montez progressivement</p>
                             
                             <div class="ladder-step">
                                 <span class="step-number">1</span>
-                                <input type="text" placeholder="Étape la plus facile (ex: regarder des photos)">
-                                <div class="difficulty">Difficulté: <span class="difficulty-low">Facile 😌</span></div>
+                                <input type="text" placeholder="Ex: Regarder des vidéos de personnes qui parlent en public">
+                                <div class="difficulty">Difficulté: <span class="difficulty-low">Très facile 😌 (2/10)</span></div>
                             </div>
                             
                             <div class="ladder-step">
                                 <span class="step-number">2</span>
-                                <input type="text" placeholder="Étape suivante (ex: regarder des vidéos)">
-                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Moyen 😐</span></div>
+                                <input type="text" placeholder="Ex: S'entraîner seul devant un miroir">
+                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Facile 😐 (4/10)</span></div>
                             </div>
                             
                             <div class="ladder-step">
                                 <span class="step-number">3</span>
-                                <input type="text" placeholder="Étape intermédiaire (ex: s'entraîner devant un miroir)">
-                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Moyen 😟</span></div>
+                                <input type="text" placeholder="Ex: Parler 2 minutes devant un ami proche">
+                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Moyen 😟 (6/10)</span></div>
                             </div>
                             
                             <div class="ladder-step">
                                 <span class="step-number">4</span>
-                                <input type="text" placeholder="Étape avancée (ex: parler à un proche)">
-                                <div class="difficulty">Difficulté: <span class="difficulty-high">Difficile 😰</span></div>
+                                <input type="text" placeholder="Ex: Présenter quelque chose devant 3-4 personnes">
+                                <div class="difficulty">Difficulté: <span class="difficulty-high">Difficile 😰 (8/10)</span></div>
                             </div>
                             
                             <div class="ladder-step">
                                 <span class="step-number">5</span>
-                                <input type="text" placeholder="Objectif final (ex: présentation devant un groupe)">
-                                <div class="difficulty">Difficulté: <span class="difficulty-max">Maximum 😱</span></div>
+                                <input type="text" placeholder="Ex: Faire une présentation devant un groupe de 10+ personnes">
+                                <div class="difficulty">Difficulté: <span class="difficulty-max">Maximum 😱 (10/10)</span></div>
                             </div>
                         </div>
                         
                         <div class="exposure-tips">
-                            <h5>💡 Conseils pour réussir :</h5>
+                            <h5>💡 Règles d'or pour réussir :</h5>
                             <ul>
-                                <li>• Commencez toujours par l'étape 1</li>
-                                <li>• Ne passez à l'étape suivante que quand l'anxiété diminue</li>
-                                <li>• Pratiquez chaque étape plusieurs fois</li>
-                                <li>• Récompensez-vous après chaque réussite</li>
+                                <li>🚀 <strong>Commencez TOUJOURS par l'étape 1</strong> - même si elle vous semble trop facile</li>
+                                <li>⏰ <strong>Pratiquez chaque étape plusieurs fois</strong> jusqu'à ce que votre anxiété diminue</li>
+                                <li>📈 <strong>Ne sautez jamais d'étapes</strong> - la progression doit être graduelle</li>
+                                <li>🎉 <strong>Célébrez chaque victoire</strong> - même les plus petites</li>
+                                <li>🔄 <strong>Si une étape est trop difficile</strong> - ajoutez une étape intermédiaire</li>
                             </ul>
                         </div>
                         
                         <div class="exposure-buttons">
-                            <button class="btn-primary" onclick="saveExposurePlan()">📝 Créer mon plan</button>
-                            <button class="btn-secondary" onclick="showNotification('Plan d\\'exposition créé !', 'success')">📊 Commencer le suivi</button>
+                            <button class="btn-primary" id="save-exposure-btn">📝 Créer mon plan</button>
+                            <button class="btn-secondary" id="track-exposure-btn" disabled>📊 Commencer le suivi</button>
+                            <p class="button-help">💡 Créez d'abord votre plan, puis vous pourrez commencer le suivi</p>
                         </div>
                     </div>
                 </div>
@@ -8061,11 +8495,69 @@
             document.body.appendChild(modal);
             modal.style.display = 'flex';
             
+            // Charger les données existantes si disponibles
+            const existingPlan = localStorage.getItem('exposure-plan');
+            if (existingPlan) {
+                const planData = JSON.parse(existingPlan);
+                document.getElementById('main-fear').value = planData.mainFear || '';
+                const stepInputs = document.querySelectorAll('.ladder-step input');
+                planData.steps.forEach((step, index) => {
+                    if (stepInputs[index]) {
+                        stepInputs[index].value = step;
+                    }
+                });
+                
+                // Activer le bouton de suivi si un plan existe
+                const trackBtn = document.getElementById('track-exposure-btn');
+                if (trackBtn && planData.mainFear) {
+                    trackBtn.disabled = false;
+                    trackBtn.style.opacity = '1';
+                }
+            }
+            
+            // Ajouter les événements
+            setTimeout(() => {
+                const saveBtn = document.getElementById('save-exposure-btn');
+                const trackBtn = document.getElementById('track-exposure-btn');
+                
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        console.log('📝 Sauvegarde plan exposition cliquée');
+                        saveExposurePlan();
+                    });
+                }
+                
+                if (trackBtn) {
+                    trackBtn.addEventListener('click', function() {
+                        if (!trackBtn.disabled) {
+                            console.log('📊 Suivi exposition cliqué');
+                            startExposureTracking();
+                        }
+                    });
+                }
+                
+                // Activer le suivi quand on tape la peur principale
+                const fearInput = document.getElementById('main-fear');
+                if (fearInput) {
+                    fearInput.addEventListener('input', function() {
+                        const trackBtn = document.getElementById('track-exposure-btn');
+                        if (this.value.trim() && trackBtn) {
+                            trackBtn.disabled = false;
+                            trackBtn.style.opacity = '1';
+                        }
+                    });
+                }
+            }, 100);
+            
             DataManager.logToolUsage('tcc-exposure');
         }
 
         // 🏆 Journal des réussites motivant
+        // 🏆 Journal des réussites motivant avec système d'étoiles fonctionnel
         function showSuccessJournal() {
+            // Charger les données existantes
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
             const modal = document.createElement('div');
             modal.className = 'tcc-modal';
             modal.innerHTML = `
@@ -8093,13 +8585,14 @@
                                 
                                 <div class="pride-level">
                                     <label>Niveau de fierté :</label>
-                                    <div class="pride-stars">
-                                        <span class="star" onclick="setPrideLevel(1)">⭐</span>
-                                        <span class="star" onclick="setPrideLevel(2)">⭐</span>
-                                        <span class="star" onclick="setPrideLevel(3)">⭐</span>
-                                        <span class="star" onclick="setPrideLevel(4)">⭐</span>
-                                        <span class="star" onclick="setPrideLevel(5)">⭐</span>
+                                    <div class="pride-stars" id="pride-stars">
+                                        <span class="star" data-level="1">⭐</span>
+                                        <span class="star" data-level="2">⭐</span>
+                                        <span class="star" data-level="3">⭐</span>
+                                        <span class="star" data-level="4">⭐</span>
+                                        <span class="star" data-level="5">⭐</span>
                                     </div>
+                                    <span id="pride-text">Moyennement fier</span>
                                 </div>
                                 
                                 <button class="btn-primary" onclick="addSuccessEntry()">➕ Ajouter cette réussite</button>
@@ -8107,48 +8600,55 @@
                         </div>
                         
                         <div class="journal-history">
-                            <h4>📚 Mes réussites récentes :</h4>
+                            <h4>📚 Mes réussites récentes (${savedSuccesses.length}/5) :</h4>
                             <div id="success-list">
-                                <div class="success-entry">
-                                    <div class="success-date">Aujourd'hui</div>
-                                    <div class="success-category-badge social">👥 Social</div>
-                                    <div class="success-text">J'ai utilisé l'app Pass Anxiété quand je me sentais mal</div>
-                                    <div class="success-pride">⭐⭐⭐⭐⭐</div>
-                                </div>
-                                
-                                <div class="success-entry">
-                                    <div class="success-date">Hier</div>
-                                    <div class="success-category-badge anxiete">😌 Gestion anxiété</div>
-                                    <div class="success-text">J'ai pratiqué la cohérence cardiaque pendant 5 minutes</div>
-                                    <div class="success-pride">⭐⭐⭐⭐</div>
-                                </div>
+                                ${generateSuccessList(savedSuccesses)}
                             </div>
                         </div>
                         
                         <div class="journal-stats">
                             <h4>📊 Mes statistiques de réussite :</h4>
                             <div class="stats-grid">
-                                <div class="stat-item">
-                                    <div class="stat-number">12</div>
-                                    <div class="stat-label">Réussites cette semaine</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-number">4.2</div>
-                                    <div class="stat-label">Fierté moyenne ⭐</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-number">5</div>
-                                    <div class="stat-label">Jours consécutifs</div>
-                                </div>
+                                ${generateRealStats(savedSuccesses)}
                             </div>
                         </div>
                         
-                        <button class="btn-secondary" onclick="showNotification('Journal exporté !', 'success')">📤 Exporter mon journal</button>
+                        <div class="journal-actions">
+                            <button class="btn-secondary" onclick="exportSuccessJournal()" ${savedSuccesses.length === 0 ? 'disabled' : ''}>📤 Exporter mon journal</button>
+                            <button class="btn-secondary" onclick="clearSuccessJournal()">🗑️ Vider le journal</button>
+                        </div>
                     </div>
                 </div>
             `;
             document.body.appendChild(modal);
             modal.style.display = 'flex';
+            
+            // Initialiser le système d'étoiles
+            setTimeout(() => {
+                initializePrideStars();
+                
+                // S'assurer que les boutons d'action fonctionnent
+                const exportBtn = document.querySelector('.journal-actions button[onclick*="exportSuccessJournal"]');
+                const clearBtn = document.querySelector('.journal-actions button[onclick*="clearSuccessJournal"]');
+                
+                if (exportBtn) {
+                    exportBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('📤 Bouton export cliqué');
+                        exportSuccessJournal();
+                    });
+                }
+                
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('🗑️ Bouton vider cliqué');
+                        clearSuccessJournal();
+                    });
+                }
+                
+                console.log('✅ Boutons d\'action initialisés');
+            }, 100);
             
             DataManager.logToolUsage('tcc-success-journal');
         }
@@ -8209,26 +8709,169 @@
             }
         }
 
-        // Sauvegarder les données émotionnelles
+        // Sauvegarder les données émotionnelles (version améliorée)
         function saveEmotionData() {
             const emotionData = {
                 date: new Date().toISOString(),
-                joy: document.getElementById('joy-slider')?.value || 5,
-                sadness: document.getElementById('sadness-slider')?.value || 3,
-                anxiety: document.getElementById('anxiety-slider')?.value || 4,
-                anger: document.getElementById('anger-slider')?.value || 2
+                joy: parseInt(document.getElementById('joy-slider')?.value || 5),
+                sadness: parseInt(document.getElementById('sadness-slider')?.value || 3),
+                anxiety: parseInt(document.getElementById('anxiety-slider')?.value || 4),
+                anger: parseInt(document.getElementById('anger-slider')?.value || 2)
             };
             
-            // Sauvegarder dans le localStorage
-            const saved = JSON.parse(localStorage.getItem('emotion-history') || '[]');
-            saved.push(emotionData);
+            // Charger l'historique existant
+            let saved = JSON.parse(localStorage.getItem('emotion-history') || '[]');
+            
+            // Limiter à 5 évaluations maximum
+            if (saved.length >= 5) {
+                saved = saved.slice(0, 4); // Garder les 4 plus récentes
+            }
+            
+            // Ajouter la nouvelle évaluation en première position
+            saved.unshift(emotionData);
             localStorage.setItem('emotion-history', JSON.stringify(saved));
             
             showNotification('📊 Évaluation émotionnelle sauvegardée !', 'success');
-            closeTCCModal();
+            
+            // Actualiser l'affichage de l'historique
+            setTimeout(() => {
+                const historyEl = document.getElementById('emotion-history-list');
+                if (historyEl) {
+                    historyEl.innerHTML = generateEmotionHistory(saved);
+                }
+                
+                // Mettre à jour le compteur
+                const titleEl = document.querySelector('.emotion-history h4');
+                if (titleEl) {
+                    titleEl.textContent = `📈 Historique des évaluations (${saved.length}/5) :`;
+                }
+            }, 500);
         }
 
-        // Sauvegarder le plan de crise
+        // Générer l'historique des émotions
+        function generateEmotionHistory(history) {
+            if (history.length === 0) {
+                return `
+                    <div class="no-emotion-history">
+                        <p>📊 Aucune évaluation enregistrée pour le moment.</p>
+                        <p>Sauvegardez votre première évaluation émotionnelle !</p>
+                    </div>
+                `;
+            }
+            
+            return history.map((entry, index) => {
+                const date = new Date(entry.date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const isYesterday = new Date(Date.now() - 86400000).toDateString() === date.toDateString();
+                
+                let displayDate;
+                if (isToday) displayDate = 'Aujourd\'hui';
+                else if (isYesterday) displayDate = 'Hier';
+                else displayDate = date.toLocaleDateString('fr-FR');
+                
+                const timeDisplay = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="emotion-history-entry">
+                        <div class="emotion-history-header">
+                            <span class="emotion-date">${displayDate} à ${timeDisplay}</span>
+                            <span class="emotion-rank">#${index + 1}</span>
+                        </div>
+                        <div class="emotion-values">
+                            <span class="emotion-value joy">😊 ${entry.joy}</span>
+                            <span class="emotion-value sadness">😢 ${entry.sadness}</span>
+                            <span class="emotion-value anxiety">😰 ${entry.anxiety}</span>
+                            <span class="emotion-value anger">😠 ${entry.anger}</span>
+                        </div>
+                        <div class="emotion-summary">
+                            ${getEmotionSummary(entry)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Obtenir un résumé de l'état émotionnel
+        function getEmotionSummary(emotion) {
+            const { joy, sadness, anxiety, anger } = emotion;
+            const dominant = Math.max(joy, sadness, anxiety, anger);
+            
+            if (dominant === joy && joy >= 7) return '🌟 État positif';
+            if (dominant === anxiety && anxiety >= 7) return '😰 Anxiété élevée';
+            if (dominant === sadness && sadness >= 7) return '💙 Période difficile';
+            if (dominant === anger && anger >= 7) return '🔥 Colère présente';
+            return '😌 État équilibré';
+        }
+
+        // Vider l'historique émotionnel (version améliorée)
+        function clearEmotionHistory() {
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'tcc-modal';
+            confirmModal.style.zIndex = '15000';
+            confirmModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>🗑️ Vider l'historique</h3>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <p style="margin-bottom: 20px;">Voulez-vous vraiment vider l'historique des évaluations émotionnelles ?</p>
+                        <p style="color: #f44336; font-weight: 600; margin-bottom: 30px;">Cette action est irréversible.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn-secondary" onclick="cancelClearEmotion()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmClearEmotion()" style="background: #f44336;">🗑️ Oui, vider</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+            confirmModal.style.display = 'flex';
+            
+            console.log('🗑️ Modal de confirmation historique émotionnel affichée');
+        }
+        
+        // Annuler le vidage de l'historique émotionnel
+        function cancelClearEmotion() {
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            console.log('❌ Vidage historique émotionnel annulé');
+        }
+        
+        // Confirmer le vidage de l'historique émotionnel
+        function confirmClearEmotion() {
+            localStorage.removeItem('emotion-history');
+            showNotification('🗑️ Historique émotionnel vidé', 'success');
+            
+            // Fermer la modal de confirmation
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            
+            // Actualiser l'affichage de l'historique
+            const historyEl = document.getElementById('emotion-history-list');
+            if (historyEl) {
+                historyEl.innerHTML = generateEmotionHistory([]);
+            }
+            
+            // Mettre à jour le compteur et cacher le bouton
+            const titleEl = document.querySelector('.emotion-history h4');
+            if (titleEl) {
+                titleEl.textContent = '📈 Historique des évaluations (0/5) :';
+            }
+            
+            // Cacher le bouton vider
+            const clearBtn = document.getElementById('clear-emotion-history-btn');
+            if (clearBtn) {
+                clearBtn.style.display = 'none';
+            }
+            
+            console.log('✅ Historique émotionnel vidé et interface actualisée');
+        }
+
+        // Sauvegarder le plan de crise (version améliorée avec historique)
         function saveCrisisPlan() {
             const planData = {
                 date: new Date().toISOString(),
@@ -8238,9 +8881,198 @@
                 immediateActions: Array.from(document.querySelectorAll('.action-checklist input:checked')).map(cb => cb.parentElement.textContent.trim())
             };
             
+            // Vérifier qu'au moins un champ est rempli
+            if (!planData.warningSignes && !planData.copingTools && !planData.supportContacts) {
+                showNotification('Veuillez remplir au moins une section du plan', 'warning');
+                return;
+            }
+            
+            // Charger l'historique existant
+            let planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            
+            // Limiter à 5 plans maximum
+            if (planHistory.length >= 5) {
+                planHistory = planHistory.slice(0, 4); // Garder les 4 plus récents
+            }
+            
+            // Ajouter le nouveau plan en première position
+            planHistory.unshift(planData);
+            localStorage.setItem('crisis-plan-history', JSON.stringify(planHistory));
+            
+            // Maintenir aussi la compatibilité avec l'ancien système
             localStorage.setItem('crisis-plan', JSON.stringify(planData));
+            
             showNotification('⚡ Plan de crise sauvegardé !', 'success');
-            closeTCCModal();
+            
+            // Actualiser l'affichage de l'historique
+            setTimeout(() => {
+                const historyEl = document.getElementById('crisis-history-list');
+                if (historyEl) {
+                    historyEl.innerHTML = generateCrisisHistory(planHistory);
+                }
+                
+                // Mettre à jour le compteur
+                const titleEl = document.querySelector('.crisis-plan-history h4');
+                if (titleEl) {
+                    titleEl.textContent = `📚 Historique de mes plans (${planHistory.length}/5) :`;
+                }
+            }, 500);
+        }
+
+        // Générer l'historique des plans de crise
+        function generateCrisisHistory(history) {
+            if (history.length === 0) {
+                return `
+                    <div class="no-crisis-history">
+                        <p>⚡ Aucun plan de crise enregistré pour le moment.</p>
+                        <p>Créez votre premier plan personnalisé !</p>
+                    </div>
+                `;
+            }
+            
+            return history.map((plan, index) => {
+                const date = new Date(plan.date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const isYesterday = new Date(Date.now() - 86400000).toDateString() === date.toDateString();
+                
+                let displayDate;
+                if (isToday) displayDate = 'Aujourd\'hui';
+                else if (isYesterday) displayDate = 'Hier';
+                else displayDate = date.toLocaleDateString('fr-FR');
+                
+                const timeDisplay = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                // Compter les sections remplies
+                const filledSections = [plan.warningSignes, plan.copingTools, plan.supportContacts].filter(s => s && s.trim()).length;
+                
+                return `
+                    <div class="crisis-history-entry">
+                        <div class="crisis-history-header">
+                            <span class="crisis-date">${displayDate} à ${timeDisplay}</span>
+                            <span class="crisis-completeness">${filledSections}/3 sections remplies</span>
+                        </div>
+                        <div class="crisis-preview">
+                            ${plan.warningSignes ? `<div class="crisis-section-preview"><strong>🚨 Signaux:</strong> ${plan.warningSignes.substring(0, 50)}...</div>` : ''}
+                            ${plan.copingTools ? `<div class="crisis-section-preview"><strong>🛠️ Outils:</strong> ${plan.copingTools.substring(0, 50)}...</div>` : ''}
+                            ${plan.supportContacts ? `<div class="crisis-section-preview"><strong>👥 Contacts:</strong> ${plan.supportContacts.substring(0, 50)}...</div>` : ''}
+                        </div>
+                        <div class="crisis-actions">
+                            <button class="btn-mini" data-plan-index="${index}" data-action="load">📋 Charger ce plan</button>
+                            <button class="btn-mini" data-plan-index="${index}" data-action="download">📄 Télécharger</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Charger un plan de crise spécifique
+        function loadCrisisPlan(index) {
+            const planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            if (planHistory[index]) {
+                const plan = planHistory[index];
+                document.getElementById('warning-signs').value = plan.warningSignes || '';
+                document.getElementById('coping-tools').value = plan.copingTools || '';
+                document.getElementById('support-contacts').value = plan.supportContacts || '';
+                
+                // Décocher toutes les cases puis recocher les bonnes
+                document.querySelectorAll('.action-checklist input').forEach(cb => cb.checked = false);
+                if (plan.immediateActions) {
+                    plan.immediateActions.forEach(action => {
+                        const checkbox = Array.from(document.querySelectorAll('.action-checklist input')).find(cb => 
+                            cb.parentElement.textContent.trim().includes(action.trim())
+                        );
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                showNotification('📋 Plan chargé avec succès !', 'success');
+            }
+        }
+
+        // Télécharger un plan spécifique
+        function downloadSpecificCrisisPlan(index) {
+            const planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            if (planHistory[index]) {
+                // Temporairement sauvegarder le plan actuel
+                const currentPlan = localStorage.getItem('crisis-plan');
+                localStorage.setItem('crisis-plan', JSON.stringify(planHistory[index]));
+                
+                // Télécharger
+                downloadCrisisPlan();
+                
+                // Restaurer le plan actuel
+                if (currentPlan) {
+                    localStorage.setItem('crisis-plan', currentPlan);
+                }
+            }
+        }
+
+        // Vider l'historique des plans de crise (version améliorée)
+        function clearCrisisHistory() {
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'tcc-modal';
+            confirmModal.style.zIndex = '15000';
+            confirmModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>🗑️ Vider l'historique</h3>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <p style="margin-bottom: 20px;">Voulez-vous vraiment vider l'historique des plans de crise ?</p>
+                        <p style="color: #f44336; font-weight: 600; margin-bottom: 30px;">Cette action supprimera tous vos plans sauvegardés.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn-secondary" onclick="cancelClearCrisis()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmClearCrisis()" style="background: #f44336;">🗑️ Oui, vider</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+            confirmModal.style.display = 'flex';
+            
+            console.log('🗑️ Modal de confirmation historique plans de crise affichée');
+        }
+        
+        // Annuler le vidage de l'historique des plans de crise
+        function cancelClearCrisis() {
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            console.log('❌ Vidage historique plans de crise annulé');
+        }
+        
+        // Confirmer le vidage de l'historique des plans de crise
+        function confirmClearCrisis() {
+            localStorage.removeItem('crisis-plan-history');
+            showNotification('🗑️ Historique des plans vidé', 'success');
+            
+            // Fermer la modal de confirmation
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            
+            // Actualiser l'affichage de l'historique
+            const historyEl = document.getElementById('crisis-history-list');
+            if (historyEl) {
+                historyEl.innerHTML = generateCrisisHistory([]);
+            }
+            
+            // Mettre à jour le compteur et cacher le bouton
+            const titleEl = document.querySelector('.crisis-plan-history h4');
+            if (titleEl) {
+                titleEl.textContent = '📚 Historique de mes plans (0/5) :';
+            }
+            
+            // Cacher le bouton vider
+            const clearBtn = document.getElementById('clear-crisis-history-btn');
+            if (clearBtn) {
+                clearBtn.style.display = 'none';
+            }
+            
+            console.log('✅ Historique plans de crise vidé et interface actualisée');
         }
 
         // Sauvegarder le plan d'exposition
@@ -8298,6 +9130,454 @@
                     star.style.color = '#ddd';
                 }
             });
+        }
+
+        // ============ NOUVELLES FONCTIONS JOURNAL RÉUSSITES ============
+
+        // Générer la liste des réussites
+        function generateSuccessList(successes) {
+            if (successes.length === 0) {
+                return `
+                    <div class="no-success">
+                        <p>🌱 Aucune réussite enregistrée pour le moment.</p>
+                        <p>Commencez par ajouter une petite victoire du jour !</p>
+                    </div>
+                `;
+            }
+            
+            return successes.map(success => {
+                const date = new Date(success.date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const isYesterday = new Date(Date.now() - 86400000).toDateString() === date.toDateString();
+                
+                let displayDate;
+                if (isToday) displayDate = 'Aujourd\'hui';
+                else if (isYesterday) displayDate = 'Hier';
+                else displayDate = date.toLocaleDateString('fr-FR');
+                
+                const categoryEmojis = {
+                    social: '👥',
+                    professionnel: '💼',
+                    personnel: '🌱',
+                    anxiete: '😌',
+                    autre: '✨'
+                };
+                
+                const categoryNames = {
+                    social: 'Social',
+                    professionnel: 'Professionnel',
+                    personnel: 'Personnel',
+                    anxiete: 'Gestion anxiété',
+                    autre: 'Autre'
+                };
+                
+                const stars = '⭐'.repeat(success.pride);
+                
+                return `
+                    <div class="success-entry">
+                        <div class="success-date">${displayDate}</div>
+                        <div class="success-category-badge ${success.category}">
+                            ${categoryEmojis[success.category] || '✨'} ${categoryNames[success.category] || 'Autre'}
+                        </div>
+                        <div class="success-text">${success.description}</div>
+                        <div class="success-pride">${stars} (${success.pride}/5)</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Générer les vraies statistiques
+        function generateRealStats(successes) {
+            if (successes.length === 0) {
+                return `
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Réussites enregistrées</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">-</div>
+                        <div class="stat-label">Fierté moyenne ⭐</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Cette semaine</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Jours actifs</div>
+                    </div>
+                `;
+            }
+            
+            // Calculer les vraies statistiques
+            const totalSuccesses = successes.length;
+            const averagePride = (successes.reduce((sum, s) => sum + s.pride, 0) / totalSuccesses).toFixed(1);
+            
+            // Compter les jours uniques avec des réussites
+            const uniqueDays = new Set(successes.map(s => new Date(s.date).toDateString())).size;
+            
+            // Réussites cette semaine
+            const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const thisWeekSuccesses = successes.filter(s => new Date(s.date) >= oneWeekAgo).length;
+            
+            return `
+                <div class="stat-item">
+                    <div class="stat-number">${totalSuccesses}</div>
+                    <div class="stat-label">Réussites enregistrées</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${averagePride}</div>
+                    <div class="stat-label">Fierté moyenne ⭐</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${thisWeekSuccesses}</div>
+                    <div class="stat-label">Cette semaine</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${uniqueDays}</div>
+                    <div class="stat-label">Jours actifs</div>
+                </div>
+            `;
+        }
+
+        // Initialiser le système d'étoiles
+        function initializePrideStars() {
+            const stars = document.querySelectorAll('#pride-stars .star');
+            const prideText = document.getElementById('pride-text');
+            
+            const prideLabels = {
+                1: 'Un peu fier',
+                2: 'Assez fier', 
+                3: 'Moyennement fier',
+                4: 'Très fier',
+                5: 'Extrêmement fier'
+            };
+            
+            // Initialiser à 3 étoiles
+            window.currentPrideLevel = 3;
+            updateStarsDisplay(3);
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const level = parseInt(this.getAttribute('data-level'));
+                    window.currentPrideLevel = level;
+                    updateStarsDisplay(level);
+                    if (prideText) {
+                        prideText.textContent = prideLabels[level];
+                    }
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const level = parseInt(this.getAttribute('data-level'));
+                    updateStarsDisplay(level, true);
+                });
+            });
+            
+            const prideContainer = document.getElementById('pride-stars');
+            if (prideContainer) {
+                prideContainer.addEventListener('mouseleave', function() {
+                    updateStarsDisplay(window.currentPrideLevel);
+                });
+            }
+        }
+
+        // Mettre à jour l'affichage des étoiles
+        function updateStarsDisplay(level, isHover = false) {
+            const stars = document.querySelectorAll('#pride-stars .star');
+            stars.forEach((star, index) => {
+                const starLevel = index + 1;
+                if (starLevel <= level) {
+                    star.style.color = isHover ? '#ffeb3b' : '#ffd700';
+                    star.style.textShadow = '0 0 5px rgba(255, 215, 0, 0.5)';
+                } else {
+                    star.style.color = '#ddd';
+                    star.style.textShadow = 'none';
+                }
+            });
+        }
+
+        // Ajouter une entrée de réussite (version améliorée)
+        function addSuccessEntry() {
+            const category = document.getElementById('success-category')?.value || '';
+            const description = document.getElementById('success-description')?.value || '';
+            
+            if (!category || !description.trim()) {
+                showNotification('Veuillez remplir tous les champs', 'warning');
+                return;
+            }
+            
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            // Limiter à 5 réussites
+            if (savedSuccesses.length >= 5) {
+                showNotification('Maximum 5 réussites. Supprimez-en une ou videz le journal.', 'warning');
+                return;
+            }
+            
+            const successData = {
+                date: new Date().toISOString(),
+                category: category,
+                description: description.trim(),
+                pride: window.currentPrideLevel || 3
+            };
+            
+            savedSuccesses.unshift(successData); // Ajouter en premier
+            localStorage.setItem('success-journal', JSON.stringify(savedSuccesses));
+            
+            showNotification('🏆 Réussite ajoutée avec succès !', 'success');
+            
+            // Fermer et rouvrir pour actualiser
+            closeTCCModal();
+            setTimeout(() => {
+                showSuccessJournal();
+            }, 300);
+        }
+
+        // Exporter le journal (fonctionnel)
+        function exportSuccessJournal() {
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            if (savedSuccesses.length === 0) {
+                showNotification('Aucune réussite à exporter', 'warning');
+                return;
+            }
+            
+            // Créer le contenu d'export
+            let exportText = '🏆 MON JOURNAL DES RÉUSSITES\n';
+            exportText += '=' .repeat(40) + '\n\n';
+            
+            savedSuccesses.forEach((success, index) => {
+                const date = new Date(success.date).toLocaleDateString('fr-FR');
+                const stars = '⭐'.repeat(success.pride);
+                
+                exportText += `${index + 1}. ${date}\n`;
+                exportText += `   Catégorie: ${success.category}\n`;
+                exportText += `   Fierté: ${stars} (${success.pride}/5)\n`;
+                exportText += `   Réussite: ${success.description}\n\n`;
+            });
+            
+            // Ajouter les statistiques
+            const totalSuccesses = savedSuccesses.length;
+            const averagePride = (savedSuccesses.reduce((sum, s) => sum + s.pride, 0) / totalSuccesses).toFixed(1);
+            
+            exportText += 'STATISTIQUES:\n';
+            exportText += `-${totalSuccesses} réussites enregistrées\n`;
+            exportText += `-Fierté moyenne: ${averagePride}/5 ⭐\n`;
+            
+            // Créer et télécharger le fichier
+            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `journal-reussites-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('📤 Journal exporté avec succès !', 'success');
+        }
+
+        // Vider le journal (version améliorée)
+        function clearSuccessJournal() {
+            console.log('🗑️ Fonction clearSuccessJournal appelée');
+            
+            // Créer une confirmation personnalisée plus fiable
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            if (savedSuccesses.length === 0) {
+                showNotification('Le journal est déjà vide', 'info');
+                return;
+            }
+            
+            // Créer une modal de confirmation personnalisée
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'tcc-modal';
+            confirmModal.style.zIndex = '20000'; // Au-dessus de l'autre modal
+            confirmModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>🗑️ Confirmer la suppression</h3>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <p style="margin-bottom: 20px;">Êtes-vous sûr de vouloir vider votre journal des réussites ?</p>
+                        <p style="color: #f44336; font-weight: 600; margin-bottom: 30px;">Cette action supprimera définitivement vos ${savedSuccesses.length} réussites.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn-secondary" onclick="cancelClearJournal()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmClearJournal()" style="background: #f44336;">🗑️ Oui, vider</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+            confirmModal.style.display = 'flex';
+            
+            console.log('✅ Modal de confirmation affichée');
+        }
+
+        // ============ NOUVELLES FONCTIONS MANQUANTES ============
+
+        // Télécharger le plan de crise en format texte
+        function downloadCrisisPlan() {
+            const planData = JSON.parse(localStorage.getItem('crisis-plan') || '{}');
+            
+            if (!planData.warningSignes && !planData.copingTools && !planData.supportContacts) {
+                showNotification('Aucun plan à télécharger. Créez d\'abord votre plan.', 'warning');
+                return;
+            }
+            
+            // Créer le contenu du plan
+            let planText = '⚡ MON PLAN D\'ACTION ANTI-CRISE\n';
+            planText += '=' .repeat(50) + '\n\n';
+            
+            planText += '🚨 SIGNAUX D\'ALARME:\n';
+            planText += '-' .repeat(25) + '\n';
+            planText += (planData.warningSignes || 'Non renseigné') + '\n\n';
+            
+            planText += '🛠️ MES OUTILS DE GESTION:\n';
+            planText += '-' .repeat(25) + '\n';
+            planText += (planData.copingTools || 'Non renseigné') + '\n\n';
+            
+            planText += '👥 MES CONTACTS DE SOUTIEN:\n';
+            planText += '-' .repeat(25) + '\n';
+            planText += (planData.supportContacts || 'Non renseigné') + '\n\n';
+            
+            planText += '🎯 ACTIONS IMMÉDIATES:\n';
+            planText += '-' .repeat(25) + '\n';
+            if (planData.immediateActions && planData.immediateActions.length > 0) {
+                planData.immediateActions.forEach((action, index) => {
+                    planText += `${index + 1}. ${action}\n`;
+                });
+            } else {
+                planText += '• Utiliser l\'app Pass Anxiété - Mode Crise\n';
+                planText += '• Appeler mon contact de soutien principal\n';
+                planText += '• Pratiquer exercice de respiration\n';
+                planText += '• Me rappeler : "Cette crise va passer"\n';
+                planText += '• Aller dans un lieu sûr\n';
+            }
+            
+            planText += '\n📅 Plan créé le: ' + new Date().toLocaleDateString('fr-FR');
+            
+            // Télécharger le fichier
+            const blob = new Blob([planText], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `plan-anti-crise-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('📄 Plan de crise téléchargé !', 'success');
+        }
+
+        // Commencer le suivi d'exposition graduelle
+        function startExposureTracking() {
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            if (!planData.mainFear) {
+                showNotification('Créez d\'abord votre plan d\'exposition !', 'warning');
+                return;
+            }
+            
+            // Créer la modal de suivi
+            const trackingModal = document.createElement('div');
+            trackingModal.className = 'tcc-modal';
+            trackingModal.style.zIndex = '15000';
+            trackingModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>📊 Suivi d'Exposition</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h4>🎯 Peur travaillée: ${planData.mainFear}</h4>
+                        
+                        <div style="margin: 20px 0;">
+                            <h5>📈 Vos étapes d'exposition:</h5>
+                            <div class="exposure-progress">
+                                ${planData.steps.map((step, index) => `
+                                    <div class="step-progress" data-step="${index + 1}">
+                                        <div class="step-indicator">${index + 1}</div>
+                                        <div class="step-content">
+                                            <div class="step-text">${step || 'Étape non définie'}</div>
+                                            <div class="step-status">
+                                                <button class="step-btn" onclick="markStepComplete(${index + 1})">✅ Terminé</button>
+                                                <button class="step-btn" onclick="markStepInProgress(${index + 1})">⏳ En cours</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <p style="color: #666; font-size: 0.9rem;">Progressez à votre rythme. Chaque petite victoire compte !</p>
+                            <button class="btn-primary" onclick="closeTCCModal()">💪 Commencer mes exercices</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(trackingModal);
+            trackingModal.style.display = 'flex';
+            
+            showNotification('📊 Suivi d\'exposition activé !', 'success');
+        }
+
+        // Marquer une étape comme terminée
+        function markStepComplete(stepNumber) {
+            showNotification(`✅ Étape ${stepNumber} marquée comme terminée !`, 'success');
+            const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
+            if (stepEl) {
+                stepEl.style.background = '#e8f5e9';
+                stepEl.style.borderLeft = '4px solid #4caf50';
+            }
+        }
+
+        // Marquer une étape comme en cours
+        function markStepInProgress(stepNumber) {
+            showNotification(`⏳ Étape ${stepNumber} en cours de travail`, 'info');
+            const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
+            if (stepEl) {
+                stepEl.style.background = '#fff3e0';
+                stepEl.style.borderLeft = '4px solid #ff9800';
+            }
+        }
+
+        // Annuler le vidage
+        function cancelClearJournal() {
+            console.log('❌ Vidage annulé');
+            const confirmModal = document.querySelector('.tcc-modal[style*="20000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+        }
+
+        // Confirmer le vidage
+        function confirmClearJournal() {
+            console.log('🗑️ Vidage confirmé');
+            
+            // Supprimer les données
+            localStorage.removeItem('success-journal');
+            
+            // Fermer la modal de confirmation
+            const confirmModal = document.querySelector('.tcc-modal[style*="20000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            
+            showNotification('🗑️ Journal vidé avec succès !', 'success');
+            
+            // Fermer et rouvrir le journal pour actualiser
+            closeTCCModal();
+            setTimeout(() => {
+                showSuccessJournal();
+            }, 300);
+            
+            console.log('✅ Journal vidé et interface actualisée');
         }
 
         // Mise à jour du suivi pour inclure TCC
