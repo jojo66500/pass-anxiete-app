@@ -3821,6 +3821,905 @@
 
         /* ============ FIN STYLES HISTORIQUES ============ */
 
+        /* ============ STYLES INTERFACE SUIVI PRATIQUE ============ */
+
+        .exercise-practice {
+            max-width: 700px;
+        }
+
+        .exercise-header {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .current-step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .step-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .step-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .current-exercise {
+            margin: 20px 0;
+        }
+
+        .exercise-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .exercise-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .exercise-difficulty {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .exercise-setup {
+            margin: 25px 0;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 12px;
+        }
+
+        .objective-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .objective-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .objective-item label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .objective-item select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .anxiety-scale {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .anxiety-scale input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .anxiety-scale input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff5722;
+            cursor: pointer;
+        }
+
+        .exercise-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        /* Style spécial pour les boutons Google Agenda */
+        .btn-google-calendar {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-google-calendar:hover {
+            background: linear-gradient(135deg, #3367d6 0%, #2d8e47 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+
+        .btn-google-calendar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-google-calendar:hover::before {
+            left: 100%;
+        }
+
+        .progress-overview {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .progress-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+        }
+
+        .progress-step.completed {
+            border-left-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .progress-step.current {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #4caf50;
+        }
+
+        .progress-step.current .step-circle {
+            background: #ff9800;
+        }
+
+        .progress-step.in-progress {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .progress-step.active-mission {
+            border-left-color: #2196f3;
+            background: #e3f2fd;
+        }
+
+        .progress-step.overdue {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #4caf50;
+        }
+
+        .progress-step.current .step-circle {
+            background: #ff9800;
+        }
+
+        .progress-step.in-progress .step-circle {
+            background: #ff9800;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .progress-step.active-mission .step-circle {
+            background: #2196f3;
+        }
+
+        .progress-step.overdue .step-circle {
+            background: #f44336;
+        }
+
+        .progress-actions {
+            margin-top: 8px;
+        }
+
+        .mission-preview {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            padding: 5px 8px;
+            background: rgba(33, 150, 243, 0.1);
+            border-radius: 6px;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-state {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .exercise-history {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 12px;
+        }
+
+        .session-entry {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .session-duration {
+            color: var(--primary);
+        }
+
+        .session-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .session-success {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .session-partial {
+            color: #ff9800;
+            font-weight: 600;
+        }
+
+        .mission-entry {
+            border-left-color: #2196f3;
+        }
+
+        .mission-success {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .mission-target {
+            color: #2196f3;
+            font-weight: 600;
+        }
+
+        .mission-notes {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        /* Interface de séance en cours */
+        .session-timer {
+            margin-top: 15px;
+        }
+
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .timer-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: #ffeb3b;
+            width: 0%;
+            transition: width 1s linear;
+            border-radius: 4px;
+        }
+
+        .session-content {
+            padding: 20px 0;
+        }
+
+        .exercise-focus {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2e7d32;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .session-guidance {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 10px;
+        }
+
+        .session-guidance ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .session-guidance li {
+            margin: 8px 0;
+        }
+
+        .anxiety-tracker {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fce4ec;
+            border-radius: 10px;
+        }
+
+        .anxiety-scale-live {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .anxiety-scale-live input[type="range"] {
+            flex: 1;
+        }
+
+        .anxiety-note {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin: 5px 0 0 0;
+        }
+
+        .exercise-completed {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .completion-stats {
+            margin: 20px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .objective-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .exercise-actions {
+                flex-direction: column;
+            }
+            
+            .session-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        /* ============ FIN STYLES INTERFACE SUIVI PRATIQUE ============ */
+
+        /* ============ STYLES INTERFACE MISSIONS ============ */
+
+        .mission-planning {
+            display: grid;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .planning-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .planning-item label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .planning-item select,
+        .planning-item input[type="date"] {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .planning-item select:focus,
+        .planning-item input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .support-strategies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .support-strategies label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: normal;
+        }
+
+        .support-strategies label:hover {
+            background: #e9ecef;
+        }
+
+        .support-strategies input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Mission créée */
+        .mission-created {
+            padding: 20px 0;
+        }
+
+        .mission-header {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .mission-id {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .mission-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .mission-objective {
+            margin-bottom: 20px;
+        }
+
+        .objective-text {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2e7d32;
+            text-align: center;
+            border: 2px solid #4caf50;
+        }
+
+        .mission-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .detail-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .mission-strategies {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .mission-strategies h6 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+
+        .mission-strategies ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .mission-strategies li {
+            margin: 5px 0;
+        }
+
+        .mission-motivation {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .mission-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .missions-list {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 12px;
+        }
+
+        .active-mission-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .mission-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .mission-step {
+            background: var(--primary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .mission-date {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .mission-text {
+            color: #333;
+            margin: 8px 0;
+        }
+
+        .mission-quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        /* Feedback mission */
+        .mission-feedback {
+            max-width: 500px;
+        }
+
+        .feedback-container {
+            padding: 30px;
+        }
+
+        .feedback-item {
+            margin: 20px 0;
+        }
+
+        .feedback-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .success-rating {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .success-rating label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: normal;
+            transition: background 0.3s;
+        }
+
+        .success-rating label:hover {
+            background: #e9ecef;
+        }
+
+        .success-rating input[type="radio"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .feedback-item textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        /* Responsive missions */
+        @media (max-width: 768px) {
+            .mission-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .mission-actions {
+                flex-direction: column;
+            }
+            
+            .mission-summary {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .support-strategies {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============ FIN STYLES INTERFACE MISSIONS ============ */
+
+        /* ============ STYLES GESTION AVANCÉE ============ */
+
+        .exposure-management {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .exposure-management h6 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .management-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .completion-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .reset-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .reset-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .reset-options {
+            margin: 20px 0;
+        }
+
+        .reset-choice {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .reset-choice label {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .reset-choice label:hover {
+            background: #e9ecef;
+        }
+
+        .reset-choice input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .reminder-settings {
+            margin: 20px 0;
+        }
+
+        .reminder-option {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .reminder-option label {
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .reminder-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .reminder-preview {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+        }
+
+        .notification-preview {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .reminder-note {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+        }
+
+        .history-stats {
+            margin-bottom: 25px;
+        }
+
+        .detailed-history {
+            margin: 20px 0;
+        }
+
+        /* Responsive gestion avancée */
+        @media (max-width: 768px) {
+            .management-actions {
+                justify-content: center;
+            }
+            
+            .completion-actions {
+                flex-direction: column;
+            }
+            
+            .reset-choice label {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+
+        /* ============ FIN STYLES GESTION AVANCÉE ============ */
+
         /* ============ STYLES SYSTÈME ACTIVATION ============ */
 
         /* Écran d'activation */
@@ -9515,7 +10414,7 @@
                         
                         <div style="text-align: center; margin-top: 30px;">
                             <p style="color: #666; font-size: 0.9rem;">Progressez à votre rythme. Chaque petite victoire compte !</p>
-                            <button class="btn-primary" onclick="closeTCCModal()">💪 Commencer mes exercices</button>
+                            <button class="btn-primary" onclick="startPracticalExercises()">💪 Commencer mes exercices</button>
                         </div>
                     </div>
                 </div>
@@ -9528,23 +10427,1729 @@
         }
 
         // Marquer une étape comme terminée
+        // Marquer une étape comme terminée (version corrigée)
         function markStepComplete(stepNumber) {
+            // Mettre à jour les données de progression
+            let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.completedSteps) progressData.completedSteps = [];
+            
+            // Ajouter l'étape aux étapes terminées si pas déjà présente
+            if (!progressData.completedSteps.includes(stepNumber)) {
+                progressData.completedSteps.push(stepNumber);
+                progressData.completedSteps.sort((a, b) => a - b); // Garder l'ordre
+            }
+            
+            // Retirer des étapes en cours si présente
+            if (progressData.inProgressSteps) {
+                progressData.inProgressSteps = progressData.inProgressSteps.filter(step => step !== stepNumber);
+            }
+            
+            // Sauvegarder
+            localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+            
+            // Mise à jour visuelle
             showNotification(`✅ Étape ${stepNumber} marquée comme terminée !`, 'success');
             const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
             if (stepEl) {
                 stepEl.style.background = '#e8f5e9';
                 stepEl.style.borderLeft = '4px solid #4caf50';
             }
+            
+            // Log pour debug
+            console.log('✅ Étape terminée via TCC:', stepNumber, 'Total terminées:', progressData.completedSteps);
         }
 
-        // Marquer une étape comme en cours
+        // Marquer une étape comme en cours (version corrigée)
         function markStepInProgress(stepNumber) {
+            // Mettre à jour les données de progression
+            let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.inProgressSteps) progressData.inProgressSteps = [];
+            
+            // Ajouter l'étape aux étapes en cours si pas déjà présente
+            if (!progressData.inProgressSteps.includes(stepNumber)) {
+                progressData.inProgressSteps.push(stepNumber);
+            }
+            
+            // Retirer des étapes terminées si présente (on peut revenir en arrière)
+            if (progressData.completedSteps) {
+                progressData.completedSteps = progressData.completedSteps.filter(step => step !== stepNumber);
+            }
+            
+            // Sauvegarder
+            localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+            
+            // Mise à jour visuelle
             showNotification(`⏳ Étape ${stepNumber} en cours de travail`, 'info');
             const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
             if (stepEl) {
                 stepEl.style.background = '#fff3e0';
                 stepEl.style.borderLeft = '4px solid #ff9800';
             }
+            
+            // Log pour debug
+            console.log('⏳ Étape en cours via TCC:', stepNumber, 'En cours:', progressData.inProgressSteps);
+        }
+
+        // ============ INTERFACE DE SUIVI PRATIQUE ============
+
+        // Commencer les exercices pratiques d'exposition (version avec synchronisation)
+        function startPracticalExercises() {
+            // **CORRECTION PRINCIPALE** : Vérifier et corriger automatiquement la synchronisation
+            const progressData = checkAndFixSynchronization();
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer la vraie étape actuelle basée sur les étapes terminées synchronisées
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Debug info
+            console.log('🎯 startPracticalExercises - Étape actuelle:', currentStep, 'Étapes terminées:', progressData.completedSteps);
+            
+            // Fermer la modal de suivi et ouvrir l'interface d'exercices
+            closeTCCModal();
+            
+            setTimeout(() => {
+                const exerciseModal = document.createElement('div');
+                exerciseModal.className = 'tcc-modal';
+                exerciseModal.innerHTML = `
+                    <div class="tcc-modal-content exercise-practice">
+                        <div class="modal-header">
+                            <h3>💪 Exercices d'Exposition</h3>
+                            <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                        </div>
+                        
+                        <div class="exercise-container">
+                            <div class="exercise-header">
+                                <h4>🎯 Peur travaillée : ${planData.mainFear}</h4>
+                                <div class="current-step-indicator">
+                                    <span class="step-badge">Étape ${currentStep}/5</span>
+                                    <span class="step-status">${currentStep <= 5 ? 'En cours' : 'Terminé'}</span>
+                                </div>
+                            </div>
+                            
+                            ${currentStep <= 5 ? `
+                                <div class="current-exercise">
+                                    <h5>📋 Exercice actuel :</h5>
+                                    <div class="exercise-card">
+                                        <div class="exercise-text">${planData.steps[currentStep - 1] || 'Exercice non défini'}</div>
+                                        <div class="exercise-difficulty">Difficulté: ${getDifficultyText(currentStep)}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="exercise-setup">
+                                    <h5>📅 Planifiez votre mission :</h5>
+                                    <div class="mission-planning">
+                                        <div class="planning-item">
+                                            <label>🎯 Objectif de réalisation :</label>
+                                            <select id="mission-timeframe">
+                                                <option value="today">Aujourd'hui</option>
+                                                <option value="tomorrow">Demain</option>
+                                                <option value="this-week" selected>Cette semaine</option>
+                                                <option value="next-week">La semaine prochaine</option>
+                                                <option value="this-month">Ce mois-ci</option>
+                                                <option value="custom">Date personnalisée</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="planning-item" id="custom-date-container" style="display: none;">
+                                            <label>📅 Date choisie :</label>
+                                            <input type="date" id="custom-date" min="${new Date().toISOString().split('T')[0]}">
+                                        </div>
+                                        
+                                        <div class="planning-item">
+                                            <label>⏰ Moment de la journée :</label>
+                                            <select id="mission-time">
+                                                <option value="morning">🌅 Matin (8h-12h)</option>
+                                                <option value="afternoon" selected>🌞 Après-midi (12h-18h)</option>
+                                                <option value="evening">🌆 Soirée (18h-22h)</option>
+                                                <option value="flexible">🕐 Flexible</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="planning-item">
+                                            <label>😰 Niveau d'anxiété anticipée :</label>
+                                            <div class="anxiety-scale">
+                                                <input type="range" id="anxiety-anticipated" min="1" max="10" value="5">
+                                                <span id="anxiety-anticipated-value">5/10</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="planning-item">
+                                            <label>💡 Stratégies de soutien :</label>
+                                            <div class="support-strategies">
+                                                <label><input type="checkbox" id="strategy-breathing"> 🌬️ Exercices de respiration</label>
+                                                <label><input type="checkbox" id="strategy-friend"> 👥 Accompagné d'un ami</label>
+                                                <label><input type="checkbox" id="strategy-escape"> 🚪 Plan de sortie préparé</label>
+                                                <label><input type="checkbox" id="strategy-reward"> 🎁 Récompense après l'exercice</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="exercise-actions">
+                                    <button class="btn-primary" onclick="createMissionPlan()">📋 Créer ma mission</button>
+                                    <button class="btn-secondary" onclick="downloadMissionCard()">📄 Télécharger ma fiche mission</button>
+                                    <button class="btn-secondary btn-google-calendar" onclick="addToGoogleCalendar()">📅 Ajouter à Google Agenda</button>
+                                    <button class="btn-secondary" onclick="skipToNextStep()">⏭️ Passer à l'étape suivante</button>
+                                </div>
+                            ` : `
+                                <div class="exercise-completed">
+                                    <h4>🎉 Félicitations !</h4>
+                                    <p>Vous avez terminé toutes les étapes de votre plan d'exposition !</p>
+                                    <div class="completion-stats">
+                                        ${generateCompletionStats(progressData)}
+                                    </div>
+                                    <div class="completion-actions">
+                                        <button class="btn-primary" onclick="resetExposurePlan()">🔄 Recommencer un nouveau plan</button>
+                                        <button class="btn-secondary" onclick="createNewExposurePlan()">➕ Créer un nouveau plan d'exposition</button>
+                                    </div>
+                                </div>
+                            `}
+                            
+                            <div class="progress-overview">
+                                <h5>📊 Votre progression :</h5>
+                                <div class="progress-steps">
+                                    ${generateProgressSteps(planData.steps, progressData, currentStep)}
+                                </div>
+                                
+                                <div class="exposure-management">
+                                    <h6>🔧 Gestion de l'exposition :</h6>
+                                    <div class="management-actions">
+                                        <button class="btn-mini" onclick="resetExposurePlan()">🔄 Réinitialiser</button>
+                                        <button class="btn-mini" onclick="setupMissionReminders()">🔔 Rappels</button>
+                                        <button class="btn-mini" onclick="viewExposureHistory()">📈 Historique</button>
+                                        <button class="btn-mini" onclick="showDebugInfo()" title="Debug info (Console)">🔧 Debug</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="exercise-history">
+                                <h5>📚 Historique des activités :</h5>
+                                <div id="session-history">
+                                    ${generateSessionHistory(progressData)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(exerciseModal);
+                exerciseModal.style.display = 'flex';
+                
+                // Initialiser les événements
+                setTimeout(() => {
+                    const anxietySlider = document.getElementById('anxiety-anticipated');
+                    const anxietyValue = document.getElementById('anxiety-anticipated-value');
+                    
+                    if (anxietySlider && anxietyValue) {
+                        anxietySlider.addEventListener('input', function() {
+                            anxietyValue.textContent = this.value + '/10';
+                        });
+                    }
+                    
+                    // Événement pour la sélection de timeframe
+                    const timeframeSelect = document.getElementById('mission-timeframe');
+                    const customDateContainer = document.getElementById('custom-date-container');
+                    
+                    if (timeframeSelect && customDateContainer) {
+                        timeframeSelect.addEventListener('change', function() {
+                            if (this.value === 'custom') {
+                                customDateContainer.style.display = 'block';
+                            } else {
+                                customDateContainer.style.display = 'none';
+                            }
+                        });
+                    }
+                }, 100);
+                
+            }, 300);
+        }
+
+        // Obtenir le texte de difficulté
+        function getDifficultyText(step) {
+            const difficulties = {
+                1: '😌 Très facile (2/10)',
+                2: '😐 Facile (4/10)', 
+                3: '😟 Moyen (6/10)',
+                4: '😰 Difficile (8/10)',
+                5: '😱 Maximum (10/10)'
+            };
+            return difficulties[step] || '😐 Moyen';
+        }
+
+        // Générer les étapes de progression avec missions et états TCC
+        function generateProgressSteps(steps, progressData, currentStep) {
+            return steps.map((step, index) => {
+                const stepNumber = index + 1;
+                const isCompleted = progressData.completedSteps && progressData.completedSteps.includes(stepNumber);
+                const isInProgress = progressData.inProgressSteps && progressData.inProgressSteps.includes(stepNumber);
+                
+                // Vérifier s'il y a une mission active pour cette étape
+                const activeMission = progressData.missions ? 
+                    progressData.missions.find(m => m.step === stepNumber && (m.status === 'planned' || m.status === 'in-progress')) : null;
+                
+                const isCurrent = stepNumber === currentStep;
+                const hasActiveMission = !!activeMission;
+                
+                let stepClass = 'progress-step';
+                if (isCompleted) stepClass += ' completed';
+                else if (isInProgress) stepClass += ' in-progress';
+                else if (hasActiveMission) stepClass += ' active-mission';
+                else if (isCurrent) stepClass += ' current';
+                
+                // Déterminer le statut et l'icône (priorité: terminé > en cours > mission > actuel > attente)
+                let statusText, statusIcon;
+                if (isCompleted) {
+                    statusText = 'Terminé (TCC)';
+                    statusIcon = '✅';
+                } else if (isInProgress) {
+                    statusText = 'En cours (TCC)';
+                    statusIcon = '⏳';
+                } else if (hasActiveMission) {
+                    const targetDate = new Date(activeMission.targetDate);
+                    const today = new Date();
+                    const isOverdue = targetDate < today;
+                    
+                    if (isOverdue) {
+                        statusText = 'Mission en retard';
+                        statusIcon = '⚠️';
+                        stepClass += ' overdue';
+                    } else {
+                        statusText = `Mission planifiée (${formatMissionDate(activeMission.targetDate)})`;
+                        statusIcon = '📅';
+                    }
+                } else if (isCurrent && !isCompleted && !isInProgress) {
+                    statusText = 'Prêt à planifier';
+                    statusIcon = '🎯';
+                } else {
+                    statusText = 'En attente';
+                    statusIcon = '⏸️';
+                }
+                
+                return `
+                    <div class="${stepClass}">
+                        <div class="step-circle">${stepNumber}</div>
+                        <div class="step-info">
+                            <div class="step-name">${step || 'Étape non définie'}</div>
+                            <div class="step-state">
+                                ${statusIcon} ${statusText}
+                            </div>
+                            ${hasActiveMission && !isCompleted && !isInProgress ? `
+                                <div class="mission-preview">
+                                    🎯 ${activeMission.timeOfDay === 'morning' ? '🌅' : activeMission.timeOfDay === 'evening' ? '🌆' : '🌞'} 
+                                    Anxiété prévue: ${activeMission.anxietyAnticipated}/10
+                                </div>
+                            ` : ''}
+                            ${isInProgress ? `
+                                <div class="progress-actions">
+                                    <button class="btn-mini" onclick="markStepComplete(${stepNumber})">✅ Marquer terminé</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Générer l'historique des séances et missions
+        function generateSessionHistory(progressData) {
+            const allActivities = [];
+            
+            // Ajouter les anciennes sessions (compatibilité)
+            if (progressData.sessions) {
+                progressData.sessions.forEach(session => {
+                    allActivities.push({
+                        type: 'session',
+                        date: session.date,
+                        step: session.step,
+                        data: session
+                    });
+                });
+            }
+            
+            // Ajouter les missions terminées
+            if (progressData.missions) {
+                progressData.missions.filter(m => m.status === 'completed').forEach(mission => {
+                    allActivities.push({
+                        type: 'mission',
+                        date: mission.completedDate || mission.date,
+                        step: mission.step,
+                        data: mission
+                    });
+                });
+            }
+            
+            if (allActivities.length === 0) {
+                return '<p style="text-align: center; color: #666; font-style: italic;">Aucune activité enregistrée pour le moment</p>';
+            }
+            
+            // Trier par date (plus récent en premier)
+            allActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            return allActivities.slice(0, 5).map(activity => {
+                const date = new Date(activity.date);
+                const dateStr = date.toLocaleDateString('fr-FR');
+                const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                if (activity.type === 'mission') {
+                    const mission = activity.data;
+                    const successIcons = {
+                        'partial': '🟡',
+                        'good': '🟢', 
+                        'excellent': '🌟'
+                    };
+                    
+                    return `
+                        <div class="session-entry mission-entry">
+                            <div class="session-header">
+                                <span>🎯 Mission Étape ${mission.step} - ${dateStr} à ${timeStr}</span>
+                                <span class="mission-success">${successIcons[mission.successLevel] || '🟢'} ${mission.successLevel || 'Réussi'}</span>
+                            </div>
+                            <div class="session-progress">
+                                <span>Anxiété: ${mission.anxietyAnticipated}/10 → ${mission.anxietyActual || '?'}/10</span>
+                                <span class="mission-target">Planifié: ${formatMissionDate(mission.targetDate)}</span>
+                            </div>
+                            ${mission.notes ? `<div class="mission-notes">💭 ${mission.notes}</div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    // Ancienne session (compatibilité)
+                    const session = activity.data;
+                    return `
+                        <div class="session-entry">
+                            <div class="session-header">
+                                <span>⏱️ Séance Étape ${session.step} - ${dateStr} à ${timeStr}</span>
+                                <span class="session-duration">${session.actualDuration || session.targetDuration}min</span>
+                            </div>
+                            <div class="session-progress">
+                                <span>Anxiété: ${session.anxietyBefore}/10 → ${session.anxietyAfter || '?'}/10</span>
+                                ${session.completed ? '<span class="session-success">✅ Terminé</span>' : '<span class="session-partial">⏳ Partiel</span>'}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // Générer les stats de completion
+        function generateCompletionStats(progressData) {
+            const totalSessions = progressData.sessions ? progressData.sessions.length : 0;
+            const completedSteps = progressData.completedSteps ? progressData.completedSteps.length : 0;
+            
+            return `
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">${completedSteps}</div>
+                        <div class="stat-label">Étapes terminées</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">${totalSessions}</div>
+                        <div class="stat-label">Séances pratiquées</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============ GESTION DES MISSIONS D'EXPOSITION ============
+
+        // Créer un plan de mission (version corrigée)
+        function createMissionPlan() {
+            const timeframe = document.getElementById('mission-timeframe').value;
+            const customDate = document.getElementById('custom-date').value;
+            const missionTime = document.getElementById('mission-time').value;
+            const anxietyAnticipated = document.getElementById('anxiety-anticipated').value;
+            
+            // Récupérer les stratégies sélectionnées
+            const strategies = [];
+            if (document.getElementById('strategy-breathing').checked) strategies.push('🌬️ Exercices de respiration');
+            if (document.getElementById('strategy-friend').checked) strategies.push('👥 Accompagné d\'un ami');
+            if (document.getElementById('strategy-escape').checked) strategies.push('🚪 Plan de sortie préparé');
+            if (document.getElementById('strategy-reward').checked) strategies.push('🎁 Récompense après l\'exercice');
+            
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer la vraie étape actuelle
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Vérifier qu'on n'a pas dépassé les 5 étapes
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont déjà terminées ! Félicitations !', 'success');
+                return;
+            }
+            
+            // Calculer la date cible
+            let targetDate = new Date();
+            switch(timeframe) {
+                case 'today':
+                    break;
+                case 'tomorrow':
+                    targetDate.setDate(targetDate.getDate() + 1);
+                    break;
+                case 'this-week':
+                    targetDate.setDate(targetDate.getDate() + 3);
+                    break;
+                case 'next-week':
+                    targetDate.setDate(targetDate.getDate() + 7);
+                    break;
+                case 'this-month':
+                    targetDate.setDate(targetDate.getDate() + 14);
+                    break;
+                case 'custom':
+                    if (customDate) {
+                        targetDate = new Date(customDate);
+                    }
+                    break;
+            }
+            
+            // Créer la mission
+            const mission = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                step: currentStep,
+                exercise: planData.steps[currentStep - 1],
+                targetDate: targetDate.toISOString(),
+                timeOfDay: missionTime,
+                anxietyAnticipated: parseInt(anxietyAnticipated),
+                strategies: strategies,
+                status: 'planned' // planned, in-progress, completed, failed
+            };
+            
+            // Sauvegarder la mission
+            if (!progressData.missions) progressData.missions = [];
+            progressData.missions.push(mission);
+            localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+            
+            showNotification('📋 Mission créée pour l\'étape ' + currentStep + ' ! Bonne chance !', 'success');
+            
+            // Afficher l'interface de mission créée
+            showMissionCreated(mission);
+        }
+
+        // Afficher la mission créée
+        function showMissionCreated(mission) {
+            const container = document.querySelector('.exercise-container');
+            const timeOptions = {
+                'morning': '🌅 Matin (8h-12h)',
+                'afternoon': '🌞 Après-midi (12h-18h)', 
+                'evening': '🌆 Soirée (18h-22h)',
+                'flexible': '🕐 Moment flexible'
+            };
+            
+            container.innerHTML = `
+                <div class="mission-created">
+                    <div class="mission-header">
+                        <h4>🎯 Mission Créée !</h4>
+                        <div class="mission-id">Mission #${mission.step}</div>
+                    </div>
+                    
+                    <div class="mission-card">
+                        <div class="mission-objective">
+                            <h5>📋 Votre défi :</h5>
+                            <div class="objective-text">${mission.exercise}</div>
+                        </div>
+                        
+                        <div class="mission-details">
+                            <div class="detail-item">
+                                <span class="detail-label">📅 À réaliser :</span>
+                                <span class="detail-value">${formatMissionDate(mission.targetDate)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">⏰ Moment :</span>
+                                <span class="detail-value">${timeOptions[mission.timeOfDay]}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">😰 Anxiété prévue :</span>
+                                <span class="detail-value">${mission.anxietyAnticipated}/10</span>
+                            </div>
+                        </div>
+                        
+                        ${mission.strategies.length > 0 ? `
+                            <div class="mission-strategies">
+                                <h6>💡 Vos stratégies de soutien :</h6>
+                                <ul>
+                                    ${mission.strategies.map(strategy => `<li>${strategy}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="mission-motivation">
+                            <p>💪 <strong>Rappel important :</strong> Cette mission est un pas vers votre liberté ! Chaque petit progrès compte.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mission-actions">
+                        <button class="btn-primary" onclick="markMissionCompleted(${mission.id})">✅ J'ai réalisé ma mission !</button>
+                        <button class="btn-secondary" onclick="postponeMission(${mission.id})">📅 Reporter la mission</button>
+                        <button class="btn-secondary" onclick="downloadMissionCard()">📄 Télécharger la fiche</button>
+                        <button class="btn-secondary btn-google-calendar" onclick="addMissionToGoogleCalendar(${mission.id})">📅 Google Agenda</button>
+                    </div>
+                    
+                    <div class="missions-list">
+                        <h5>📚 Mes missions en cours :</h5>
+                        <div id="active-missions">
+                            ${generateActiveMissions()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            console.log('✅ Mission créée et affichée');
+        }
+
+        // Formater la date de mission
+        function formatMissionDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Aujourd\'hui';
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return 'Demain';
+            } else {
+                return date.toLocaleDateString('fr-FR', { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long' 
+                });
+            }
+        }
+
+        // Générer la liste des missions actives
+        function generateActiveMissions() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.missions) return '<p style="text-align: center; color: #666;">Aucune mission active</p>';
+            
+            const activeMissions = progressData.missions.filter(m => m.status === 'planned' || m.status === 'in-progress');
+            
+            if (activeMissions.length === 0) {
+                return '<p style="text-align: center; color: #666;">Aucune mission active</p>';
+            }
+            
+            return activeMissions.map(mission => `
+                <div class="active-mission-item">
+                    <div class="mission-summary">
+                        <span class="mission-step">Étape ${mission.step}</span>
+                        <span class="mission-date">${formatMissionDate(mission.targetDate)}</span>
+                    </div>
+                    <div class="mission-text">${mission.exercise.substring(0, 50)}...</div>
+                    <div class="mission-quick-actions">
+                        <button class="btn-mini" onclick="markMissionCompleted(${mission.id})">✅ Fait</button>
+                        <button class="btn-mini" onclick="postponeMission(${mission.id})">📅 Reporter</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Marquer une mission comme terminée
+        function markMissionCompleted(missionId) {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (!mission) return;
+            
+            // Interface de feedback post-mission
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content mission-feedback">
+                    <div class="modal-header">
+                        <h3>🎉 Mission Accomplie !</h3>
+                    </div>
+                    
+                    <div class="feedback-container">
+                        <h4>Bravo ! Comment ça s'est passé ?</h4>
+                        
+                        <div class="feedback-item">
+                            <label>😰 Niveau d'anxiété ressenti :</label>
+                            <div class="anxiety-scale">
+                                <input type="range" id="anxiety-actual" min="1" max="10" value="5">
+                                <span id="anxiety-actual-value">5/10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-item">
+                            <label>🌟 Niveau de réussite :</label>
+                            <div class="success-rating">
+                                <label><input type="radio" name="success" value="partial"> 🟡 Partiel - J'ai essayé mais pas terminé</label>
+                                <label><input type="radio" name="success" value="good" checked> 🟢 Réussi - J'ai fait l'exercice</label>
+                                <label><input type="radio" name="success" value="excellent"> 🌟 Excellent - Dépassé mes attentes</label>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-item">
+                            <label>💭 Notes personnelles (optionnel) :</label>
+                            <textarea id="mission-notes" placeholder="Comment je me suis senti, ce que j'ai appris, mes difficultés..."></textarea>
+                        </div>
+                        
+                        <div class="feedback-actions">
+                            <button class="btn-primary" onclick="completeMissionFeedback(${missionId})">🎯 Valider ma réussite</button>
+                            <button class="btn-secondary" onclick="closeTCCModal()">❌ Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Event listener pour le slider d'anxiété
+            setTimeout(() => {
+                const anxietySlider = document.getElementById('anxiety-actual');
+                const anxietyValue = document.getElementById('anxiety-actual-value');
+                
+                if (anxietySlider && anxietyValue) {
+                    anxietySlider.addEventListener('input', function() {
+                        anxietyValue.textContent = this.value + '/10';
+                    });
+                }
+            }, 100);
+        }
+
+        // Finaliser le feedback de mission (version corrigée)
+        function completeMissionFeedback(missionId) {
+            const anxietyActual = document.getElementById('anxiety-actual').value;
+            const successLevel = document.querySelector('input[name="success"]:checked').value;
+            const notes = document.getElementById('mission-notes').value;
+            
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (mission) {
+                // Marquer la mission comme terminée
+                mission.status = 'completed';
+                mission.completedDate = new Date().toISOString();
+                mission.anxietyActual = parseInt(anxietyActual);
+                mission.successLevel = successLevel;
+                mission.notes = notes;
+                
+                // **CORRECTION PRINCIPALE** : Synchroniser avec les étapes terminées
+                const anxietyReduction = mission.anxietyAnticipated - parseInt(anxietyActual);
+                const isSuccessful = (anxietyReduction >= 1 || parseInt(anxietyActual) <= 4) && successLevel !== 'partial';
+                
+                // Valider l'étape correspondante à la mission
+                if (isSuccessful) {
+                    if (!progressData.completedSteps) progressData.completedSteps = [];
+                    
+                    // Ajouter l'étape de cette mission si pas déjà présente
+                    if (!progressData.completedSteps.includes(mission.step)) {
+                        progressData.completedSteps.push(mission.step);
+                        
+                        // Trier les étapes pour maintenir l'ordre
+                        progressData.completedSteps.sort((a, b) => a - b);
+                        
+                        showNotification(`🏆 Étape ${mission.step} validée ! Votre anxiété a diminué de ${anxietyReduction} points.`, 'success');
+                    } else {
+                        showNotification(`✅ Mission terminée ! Étape ${mission.step} déjà validée.`, 'success');
+                    }
+                } else {
+                    showNotification(`📝 Mission enregistrée. Anxiété encore élevée, vous pouvez réessayer cette étape.`, 'info');
+                }
+                
+                // Sauvegarder les modifications
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                
+                // Log pour debug
+                console.log('✅ Mission complétée:', {
+                    missionStep: mission.step,
+                    anxietyReduction: anxietyReduction,
+                    isSuccessful: isSuccessful,
+                    completedSteps: progressData.completedSteps
+                });
+            }
+            
+            closeTCCModal();
+            showNotification('🎉 Mission terminée ! Félicitations pour votre courage !', 'success');
+            
+            // Retourner à l'interface principale avec refresh
+            setTimeout(() => {
+                startPracticalExercises();
+            }, 1500);
+        }
+
+        // Reporter une mission
+        function postponeMission(missionId) {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (mission) {
+                const currentDate = new Date(mission.targetDate);
+                currentDate.setDate(currentDate.getDate() + 2); // Reporter de 2 jours
+                mission.targetDate = currentDate.toISOString();
+                
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                showNotification('📅 Mission reportée de 2 jours', 'info');
+                
+                // Actualiser l'affichage
+                const activeMissionsEl = document.getElementById('active-missions');
+                if (activeMissionsEl) {
+                    activeMissionsEl.innerHTML = generateActiveMissions();
+                }
+            }
+        }
+
+        // Passer à l'étape suivante (version corrigée)
+        function skipToNextStep() {
+            let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.completedSteps) progressData.completedSteps = [];
+            
+            // Déterminer l'étape actuelle basée sur les étapes terminées
+            let currentStep = 1;
+            if (progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Vérifier qu'on ne dépasse pas les 5 étapes
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont déjà terminées !', 'success');
+                return;
+            }
+            
+            // Ajouter l'étape actuelle aux étapes terminées
+            if (!progressData.completedSteps.includes(currentStep)) {
+                progressData.completedSteps.push(currentStep);
+                progressData.completedSteps.sort((a, b) => a - b); // Garder l'ordre
+                
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                showNotification(`⏭️ Étape ${currentStep} passée → Étape ${currentStep + 1 <= 5 ? currentStep + 1 : 'terminé'}`, 'info');
+                
+                // Log pour debug
+                console.log('⏭️ Étape passée:', {
+                    passedStep: currentStep,
+                    nextStep: currentStep + 1,
+                    completedSteps: progressData.completedSteps
+                });
+                
+                // Actualiser l'interface
+                setTimeout(() => {
+                    closeTCCModal();
+                    startPracticalExercises();
+                }, 500);
+            }
+        }
+
+        // Recommencer le plan
+        function resetExposurePlan() {
+            if (confirm('Voulez-vous vraiment recommencer votre plan d\'exposition depuis le début ?')) {
+                localStorage.removeItem('exposure-progress');
+                showNotification('🔄 Plan d\'exposition réinitialisé', 'success');
+                
+                setTimeout(() => {
+                    closeTCCModal();
+                    startPracticalExercises();
+                }, 500);
+            }
+        }
+
+        // ============ INTÉGRATION GOOGLE AGENDA ============
+
+        // Ajouter la mission à Google Agenda
+        function addToGoogleCalendar() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer l'étape actuelle
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont terminées !', 'success');
+                return;
+            }
+            
+            if (!planData.mainFear || !planData.steps[currentStep - 1]) {
+                showNotification('Aucun plan d\'exposition trouvé', 'warning');
+                return;
+            }
+            
+            // Récupérer les données du formulaire
+            const timeframe = document.getElementById('mission-timeframe')?.value || 'this-week';
+            const customDate = document.getElementById('custom-date')?.value;
+            const missionTime = document.getElementById('mission-time')?.value || 'afternoon';
+            const anxietyAnticipated = document.getElementById('anxiety-anticipated')?.value || '5';
+            
+            // Calculer la date et l'heure de la mission
+            let targetDate = new Date();
+            switch(timeframe) {
+                case 'today': break;
+                case 'tomorrow': targetDate.setDate(targetDate.getDate() + 1); break;
+                case 'this-week': targetDate.setDate(targetDate.getDate() + 3); break;
+                case 'next-week': targetDate.setDate(targetDate.getDate() + 7); break;
+                case 'this-month': targetDate.setDate(targetDate.getDate() + 14); break;
+                case 'custom': 
+                    if (customDate) {
+                        targetDate = new Date(customDate);
+                    }
+                    break;
+            }
+            
+            // Définir l'heure selon le moment choisi
+            let startHour, endHour;
+            switch(missionTime) {
+                case 'morning':
+                    startHour = 9;
+                    endHour = 10;
+                    break;
+                case 'afternoon':
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+                case 'evening':
+                    startHour = 18;
+                    endHour = 19;
+                    break;
+                case 'flexible':
+                default:
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+            }
+            
+            // Créer les dates de début et fin
+            const startDate = new Date(targetDate);
+            startDate.setHours(startHour, 0, 0, 0);
+            
+            const endDate = new Date(targetDate);
+            endDate.setHours(endHour, 0, 0, 0);
+            
+            // Récupérer les stratégies sélectionnées
+            const strategies = [];
+            if (document.getElementById('strategy-breathing')?.checked) strategies.push('🌬️ Exercices de respiration');
+            if (document.getElementById('strategy-friend')?.checked) strategies.push('👥 Accompagné d\'un ami');
+            if (document.getElementById('strategy-escape')?.checked) strategies.push('🚪 Plan de sortie préparé');
+            if (document.getElementById('strategy-reward')?.checked) strategies.push('🎁 Récompense après l\'exercice');
+            
+            // Créer le titre de l'événement
+            const eventTitle = `🎯 Mission Exposition : ${planData.mainFear} (Étape ${currentStep}/5)`;
+            
+            // Créer la description détaillée
+            let eventDescription = `🎯 MISSION D'EXPOSITION GRADUELLE\n\n`;
+            eventDescription += `📋 Étape ${currentStep}/5 : ${planData.steps[currentStep - 1]}\n`;
+            eventDescription += `😰 Niveau d'anxiété anticipé : ${anxietyAnticipated}/10\n`;
+            eventDescription += `🎭 Peur travaillée : ${planData.mainFear}\n\n`;
+            
+            if (strategies.length > 0) {
+                eventDescription += `💡 Stratégies de soutien :\n`;
+                strategies.forEach(strategy => {
+                    eventDescription += `• ${strategy}\n`;
+                });
+                eventDescription += `\n`;
+            }
+            
+            eventDescription += `💪 CONSEILS :\n`;
+            eventDescription += `• Respirez profondément avant de commencer\n`;
+            eventDescription += `• L'anxiété va diminuer progressivement\n`;
+            eventDescription += `• Utilisez vos stratégies si nécessaire\n`;
+            eventDescription += `• Chaque petit pas compte !\n\n`;
+            
+            eventDescription += `📝 APRÈS LA MISSION :\n`;
+            eventDescription += `• Noter le niveau d'anxiété final\n`;
+            eventDescription += `• Retourner dans Pass Anxiété pour valider\n`;
+            eventDescription += `• Se féliciter pour ce courage ! 🎉\n\n`;
+            
+            eventDescription += `📱 Créé avec Pass Anxiété - Exposition Graduelle`;
+            
+            // Créer l'URL Google Calendar
+            const formatDateForGoogle = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+            
+            const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+            calendarUrl.searchParams.set('action', 'TEMPLATE');
+            calendarUrl.searchParams.set('text', eventTitle);
+            calendarUrl.searchParams.set('dates', `${formatDateForGoogle(startDate)}/${formatDateForGoogle(endDate)}`);
+            calendarUrl.searchParams.set('details', eventDescription);
+            calendarUrl.searchParams.set('location', 'À définir selon l\'exercice');
+            calendarUrl.searchParams.set('sf', 'true');
+            calendarUrl.searchParams.set('output', 'xml');
+            
+            // Ouvrir Google Calendar dans un nouvel onglet
+            window.open(calendarUrl.toString(), '_blank');
+            
+            showNotification(`📅 Mission ajoutée à Google Agenda ! ${formatMissionDate(targetDate.toISOString())} à ${startHour}h`, 'success');
+            
+            // Log pour debug
+            console.log('📅 Google Calendar:', {
+                title: eventTitle,
+                start: startDate,
+                end: endDate,
+                anxiety: anxietyAnticipated,
+                url: calendarUrl.toString()
+            });
+        }
+
+        // Ajouter une mission spécifique à Google Agenda
+        function addMissionToGoogleCalendar(missionId) {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (!mission) {
+                showNotification('Mission non trouvée', 'warning');
+                return;
+            }
+            
+            // Définir l'heure selon le moment choisi
+            let startHour, endHour;
+            switch(mission.timeOfDay) {
+                case 'morning':
+                    startHour = 9;
+                    endHour = 10;
+                    break;
+                case 'afternoon':
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+                case 'evening':
+                    startHour = 18;
+                    endHour = 19;
+                    break;
+                case 'flexible':
+                default:
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+            }
+            
+            // Créer les dates de début et fin
+            const startDate = new Date(mission.targetDate);
+            startDate.setHours(startHour, 0, 0, 0);
+            
+            const endDate = new Date(mission.targetDate);
+            endDate.setHours(endHour, 0, 0, 0);
+            
+            // Créer le titre de l'événement
+            const eventTitle = `🎯 Mission Exposition : ${planData.mainFear} (Étape ${mission.step}/5)`;
+            
+            // Créer la description détaillée
+            let eventDescription = `🎯 MISSION D'EXPOSITION GRADUELLE\n\n`;
+            eventDescription += `📋 Étape ${mission.step}/5 : ${mission.exercise}\n`;
+            eventDescription += `😰 Niveau d'anxiété anticipé : ${mission.anxietyAnticipated}/10\n`;
+            eventDescription += `🎭 Peur travaillée : ${planData.mainFear}\n\n`;
+            
+            if (mission.strategies && mission.strategies.length > 0) {
+                eventDescription += `💡 Stratégies de soutien :\n`;
+                mission.strategies.forEach(strategy => {
+                    eventDescription += `• ${strategy}\n`;
+                });
+                eventDescription += `\n`;
+            }
+            
+            eventDescription += `💪 CONSEILS :\n`;
+            eventDescription += `• Respirez profondément avant de commencer\n`;
+            eventDescription += `• L'anxiété va diminuer progressivement\n`;
+            eventDescription += `• Utilisez vos stratégies si nécessaire\n`;
+            eventDescription += `• Chaque petit pas compte !\n\n`;
+            
+            eventDescription += `📝 PENDANT LA MISSION :\n`;
+            eventDescription += `• Noter l'heure de début\n`;
+            eventDescription += `• Observer le niveau d'anxiété\n`;
+            eventDescription += `• Appliquer les stratégies si besoin\n`;
+            eventDescription += `• Continuer même si c'est difficile\n\n`;
+            
+            eventDescription += `📝 APRÈS LA MISSION :\n`;
+            eventDescription += `• Noter le niveau d'anxiété final\n`;
+            eventDescription += `• Retourner dans Pass Anxiété pour valider\n`;
+            eventDescription += `• Se féliciter pour ce courage ! 🎉\n\n`;
+            
+            eventDescription += `📱 Mission créée avec Pass Anxiété - Exposition Graduelle\n`;
+            eventDescription += `📅 Mission ID: ${mission.id}`;
+            
+            // Créer l'URL Google Calendar
+            const formatDateForGoogle = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+            
+            const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+            calendarUrl.searchParams.set('action', 'TEMPLATE');
+            calendarUrl.searchParams.set('text', eventTitle);
+            calendarUrl.searchParams.set('dates', `${formatDateForGoogle(startDate)}/${formatDateForGoogle(endDate)}`);
+            calendarUrl.searchParams.set('details', eventDescription);
+            calendarUrl.searchParams.set('location', 'À définir selon l\'exercice d\'exposition');
+            calendarUrl.searchParams.set('sf', 'true');
+            calendarUrl.searchParams.set('output', 'xml');
+            
+            // Ouvrir Google Calendar dans un nouvel onglet
+            window.open(calendarUrl.toString(), '_blank');
+            
+            const timeOptions = {
+                'morning': '🌅 Matin (9h)',
+                'afternoon': '🌞 Après-midi (14h)', 
+                'evening': '🌆 Soirée (18h)',
+                'flexible': '🕐 Après-midi (14h)'
+            };
+            
+            showNotification(`📅 Mission ajoutée à Google Agenda ! ${formatMissionDate(mission.targetDate)} - ${timeOptions[mission.timeOfDay]}`, 'success');
+            
+            // Log pour debug
+            console.log('📅 Mission Google Calendar:', {
+                missionId: mission.id,
+                title: eventTitle,
+                start: startDate,
+                end: endDate,
+                anxiety: mission.anxietyAnticipated
+            });
+        }
+
+        // ============ FIN INTÉGRATION GOOGLE AGENDA ============
+
+        // ============ TÉLÉCHARGEMENT FICHE MISSION ============
+
+        // Recommencer le plan (version améliorée avec confirmation)
+        function resetExposurePlan() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const completedSteps = progressData.completedSteps ? progressData.completedSteps.length : 0;
+            const activeMissions = progressData.missions ? progressData.missions.filter(m => m.status === 'planned').length : 0;
+            
+            const resetModal = document.createElement('div');
+            resetModal.className = 'tcc-modal';
+            resetModal.style.zIndex = '15000';
+            resetModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>🔄 Réinitialiser l'exposition</h3>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h4>⚠️ Attention</h4>
+                        <p>Vous êtes sur le point de réinitialiser votre plan d'exposition graduelle.</p>
+                        
+                        <div class="reset-info">
+                            <h5>📊 Votre progression actuelle :</h5>
+                            <ul>
+                                <li>✅ <strong>${completedSteps}</strong> étapes terminées</li>
+                                <li>📅 <strong>${activeMissions}</strong> missions planifiées</li>
+                                <li>📚 Historique de vos réussites sauvegardé</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="reset-options">
+                            <h5>🎯 Que souhaitez-vous faire ?</h5>
+                            <div class="reset-choice">
+                                <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                                    <input type="radio" name="resetType" value="soft" checked>
+                                    <span><strong>🔄 Recommencer les étapes</strong><br>
+                                    <small>Garde l'historique, remet les étapes à zéro</small></span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                                    <input type="radio" name="resetType" value="hard">
+                                    <span><strong>🗑️ Effacement complet</strong><br>
+                                    <small>Supprime tout : étapes, missions, historique</small></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                            <button class="btn-secondary" onclick="cancelReset()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmReset()" style="background: #f44336;">🔄 Confirmer</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(resetModal);
+            resetModal.style.display = 'flex';
+        }
+
+        // Annuler la réinitialisation
+        function cancelReset() {
+            const resetModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (resetModal) {
+                resetModal.remove();
+            }
+        }
+
+        // Confirmer la réinitialisation (version TCC)
+        function confirmReset() {
+            const resetType = document.querySelector('input[name="resetType"]:checked').value;
+            const resetModal = document.querySelector('.tcc-modal[style*="15000"]');
+            
+            if (resetType === 'soft') {
+                // Recommencer les étapes, garder l'historique
+                let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+                progressData.completedSteps = [];
+                progressData.inProgressSteps = []; // Réinitialiser aussi les étapes en cours
+                progressData.missions = progressData.missions ? progressData.missions.filter(m => m.status === 'completed') : [];
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                showNotification('🔄 Étapes réinitialisées ! Historique conservé', 'success');
+            } else {
+                // Effacement complet
+                localStorage.removeItem('exposure-progress');
+                showNotification('🗑️ Plan d\'exposition complètement réinitialisé', 'success');
+            }
+            
+            if (resetModal) {
+                resetModal.remove();
+            }
+            
+            // Actualiser l'interface
+            setTimeout(() => {
+                closeTCCModal();
+                startPracticalExercises();
+            }, 1000);
+        }
+
+        // Créer un nouveau plan d'exposition
+        function createNewExposurePlan() {
+            if (confirm('Voulez-vous créer un nouveau plan d\'exposition pour une autre peur ?')) {
+                closeTCCModal();
+                setTimeout(() => {
+                    startExposureExercise();
+                }, 500);
+            }
+        }
+
+        // Configuration des rappels de mission
+        function setupMissionReminders() {
+            const reminderModal = document.createElement('div');
+            reminderModal.className = 'tcc-modal';
+            reminderModal.style.zIndex = '15000';
+            reminderModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>🔔 Rappels de Mission</h3>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h4>📱 Notifications personnalisées</h4>
+                        <p>Configurez des rappels pour ne pas oublier vos missions d'exposition :</p>
+                        
+                        <div class="reminder-settings">
+                            <div class="reminder-option">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="reminder-daily" checked>
+                                    <span><strong>📅 Rappel quotidien</strong><br>
+                                    <small>Tous les jours à 9h : "Pensez à votre mission d'exposition !"</small></span>
+                                </label>
+                            </div>
+                            
+                            <div class="reminder-option">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="reminder-mission">
+                                    <span><strong>⏰ Rappel de mission</strong><br>
+                                    <small>Le jour de votre mission : "C'est le moment de votre défi !"</small></span>
+                                </label>
+                            </div>
+                            
+                            <div class="reminder-option">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="reminder-encouragement">
+                                    <span><strong>💪 Messages d'encouragement</strong><br>
+                                    <small>Messages motivants aléatoires</small></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="reminder-preview">
+                            <h5>📝 Aperçu des notifications :</h5>
+                            <div class="notification-preview">
+                                🔔 "Bonjour ! N'oubliez pas votre mission d'exposition aujourd'hui. Vous pouvez le faire ! 💪"
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                            <button class="btn-secondary" onclick="closeReminderModal()">❌ Fermer</button>
+                            <button class="btn-primary" onclick="activateReminders()">🔔 Activer les rappels</button>
+                        </div>
+                        
+                        <div class="reminder-note">
+                            <p style="font-size: 0.9rem; color: #666; text-align: center; margin-top: 15px;">
+                                💡 <strong>Note :</strong> Les rappels utilisent les notifications du navigateur. 
+                                Assurez-vous d'autoriser les notifications pour Pass Anxiété.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(reminderModal);
+            reminderModal.style.display = 'flex';
+        }
+
+        // Fermer la modal de rappels
+        function closeReminderModal() {
+            const reminderModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (reminderModal) {
+                reminderModal.remove();
+            }
+        }
+
+        // Activer les rappels
+        function activateReminders() {
+            const daily = document.getElementById('reminder-daily').checked;
+            const mission = document.getElementById('reminder-mission').checked;
+            const encouragement = document.getElementById('reminder-encouragement').checked;
+            
+            // Demander permission pour les notifications
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        // Sauvegarder les préférences
+                        const reminderSettings = {
+                            daily: daily,
+                            mission: mission,
+                            encouragement: encouragement,
+                            enabled: true
+                        };
+                        localStorage.setItem('exposure-reminders', JSON.stringify(reminderSettings));
+                        
+                        // Programmer les rappels
+                        scheduleReminders(reminderSettings);
+                        
+                        showNotification('🔔 Rappels activés ! Vous recevrez des notifications', 'success');
+                        
+                        // Test immédiat
+                        setTimeout(() => {
+                            new Notification('🎯 Pass Anxiété', {
+                                body: 'Rappels activés ! Vous êtes sur la bonne voie pour surmonter vos peurs. 💪',
+                                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">🎯</text></svg>'
+                            });
+                        }, 1000);
+                        
+                    } else {
+                        showNotification('❌ Notifications refusées. Activez-les dans les paramètres du navigateur.', 'warning');
+                    }
+                });
+            } else {
+                showNotification('❌ Votre navigateur ne supporte pas les notifications', 'warning');
+            }
+            
+            closeReminderModal();
+        }
+
+        // Programmer les rappels
+        function scheduleReminders(settings) {
+            // Annuler les anciens rappels
+            if (window.exposureReminders) {
+                window.exposureReminders.forEach(reminder => clearInterval(reminder));
+            }
+            window.exposureReminders = [];
+            
+            if (settings.daily) {
+                // Rappel quotidien à 9h
+                const dailyReminder = setInterval(() => {
+                    const now = new Date();
+                    if (now.getHours() === 9 && now.getMinutes() === 0) {
+                        const messages = [
+                            'Bonjour ! Pensez à votre mission d\'exposition aujourd\'hui. 🌅',
+                            'Une nouvelle journée pour progresser ! Votre mission vous attend. 💪',
+                            'Rappel bienveillant : votre défi d\'exposition peut transformer votre journée ! ✨'
+                        ];
+                        const message = messages[Math.floor(Math.random() * messages.length)];
+                        
+                        new Notification('🎯 Pass Anxiété - Rappel quotidien', {
+                            body: message,
+                            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">📅</text></svg>'
+                        });
+                    }
+                }, 60000); // Vérifier chaque minute
+                
+                window.exposureReminders.push(dailyReminder);
+            }
+            
+            if (settings.encouragement) {
+                // Messages d'encouragement aléatoires
+                const encouragementReminder = setInterval(() => {
+                    const messages = [
+                        'Vous faites un travail formidable ! Continuez à progresser. 🌟',
+                        'Chaque petit pas compte. Vous êtes plus fort que vos peurs ! 💪',
+                        'Rappel : vous avez déjà surmonté tant de défis. Celui-ci aussi passera ! ✨',
+                        'Votre courage inspire ! Continuez sur cette voie. 🚀'
+                    ];
+                    const message = messages[Math.floor(Math.random() * messages.length)];
+                    
+                    new Notification('💪 Pass Anxiété - Encouragement', {
+                        body: message,
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FF9800"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">💪</text></svg>'
+                    });
+                }, 4 * 60 * 60 * 1000); // Toutes les 4 heures
+                
+                window.exposureReminders.push(encouragementReminder);
+            }
+            
+            // Rappels de mission spécifiques
+            if (settings.mission) {
+                checkMissionReminders();
+            }
+        }
+
+        // Vérifier les rappels de mission
+        function checkMissionReminders() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.missions) return;
+            
+            progressData.missions.forEach(mission => {
+                if (mission.status === 'planned') {
+                    const missionDate = new Date(mission.targetDate);
+                    const today = new Date();
+                    
+                    // Rappel le jour de la mission
+                    if (missionDate.toDateString() === today.toDateString()) {
+                        setTimeout(() => {
+                            new Notification('🎯 Pass Anxiété - Mission du jour !', {
+                                body: `C'est le moment de votre défi : ${mission.exercise.substring(0, 50)}... Vous pouvez le faire ! 💪`,
+                                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%232196F3"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">🎯</text></svg>'
+                            });
+                        }, 2000);
+                    }
+                }
+            });
+        }
+
+        // Voir l'historique d'exposition
+        function viewExposureHistory() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            
+            const historyModal = document.createElement('div');
+            historyModal.className = 'tcc-modal';
+            historyModal.style.zIndex = '15000';
+            historyModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 600px;">
+                    <div class="modal-header">
+                        <h3>📈 Historique d'Exposition</h3>
+                        <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+                    </div>
+                    <div style="padding: 30px;">
+                        <div class="history-stats">
+                            <h4>📊 Vos statistiques globales :</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-number">${progressData.completedSteps ? progressData.completedSteps.length : 0}</div>
+                                    <div class="stat-label">Étapes terminées</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">${progressData.missions ? progressData.missions.filter(m => m.status === 'completed').length : 0}</div>
+                                    <div class="stat-label">Missions réussies</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">${progressData.missions ? progressData.missions.filter(m => m.status === 'planned').length : 0}</div>
+                                    <div class="stat-label">Missions planifiées</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detailed-history">
+                            <h4>📚 Historique détaillé :</h4>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                ${generateSessionHistory(progressData)}
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn-secondary" onclick="closeHistoryModal()">✅ Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(historyModal);
+            historyModal.style.display = 'flex';
+        }
+
+        // Fermer la modal d'historique
+        function closeHistoryModal() {
+            const historyModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (historyModal) {
+                historyModal.remove();
+            }
+        }
+
+        // ============ OUTILS DE DEBUG ET SYNCHRONISATION ============
+
+        // Vérifier et corriger la synchronisation des données (version TCC)
+        function checkAndFixSynchronization() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            let needsUpdate = false;
+            
+            // Initialiser les étapes terminées si inexistantes
+            if (!progressData.completedSteps) {
+                progressData.completedSteps = [];
+                needsUpdate = true;
+            }
+            
+            // Initialiser les étapes en cours si inexistantes
+            if (!progressData.inProgressSteps) {
+                progressData.inProgressSteps = [];
+                needsUpdate = true;
+            }
+            
+            // Vérifier les missions terminées avec succès qui ne sont pas dans completedSteps
+            if (progressData.missions) {
+                progressData.missions.forEach(mission => {
+                    if (mission.status === 'completed' && mission.successLevel !== 'partial') {
+                        const anxietyReduction = mission.anxietyAnticipated - (mission.anxietyActual || mission.anxietyAnticipated);
+                        const isSuccessful = anxietyReduction >= 1 || (mission.anxietyActual || 10) <= 4;
+                        
+                        if (isSuccessful && !progressData.completedSteps.includes(mission.step)) {
+                            progressData.completedSteps.push(mission.step);
+                            
+                            // Retirer des étapes en cours si elle y était
+                            progressData.inProgressSteps = progressData.inProgressSteps.filter(step => step !== mission.step);
+                            
+                            needsUpdate = true;
+                            console.log('🔧 Synchronisation: ajout étape terminée', mission.step);
+                        }
+                    }
+                });
+                
+                // Trier les étapes terminées
+                if (needsUpdate) {
+                    progressData.completedSteps.sort((a, b) => a - b);
+                }
+            }
+            
+            // Nettoyer les doublons dans inProgressSteps
+            if (progressData.inProgressSteps.length > 0) {
+                const uniqueInProgress = [...new Set(progressData.inProgressSteps)];
+                if (uniqueInProgress.length !== progressData.inProgressSteps.length) {
+                    progressData.inProgressSteps = uniqueInProgress;
+                    needsUpdate = true;
+                }
+            }
+            
+            // Sauvegarder si des corrections ont été apportées
+            if (needsUpdate) {
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                console.log('✅ Synchronisation TCC corrigée:', {
+                    completed: progressData.completedSteps,
+                    inProgress: progressData.inProgressSteps
+                });
+                showNotification('🔧 Données synchronisées automatiquement', 'info');
+            }
+            
+            return progressData;
+        }
+
+        // Afficher l'état actuel pour debug (version TCC)
+        function showDebugInfo() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            
+            console.log('=== DEBUG EXPOSITION GRADUELLE TCC ===');
+            console.log('Étapes terminées (TCC):', progressData.completedSteps || []);
+            console.log('Étapes en cours (TCC):', progressData.inProgressSteps || []);
+            console.log('Missions totales:', progressData.missions ? progressData.missions.length : 0);
+            console.log('Missions terminées:', progressData.missions ? progressData.missions.filter(m => m.status === 'completed').length : 0);
+            console.log('Missions planifiées:', progressData.missions ? progressData.missions.filter(m => m.status === 'planned').length : 0);
+            
+            if (progressData.missions) {
+                console.log('--- Détail missions ---');
+                progressData.missions.forEach(mission => {
+                    console.log(`Mission ${mission.step}: ${mission.status} (${mission.exercise?.substring(0, 30)}...)`);
+                });
+            }
+            
+            // Calculer l'étape actuelle
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            console.log('Étape actuelle calculée:', currentStep);
+            
+            // États TCC
+            console.log('--- États TCC ---');
+            for (let i = 1; i <= 5; i++) {
+                const isCompleted = progressData.completedSteps && progressData.completedSteps.includes(i);
+                const isInProgress = progressData.inProgressSteps && progressData.inProgressSteps.includes(i);
+                const hasMission = progressData.missions && progressData.missions.find(m => m.step === i && m.status === 'planned');
+                
+                let status = '⏸️ En attente';
+                if (isCompleted) status = '✅ Terminé (TCC)';
+                else if (isInProgress) status = '⏳ En cours (TCC)';
+                else if (hasMission) status = '📅 Mission planifiée';
+                else if (i === currentStep) status = '🎯 Actuel';
+                
+                console.log(`Étape ${i}: ${status}`);
+            }
+            console.log('======================================');
+            
+            // Afficher aussi dans l'interface pour l'utilisateur
+            showNotification('🔧 Informations de debug affichées dans la console (F12)', 'info');
+        }
+
+        // Télécharger la fiche mission (version avec anxiété corrigée)
+        function downloadMissionCard() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer la vraie étape actuelle basée sur les missions terminées
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Si toutes les étapes sont terminées
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont terminées ! Félicitations !', 'success');
+                return;
+            }
+            
+            if (!planData.mainFear || !planData.steps[currentStep - 1]) {
+                showNotification('Aucun plan d\'exposition trouvé pour cette étape', 'warning');
+                return;
+            }
+            
+            // **CORRECTION PRINCIPALE** : Récupérer la vraie anxiété du curseur ou de l'étape
+            let realAnxietyLevel = '5'; // Valeur par défaut
+            
+            // 1. Essayer de récupérer du curseur actuel si disponible
+            const anxietySlider = document.getElementById('anxiety-anticipated');
+            if (anxietySlider && anxietySlider.value) {
+                realAnxietyLevel = anxietySlider.value;
+                console.log('📊 Anxiété prise du curseur:', realAnxietyLevel);
+            } else {
+                // 2. Récupérer de l'anxiété de l'étape définie dans le plan
+                const stepAnxiety = planData.anxietyLevels ? planData.anxietyLevels[currentStep - 1] : null;
+                if (stepAnxiety) {
+                    realAnxietyLevel = stepAnxiety.toString();
+                    console.log('📊 Anxiété prise du plan étape:', realAnxietyLevel);
+                } else {
+                    // 3. Calculer l'anxiété progressive par étape (2, 4, 6, 8, 10)
+                    realAnxietyLevel = (currentStep * 2).toString();
+                    console.log('📊 Anxiété calculée progressive:', realAnxietyLevel);
+                }
+            }
+            
+            // Récupérer les autres données du formulaire
+            const timeframe = document.getElementById('mission-timeframe')?.value || 'this-week';
+            const customDate = document.getElementById('custom-date')?.value;
+            const missionTime = document.getElementById('mission-time')?.value || 'afternoon';
+            
+            // Calculer la date cible
+            let targetDate = new Date();
+            switch(timeframe) {
+                case 'today': break;
+                case 'tomorrow': targetDate.setDate(targetDate.getDate() + 1); break;
+                case 'this-week': targetDate.setDate(targetDate.getDate() + 3); break;
+                case 'next-week': targetDate.setDate(targetDate.getDate() + 7); break;
+                case 'this-month': targetDate.setDate(targetDate.getDate() + 14); break;
+                case 'custom': if (customDate) targetDate = new Date(customDate); break;
+            }
+            
+            const timeOptions = {
+                'morning': '🌅 Matin (8h-12h)',
+                'afternoon': '🌞 Après-midi (12h-18h)', 
+                'evening': '🌆 Soirée (18h-22h)',
+                'flexible': '🕐 Moment flexible'
+            };
+            
+            // Récupérer les stratégies sélectionnées
+            const strategies = [];
+            if (document.getElementById('strategy-breathing')?.checked) strategies.push('🌬️ Exercices de respiration');
+            if (document.getElementById('strategy-friend')?.checked) strategies.push('👥 Accompagné d\'un ami');
+            if (document.getElementById('strategy-escape')?.checked) strategies.push('🚪 Plan de sortie préparé');
+            if (document.getElementById('strategy-reward')?.checked) strategies.push('🎁 Récompense après l\'exercice');
+            
+            // Créer le contenu de la fiche mission
+            let missionContent = '🎯 FICHE MISSION - EXPOSITION GRADUELLE\n';
+            missionContent += '=' .repeat(60) + '\n\n';
+            
+            missionContent += `📋 MISSION #${currentStep}\n`;
+            missionContent += '-' .repeat(20) + '\n';
+            missionContent += `Peur travaillée : ${planData.mainFear}\n`;
+            missionContent += `Étape actuelle : ${currentStep}/5\n`;
+            missionContent += `Étapes terminées : ${progressData.completedSteps ? progressData.completedSteps.length : 0}\n\n`;
+            
+            missionContent += '🎯 MON DÉFI :\n';
+            missionContent += '-' .repeat(15) + '\n';
+            missionContent += `${planData.steps[currentStep - 1]}\n\n`;
+            
+            missionContent += '📅 PLANIFICATION :\n';
+            missionContent += '-' .repeat(20) + '\n';
+            missionContent += `Date cible : ${formatMissionDate(targetDate.toISOString())}\n`;
+            missionContent += `Moment : ${timeOptions[missionTime]}\n`;
+            missionContent += `💗 Anxiété anticipée : ${realAnxietyLevel}/10 🎯\n`;
+            missionContent += `📊 Difficulté étape : ${getDifficultyText(currentStep)}\n\n`;
+            
+            if (strategies.length > 0) {
+                missionContent += '💡 MES STRATÉGIES DE SOUTIEN :\n';
+                missionContent += '-' .repeat(30) + '\n';
+                strategies.forEach(strategy => {
+                    missionContent += `• ${strategy}\n`;
+                });
+                missionContent += '\n';
+            }
+            
+            // Ajouter l'historique des étapes précédentes
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                missionContent += '📈 MES PROGRÈS PRÉCÉDENTS :\n';
+                missionContent += '-' .repeat(25) + '\n';
+                progressData.completedSteps.forEach(stepNum => {
+                    missionContent += `✅ Étape ${stepNum} : ${planData.steps[stepNum - 1] || 'Non définie'}\n`;
+                });
+                
+                // Ajouter les niveaux d'anxiété des étapes précédentes si disponibles
+                if (progressData.missions) {
+                    missionContent += '\n📊 Historique anxiété :\n';
+                    progressData.missions.filter(m => m.status === 'completed').forEach(mission => {
+                        const reduction = mission.anxietyAnticipated - (mission.anxietyActual || mission.anxietyAnticipated);
+                        missionContent += `   Étape ${mission.step}: ${mission.anxietyAnticipated}/10 → ${mission.anxietyActual || '?'}/10 (${reduction >= 0 ? '-' : '+'}${Math.abs(reduction)})\n`;
+                    });
+                }
+                missionContent += '\n';
+            }
+            
+            missionContent += '💪 CONSEILS POUR RÉUSSIR :\n';
+            missionContent += '-' .repeat(25) + '\n';
+            missionContent += '• Respirez profondément avant de commencer\n';
+            missionContent += '• Rappelez-vous que l\'anxiété va diminuer\n';
+            missionContent += '• Utilisez vos stratégies de soutien si nécessaire\n';
+            missionContent += '• Chaque petit pas compte énormément\n';
+            missionContent += '• Soyez fier de votre courage et de vos progrès\n\n';
+            
+            missionContent += '📝 PENDANT LA MISSION :\n';
+            missionContent += '-' .repeat(22) + '\n';
+            missionContent += '□ Noter l\'heure de début\n';
+            missionContent += `□ Observer mon niveau d\'anxiété (objectif: descendre sous ${realAnxietyLevel}/10)\n`;
+            missionContent += '□ Appliquer mes stratégies si besoin\n';
+            missionContent += '□ Continuer même si c\'est difficile\n';
+            missionContent += '□ Noter l\'heure de fin\n\n';
+            
+            missionContent += '📝 APRÈS LA MISSION :\n';
+            missionContent += '-' .repeat(20) + '\n';
+            missionContent += '□ Noter mon niveau d\'anxiété final (1-10)\n';
+            missionContent += '□ Évaluer ma réussite (partiel/réussi/excellent)\n';
+            missionContent += '□ Retourner dans l\'app Pass Anxiété\n';
+            missionContent += '□ Valider l\'étape et passer à la suivante\n';
+            missionContent += '□ Me féliciter pour mon courage ! 🎉\n\n';
+            
+            missionContent += '🏆 MOTIVATION PERSONNELLE :\n';
+            missionContent += '-' .repeat(25) + '\n';
+            missionContent += 'Cette mission me rapproche de ma liberté !\n';
+            missionContent += 'Chaque exposition me rend plus fort(e).\n';
+            missionContent += `J'ai déjà réussi ${progressData.completedSteps ? progressData.completedSteps.length : 0} étape(s) !\n`;
+            missionContent += `Mon niveau d'anxiété de ${realAnxietyLevel}/10 va diminuer !\n`;
+            missionContent += 'Je PEUX le faire ! 💪✨\n\n';
+            
+            missionContent += '📞 EN CAS DE DIFFICULTÉ :\n';
+            missionContent += '-' .repeat(22) + '\n';
+            missionContent += '• Utilisez l\'app Pass Anxiété - Mode Crise\n';
+            missionContent += '• Pratiquez la respiration 4-7-8\n';
+            missionContent += '• Rappelez-vous : "Cette anxiété va passer"\n';
+            missionContent += '• Contactez votre soutien si nécessaire\n\n';
+            
+            missionContent += `📅 Fiche créée le : ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}\n`;
+            missionContent += `💗 Niveau d'anxiété anticipé enregistré : ${realAnxietyLevel}/10\n`;
+            missionContent += `📱 Application Pass Anxiété - Exposition Graduelle\n`;
+            
+            // Télécharger le fichier
+            const blob = new Blob([missionContent], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mission-exposition-etape-${currentStep}-anxiete-${realAnxietyLevel}-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification(`📄 Fiche mission téléchargée ! Anxiété ${realAnxietyLevel}/10 incluse`, 'success');
         }
 
         // Annuler le vidage
