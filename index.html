@@ -6202,8 +6202,16 @@
         }
 
         function hideOrientationRecommendation() {
+            console.log('🔧 Masquage recommendation orientation');
             recommendationDismissed = true;
-            document.getElementById('orientation-recommendation').classList.remove('show');
+            const recommendation = document.getElementById('orientation-recommendation');
+            if (recommendation) {
+                recommendation.classList.remove('show');
+                recommendation.style.display = 'none';
+                console.log('✅ Recommendation masquée');
+            } else {
+                console.warn('⚠️ Element orientation-recommendation non trouvé');
+            }
         }
 
         // Navigation avec vérification d'activation et gestion wake lock
@@ -6223,6 +6231,15 @@
             
             // Gérer le wake lock selon l'écran
             manageWakeLockForScreen(screenId);
+            
+            // Initialisation spécifique selon l'écran
+            if (screenId === 'emdr-setup' || screenId === 'emdr-evaluation') {
+                // Réinitialiser les sliders SUD quand on accède aux écrans EMDR
+                setTimeout(() => {
+                    setupSUDSliders();
+                    console.log('🎯 Sliders SUD réinitialisés');
+                }, 100);
+            }
             
             if (screenId === 'emdr-session') {
                 recommendationDismissed = false;
@@ -8757,6 +8774,17 @@
                 });
             });
 
+            // ============ GESTION BOUTON ORIENTATION ============
+            // S'assurer que le bouton "J'ai compris" fonctionne
+            const orientationBtn = document.querySelector('#orientation-recommendation .rec-btn');
+            if (orientationBtn) {
+                orientationBtn.addEventListener('click', function() {
+                    console.log('🔧 Bouton J\'ai compris cliqué');
+                    hideOrientationRecommendation();
+                });
+                console.log('✅ Bouton orientation initialisé');
+            }
+
             // ============ GESTION BOUTONS OUTILS ============
             // Gestionnaire pour tous les boutons d'outils y compris thérapeute
             document.querySelectorAll('.tool-card').forEach(button => {
@@ -8765,6 +8793,7 @@
                     console.log('🔧 Outil sélectionné:', tool);
                     
                     const screenMap = {
+                        'crisis': 'crisis-screen',
                         'breathing': 'breathing-screen',
                         'emdr': 'emdr-distance', // Écran EMDR complet original
                         'hypnotherapy': 'hypnotherapy-screen',
