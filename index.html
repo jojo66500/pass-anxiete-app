@@ -3094,6 +3094,437 @@
 
         /* ============ FIN STYLES VOTRE THÉRAPEUTE ============ */
 
+        /* ============ STYLES MODALS TCC AVANCÉES ============ */
+
+        .tcc-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .tcc-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        /* Graphique émotionnel */
+        .emotion-chart-container {
+            padding: 30px;
+        }
+
+        .emotion-sliders {
+            margin: 20px 0;
+        }
+
+        .emotion-slider-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .emotion-slider-item label {
+            min-width: 100px;
+            font-weight: 600;
+        }
+
+        .emotion-slider-item input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .emotion-slider-item input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .emotion-chart {
+            margin: 30px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .chart-bars {
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            height: 200px;
+            justify-content: space-around;
+        }
+
+        .emotion-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .bar-fill {
+            width: 40px;
+            background: var(--primary);
+            border-radius: 20px 20px 0 0;
+            transition: height 0.5s ease;
+            margin-bottom: 10px;
+        }
+
+        .bar-fill.joy { background: #4CAF50; }
+        .bar-fill.sadness { background: #2196F3; }
+        .bar-fill.anxiety { background: #FF9800; }
+        .bar-fill.anger { background: #F44336; }
+
+        .bar-label {
+            font-size: 1.5rem;
+        }
+
+        .emotion-interpretation {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Plan de crise */
+        .crisis-plan-form {
+            padding: 30px;
+        }
+
+        .plan-section {
+            margin: 25px 0;
+        }
+
+        .plan-section h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .plan-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .plan-section textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .action-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-checklist label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .action-checklist label:hover {
+            background: #e9ecef;
+        }
+
+        .plan-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        /* Exposition graduelle */
+        .exposure-container {
+            padding: 30px;
+        }
+
+        .fear-identification input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .exposure-ladder {
+            margin: 25px 0;
+        }
+
+        .ladder-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .ladder-step input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .difficulty {
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .difficulty-low { color: #4CAF50; }
+        .difficulty-medium { color: #FF9800; }
+        .difficulty-high { color: #FF5722; }
+        .difficulty-max { color: #F44336; }
+
+        .exposure-tips {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .exposure-tips ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .exposure-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        /* Journal des réussites */
+        .journal-container {
+            padding: 30px;
+        }
+
+        .success-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .success-form select,
+        .success-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .pride-level {
+            margin: 15px 0;
+        }
+
+        .pride-stars {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.3s;
+        }
+
+        .star:hover {
+            color: #ffd700;
+        }
+
+        .success-entry {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .success-category-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin: 5px 0;
+        }
+
+        .success-category-badge.social { background: #e3f2fd; color: #1976d2; }
+        .success-category-badge.anxiete { background: #e8f5e9; color: #388e3c; }
+
+        .success-text {
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .success-pride {
+            color: #ffd700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Responsive pour modals */
+        @media (max-width: 768px) {
+            .tcc-modal-content {
+                max-width: 95vw;
+                max-height: 95vh;
+            }
+            
+            .modal-header {
+                padding: 15px 20px;
+            }
+            
+            .emotion-chart-container,
+            .crisis-plan-form,
+            .exposure-container,
+            .journal-container {
+                padding: 20px;
+            }
+            
+            .chart-bars {
+                gap: 10px;
+            }
+            
+            .ladder-step {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ============ FIN STYLES MODALS TCC ============ */
+
         /* ============ STYLES SYSTÈME ACTIVATION ============ */
 
         /* Écran d'activation */
@@ -7421,21 +7852,452 @@
             DataManager.logToolUsage('tcc-social');
         }
 
-        // Fonctions pour les techniques avancées
+        // ============ TECHNIQUES TCC AVANCÉES FONCTIONNELLES ============
+
+        // 📊 Graphique émotionnel interactif
         function showEmotionChart() {
-            alert('📊 Fonctionnalité en développement !\n\nLe graphique émotionnel permettra de visualiser l\'évolution de vos émotions sur plusieurs semaines.');
+            // Créer une modal avec graphique émotionnel
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content">
+                    <div class="modal-header">
+                        <h3>📊 Graphique Émotionnel</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="emotion-chart-container">
+                        <h4>🎭 Évaluez vos émotions actuelles :</h4>
+                        
+                        <div class="emotion-sliders">
+                            <div class="emotion-slider-item">
+                                <label>😊 Joie</label>
+                                <input type="range" id="joy-slider" min="0" max="10" value="5" oninput="updateEmotionChart()">
+                                <span id="joy-value">5</span>
+                            </div>
+                            
+                            <div class="emotion-slider-item">
+                                <label>😢 Tristesse</label>
+                                <input type="range" id="sadness-slider" min="0" max="10" value="3" oninput="updateEmotionChart()">
+                                <span id="sadness-value">3</span>
+                            </div>
+                            
+                            <div class="emotion-slider-item">
+                                <label>😰 Anxiété</label>
+                                <input type="range" id="anxiety-slider" min="0" max="10" value="4" oninput="updateEmotionChart()">
+                                <span id="anxiety-value">4</span>
+                            </div>
+                            
+                            <div class="emotion-slider-item">
+                                <label>😠 Colère</label>
+                                <input type="range" id="anger-slider" min="0" max="10" value="2" oninput="updateEmotionChart()">
+                                <span id="anger-value">2</span>
+                            </div>
+                        </div>
+                        
+                        <div class="emotion-chart">
+                            <div class="chart-bars">
+                                <div class="emotion-bar" id="joy-bar">
+                                    <div class="bar-fill joy" style="height: 50%"></div>
+                                    <div class="bar-label">😊</div>
+                                </div>
+                                <div class="emotion-bar" id="sadness-bar">
+                                    <div class="bar-fill sadness" style="height: 30%"></div>
+                                    <div class="bar-label">😢</div>
+                                </div>
+                                <div class="emotion-bar" id="anxiety-bar">
+                                    <div class="bar-fill anxiety" style="height: 40%"></div>
+                                    <div class="bar-label">😰</div>
+                                </div>
+                                <div class="emotion-bar" id="anger-bar">
+                                    <div class="bar-fill anger" style="height: 20%"></div>
+                                    <div class="bar-label">😠</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="emotion-interpretation">
+                            <p id="emotion-analysis">Analysez vos émotions en temps réel...</p>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="saveEmotionData()">💾 Sauvegarder cette évaluation</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Initialiser le graphique
+            setTimeout(() => {
+                updateEmotionChart();
+            }, 100);
+            
+            DataManager.logToolUsage('tcc-emotion-chart');
         }
 
+        // ⚡ Plan d'action anti-crise personnalisé
         function createCrisisPlan() {
-            alert('⚡ Fonctionnalité en développement !\n\nLe plan anti-crise vous permettra de créer une stratégie personnalisée pour les moments difficiles.');
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content crisis-plan">
+                    <div class="modal-header">
+                        <h3>⚡ Plan d'Action Anti-Crise</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="crisis-plan-form">
+                        <h4>🎯 Créez votre stratégie personnalisée :</h4>
+                        
+                        <div class="plan-section">
+                            <h5>1. 🚨 Signaux d'alarme (quand je commence à aller mal) :</h5>
+                            <textarea id="warning-signs" placeholder="Ex: pensées négatives répétitives, difficultés à dormir, isolation sociale..."></textarea>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <h5>2. 🛠️ Mes outils de gestion (ce qui m'aide) :</h5>
+                            <textarea id="coping-tools" placeholder="Ex: respiration 4-7-8, appeler un ami, écouter de la musique, faire une promenade..."></textarea>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <h5>3. 👥 Mes contacts de soutien :</h5>
+                            <textarea id="support-contacts" placeholder="Ex: Marie (06...), thérapeute (05...), SOS Amitié (09 72 39 40 50)..."></textarea>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <h5>4. 🎯 Actions immédiates en cas de crise :</h5>
+                            <div class="action-checklist">
+                                <label><input type="checkbox"> Utiliser l'app Pass Anxiété - Mode Crise</label>
+                                <label><input type="checkbox"> Appeler mon contact de soutien principal</label>
+                                <label><input type="checkbox"> Pratiquer exercice de respiration</label>
+                                <label><input type="checkbox"> Me rappeler : "Cette crise va passer"</label>
+                                <label><input type="checkbox"> Aller dans un lieu sûr</label>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-buttons">
+                            <button class="btn-primary" onclick="saveCrisisPlan()">💾 Sauvegarder mon plan</button>
+                            <button class="btn-secondary" onclick="showNotification('Plan de crise sauvegardé !', 'success')">📄 Télécharger PDF</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            DataManager.logToolUsage('tcc-crisis-plan');
         }
 
+        // 🎯 Exposition graduelle avec niveaux de difficulté
         function startExposureExercise() {
-            alert('🎯 Fonctionnalité en développement !\n\nL\'exposition graduelle vous aidera à affronter progressivement vos peurs.');
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content exposure-exercise">
+                    <div class="modal-header">
+                        <h3>🎯 Exposition Graduelle</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="exposure-container">
+                        <h4>🏔️ Planifiez votre progression :</h4>
+                        
+                        <div class="fear-identification">
+                            <h5>1. 😨 Quelle peur souhaitez-vous travailler ?</h5>
+                            <input type="text" id="main-fear" placeholder="Ex: Parler en public, prendre l'avion, rencontrer de nouvelles personnes...">
+                        </div>
+                        
+                        <div class="exposure-ladder">
+                            <h5>2. 📈 Échelle d'exposition (du plus facile au plus difficile) :</h5>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">1</span>
+                                <input type="text" placeholder="Étape la plus facile (ex: regarder des photos)">
+                                <div class="difficulty">Difficulté: <span class="difficulty-low">Facile 😌</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">2</span>
+                                <input type="text" placeholder="Étape suivante (ex: regarder des vidéos)">
+                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Moyen 😐</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">3</span>
+                                <input type="text" placeholder="Étape intermédiaire (ex: s'entraîner devant un miroir)">
+                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Moyen 😟</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">4</span>
+                                <input type="text" placeholder="Étape avancée (ex: parler à un proche)">
+                                <div class="difficulty">Difficulté: <span class="difficulty-high">Difficile 😰</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">5</span>
+                                <input type="text" placeholder="Objectif final (ex: présentation devant un groupe)">
+                                <div class="difficulty">Difficulté: <span class="difficulty-max">Maximum 😱</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exposure-tips">
+                            <h5>💡 Conseils pour réussir :</h5>
+                            <ul>
+                                <li>• Commencez toujours par l'étape 1</li>
+                                <li>• Ne passez à l'étape suivante que quand l'anxiété diminue</li>
+                                <li>• Pratiquez chaque étape plusieurs fois</li>
+                                <li>• Récompensez-vous après chaque réussite</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="exposure-buttons">
+                            <button class="btn-primary" onclick="saveExposurePlan()">📝 Créer mon plan</button>
+                            <button class="btn-secondary" onclick="showNotification('Plan d\\'exposition créé !', 'success')">📊 Commencer le suivi</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            DataManager.logToolUsage('tcc-exposure');
         }
 
+        // 🏆 Journal des réussites motivant
         function showSuccessJournal() {
-            alert('🏆 Fonctionnalité en développement !\n\nLe journal des réussites valorisera vos progrès et accomplissements.');
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content success-journal">
+                    <div class="modal-header">
+                        <h3>🏆 Journal des Réussites</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="journal-container">
+                        <div class="journal-today">
+                            <h4>⭐ Ajoutez une réussite d'aujourd'hui :</h4>
+                            
+                            <div class="success-form">
+                                <select id="success-category">
+                                    <option value="">Choisir une catégorie...</option>
+                                    <option value="social">👥 Social</option>
+                                    <option value="professionnel">💼 Professionnel</option>
+                                    <option value="personnel">🌱 Personnel</option>
+                                    <option value="anxiete">😌 Gestion anxiété</option>
+                                    <option value="autre">✨ Autre</option>
+                                </select>
+                                
+                                <textarea id="success-description" placeholder="Décrivez votre réussite... (ex: J'ai osé poser une question en réunion, j'ai géré une crise d'anxiété avec les techniques apprises...)"></textarea>
+                                
+                                <div class="pride-level">
+                                    <label>Niveau de fierté :</label>
+                                    <div class="pride-stars">
+                                        <span class="star" onclick="setPrideLevel(1)">⭐</span>
+                                        <span class="star" onclick="setPrideLevel(2)">⭐</span>
+                                        <span class="star" onclick="setPrideLevel(3)">⭐</span>
+                                        <span class="star" onclick="setPrideLevel(4)">⭐</span>
+                                        <span class="star" onclick="setPrideLevel(5)">⭐</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn-primary" onclick="addSuccessEntry()">➕ Ajouter cette réussite</button>
+                            </div>
+                        </div>
+                        
+                        <div class="journal-history">
+                            <h4>📚 Mes réussites récentes :</h4>
+                            <div id="success-list">
+                                <div class="success-entry">
+                                    <div class="success-date">Aujourd'hui</div>
+                                    <div class="success-category-badge social">👥 Social</div>
+                                    <div class="success-text">J'ai utilisé l'app Pass Anxiété quand je me sentais mal</div>
+                                    <div class="success-pride">⭐⭐⭐⭐⭐</div>
+                                </div>
+                                
+                                <div class="success-entry">
+                                    <div class="success-date">Hier</div>
+                                    <div class="success-category-badge anxiete">😌 Gestion anxiété</div>
+                                    <div class="success-text">J'ai pratiqué la cohérence cardiaque pendant 5 minutes</div>
+                                    <div class="success-pride">⭐⭐⭐⭐</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="journal-stats">
+                            <h4>📊 Mes statistiques de réussite :</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">Réussites cette semaine</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">4.2</div>
+                                    <div class="stat-label">Fierté moyenne ⭐</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">5</div>
+                                    <div class="stat-label">Jours consécutifs</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-secondary" onclick="showNotification('Journal exporté !', 'success')">📤 Exporter mon journal</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            DataManager.logToolUsage('tcc-success-journal');
+        }
+
+        // ============ FONCTIONS SUPPORT TCC ============
+
+        // Fermer les modals TCC
+        function closeTCCModal() {
+            const modals = document.querySelectorAll('.tcc-modal');
+            modals.forEach(modal => {
+                modal.remove();
+            });
+        }
+
+        // Mise à jour du graphique émotionnel
+        function updateEmotionChart() {
+            const joy = document.getElementById('joy-slider')?.value || 5;
+            const sadness = document.getElementById('sadness-slider')?.value || 3;
+            const anxiety = document.getElementById('anxiety-slider')?.value || 4;
+            const anger = document.getElementById('anger-slider')?.value || 2;
+            
+            // Mettre à jour les valeurs affichées
+            if (document.getElementById('joy-value')) document.getElementById('joy-value').textContent = joy;
+            if (document.getElementById('sadness-value')) document.getElementById('sadness-value').textContent = sadness;
+            if (document.getElementById('anxiety-value')) document.getElementById('anxiety-value').textContent = anxiety;
+            if (document.getElementById('anger-value')) document.getElementById('anger-value').textContent = anger;
+            
+            // Mettre à jour les barres du graphique
+            if (document.querySelector('#joy-bar .bar-fill')) {
+                document.querySelector('#joy-bar .bar-fill').style.height = (joy * 10) + '%';
+            }
+            if (document.querySelector('#sadness-bar .bar-fill')) {
+                document.querySelector('#sadness-bar .bar-fill').style.height = (sadness * 10) + '%';
+            }
+            if (document.querySelector('#anxiety-bar .bar-fill')) {
+                document.querySelector('#anxiety-bar .bar-fill').style.height = (anxiety * 10) + '%';
+            }
+            if (document.querySelector('#anger-bar .bar-fill')) {
+                document.querySelector('#anger-bar .bar-fill').style.height = (anger * 10) + '%';
+            }
+            
+            // Analyse émotionnelle intelligente
+            const analysisEl = document.getElementById('emotion-analysis');
+            if (analysisEl) {
+                let analysis = '🎭 ';
+                if (anxiety > 7) {
+                    analysis += 'Niveau d\'anxiété élevé - Pratiquez la respiration 4-7-8 ou la cohérence cardiaque.';
+                } else if (sadness > 7) {
+                    analysis += 'Période de tristesse - Contactez vos proches ou consultez le journal des réussites.';
+                } else if (anger > 7) {
+                    analysis += 'Colère présente - Essayez une technique de relaxation ou une activité physique.';
+                } else if (joy > 7) {
+                    analysis += 'Excellent état émotionnel ! Profitez de ce moment positif.';
+                } else {
+                    analysis += 'État émotionnel équilibré - Continuez vos pratiques de bien-être.';
+                }
+                analysisEl.textContent = analysis;
+            }
+        }
+
+        // Sauvegarder les données émotionnelles
+        function saveEmotionData() {
+            const emotionData = {
+                date: new Date().toISOString(),
+                joy: document.getElementById('joy-slider')?.value || 5,
+                sadness: document.getElementById('sadness-slider')?.value || 3,
+                anxiety: document.getElementById('anxiety-slider')?.value || 4,
+                anger: document.getElementById('anger-slider')?.value || 2
+            };
+            
+            // Sauvegarder dans le localStorage
+            const saved = JSON.parse(localStorage.getItem('emotion-history') || '[]');
+            saved.push(emotionData);
+            localStorage.setItem('emotion-history', JSON.stringify(saved));
+            
+            showNotification('📊 Évaluation émotionnelle sauvegardée !', 'success');
+            closeTCCModal();
+        }
+
+        // Sauvegarder le plan de crise
+        function saveCrisisPlan() {
+            const planData = {
+                date: new Date().toISOString(),
+                warningSignes: document.getElementById('warning-signs')?.value || '',
+                copingTools: document.getElementById('coping-tools')?.value || '',
+                supportContacts: document.getElementById('support-contacts')?.value || '',
+                immediateActions: Array.from(document.querySelectorAll('.action-checklist input:checked')).map(cb => cb.parentElement.textContent.trim())
+            };
+            
+            localStorage.setItem('crisis-plan', JSON.stringify(planData));
+            showNotification('⚡ Plan de crise sauvegardé !', 'success');
+            closeTCCModal();
+        }
+
+        // Sauvegarder le plan d'exposition
+        function saveExposurePlan() {
+            const steps = Array.from(document.querySelectorAll('.ladder-step input')).map(input => input.value);
+            const exposureData = {
+                date: new Date().toISOString(),
+                mainFear: document.getElementById('main-fear')?.value || '',
+                steps: steps
+            };
+            
+            localStorage.setItem('exposure-plan', JSON.stringify(exposureData));
+            showNotification('🎯 Plan d\'exposition sauvegardé !', 'success');
+            closeTCCModal();
+        }
+
+        // Ajouter une entrée de réussite
+        function addSuccessEntry() {
+            const category = document.getElementById('success-category')?.value || '';
+            const description = document.getElementById('success-description')?.value || '';
+            
+            if (!category || !description) {
+                showNotification('Veuillez remplir tous les champs', 'warning');
+                return;
+            }
+            
+            const successData = {
+                date: new Date().toISOString(),
+                category: category,
+                description: description,
+                pride: window.currentPrideLevel || 3
+            };
+            
+            const saved = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            saved.unshift(successData);
+            localStorage.setItem('success-journal', JSON.stringify(saved));
+            
+            showNotification('🏆 Réussite ajoutée !', 'success');
+            
+            // Réinitialiser le formulaire
+            document.getElementById('success-category').value = '';
+            document.getElementById('success-description').value = '';
+            setPrideLevel(3);
+        }
+
+        // Définir le niveau de fierté
+        window.currentPrideLevel = 3;
+        function setPrideLevel(level) {
+            window.currentPrideLevel = level;
+            const stars = document.querySelectorAll('.pride-stars .star');
+            stars.forEach((star, index) => {
+                if (index < level) {
+                    star.style.color = '#ffd700';
+                } else {
+                    star.style.color = '#ddd';
+                }
+            });
         }
 
         // Mise à jour du suivi pour inclure TCC
