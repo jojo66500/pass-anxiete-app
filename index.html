@@ -16600,6 +16600,119 @@
         
         // ============ FIN SOLUTION ULTRA-AGRESSIVE ANTI-VEILLE ============
         
+        // ============ CORRECTIF FORCÉ BOUTONS PAYSAGE ============
+        
+        // Solution forcée pour corriger les boutons en mode paysage
+        function forceButtonsPositionLandscape() {
+            // Vérifier si on est en plein écran et en paysage
+            const emdrSession = document.getElementById('emdr-session');
+            const isFullscreen = emdrSession && emdrSession.classList.contains('emdr-fullscreen');
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isFullscreen && isLandscape && isMobile) {
+                const controls = document.querySelector('.emdr-fullscreen .session-controls');
+                if (controls) {
+                    // Forcer la position centrée en haut
+                    controls.style.setProperty('position', 'fixed', 'important');
+                    controls.style.setProperty('top', '8px', 'important');
+                    controls.style.setProperty('left', '50%', 'important');
+                    controls.style.setProperty('right', 'auto', 'important');
+                    controls.style.setProperty('bottom', 'auto', 'important');
+                    controls.style.setProperty('transform', 'translateX(-50%)', 'important');
+                    controls.style.setProperty('width', '90%', 'important');
+                    controls.style.setProperty('max-width', '90vw', 'important');
+                    controls.style.setProperty('display', 'flex', 'important');
+                    controls.style.setProperty('flex-direction', 'row', 'important');
+                    controls.style.setProperty('justify-content', 'space-around', 'important');
+                    controls.style.setProperty('gap', '10px', 'important');
+                    controls.style.setProperty('padding', '6px 15px', 'important');
+                    controls.style.setProperty('background', 'rgba(0,0,0,0.85)', 'important');
+                    controls.style.setProperty('border-radius', '25px', 'important');
+                    controls.style.setProperty('z-index', '10001', 'important');
+                    
+                    console.log('📱 Boutons forcés en position paysage centrée');
+                    
+                    // Ajuster les boutons individuels
+                    const buttons = controls.querySelectorAll('.control-btn');
+                    buttons.forEach(btn => {
+                        btn.style.setProperty('flex', '1', 'important');
+                        btn.style.setProperty('max-width', '120px', 'important');
+                        btn.style.setProperty('padding', '6px 8px', 'important');
+                        btn.style.setProperty('font-size', '0.7rem', 'important');
+                        btn.style.setProperty('border-radius', '15px', 'important');
+                        btn.style.setProperty('white-space', 'nowrap', 'important');
+                    });
+                }
+            }
+        }
+        
+        // Appliquer la correction à plusieurs moments
+        setTimeout(() => {
+            forceButtonsPositionLandscape();
+            
+            // Observer les changements d'orientation
+            window.addEventListener('resize', () => {
+                setTimeout(forceButtonsPositionLandscape, 100);
+            });
+            
+            // Observer les changements de plein écran
+            document.addEventListener('fullscreenchange', () => {
+                setTimeout(forceButtonsPositionLandscape, 200);
+            });
+            
+            // Appliquer quand on clique sur plein écran
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                    setTimeout(forceButtonsPositionLandscape, 300);
+                });
+            }
+            
+            console.log('📱 Correctif boutons paysage installé');
+        }, 1500);
+        
+        // Ajouter aussi des styles CSS ultra-prioritaires
+        setTimeout(() => {
+            const forceStyles = document.createElement('style');
+            forceStyles.innerHTML = `
+                /* FORCAGE ABSOLU - Mode paysage mobile plein écran */
+                @media (max-width: 768px) and (orientation: landscape) {
+                    .emdr-fullscreen .session-controls {
+                        position: fixed !important;
+                        top: 8px !important;
+                        left: 50% !important;
+                        right: auto !important;
+                        bottom: auto !important;
+                        transform: translateX(-50%) !important;
+                        width: 90% !important;
+                        max-width: 90vw !important;
+                        display: flex !important;
+                        flex-direction: row !important;
+                        justify-content: space-around !important;
+                        gap: 10px !important;
+                        padding: 6px 15px !important;
+                        background: rgba(0,0,0,0.85) !important;
+                        border-radius: 25px !important;
+                        z-index: 10002 !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn {
+                        flex: 1 !important;
+                        max-width: 120px !important;
+                        padding: 6px 8px !important;
+                        font-size: 0.7rem !important;
+                        border-radius: 15px !important;
+                        white-space: nowrap !important;
+                    }
+                }
+            `;
+            document.head.appendChild(forceStyles);
+            console.log('🎯 Styles forcés ultra-prioritaires ajoutés');
+        }, 500);
+        
+        // ============ FIN CORRECTIF FORCÉ BOUTONS PAYSAGE ============
+        
         // ============ FIN AMÉLIORATIONS FINALES ============
 
         // ============ ÉCRAN MENTIONS LÉGALES ============
