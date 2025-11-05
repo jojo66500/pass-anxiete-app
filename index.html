@@ -16406,14 +16406,21 @@
                 @media (max-width: 768px) and (orientation: landscape) {
                     .emdr-fullscreen .session-controls {
                         top: 5px !important;
+                        left: 50% !important;
+                        right: auto !important;
+                        transform: translateX(-50%) !important;
                         padding: 4px 8px !important;
-                        gap: 4px !important;
+                        gap: 8px !important;
+                        max-width: 95vw !important;
+                        justify-content: space-around !important;
                     }
                     
                     .emdr-fullscreen .control-btn {
-                        padding: 4px 6px !important;
+                        padding: 4px 8px !important;
                         font-size: 0.65rem !important;
                         border-radius: 10px !important;
+                        flex: 1 !important;
+                        max-width: 100px !important;
                     }
                 }
             `;
@@ -16422,6 +16429,176 @@
         }, 600);
         
         // ============ FIN CORRECTIF BOUTONS EMDR MOBILE ============
+        
+        // ============ SOLUTION ULTRA-AGRESSIVE ANTI-VEILLE ============
+        
+        // Solution multiple pour empêcher la mise en veille
+        function initAntiSleepSolution() {
+            console.log('🔋 Initialisation solution anti-veille...');
+            
+            // 1. Wake Lock API (si supporté)
+            let wakeLock = null;
+            async function activateWakeLock() {
+                try {
+                    if ('wakeLock' in navigator) {
+                        if (wakeLock) {
+                            await wakeLock.release();
+                        }
+                        wakeLock = await navigator.wakeLock.request('screen');
+                        console.log('✅ Wake Lock API activé');
+                        return true;
+                    }
+                } catch (err) {
+                    console.log('❌ Wake Lock failed:', err);
+                }
+                return false;
+            }
+            
+            // 2. Vidéo invisible (solution de backup)
+            function createInvisibleVideo() {
+                const video = document.createElement('video');
+                video.id = 'anti-sleep-video';
+                video.style.cssText = `
+                    position: fixed;
+                    top: -1px;
+                    left: -1px;
+                    width: 1px;
+                    height: 1px;
+                    opacity: 0;
+                    pointer-events: none;
+                    z-index: -1;
+                `;
+                video.muted = true;
+                video.loop = true;
+                video.autoplay = true;
+                
+                // Créer une source vidéo minimale (1 pixel transparent)
+                const canvas = document.createElement('canvas');
+                canvas.width = 1;
+                canvas.height = 1;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = 'transparent';
+                ctx.fillRect(0, 0, 1, 1);
+                
+                video.srcObject = canvas.captureStream(1); // 1 FPS minimum
+                document.body.appendChild(video);
+                
+                video.play().then(() => {
+                    console.log('✅ Vidéo anti-veille activée');
+                }).catch(err => {
+                    console.log('❌ Vidéo anti-veille failed:', err);
+                });
+                
+                return video;
+            }
+            
+            // 3. Audio silencieux (solution iOS/mobile)
+            function createSilentAudio() {
+                const audio = document.createElement('audio');
+                audio.id = 'anti-sleep-audio';
+                audio.style.cssText = `
+                    position: fixed;
+                    top: -1px;
+                    left: -1px;
+                    width: 1px;
+                    height: 1px;
+                    opacity: 0;
+                    pointer-events: none;
+                    z-index: -1;
+                `;
+                audio.loop = true;
+                audio.volume = 0.01; // Volume très bas mais pas 0
+                
+                // Son silencieux encodé en base64
+                audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0/LnfSMGJIHO8diJNwgZZ7zs559NEAxPqOPxtmUcBjiOXY=';
+                
+                document.body.appendChild(audio);
+                
+                audio.play().then(() => {
+                    console.log('✅ Audio anti-veille activé');
+                }).catch(err => {
+                    console.log('❌ Audio anti-veille failed:', err);
+                });
+                
+                return audio;
+            }
+            
+            // 4. Simulation d'activité utilisateur
+            function simulateUserActivity() {
+                // Mouvement de souris invisible minimal
+                setInterval(() => {
+                    const event = new MouseEvent('mousemove', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true,
+                        clientX: Math.random() * 2,
+                        clientY: Math.random() * 2
+                    });
+                    document.dispatchEvent(event);
+                }, 30000); // Toutes les 30 secondes
+                
+                console.log('✅ Simulation activité utilisateur activée');
+            }
+            
+            // 5. Réactivation périodique
+            function periodicReactivation() {
+                setInterval(async () => {
+                    // Réactiver Wake Lock si nécessaire
+                    if ('wakeLock' in navigator && (!wakeLock || wakeLock.released)) {
+                        await activateWakeLock();
+                    }
+                    
+                    // Vérifier vidéo
+                    const video = document.getElementById('anti-sleep-video');
+                    if (video && video.paused) {
+                        video.play().catch(() => {});
+                    }
+                    
+                    // Vérifier audio
+                    const audio = document.getElementById('anti-sleep-audio');
+                    if (audio && audio.paused) {
+                        audio.play().catch(() => {});
+                    }
+                    
+                    console.log('🔋 Réactivation anti-veille');
+                }, 60000); // Toutes les minutes
+            }
+            
+            // Initialiser toutes les solutions
+            setTimeout(async () => {
+                await activateWakeLock();
+                createInvisibleVideo();
+                createSilentAudio();
+                simulateUserActivity();
+                periodicReactivation();
+                
+                console.log('🛡️ Solution anti-veille complète activée');
+            }, 1000);
+            
+            // Gestion des changements de visibilité
+            document.addEventListener('visibilitychange', async () => {
+                if (document.visibilityState === 'visible') {
+                    setTimeout(async () => {
+                        await activateWakeLock();
+                        console.log('🔋 Wake Lock réactivé après retour');
+                    }, 100);
+                }
+            });
+            
+            // Gestion des interactions utilisateur
+            ['click', 'touchstart', 'keypress'].forEach(eventType => {
+                document.addEventListener(eventType, async () => {
+                    if (!wakeLock || wakeLock.released) {
+                        await activateWakeLock();
+                    }
+                }, { passive: true });
+            });
+        }
+        
+        // Démarrer la solution anti-veille
+        initAntiSleepSolution();
+        
+        // ============ FIN SOLUTION ULTRA-AGRESSIVE ANTI-VEILLE ============
         
         // ============ FIN AMÉLIORATIONS FINALES ============
 
