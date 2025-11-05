@@ -16324,35 +16324,111 @@
         setTimeout(() => {
             const mobileButtonsStyles = document.createElement('style');
             mobileButtonsStyles.textContent = `
-                /* DIMINUER BOUTONS EN MODE PLEIN ÉCRAN MOBILE UNIQUEMENT */
+                /* BOUTONS PLEIN ÉCRAN: SYMBOLES UNIQUEMENT, ULTRA-COMPACTS */
                 @media (max-width: 768px) {
-                    .emdr-fullscreen .session-controls {
-                        padding: 4px 8px !important;
-                        gap: 4px !important;
+                    .emdr-fullscreen .control-btn {
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 16px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        text-align: center !important;
+                        line-height: 1 !important;
+                        min-width: 30px !important;
+                        max-width: 30px !important;
+                        overflow: hidden !important;
                     }
                     
+                    /* Remplacer complètement le contenu par les symboles */
+                    .emdr-fullscreen .control-btn.start {
+                        font-size: 14px !important;
+                    }
+                    .emdr-fullscreen .control-btn.start::after {
+                        content: "▶" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.stop {
+                        font-size: 12px !important;
+                    }
+                    .emdr-fullscreen .control-btn.stop::after {
+                        content: "⏹" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.fullscreen {
+                        font-size: 12px !important;
+                    }
+                    .emdr-fullscreen .control-btn.fullscreen::after {
+                        content: "📱" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.menu {
+                        font-size: 14px !important;
+                    }
+                    .emdr-fullscreen .control-btn.menu::after {
+                        content: "🏠" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    /* Masquer complètement le texte original */
                     .emdr-fullscreen .control-btn {
-                        padding: 4px 8px !important;
-                        font-size: 0.7rem !important;
-                        border-radius: 12px !important;
-                        min-height: 28px !important;
+                        text-indent: -9999px !important;
+                        color: transparent !important;
+                        font-size: 0 !important;
+                    }
+                    
+                    .emdr-fullscreen .session-controls {
+                        gap: 4px !important;
+                        padding: 4px !important;
                     }
                 }
                 
                 @media (max-width: 768px) and (orientation: portrait) {
                     .emdr-fullscreen .control-btn {
-                        padding: 3px 6px !important;
-                        font-size: 0.65rem !important;
-                        min-height: 24px !important;
+                        width: 28px !important;
+                        height: 28px !important;
+                        border-radius: 5px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.start::after,
+                    .emdr-fullscreen .control-btn.menu::after {
+                        font-size: 12px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.stop::after,
+                    .emdr-fullscreen .control-btn.fullscreen::after {
+                        font-size: 11px !important;
                     }
                 }
                 
                 @media (max-width: 768px) and (orientation: landscape) {
                     .emdr-fullscreen .control-btn {
-                        padding: 3px 6px !important;
-                        font-size: 0.6rem !important;
-                        min-height: 22px !important;
-                        max-width: 70px !important;
+                        width: 26px !important;
+                        height: 26px !important;
+                        border-radius: 4px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.start::after,
+                    .emdr-fullscreen .control-btn.menu::after {
+                        font-size: 11px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.stop::after,
+                    .emdr-fullscreen .control-btn.fullscreen::after {
+                        font-size: 10px !important;
+                    }
+                    
+                    .emdr-fullscreen .session-controls {
+                        gap: 6px !important;
                     }
                 }
             `;
@@ -16644,6 +16720,163 @@
         }, 500);
         
         // ============ FIN CORRECTIF FORCÉ BOUTONS PAYSAGE ============
+        
+        // ============ BOUTONS SYMBOLES UNIQUEMENT EN PLEIN ÉCRAN ============
+        
+        // Fonction pour transformer les boutons en symboles uniquement
+        function setButtonsToSymbolsOnly() {
+            const controls = document.querySelector('.emdr-fullscreen .session-controls');
+            if (!controls) return;
+            
+            const buttons = controls.querySelectorAll('.control-btn');
+            buttons.forEach(btn => {
+                if (btn.classList.contains('start')) {
+                    btn.textContent = '▶';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 14px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                } else if (btn.classList.contains('stop')) {
+                    btn.textContent = '⏹';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 12px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                } else if (btn.classList.contains('fullscreen')) {
+                    btn.textContent = '📱';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 12px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                } else if (btn.classList.contains('menu')) {
+                    btn.textContent = '🏠';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 14px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                }
+            });
+            
+            // Réduire l'espacement du container
+            controls.style.cssText += `
+                gap: 4px !important;
+                padding: 4px !important;
+            `;
+            
+            console.log('✅ Boutons transformés en symboles uniquement');
+        }
+        
+        // Fonction pour remettre le texte normal
+        function restoreButtonsText() {
+            const controls = document.querySelector('.session-controls');
+            if (!controls) return;
+            
+            const buttons = controls.querySelectorAll('.control-btn');
+            buttons.forEach(btn => {
+                if (btn.classList.contains('start')) {
+                    btn.innerHTML = '▶️ Démarrer';
+                } else if (btn.classList.contains('stop')) {
+                    btn.innerHTML = '■ Arrêter';
+                } else if (btn.classList.contains('fullscreen')) {
+                    btn.innerHTML = '📺 Plein Écran';
+                } else if (btn.classList.contains('menu')) {
+                    btn.innerHTML = '🏠 Menu';
+                }
+                
+                // Remettre les styles normaux
+                btn.style.width = '';
+                btn.style.height = '';
+                btn.style.padding = '';
+                btn.style.fontSize = '';
+                btn.style.minWidth = '';
+            });
+            
+            console.log('✅ Boutons remis avec texte normal');
+        }
+        
+        // Surcharger la fonction toggleFullscreen pour modifier les boutons
+        setTimeout(() => {
+            const originalToggleFullscreen = window.toggleFullscreen;
+            
+            window.toggleFullscreen = async function() {
+                if (originalToggleFullscreen) {
+                    await originalToggleFullscreen();
+                }
+                
+                // Après le basculement, vérifier si on est en plein écran
+                setTimeout(() => {
+                    const emdrSession = document.getElementById('emdr-session');
+                    const isFullscreenMode = emdrSession && emdrSession.classList.contains('emdr-fullscreen');
+                    
+                    if (isFullscreenMode) {
+                        setButtonsToSymbolsOnly();
+                    } else {
+                        restoreButtonsText();
+                    }
+                }, 200);
+            };
+            
+            console.log('🔧 Fonction toggleFullscreen surchargée pour symboles');
+        }, 1500);
+        
+        // Observer les changements de classe pour automatiser
+        setTimeout(() => {
+            const emdrSession = document.getElementById('emdr-session');
+            if (emdrSession) {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const hasFullscreen = emdrSession.classList.contains('emdr-fullscreen');
+                            
+                            setTimeout(() => {
+                                if (hasFullscreen) {
+                                    setButtonsToSymbolsOnly();
+                                } else {
+                                    restoreButtonsText();
+                                }
+                            }, 100);
+                        }
+                    });
+                });
+                
+                observer.observe(emdrSession, {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+                
+                console.log('👁️ Observer boutons symboles installé');
+            }
+        }, 1600);
+        
+        // ============ FIN BOUTONS SYMBOLES UNIQUEMENT EN PLEIN ÉCRAN ============
         
         // ============ ASSURER POSITION NORMALE BOUTONS ============
         
