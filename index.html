@@ -16328,99 +16328,114 @@
                 @media (max-width: 768px) {
                     .emdr-fullscreen .session-controls {
                         position: fixed !important;
-                        top: 10px !important;
+                        top: 8px !important;
                         left: 50% !important;
                         right: auto !important;
                         bottom: auto !important;
                         transform: translateX(-50%) !important;
                         z-index: 10001 !important;
-                        background: rgba(0,0,0,0.85) !important;
-                        padding: 8px 15px !important;
-                        border-radius: 25px !important;
+                        background: rgba(0,0,0,0.7) !important;
+                        padding: 4px 8px !important;
+                        border-radius: 20px !important;
                         display: flex !important;
                         flex-direction: row !important;
-                        gap: 8px !important;
-                        max-width: 90vw !important;
+                        gap: 4px !important;
+                        max-width: 85vw !important;
                         justify-content: center !important;
                         align-items: center !important;
                     }
                     
                     .emdr-fullscreen .control-btn {
-                        padding: 6px 12px !important;
-                        font-size: 0.75rem !important;
-                        border-radius: 15px !important;
+                        padding: 4px 8px !important;
+                        font-size: 0.65rem !important;
+                        border-radius: 12px !important;
                         min-width: auto !important;
                         white-space: nowrap !important;
                         flex-shrink: 1 !important;
+                        opacity: 0.9 !important;
+                        font-weight: 500 !important;
+                        border: none !important;
+                        text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn:hover {
+                        opacity: 1 !important;
+                        transform: scale(1.05) !important;
                     }
                     
                     /* Instructions en bas pour ne pas gêner */
                     .emdr-fullscreen .floating-instruction {
                         position: fixed !important;
-                        bottom: 15px !important;
+                        bottom: 12px !important;
                         left: 50% !important;
                         transform: translateX(-50%) !important;
                         z-index: 10000 !important;
-                        background: rgba(0,0,0,0.6) !important;
+                        background: rgba(0,0,0,0.5) !important;
                         color: white !important;
-                        padding: 6px 12px !important;
-                        border-radius: 15px !important;
-                        font-size: 0.7rem !important;
-                        max-width: 80vw !important;
+                        padding: 4px 8px !important;
+                        border-radius: 12px !important;
+                        font-size: 0.65rem !important;
+                        max-width: 75vw !important;
                         text-align: center !important;
+                        opacity: 0.8 !important;
                     }
                     
                     .emdr-fullscreen .emdr-instruction {
                         position: fixed !important;
-                        bottom: 15px !important;
+                        bottom: 12px !important;
                         left: 50% !important;
                         transform: translateX(-50%) !important;
                         z-index: 10000 !important;
-                        background: rgba(0,0,0,0.6) !important;
+                        background: rgba(0,0,0,0.5) !important;
                         color: white !important;
-                        padding: 6px 12px !important;
-                        border-radius: 15px !important;
-                        font-size: 0.7rem !important;
-                        max-width: 80vw !important;
+                        padding: 4px 8px !important;
+                        border-radius: 12px !important;
+                        font-size: 0.65rem !important;
+                        max-width: 75vw !important;
                         text-align: center !important;
                         margin: 0 !important;
+                        opacity: 0.8 !important;
                     }
                 }
                 
-                /* Mode portrait mobile - boutons ultra-compacts */
+                /* Mode portrait mobile - boutons ultra-discrets */
                 @media (max-width: 768px) and (orientation: portrait) {
                     .emdr-fullscreen .session-controls {
-                        top: 8px !important;
-                        padding: 6px 12px !important;
-                        gap: 6px !important;
+                        top: 6px !important;
+                        padding: 3px 6px !important;
+                        gap: 3px !important;
+                        background: rgba(0,0,0,0.6) !important;
                     }
                     
                     .emdr-fullscreen .control-btn {
-                        padding: 5px 8px !important;
-                        font-size: 0.7rem !important;
-                        border-radius: 12px !important;
+                        padding: 3px 6px !important;
+                        font-size: 0.6rem !important;
+                        border-radius: 10px !important;
+                        opacity: 0.85 !important;
                     }
                 }
                 
                 /* Mode paysage mobile - boutons très compacts */
                 @media (max-width: 768px) and (orientation: landscape) {
                     .emdr-fullscreen .session-controls {
-                        top: 5px !important;
+                        top: 4px !important;
                         left: 50% !important;
                         right: auto !important;
                         transform: translateX(-50%) !important;
-                        padding: 4px 8px !important;
-                        gap: 8px !important;
-                        max-width: 95vw !important;
+                        padding: 3px 6px !important;
+                        gap: 6px !important;
+                        max-width: 90vw !important;
                         justify-content: space-around !important;
+                        background: rgba(0,0,0,0.6) !important;
                     }
                     
                     .emdr-fullscreen .control-btn {
-                        padding: 4px 8px !important;
-                        font-size: 0.65rem !important;
+                        padding: 3px 6px !important;
+                        font-size: 0.6rem !important;
                         border-radius: 10px !important;
                         flex: 1 !important;
-                        max-width: 100px !important;
+                        max-width: 80px !important;
+                        opacity: 0.85 !important;
                     }
                 }
             `;
