@@ -431,7 +431,7 @@
             text-align: center;
             transform: translateY(100%);
             transition: transform 0.5s ease;
-            z-index: 100;
+            z-index: 15000;
         }
         .question-overlay.visible { transform: translateY(0); }
         .question-text { font-size: 1.3rem; margin: 15px 0; line-height: 1.6; }
@@ -5038,6 +5038,707 @@
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
     </style>
+    
+    <!-- Styles additionnels pour les boutons EMDR améliorés -->
+    <style>
+        /* ============ STYLES BOUTONS EMDR AMÉLIORÉS ============ */
+        .control-btn.start {
+            background: var(--success);
+            color: white;
+        }
+        .control-btn.start:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+        
+        .control-btn.menu {
+            background: var(--secondary);
+            color: #2C3E50;
+        }
+        .control-btn.menu:hover {
+            background: #95c9a8;
+            transform: scale(1.05);
+        }
+
+        .control-btn.stop {
+            background: var(--danger);
+            color: white;
+        }
+        .control-btn.stop:hover {
+            background: #da190b;
+            transform: scale(1.05);
+        }
+
+        .control-btn.fullscreen {
+            background: var(--primary);
+            color: white;
+        }
+        .control-btn.fullscreen:hover {
+            background: #5a8bc4;
+            transform: scale(1.05);
+        }
+
+        /* Espacement des boutons de contrôle EMDR */
+        .session-controls {
+            margin-top: 40px !important;
+            margin-bottom: 30px !important;
+            padding: 20px 0 !important;
+            gap: 12px !important;
+            display: flex !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+        }
+        
+        .control-btn {
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            min-width: 120px !important;
+            margin: 5px !important;
+        }
+
+        /* Instructions EMDR avec plus d'espace */
+        .emdr-instruction {
+            margin-top: 35px !important;
+            padding: 20px !important;
+            background: rgba(255,255,255,0.95) !important;
+            border-radius: 15px !important;
+            backdrop-filter: blur(10px) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        }
+
+        /* Canvas EMDR avec marge pour éviter la collision avec les boutons */
+        #emdr-canvas-portrait {
+            margin-bottom: 20px !important;
+            border-radius: 15px !important;
+        }
+
+        /* Session info avec plus d'espace */
+        .session-info-portrait {
+            margin: 15px 0 !important;
+            padding: 15px !important;
+        }
+
+        /* Plein écran - boutons EN HAUT À DROITE */
+        .emdr-fullscreen .session-controls {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            padding: 12px 15px !important;
+            border-radius: 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            margin: 0 !important;
+            max-width: 200px !important;
+        }
+
+        /* Cacher tous les autres éléments en plein écran */
+        .emdr-fullscreen .tool-header {
+            display: none !important;
+        }
+
+        .emdr-fullscreen .session-info-portrait {
+            position: fixed !important;
+            top: 20px !important;
+            left: 20px !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            margin: 0 !important;
+            padding: 10px 15px !important;
+            border-radius: 15px !important;
+            font-size: 0.9rem !important;
+        }
+
+        .emdr-fullscreen .container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .emdr-fullscreen .emdr-container {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            z-index: 1000 !important;
+        }
+
+        .emdr-fullscreen .control-btn {
+            padding: 8px 15px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            border-radius: 15px !important;
+            min-width: 80px !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Instructions en plein écran - position discrète */
+        .emdr-fullscreen .floating-instruction {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10000 !important;
+            background: rgba(0,0,0,0.6) !important;
+            color: white !important;
+            padding: 8px 15px !important;
+            border-radius: 20px !important;
+            font-size: 0.85rem !important;
+            text-align: center !important;
+            backdrop-filter: blur(4px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            max-width: 300px !important;
+            line-height: 1.3 !important;
+            display: block !important;
+        }
+
+        /* Instruction EMDR en mode normal - visible */
+        .emdr-instruction {
+            margin-top: 30px !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff) !important;
+            border-radius: 15px !important;
+            border-left: 4px solid var(--primary) !important;
+            font-size: 1.1rem !important;
+            color: #2C3E50 !important;
+            text-align: center !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            max-width: 600px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            display: block !important;
+        }
+
+        /* En plein écran - créer une version floating des instructions normales */
+        .emdr-fullscreen .emdr-instruction {
+            position: fixed !important;
+            bottom: 30px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10000 !important;
+            background: rgba(0,0,0,0.8) !important;
+            color: white !important;
+            padding: 12px 24px !important;
+            border-radius: 25px !important;
+            font-size: 1rem !important;
+            font-weight: 500 !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+            backdrop-filter: blur(10px) !important;
+            max-width: 400px !important;
+            margin: 0 !important;
+            border-left: none !important;
+            display: block !important;
+        }
+
+        /* S'assurer que les instructions floating sont visibles */
+        .floating-instruction {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 500;
+            z-index: 50;
+            animation: float 3s ease-in-out infinite;
+            display: block !important;
+        }
+
+        /* Responsive pour les boutons de contrôle */
+        @media (max-width: 768px) {
+            .session-controls {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 10px !important;
+                margin-top: 35px !important;
+                padding: 15px 0 !important;
+            }
+            
+            .control-btn {
+                width: 90% !important;
+                max-width: 250px !important;
+                font-size: 0.95rem !important;
+                padding: 12px 20px !important;
+                min-width: auto !important;
+            }
+            
+            .emdr-instruction {
+                margin-top: 25px !important;
+                padding: 15px !important;
+                font-size: 0.95rem !important;
+            }
+
+            /* Mobile plein écran - boutons compacts en haut à droite */
+            .emdr-fullscreen .session-controls {
+                top: 10px !important;
+                right: 10px !important;
+                padding: 8px 10px !important;
+                max-width: 160px !important;
+                gap: 6px !important;
+            }
+
+            .emdr-fullscreen .control-btn {
+                padding: 6px 10px !important;
+                font-size: 0.8rem !important;
+                border-radius: 12px !important;
+                min-width: 60px !important;
+            }
+
+            .emdr-fullscreen .floating-instruction {
+                bottom: 15px !important;
+                font-size: 0.75rem !important;
+                padding: 6px 12px !important;
+                max-width: 250px !important;
+            }
+        }
+
+        /* Desktop plein écran - boutons bien visibles en haut à droite */
+        @media (min-width: 769px) {
+            .emdr-fullscreen .session-controls {
+                top: 30px !important;
+                right: 30px !important;
+                padding: 15px 18px !important;
+                border-radius: 25px !important;
+                max-width: 220px !important;
+                gap: 10px !important;
+            }
+
+            .emdr-fullscreen .control-btn {
+                padding: 10px 18px !important;
+                font-size: 0.95rem !important;
+                border-radius: 18px !important;
+                min-width: 100px !important;
+            }
+
+            .emdr-fullscreen .floating-instruction {
+                bottom: 30px !important;
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+                border-radius: 25px !important;
+            }
+        }
+
+        /* ============ STYLES EMDR CONTAINER AMÉLIORÉ ============ */
+        
+        /* Container principal EMDR avec espacement optimisé */
+        .emdr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 500px;
+            gap: 20px;
+        }
+
+        /* Canvas EMDR avec dimensions et espacement fixes */
+        #emdr-canvas-portrait {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background: #000;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px !important;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Canvas en plein écran - suppression de tous les cadres */
+        .emdr-fullscreen #emdr-canvas-portrait {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            z-index: 1000 !important;
+            background: #000 !important;
+        }
+
+        /* Point EMDR en plein écran - ajustement pour l'écran complet */
+        .emdr-fullscreen #emdr-dot-portrait {
+            width: 60px !important;
+            height: 60px !important;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 1) !important;
+            z-index: 1001 !important;
+        }
+
+        /* Point EMDR */
+        #emdr-dot-portrait {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+            z-index: 5;
+            transition: all 0.1s ease;
+        }
+
+        /* Info session avec meilleur espacement */
+        .session-info-portrait {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 200px;
+        }
+
+        .session-timer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(107, 155, 209, 0.5);
+        }
+
+        /* Zone de contrôles bien séparée */
+        .session-controls {
+            margin-top: 40px !important;
+            margin-bottom: 20px !important;
+            padding: 20px !important;
+            background: rgba(248, 249, 250, 0.8) !important;
+            border-radius: 20px !important;
+            width: 100% !important;
+            max-width: 600px !important;
+            display: flex !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+            gap: 15px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            backdrop-filter: blur(5px) !important;
+        }
+
+        /* Instructions bien séparées en bas */
+        .emdr-instruction {
+            margin-top: 30px !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff) !important;
+            border-radius: 15px !important;
+            border-left: 4px solid var(--primary) !important;
+            font-size: 1.1rem !important;
+            color: #2C3E50 !important;
+            text-align: center !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            max-width: 600px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        /* Mobile - container adapté */
+        @media (max-width: 768px) {
+            .emdr-container {
+                padding: 15px;
+                margin: 15px 0;
+                min-height: 450px;
+                gap: 15px;
+            }
+
+            #emdr-canvas-portrait {
+                height: 250px;
+                margin-bottom: 20px !important;
+                border-width: 2px;
+            }
+
+            .session-info-portrait {
+                padding: 12px 20px;
+                margin: 15px 0;
+                font-size: 0.95rem;
+            }
+
+            .session-timer {
+                font-size: 1.5rem;
+            }
+
+            .session-controls {
+                margin-top: 30px !important;
+                padding: 15px !important;
+            }
+
+            .emdr-instruction {
+                margin-top: 25px !important;
+                padding: 15px !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* ============ FIN STYLES EMDR CONTAINER ============ */
+
+        /* ============ STYLES DESCRIPTION EMDR ============ */
+        
+        .emdr-description {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .emdr-intro-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .emdr-intro-section h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .emdr-definition {
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .benefit-item h4 {
+            color: var(--primary);
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .benefit-item p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .mechanism-steps {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--primary);
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            margin: 0;
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .efficacy-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: var(--gradient);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1rem !important;
+            opacity: 1 !important;
+            line-height: 1.4;
+            color: white !important;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .safety-alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .safety-alert h4 {
+            color: #856404;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .safety-alert p {
+            color: #856404;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Responsive pour description EMDR */
+        @media (max-width: 768px) {
+            .emdr-description {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .efficacy-stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* ============ FIN STYLES DESCRIPTION EMDR ============ */
+
+        /* Bouton Terminer la session */
+        .btn-back {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+            min-width: 200px;
+        }
+
+        .btn-back:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Navigation dans l'évaluation EMDR */
+        #emdr-evaluation .tool-header {
+            background: white !important;
+            color: #2C3E50 !important;
+        }
+
+        #emdr-evaluation .btn-back-icon {
+            color: var(--primary) !important;
+            background: rgba(107, 155, 209, 0.1) !important;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #emdr-evaluation .btn-back-icon:hover {
+            background: rgba(107, 155, 209, 0.2) !important;
+            transform: scale(1.1);
+        }
+        /* ============ FIN STYLES BOUTONS EMDR ============ */
+    </style>
 </head>
 <body>
     <!-- Recommandation orientation -->
@@ -5417,12 +6118,109 @@
     <div id="emdr-distance" class="screen">
         <header class="tool-header">
             <button class="btn-back-icon" data-back="home-screen">←</button>
-            <h1>Configuration Distance EMDR</h1>
+            <h1>🧠 EMDR - Thérapie par Mouvements Oculaires</h1>
         </header>
         <div class="container">
             <div class="distance-setup">
                 <h2>📏 Distance Optimale</h2>
                 <div class="distance-icon">📱👁️</div>
+                
+                <!-- Description complète de l'EMDR -->
+                <div class="emdr-description">
+                    <div class="emdr-intro-section">
+                        <h2>🧠 Qu'est-ce que l'EMDR ?</h2>
+                        <div class="emdr-definition">
+                            <p><strong>EMDR</strong> signifie <em>Eye Movement Desensitization and Reprocessing</em> (Désensibilisation et Retraitement par les Mouvements Oculaires). Cette thérapie révolutionnaire, développée par Dr. Francine Shapiro en 1987, aide à traiter les traumatismes et les souvenirs perturbants.</p>
+                        </div>
+                    </div>
+
+                    <div class="emdr-benefits-section">
+                        <h3>✨ Les Bienfaits de l'EMDR</h3>
+                        <div class="benefits-grid">
+                            <div class="benefit-item">
+                                <span class="benefit-icon">🎯</span>
+                                <h4>Traitement des Traumatismes</h4>
+                                <p>Efficace pour les traumatismes (PTSD), les chocs émotionnels, et les souvenirs douloureux</p>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-icon">😌</span>
+                                <h4>Réduction de l'Anxiété</h4>
+                                <p>Diminue l'impact émotionnel des phobies, angoisses et peurs</p>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-icon">🔄</span>
+                                <h4>Retraitement Adaptatif</h4>
+                                <p>Transforme les souvenirs négatifs en expériences intégrées et apaisées</p>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-icon">🧘</span>
+                                <h4>Bien-être Mental</h4>
+                                <p>Améliore l'estime de soi et la capacité de gestion émotionnelle</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emdr-mechanism-section">
+                        <h3>🔬 Comment ça fonctionne ?</h3>
+                        <div class="mechanism-steps">
+                            <div class="step-item">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <h4>Activation du Souvenir</h4>
+                                    <p>Vous vous concentrez sur un souvenir ou une situation problématique</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <h4>Stimulation Bilatérale</h4>
+                                    <p>Les mouvements oculaires stimulent alternativement les deux hémisphères cérébraux</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <h4>Retraitement Naturel</h4>
+                                    <p>Le cerveau traite et intègre l'information de manière adaptative</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <h4>Résolution</h4>
+                                    <p>La charge émotionnelle diminue et de nouvelles perspectives émergent</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emdr-efficacy-section">
+                        <h3>📊 Efficacité Scientifique</h3>
+                        <div class="efficacy-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">80%</span>
+                                <span class="stat-label">des patients voient une amélioration significative</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">3-6</span>
+                                <span class="stat-label">séances suffisent souvent pour un trauma simple</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">OMS</span>
+                                <span class="stat-label">Organisation Mondiale de la Santé recommande l'EMDR pour les traumatismes (PTSD)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emdr-safety-note">
+                        <div class="safety-alert">
+                            <h4>⚠️ Important</h4>
+                            <p>Cette application propose une version simplifiée d'auto-traitement. Pour des traumatismes importants, consultez un thérapeute EMDR certifié pour un accompagnement professionnel adapté.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>📏 Configuration & Distance Optimale</h2>
                 
                 <div class="emdr-info-box success">
                     <p><strong>📚 Recherche scientifique (Shapiro, 2001)</strong></p>
@@ -5509,9 +6307,9 @@
             <div class="emdr-settings">
                 <label>Mode Session :
                     <select id="emdr-mode">
-                        <option value="professional">Mode Professionnel (4 séries)</option>
-                        <option value="quick">Mode Rapide (2 minutes)</option>
-                        <option value="standard">Mode Standard (5 minutes)</option>
+                        <option value="professional">Mode Professionnel (12 min continues)</option>
+                        <option value="quick">Mode Rapide (2 min continues)</option>
+                        <option value="standard">Mode Standard (5 min continues)</option>
                     </select>
                 </label>
                 <label>Vitesse :
@@ -5523,7 +6321,7 @@
                 </label>
             </div>
 
-            <button class="btn-primary" onclick="startEMDRSession()">
+            <button class="btn-primary" onclick="startEMDRSessionImproved()">
                 Commencer la session EMDR →
             </button>
         </div>
@@ -5531,7 +6329,7 @@
 
     <!-- EMDR: Session Active -->
     <div id="emdr-session" class="screen">
-        <div id="portrait-version" style="display: none;">
+        <div id="portrait-version">
             <header class="tool-header">
                 <h1>Session EMDR</h1>
             </header>
@@ -5547,10 +6345,16 @@
                     </div>
 
                     <div class="session-controls">
+                        <button class="control-btn start" onclick="startEMDRFixed()" id="start-emdr-btn">
+                            ▶️ Démarrer
+                        </button>
                         <button class="control-btn fullscreen" onclick="toggleFullscreen()" id="fullscreen-btn">
                             📺 Plein Écran
                         </button>
-                        <button class="control-btn stop" onclick="stopEMDRSession()">■ Arrêter</button>
+                        <button class="control-btn stop" onclick="stopEMDRFixed()" id="stop-emdr-btn" style="display: none;">■ Arrêter</button>
+                        <button class="control-btn menu" onclick="returnToMainMenu()" id="menu-btn">
+                            🏠 Menu
+                        </button>
                     </div>
                 </div>
                 
@@ -5624,7 +6428,7 @@
             <button class="btn-primary" onclick="evaluateResults()">
                 Valider mon évaluation
             </button>
-            <button class="btn-back" data-back="home-screen">Terminer</button>
+            <button class="btn-back" onclick="completeEMDREvaluation()">✅ Terminer la session</button>
         </div>
     </div>
 
@@ -7078,8 +7882,8 @@
         let emdrTimerInterval = null;
         let sudBefore = 5;
         let sudAfter = 5;
-        let currentSeries = 0;
-        let totalSeries = 4;
+        window.currentSeries = 0;  // Variable globale
+        window.totalSeries = 4;    // Variable globale
         let questionInterval = null;
         let currentMode = 'portrait';
         let recommendationDismissed = false;
@@ -7779,10 +8583,11 @@
 
         // Questions EMDR
         const EMDR_QUESTIONS = [
+            "Racontez votre souvenir problématique (Trauma, phobie, angoisse etc...) que ce soit à haute voix ou dans votre tête",
             "Que remarquez-vous maintenant ?",
             "Restez concentré sur le souvenir...",
             "Quelles pensées émergent ?",
-            "Continuez à suivre le point des yeux",
+            "Posez votre main sur la zone de votre corps qui est la plus douloureuse quand vous vous connectez à ce souvenir",
             "Que ressentez-vous dans votre corps ?",
             "Laissez venir ce qui vient...",
             "Restez avec l'image du souvenir",
@@ -7941,23 +8746,28 @@
             
             switch(mode) {
                 case 'professional':
-                    totalSeries = 4;
-                    emdrTimeRemaining = 120;
+                    window.totalSeries = 4;
+                    emdrTimeRemaining = 180;
                     break;
                 case 'quick':
-                    totalSeries = 1;
+                    window.totalSeries = 1;
                     emdrTimeRemaining = 120;
                     break;
                 case 'standard':
-                    totalSeries = 2;
+                    window.totalSeries = 2;
                     emdrTimeRemaining = 150;
                     break;
             }
             
-            currentSeries = 1;
+            window.currentSeries = 1;
             document.getElementById('total-series-portrait').textContent = totalSeries;
             
             goToScreen('emdr-session');
+            
+            // Afficher immédiatement le bon timer
+            setTimeout(() => {
+                updateTimer();
+            }, 100);
             
             setTimeout(() => {
                 startEMDRAnimation();
@@ -8035,6 +8845,9 @@
             dot.style.top = ((canvas.offsetHeight / 2) - 25) + 'px';
             
             emdrInterval = setInterval(animate, 50);
+
+            // Afficher le timer initial
+            updateTimer();
             
             emdrTimerInterval = setInterval(() => {
                 emdrTimeRemaining--;
@@ -8042,7 +8855,41 @@
                 
                 if (emdrTimeRemaining <= 0) {
                     stopEMDRAnimation();
-                    completeSeries();
+                    // SÉRIE SUIVANTE GÉRÉE DIRECTEMENT ICI
+                    console.log("⏰ Série terminée:", currentSeries, "/", totalSeries);
+                    
+                    if (window.currentSeries >= window.totalSeries) {
+                        console.log("✅ Toutes les séries terminées");
+                        DataManager.logToolUsage("emdr");
+                        goToScreen("emdr-evaluation");
+                    } else {
+                        console.log("➡️ Passage à la série suivante");
+                        if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                            window.currentSeries++;
+                            document.getElementById("current-series-portrait").textContent = window.currentSeries;
+                            
+                            const mode = document.getElementById("emdr-mode").value;
+                            switch(mode) {
+                                case "professional":
+                                    emdrTimeRemaining = 180;
+                                    break;
+                                case "standard":
+                                    emdrTimeRemaining = 150;
+                                    break;
+                                case "quick":
+                                    emdrTimeRemaining = 120;
+                                    break;
+                                default:
+                                    emdrTimeRemaining = 150;
+                            }
+                            
+                            console.log("🔄 Redémarrage série", currentSeries, "avec", emdrTimeRemaining, "secondes");
+                            startEMDRAnimation();
+                        } else {
+                            DataManager.logToolUsage("emdr");
+                            goToScreen("emdr-evaluation");
+                        }
+                    }
                 }
             }, 1000);
             
@@ -8086,22 +8933,23 @@
             
             setTimeout(() => {
                 overlay.classList.remove('visible');
-            }, 4000);
+            }, 7000);
         }
 
-        function completeSeries() {
-            if (currentSeries >= totalSeries) {
+        // Fonction globale pour gérer les séries EMDR
+        window.completeSeries = function() {
+            if (window.currentSeries >= window.totalSeries) {
                 DataManager.logToolUsage('emdr');
                 goToScreen('emdr-evaluation');
             } else {
-                if (confirm(`Série ${currentSeries}/${totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
-                    currentSeries++;
+                if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                    window.currentSeries++;
                     document.getElementById('current-series-portrait').textContent = currentSeries;
                     
                     const mode = document.getElementById('emdr-mode').value;
                     switch(mode) {
                         case 'professional':
-                            emdrTimeRemaining = 120;
+                            emdrTimeRemaining = 180;
                             break;
                         case 'standard':
                             emdrTimeRemaining = 150;
@@ -8214,6 +9062,9 @@
             }
             
             emdrInterval = setInterval(animate, 50);
+
+            // Afficher le timer initial
+            updateTimer();
             
             emdrTimerInterval = setInterval(() => {
                 emdrTimeRemaining--;
@@ -12437,7 +13288,7 @@
             }
             
             // Cycle de respiration toutes les 4 secondes
-            meditationBreathingInterval = setInterval(breathCycle, 4000);
+            meditationBreathingInterval = setInterval(breathCycle, 7000);
             breathCycle(); // Démarrer immédiatement
         }
 
@@ -12643,7 +13494,7 @@
                     // ANIMATION RESTE en inspiration - PAS DE CHANGEMENT
                     console.log('🫁 RÉTENTION 7s - animation reste en inspiration');
                     
-                }, 4000); // EXACTEMENT 4 secondes
+                }, 7000); // EXACTEMENT 4 secondes
                 
                 setTimeout(() => {
                     if (!isRunning) return;
@@ -13219,7 +14070,7 @@
                     
                     setTimeout(() => {
                         if (isRunning) severeCycle();
-                    }, 4000);
+                    }, 7000);
                     
                 }, 21000); // EXACTEMENT 7+4+10 = 21 secondes
             }
@@ -13623,6 +14474,1857 @@
         }
 
         // ============ FIN FONCTIONS ASTUCES ============
+
+        // ============ NOUVELLES FONCTIONS EMDR AMÉLIORÉES ============
+
+        // Définir les fonctions globalement pour qu'elles soient accessibles
+        window.stopEMDRSessionImproved = function() {
+            console.log('🛑 Bouton Stop cliqué');
+            
+            // Arrêter l'animation immédiatement
+            if (emdrInterval) {
+                clearInterval(emdrInterval);
+                emdrInterval = null;
+            }
+            if (emdrTimerInterval) {
+                clearInterval(emdrTimerInterval);
+                emdrTimerInterval = null;
+            }
+            if (questionInterval) {
+                clearInterval(questionInterval);
+                questionInterval = null;
+            }
+            
+            // Les instructions CSS se gérent automatiquement
+            console.log('📝 Instructions gérées par CSS automatiquement');
+            
+            // Remettre les boutons dans l'état initial
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                    DataManager.logToolUsage('emdr');
+                }
+                // Utiliser la nouvelle fonction pour aller à l'évaluation
+                if (typeof goToEMDREvaluation === 'function') {
+                    goToEMDREvaluation();
+                } else if (typeof goToScreen === 'function') {
+                    goToScreen('emdr-evaluation');
+                } else {
+                    console.error('❌ Fonction de navigation non trouvée');
+                    alert('Erreur : impossible de naviguer vers l\'évaluation');
+                }
+            } else {
+                // Si l'utilisateur annule, NE PAS redémarrer automatiquement
+                // Laisser juste les boutons dans l'état initial
+                console.log('🔄 Arrêt annulé - session prête à redémarrer manuellement');
+            }
+        };
+
+        window.returnToMainMenu = function() {
+            console.log('🏠 Bouton Menu cliqué');
+            
+            // Vérifier d'abord si des animations sont en cours
+            const animationActive = !!(emdrInterval || emdrTimerInterval || questionInterval);
+            console.log('Animation active:', animationActive);
+            
+            if (animationActive) {
+                if (confirm('Voulez-vous vraiment quitter la session EMDR ?\n\nLa session en cours sera perdue.')) {
+                    // Arrêter toutes les animations
+                    if (emdrInterval) {
+                        clearInterval(emdrInterval);
+                        emdrInterval = null;
+                    }
+                    if (emdrTimerInterval) {
+                        clearInterval(emdrTimerInterval);
+                        emdrTimerInterval = null;
+                    }
+                    if (questionInterval) {
+                        clearInterval(questionInterval);
+                        questionInterval = null;
+                    }
+                    
+                    // Les instructions CSS se gérent automatiquement
+                    console.log('📝 Instructions gérées par CSS automatiquement');
+                    
+                    // Naviguer vers le menu
+                    navigateToMainScreen();
+                } else {
+                    console.log('🔄 Retour annulé');
+                }
+            } else {
+                // Pas d'animation en cours, naviguer directement
+                navigateToMainScreen();
+            }
+        };
+
+        // Fonction helper pour la navigation
+        function navigateToMainScreen() {
+            console.log('🔄 Navigation vers l\'écran principal...');
+            
+            // S'assurer de sortir du plein écran
+            if (typeof isFullscreen !== 'undefined' && isFullscreen) {
+                console.log('📺 Sortie du plein écran...');
+                if (typeof exitFullscreen === 'function') {
+                    exitFullscreen().then(() => {
+                        performNavigation();
+                    }).catch(() => {
+                        console.log('⚠️ Erreur sortie plein écran, navigation quand même');
+                        performNavigation();
+                    });
+                } else {
+                    console.log('⚠️ Fonction exitFullscreen non trouvée');
+                    performNavigation();
+                }
+            } else {
+                performNavigation();
+            }
+        }
+
+        // Fonction pour effectuer la navigation réelle
+        function performNavigation() {
+            console.log('🎯 Tentative de navigation...');
+            
+            // Essayer différentes méthodes de navigation avec le bon ID
+            if (typeof window.goToScreen === 'function') {
+                console.log('✅ Utilisation de window.goToScreen');
+                window.goToScreen('home-screen');
+            } else if (typeof goToScreen === 'function') {
+                console.log('✅ Utilisation de goToScreen');
+                goToScreen('home-screen');
+            } else {
+                console.log('⚠️ Fonctions de navigation non trouvées - méthode manuelle');
+                // Méthode manuelle de navigation
+                const currentScreen = document.querySelector('.screen.active');
+                const homeScreen = document.getElementById('home-screen');
+                
+                if (currentScreen) {
+                    currentScreen.classList.remove('active');
+                    console.log('📱 Écran actuel masqué:', currentScreen.id);
+                }
+                if (homeScreen) {
+                    homeScreen.classList.add('active');
+                    console.log('🏠 Écran principal affiché');
+                } else {
+                    console.error('❌ Écran principal (home-screen) non trouvé');
+                    // Essayer avec main-screen au cas où
+                    const mainScreen = document.getElementById('main-screen');
+                    if (mainScreen) {
+                        mainScreen.classList.add('active');
+                        console.log('🏠 Écran main-screen affiché (fallback)');
+                    } else {
+                        console.error('❌ Aucun écran principal trouvé');
+                        alert('Erreur : impossible de revenir au menu principal');
+                    }
+                }
+            }
+        }
+
+        window.startEMDRAnimationImproved = function() {
+            console.log('🎬 Démarrage animation EMDR améliorée');
+            
+            // Gérer l'affichage des boutons
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) {
+                startBtn.style.display = 'none';
+                console.log('👁️ Bouton Démarrer caché');
+            }
+            if (stopBtn) {
+                stopBtn.style.display = 'inline-block';
+                console.log('🛑 Bouton Arrêter affiché');
+            }
+            
+            // S'assurer que les variables globales sont définies
+            if (typeof window.emdrInterval === 'undefined') {
+                window.emdrInterval = null;
+            }
+            if (typeof window.emdrTimerInterval === 'undefined') {
+                window.emdrTimerInterval = null;
+            }
+            if (typeof window.questionInterval === 'undefined') {
+                window.questionInterval = null;
+            }
+            
+            // Les instructions EMDR normales se transformeront automatiquement en plein écran grâce au CSS
+            console.log('📝 Instructions EMDR utilisent le CSS responsive pour le plein écran');
+            
+            // Chercher la fonction originale globalement
+            if (typeof window.startEMDRAnimation === 'function') {
+                console.log('✅ Fonction startEMDRAnimation trouvée globalement');
+                try {
+                    window.startEMDRAnimation();
+                } catch (error) {
+                    console.error('❌ Erreur lors du démarrage EMDR original:', error);
+                    manualStartEMDR();
+                }
+            } else if (typeof startEMDRAnimationOriginal === 'function') {
+                console.log('✅ Fonction startEMDRAnimation originale sauvegardée trouvée');
+                try {
+                    startEMDRAnimationOriginal();
+                } catch (error) {
+                    console.error('❌ Erreur lors du démarrage EMDR sauvegardé:', error);
+                    manualStartEMDR();
+                }
+            } else {
+                console.log('❌ Fonction EMDR originale non trouvée - démarrage manuel');
+                manualStartEMDR();
+            }
+        };
+
+        // Fonction pour remplacer startEMDRSession originale
+        function startEMDRSessionImproved() {
+            sudBefore = parseInt(document.getElementById('sud-before').value);
+            const mode = document.getElementById('emdr-mode').value;
+            
+            // Redimensionner le canvas avant de commencer
+            setTimeout(() => {
+                resizeEMDRCanvas();
+            }, 100);
+            
+            // NOUVEAU: Initialiser notre système Fixed
+            if (!window.emdrSeries) {
+                window.emdrSeries = {
+                    current: 1,
+                    total: 1,
+                    timeRemaining: 120,
+                    mode: mode,
+                    timer: null,
+                    animation: null
+                };
+            }
+            
+            // Configurer selon le mode avec NOTRE système
+            switch(mode) {
+                case 'professional':
+                    window.emdrSeries.total = 1;  // Une seule session
+                    window.emdrSeries.timeRemaining = 720; // 12 minutes
+                    window.totalSeries = 1;  // Pour l'affichage
+                    emdrTimeRemaining = 720; // Pour compatibilité
+                    break;
+                case 'quick':
+                    window.emdrSeries.total = 1;
+                    window.emdrSeries.timeRemaining = 120; // 2 minutes
+                    window.totalSeries = 1;
+                    emdrTimeRemaining = 120;
+                    break;
+                case 'standard':
+                    window.emdrSeries.total = 1;  // Une seule session continue
+                    window.emdrSeries.timeRemaining = 300; // 5 minutes (2,5 × 2)
+                    window.totalSeries = 1;  // Pour l'affichage
+                    emdrTimeRemaining = 300; // Pour compatibilité
+                    break;
+            }
+            
+            window.emdrSeries.mode = mode;
+            window.emdrSeries.current = 1;
+            
+            window.currentSeries = 1;
+            document.getElementById('current-series-portrait').textContent = window.emdrSeries.current;
+            document.getElementById('total-series-portrait').textContent = window.emdrSeries.total;
+            
+            goToScreen('emdr-session');
+            
+            // Afficher immédiatement le bon timer
+            setTimeout(() => {
+                updateTimer();
+            }, 100);
+            
+            // Initialiser l'interface EMDR
+            setTimeout(() => {
+                initializeEMDRInterface();
+            }, 200);
+            
+            // PAS de démarrage automatique - l'utilisateur doit cliquer sur "Démarrer"
+            console.log('🎯 Session EMDR prête - Cliquez sur le bouton Démarrer');
+        }
+
+        // Fonction pour revenir au menu principal depuis EMDR
+        function returnToMainMenu() {
+            console.log('🏠 Bouton Menu cliqué');
+            
+            if (emdrInterval || emdrTimerInterval || questionInterval) {
+                if (confirm('Voulez-vous vraiment quitter la session EMDR ?\n\nLa session en cours sera perdue.')) {
+                    stopEMDRAnimation();
+                    // S'assurer de sortir du plein écran
+                    if (isFullscreen) {
+                        exitFullscreen().then(() => {
+                            goToScreen('main-screen');
+                        }).catch(() => {
+                            goToScreen('main-screen');
+                        });
+                    } else {
+                        goToScreen('main-screen');
+                    }
+                    console.log('🏠 Retour au menu principal depuis EMDR (session arrêtée)');
+                }
+            } else {
+                // S'assurer de sortir du plein écran
+                if (isFullscreen) {
+                    exitFullscreen().then(() => {
+                        goToScreen('main-screen');
+                    }).catch(() => {
+                        goToScreen('main-screen');
+                    });
+                } else {
+                    goToScreen('main-screen');
+                }
+                console.log('🏠 Retour au menu principal depuis EMDR (pas de session active)');
+            }
+        }
+
+        // Améliorer la fonction stopEMDRSession pour mieux gérer les boutons
+        function stopEMDRSessionImproved() {
+            stopEMDRAnimation();
+            
+            // Remettre les boutons dans l'état initial
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                DataManager.logToolUsage('emdr');
+                // Utiliser la nouvelle fonction pour aller à l'évaluation
+                goToEMDREvaluation();
+            } else {
+                // Si l'utilisateur annule, remettre le bouton Stop visible
+                if (startBtn) startBtn.style.display = 'none';
+                if (stopBtn) stopBtn.style.display = 'inline-block';
+                startEMDRAnimation();
+            }
+        }
+
+        // Améliorer startEMDRAnimation pour gérer les boutons
+        function startEMDRAnimationImproved() {
+            console.log('🎬 Démarrage animation EMDR améliorée');
+            
+            // Gérer l'affichage des boutons
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) {
+                startBtn.style.display = 'none';
+                console.log('👁️ Bouton Démarrer caché');
+            }
+            if (stopBtn) {
+                stopBtn.style.display = 'inline-block';
+                console.log('🛑 Bouton Arrêter affiché');
+            }
+            
+            // Chercher la fonction originale globalement
+            if (typeof window.startEMDRAnimation === 'function') {
+                console.log('✅ Fonction startEMDRAnimation trouvée globalement');
+                window.startEMDRAnimation();
+            } else if (startEMDRAnimationOriginal) {
+                console.log('✅ Fonction startEMDRAnimation originale sauvegardée trouvée');
+                startEMDRAnimationOriginal();
+            } else {
+                console.log('❌ Fonction EMDR originale non trouvée - démarrage manuel');
+                // Démarrage manuel de base
+                manualStartEMDR();
+            }
+        }
+
+        // Fonction de démarrage EMDR manuel en cas de problème
+        function manualStartEMDR() {
+            console.log('🔧 Démarrage EMDR manuel');
+            
+            const dot = document.getElementById('emdr-dot-portrait');
+            const canvas = document.getElementById('emdr-canvas-portrait');
+            
+            if (!dot || !canvas) {
+                console.error('❌ Éléments EMDR introuvables pour démarrage manuel');
+                return;
+            }
+
+            // S'assurer que les variables globales existent
+            window.emdrInterval = null;
+            window.emdrTimerInterval = null;
+            window.questionInterval = null;
+
+            // Arrêter toute animation existante
+            if (window.emdrInterval) {
+                clearInterval(window.emdrInterval);
+            }
+            if (window.emdrTimerInterval) {
+                clearInterval(window.emdrTimerInterval);
+            }
+            if (window.questionInterval) {
+                clearInterval(window.questionInterval);
+            }
+
+            // Les instructions floating seront créées automatiquement lors du passage en plein écran
+            console.log('📝 Instructions floating seront créées lors du plein écran');
+
+            // Paramètres de base
+            let direction = 1;
+            let currentX = 25;
+            const cycleDuration = 2500; // Vitesse moyenne
+            let timeRemaining = 120; // 2 minutes par défaut
+
+            function animate() {
+                const isFullscreen = document.getElementById('emdr-session').classList.contains('emdr-fullscreen');
+                
+                let canvasWidth = isFullscreen ? window.innerWidth : canvas.offsetWidth;
+                const canvasHeight = isFullscreen ? window.innerHeight : canvas.offsetHeight;
+                
+                const minX = 25;
+                const maxX = canvasWidth - 25;
+                const increment = (maxX - minX) / (cycleDuration / 50);
+                
+                currentX += increment * direction;
+                
+                if (currentX >= maxX) {
+                    currentX = maxX;
+                    direction = -1;
+                } else if (currentX <= minX) {
+                    currentX = minX;
+                    direction = 1;
+                }
+                
+                dot.style.left = (currentX - 25) + 'px';
+                dot.style.top = (canvasHeight / 2 - 25) + 'px';
+            }
+
+            function updateTimer() {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                const timer = document.getElementById('session-timer-portrait');
+                if (timer) timer.textContent = timeStr;
+            }
+
+            // Démarrer l'animation
+            window.emdrInterval = setInterval(animate, 50);
+
+            // Afficher le timer initial
+            updateTimer();
+            
+            // Démarrer le timer
+            updateTimer();
+            window.emdrTimerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimer();
+                
+                if (timeRemaining <= 0) {
+                    console.log('⏰ Timer EMDR terminé - Série:', currentSeries, 'Total:', totalSeries);
+                    
+                    // Arrêter l'animation
+                    if (window.emdrInterval) {
+                        clearInterval(window.emdrInterval);
+                        window.emdrInterval = null;
+                    }
+                    if (window.emdrTimerInterval) {
+                        clearInterval(window.emdrTimerInterval);
+                        window.emdrTimerInterval = null;
+                    }
+                    
+                    // Appeler completeSeries pour gérer les séries
+                    if (typeof window.completeSeries === 'function') {
+                        console.log('📞 Appel de window.completeSeries');
+                        window.// SÉRIE SUIVANTE GÉRÉE DIRECTEMENT ICI
+                    console.log("⏰ Série terminée:", currentSeries, "/", totalSeries);
+                    
+                    if (window.currentSeries >= window.totalSeries) {
+                        console.log("✅ Toutes les séries terminées");
+                        DataManager.logToolUsage("emdr");
+                        goToScreen("emdr-evaluation");
+                    } else {
+                        console.log("➡️ Passage à la série suivante");
+                        if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                            window.currentSeries++;
+                            document.getElementById("current-series-portrait").textContent = window.currentSeries;
+                            
+                            const mode = document.getElementById("emdr-mode").value;
+                            switch(mode) {
+                                case "professional":
+                                    emdrTimeRemaining = 180;
+                                    break;
+                                case "standard":
+                                    emdrTimeRemaining = 150;
+                                    break;
+                                case "quick":
+                                    emdrTimeRemaining = 120;
+                                    break;
+                                default:
+                                    emdrTimeRemaining = 150;
+                            }
+                            
+                            console.log("🔄 Redémarrage série", currentSeries, "avec", emdrTimeRemaining, "secondes");
+                            startEMDRAnimation();
+                        } else {
+                            DataManager.logToolUsage("emdr");
+                            goToScreen("emdr-evaluation");
+                        }
+                    }
+                    } else {
+                        console.error('❌ completeSeries non accessible');
+                        // Fallback - remettre les boutons
+                        const startBtn = document.getElementById('start-emdr-btn');
+                        const stopBtn = document.getElementById('stop-emdr-btn');
+                        if (startBtn) startBtn.style.display = 'inline-block';
+                        if (stopBtn) stopBtn.style.display = 'none';
+                        
+                        alert('✨ Session EMDR terminée !');
+                    }
+                }
+            }, 1000);
+            
+            console.log('✅ Animation EMDR manuelle démarrée');
+        }
+
+        // Fonction pour créer les instructions floating SEULEMENT en plein écran
+        function createFloatingInstructions() {
+            console.log('📝 Vérification du mode plein écran...');
+            
+            // Vérifier si on est vraiment en plein écran
+            const emdrSession = document.getElementById('emdr-session');
+            const isFullscreenMode = emdrSession && emdrSession.classList.contains('emdr-fullscreen');
+            
+            if (!isFullscreenMode) {
+                console.log('⚠️ Pas en plein écran - instructions floating NON créées');
+                return;
+            }
+            
+            console.log('📝 Mode plein écran confirmé - création des instructions floating...');
+            
+            // Supprimer les instructions existantes
+            const existingInstructions = document.querySelectorAll('.floating-instruction, #emdr-floating-instruction');
+            existingInstructions.forEach(el => {
+                el.remove();
+                console.log('🗑️ Instruction existante supprimée');
+            });
+            
+            // Créer une nouvelle instruction floating
+            const instruction = document.createElement('div');
+            instruction.className = 'floating-instruction';
+            instruction.id = 'emdr-floating-instruction';
+            instruction.textContent = 'Suivez le point avec vos yeux, sans bouger la tête';
+            
+            // Styles pour assurer la visibilité EN PLEIN ÉCRAN UNIQUEMENT
+            instruction.style.cssText = `
+                position: fixed !important;
+                bottom: 30px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                background: rgba(0,0,0,0.7) !important;
+                color: white !important;
+                padding: 10px 20px !important;
+                border-radius: 20px !important;
+                font-size: 0.9rem !important;
+                font-weight: 500 !important;
+                text-align: center !important;
+                z-index: 10000 !important;
+                backdrop-filter: blur(5px) !important;
+                border: 1px solid rgba(255,255,255,0.2) !important;
+                box-shadow: 0 2px 15px rgba(0,0,0,0.3) !important;
+                max-width: 350px !important;
+                line-height: 1.3 !important;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: none !important;
+            `;
+            
+            // L'ajouter au body SEULEMENT si on est en plein écran
+            document.body.appendChild(instruction);
+            
+            console.log('✅ Instructions floating créées pour le plein écran');
+        }
+
+        // Fonction pour nettoyer les instructions floating
+        function cleanupFloatingInstructions() {
+            const instructions = document.querySelectorAll('.floating-instruction, #emdr-floating-instruction');
+            instructions.forEach(el => el.remove());
+            console.log('🧹 Instructions floating nettoyées');
+        }
+
+        // Sauvegarder la fonction startEMDRAnimation originale
+        let startEMDRAnimationOriginal = null;
+
+        // Améliorer la sortie du plein écran pour l'évaluation
+        function exitFullscreenForEvaluation() {
+            if (isFullscreen) {
+                return exitFullscreen().then(() => {
+                    console.log('✅ Plein écran quitté pour l\'évaluation');
+                });
+            }
+            return Promise.resolve();
+        }
+
+        // Améliorer la fonction completeSeries pour gérer le plein écran
+        function completeSeriesImproved() {
+            if (window.currentSeries >= window.totalSeries) {
+                DataManager.logToolUsage('emdr');
+                // Utiliser la nouvelle fonction pour aller à l'évaluation
+                goToEMDREvaluation();
+            } else {
+                if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                    window.currentSeries++;
+                    document.getElementById('current-series-portrait').textContent = currentSeries;
+                    
+                    const mode = document.getElementById('emdr-mode').value;
+                    switch(mode) {
+                        case 'professional':
+                            emdrTimeRemaining = 180;
+                            break;
+                        case 'standard':
+                            emdrTimeRemaining = 150;
+                            break;
+                        case 'quick':
+                            emdrTimeRemaining = 120;
+                            break;
+                        default:
+                            emdrTimeRemaining = 150;
+                    }
+                    
+                    startEMDRAnimation();
+                } else {
+                    DataManager.logToolUsage('emdr');
+                    // Utiliser la nouvelle fonction pour aller à l'évaluation
+                    goToEMDREvaluation();
+                }
+            }
+        }
+
+        // Initialisation pour remplacer les fonctions existantes
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initialisation EMDR améliorée...');
+            
+            // Sauvegarder la fonction originale si elle existe
+            setTimeout(() => {
+                if (typeof window.startEMDRAnimation === 'function') {
+                    startEMDRAnimationOriginal = window.startEMDRAnimation;
+                    console.log('✅ Fonction startEMDRAnimation sauvegardée');
+                } else {
+                    console.log('⚠️ Fonction startEMDRAnimation non trouvée');
+                }
+                
+                // Remplacer la fonction startEMDRSession originale
+                if (typeof window.startEMDRSession === 'function') {
+                    window.startEMDRSession = startEMDRSessionImproved;
+                    console.log('✅ Fonction startEMDRSession remplacée');
+                }
+
+                // Forcer le remplacement de completeSeries
+                window.completeSeries = function() {
+                    console.log('🔄 SÉRIE TERMINÉE - Série actuelle:', typeof currentSeries !== 'undefined' ? currentSeries : 'undefined', 'Total séries:', typeof totalSeries !== 'undefined' ? totalSeries : 'undefined');
+                    
+                    if (typeof currentSeries === 'undefined' || typeof totalSeries === 'undefined') {
+                        console.error('❌ Variables currentSeries ou totalSeries non définies');
+                        // Utiliser la fonction d'évaluation par défaut
+                        if (typeof goToEMDREvaluation === 'function') {
+                            goToEMDREvaluation();
+                        } else {
+                            goToScreen('emdr-evaluation');
+                        }
+                        return;
+                    }
+                    
+                    if (window.currentSeries >= window.totalSeries) {
+                        console.log('✅ TOUTES LES SÉRIES TERMINÉES - Passage à l\'évaluation');
+                        if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                            DataManager.logToolUsage('emdr');
+                        }
+                        if (typeof goToEMDREvaluation === 'function') {
+                            goToEMDREvaluation();
+                        } else {
+                            goToScreen('emdr-evaluation');
+                        }
+                    } else {
+                        console.log('➡️ SÉRIE SUIVANTE - Passage de', currentSeries, 'à', currentSeries + 1);
+                        if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                            window.currentSeries++;
+                            document.getElementById('current-series-portrait').textContent = currentSeries;
+                            
+                            const mode = document.getElementById('emdr-mode').value;
+                            console.log('🔧 Mode:', mode, '- Configuration temps pour série', currentSeries);
+                            
+                            switch(mode) {
+                                case 'professional':
+                                    emdrTimeRemaining = 180; // 3 minutes
+                                    console.log('⏱️ Mode professionnel: 180 secondes');
+                                    break;
+                                case 'standard':
+                                    emdrTimeRemaining = 150; // 2,5 minutes
+                                    console.log('⏱️ Mode standard: 150 secondes');
+                                    break;
+                                case 'quick':
+                                    emdrTimeRemaining = 120; // 2 minutes
+                                    console.log('⏱️ Mode rapide: 120 secondes');
+                                    break;
+                                default:
+                                    emdrTimeRemaining = 150;
+                                    console.log('⏱️ Mode par défaut: 150 secondes');
+                            }
+                            
+                            // Redémarrer l'animation
+                            if (typeof window.startEMDRAnimation === 'function') {
+                                console.log('🎬 Redémarrage avec startEMDRAnimation');
+                                startEMDRAnimation();
+                            } else if (typeof startEMDRAnimationImproved === 'function') {
+                                console.log('🎬 Redémarrage avec startEMDRAnimationImproved');
+                                startEMDRAnimationImproved();
+                            } else {
+                                console.error('❌ Aucune fonction de démarrage trouvée');
+                            }
+                        } else {
+                            console.log('🚫 Utilisateur a annulé - Passage à l\'évaluation');
+                            if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                                DataManager.logToolUsage('emdr');
+                            }
+                            if (typeof goToEMDREvaluation === 'function') {
+                                goToEMDREvaluation();
+                            } else {
+                                goToScreen('emdr-evaluation');
+                            }
+                        }
+                    }
+                };
+                
+                console.log('✅ completeSeries forcément remplacée avec logging détaillé');
+
+                // Tester les fonctions EMDR
+                testEMDRFunctions();
+                
+                // Forcer l'assignation des boutons
+                forceAssignEMDRButtons();
+                
+                // Test final
+                setTimeout(() => {
+                    console.log('🔍 Test final après assignation...');
+                    testEMDRFunctions();
+                    
+                    // Information sur les modes EMDR
+                    console.log('📋 MODES EMDR CONFIGURÉS:');
+                    console.log('- Professionnel: 4 séries × 3 min = 12 min');
+                    console.log('- Standard: 2 séries × 2.5 min = 5 min');
+                    console.log('- Rapide: 1 série × 2 min = 2 min');
+                    console.log('💡 Tapez debugEMDRSeries() pour diagnostiquer');
+                }, 500);
+                
+                console.log('✅ Initialisation EMDR terminée');
+            }, 500);
+
+            // Ajouter gestionnaire pour sortir automatiquement du plein écran
+            const originalGoToScreen = window.goToScreen;
+            if (originalGoToScreen) {
+                window.goToScreen = function(screenId) {
+                    // Si on quitte l'écran EMDR et qu'on est en plein écran
+                    if (isFullscreen && 
+                        (screenId !== 'emdr-session' && screenId !== 'emdr-distance' && screenId !== 'emdr-preparation')) {
+                        console.log('🔄 Sortie automatique du plein écran (changement d\'écran)');
+                        exitFullscreen().then(() => {
+                            originalGoToScreen(screenId);
+                        }).catch(() => {
+                            // En cas d'erreur, continuer quand même
+                            originalGoToScreen(screenId);
+                        });
+                    } else {
+                        originalGoToScreen(screenId);
+                    }
+                };
+            }
+
+            // Gestionnaire pour la touche Échap en plein écran
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && isFullscreen) {
+                    console.log('⌨️ Touche Échap détectée - Sortie du plein écran');
+                    exitFullscreen();
+                }
+            });
+
+            // Gestionnaire pour les changements d'état du plein écran
+            document.addEventListener('fullscreenchange', function() {
+                if (!document.fullscreenElement && isFullscreen) {
+                    console.log('📺 Sortie détectée du plein écran par l\'utilisateur');
+                    isFullscreen = false;
+                    const emdrSession = document.getElementById('emdr-session');
+                    if (emdrSession) {
+                        emdrSession.classList.remove('emdr-fullscreen');
+                    }
+                    updateFullscreenButtons('📺 Plein Écran');
+                    // Les instructions CSS se gèrent automatiquement
+                    console.log('📝 Instructions CSS gérées automatiquement');
+                }
+            });
+        });
+
+        // ============ FIN NOUVELLES FONCTIONS EMDR ============
+
+        // ============ TEST ET DEBUG FONCTIONS EMDR ============
+        
+        // Test des fonctions EMDR
+        function testEMDRFunctions() {
+            console.log('🧪 Test des fonctions EMDR...');
+            
+            console.log('stopEMDRSessionImproved:', typeof window.stopEMDRSessionImproved);
+            console.log('returnToMainMenu:', typeof window.returnToMainMenu);
+            console.log('startEMDRAnimationImproved:', typeof window.startEMDRAnimationImproved);
+            
+            // Test direct des boutons
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            
+            console.log('Bouton Start trouvé:', !!startBtn);
+            console.log('Bouton Stop trouvé:', !!stopBtn);
+            console.log('Bouton Menu trouvé:', !!menuBtn);
+            
+            if (stopBtn) {
+                console.log('Onclick Stop actuel:', stopBtn.getAttribute('onclick'));
+            }
+            if (menuBtn) {
+                console.log('Onclick Menu actuel:', menuBtn.getAttribute('onclick'));
+            }
+
+            // Diagnostic des écrans disponibles
+            console.log('🔍 Écrans disponibles:');
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                const isActive = screen.classList.contains('active');
+                console.log(`- ${screen.id}: ${isActive ? 'ACTIF' : 'inactif'}`);
+            });
+        }
+
+        // Forcer l'assignation des fonctions aux boutons
+        function forceAssignEMDRButtons() {
+            console.log('🔧 Assignation forcée des boutons EMDR...');
+            
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            const startBtn = document.getElementById('start-emdr-btn');
+            
+            if (stopBtn) {
+                stopBtn.onclick = function() {
+                    console.log('🛑 Stop cliqué via onclick');
+                    window.stopEMDRSessionImproved();
+                };
+                console.log('✅ Bouton Stop assigné');
+            }
+            
+            if (menuBtn) {
+                menuBtn.onclick = function() {
+                    console.log('🏠 Menu cliqué via onclick');
+                    window.returnToMainMenu();
+                };
+                console.log('✅ Bouton Menu assigné');
+            }
+            
+            if (startBtn) {
+                startBtn.onclick = function() {
+                    console.log('▶️ Start cliqué via onclick');
+                    window.startEMDRAnimationImproved();
+                };
+                console.log('✅ Bouton Start assigné');
+            }
+        }
+
+        // ============ FIN TEST ET DEBUG ============
+
+        // ============ FONCTION DIAGNOSTIC NAVIGATION ============
+        
+        // Fonction globale pour diagnostiquer les problèmes de navigation
+        window.debugNavigation = function() {
+            console.log('🔍 DIAGNOSTIC NAVIGATION');
+            console.log('========================');
+            
+            // Vérifier les fonctions de navigation
+            console.log('goToScreen (global):', typeof window.goToScreen);
+            console.log('goToScreen (local):', typeof goToScreen);
+            
+            // Lister tous les écrans
+            const screens = document.querySelectorAll('.screen');
+            console.log(`📱 ${screens.length} écrans trouvés:`);
+            screens.forEach((screen, index) => {
+                const isActive = screen.classList.contains('active');
+                const isVisible = screen.style.display !== 'none';
+                console.log(`${index + 1}. ${screen.id}: ${isActive ? '🟢 ACTIF' : '⚫ inactif'} ${isVisible ? '👁️ visible' : '🙈 caché'}`);
+            });
+            
+            // Test de navigation vers home-screen
+            console.log('🧪 Test navigation vers home-screen...');
+            try {
+                performNavigation();
+                console.log('✅ Navigation testée');
+            } catch (error) {
+                console.error('❌ Erreur navigation:', error);
+            }
+        };
+
+        // ============ FIN DIAGNOSTIC NAVIGATION ============
+
+        // ============ FONCTION DEBUG SÉRIES EMDR ============
+        
+        // Fonction pour débugger les séries EMDR
+        window.debugEMDRSeries = function() {
+            console.log('🔍 DEBUG SÉRIES EMDR');
+            console.log('====================');
+            
+            const mode = document.getElementById('emdr-mode') ? document.getElementById('emdr-mode').value : 'non défini';
+            console.log('Mode sélectionné:', mode);
+            console.log('Série actuelle:', typeof currentSeries !== 'undefined' ? currentSeries : 'non défini');
+            console.log('Total séries:', typeof totalSeries !== 'undefined' ? totalSeries : 'non défini');
+            console.log('Temps restant:', typeof emdrTimeRemaining !== 'undefined' ? emdrTimeRemaining : 'non défini');
+            
+            console.log('Fonction completeSeries type:', typeof window.completeSeries);
+            console.log('Fonction completeSeriesImproved type:', typeof completeSeriesImproved);
+            
+            // Test de la logique
+            if (typeof currentSeries !== 'undefined' && typeof totalSeries !== 'undefined') {
+                console.log('Est-ce la dernière série ?', window.currentSeries >= window.totalSeries);
+                console.log('Séries restantes:', totalSeries - currentSeries);
+            }
+        };
+
+        // ============ FIN DEBUG SÉRIES EMDR ============
+
+        // ============ FONCTION TEST SIMPLE ============
+        
+        // Test simple des variables EMDR
+        window.testEMDR = function() {
+            console.log('=== TEST EMDR ===');
+            console.log('currentSeries:', typeof currentSeries !== 'undefined' ? currentSeries : 'UNDEFINED');
+            console.log('totalSeries:', typeof totalSeries !== 'undefined' ? totalSeries : 'UNDEFINED'); 
+            console.log('emdrTimeRemaining:', typeof emdrTimeRemaining !== 'undefined' ? emdrTimeRemaining : 'UNDEFINED');
+            console.log('Mode sélectionné:', document.getElementById('emdr-mode') ? document.getElementById('emdr-mode').value : 'ELEMENT NON TROUVÉ');
+            
+            // Force le passage à la série suivante pour test
+            if (typeof currentSeries !== 'undefined' && typeof totalSeries !== 'undefined') {
+                console.log('🧪 Test: passage forcé à la série suivante');
+                if (currentSeries < totalSeries) {
+                    window.currentSeries++;
+                    document.getElementById('current-series-portrait').textContent = currentSeries;
+                    console.log('✅ Série forcée à:', currentSeries);
+                }
+            }
+        };
+
+        // ============ FIN FONCTION TEST ============
+
+        // ============ DIAGNOSTIC COMPLET ============
+        
+        window.diagnosticEMDR = function() {
+            console.clear();
+            console.log("🔧 === DIAGNOSTIC COMPLET EMDR ===");
+            
+            // 1. Variables globales
+            console.log("📊 VARIABLES GLOBALES:");
+            console.log("   window.currentSeries =", window.currentSeries, "(type:", typeof window.currentSeries, ")");
+            console.log("   window.totalSeries =", window.totalSeries, "(type:", typeof window.totalSeries, ")");
+            
+            // 2. Interface
+            console.log("🖥️ INTERFACE:");
+            const mode = document.getElementById('emdr-mode');
+            console.log("   Mode sélectionné =", mode ? mode.value : "ÉLÉMENT NON TROUVÉ");
+            const currentDisplay = document.getElementById('current-series-portrait');
+            const totalDisplay = document.getElementById('total-series-portrait');
+            console.log("   Affichage série actuelle =", currentDisplay ? currentDisplay.textContent : "NON TROUVÉ");
+            console.log("   Affichage total séries =", totalDisplay ? totalDisplay.textContent : "NON TROUVÉ");
+            
+            // 3. Test de la condition critique
+            console.log("🧪 TEST CONDITION:");
+            const condition = window.currentSeries >= window.totalSeries;
+            console.log("   (", window.currentSeries, ">=", window.totalSeries, ") =", condition);
+            if (condition) {
+                console.log("   ❌ PROBLÈME: Condition vraie → ira directement à l'évaluation");
+                console.log("   💡 Solution: currentSeries devrait être < totalSeries");
+            } else {
+                console.log("   ✅ OK: Condition fausse → passera à la série suivante");
+            }
+            
+            // 4. Fonctions disponibles
+            console.log("🛠️ FONCTIONS DE TEST:");
+            console.log("   fixEMDRVariables() - Corrige les variables");
+            console.log("   simulateSeriesEnd() - Simule la fin d'une série");
+            console.log("   resetEMDR() - Remet à zéro");
+        };
+
+        // Fonction pour corriger les variables
+        window.fixEMDRVariables = function() {
+            const mode = document.getElementById('emdr-mode').value;
+            window.currentSeries = 1;
+            
+            switch(mode) {
+                case 'professional':
+                    window.totalSeries = 4;
+                    break;
+                case 'standard':
+                    window.totalSeries = 2;
+                    break;
+                case 'quick':
+                    window.totalSeries = 1;
+                    break;
+            }
+            
+            document.getElementById('current-series-portrait').textContent = window.currentSeries;
+            document.getElementById('total-series-portrait').textContent = window.totalSeries;
+            
+            console.log("✅ Variables corrigées:", window.currentSeries, "/", window.totalSeries);
+        };
+
+        // Fonction pour simuler la fin d'une série
+        window.simulateSeriesEnd = function() {
+            console.log("🎭 Simulation fin de série...");
+            
+            if (window.currentSeries >= window.totalSeries) {
+                console.log("➡️ Ira à l'évaluation");
+            } else {
+                console.log("➡️ Passera à la série", window.currentSeries + 1);
+                window.currentSeries++;
+                document.getElementById('current-series-portrait').textContent = window.currentSeries;
+            }
+        };
+
+        // ============ FIN DIAGNOSTIC COMPLET ============
+
+        // ============ SOLUTION DEFINITIVE EMDR ============
+        
+        // Variables globales EMDR (forcées)
+        window.emdrSeries = {
+            current: 1,
+            total: 4,
+            timeRemaining: 180,
+            mode: 'professional',
+            timer: null,
+            animation: null
+        };
+
+        // Forcer la variable emdrTimeRemaining globale aussi
+        window.emdrTimeRemaining = 180;
+
+        // Fonction de démarrage EMDR qui fonctionne VRAIMENT
+        window.startEMDRFixed = function() {
+            console.log("🔥 === DÉMARRAGE EMDR FIXED ===");
+            
+            // 1. Récupérer le mode
+            const mode = document.getElementById('emdr-mode').value;
+            window.emdrSeries.mode = mode;
+            
+            // 2. Configurer selon le mode
+            switch(mode) {
+                case 'professional':
+                    window.emdrSeries.total = 1;  // Une seule session longue
+                    window.emdrSeries.timeRemaining = 720; // 12 minutes (3min × 4)
+                    window.emdrTimeRemaining = 720; // Forcer aussi la variable globale
+                    break;
+                case 'standard':
+                    window.emdrSeries.total = 1;  // Une seule session continue
+                    window.emdrSeries.timeRemaining = 300; // 5 minutes (2,5min × 2)
+                    window.emdrTimeRemaining = 300;
+                    break;
+                case 'quick':
+                    window.emdrSeries.total = 1;
+                    window.emdrSeries.timeRemaining = 120;
+                    window.emdrTimeRemaining = 120;
+                    break;
+            }
+            
+            // 3. Réinitialiser la série actuelle
+            window.emdrSeries.current = 1;
+            
+            console.log("⚙️ Configuration:", window.emdrSeries);
+            
+            // 4. Mettre à jour l'interface
+            document.getElementById('current-series-portrait').textContent = window.emdrSeries.current;
+            document.getElementById('total-series-portrait').textContent = window.emdrSeries.total;
+            
+            // 5. Démarrer l'animation et le timer
+            startEMDRTimerFixed();
+            
+            // 6. Masquer le bouton démarrer, afficher arrêter
+            document.getElementById('start-emdr-btn').style.display = 'none';
+            document.getElementById('stop-emdr-btn').style.display = 'inline-block';
+        };
+
+        // Timer EMDR qui gère correctement les séries
+        function startEMDRTimerFixed() {
+            console.log("⏱️ Démarrage timer série", window.emdrSeries.current, "/", window.emdrSeries.total);
+            
+            // Démarrer l'animation visuelle (utiliser l'existante)
+            const speed = document.getElementById('emdr-speed').value;
+            startVisualAnimation(speed);
+            
+            // Afficher le timer initial
+            updateTimerFixed();
+            
+            // Démarrer le décompte
+            window.emdrSeries.timer = setInterval(() => {
+                window.emdrSeries.timeRemaining--;
+                window.emdrTimeRemaining = window.emdrSeries.timeRemaining; // Synchroniser
+                updateTimerFixed();
+                
+                if (window.emdrSeries.timeRemaining <= 0) {
+                    endSeriesFixed();
+                }
+            }, 1000);
+        }
+
+        // Mise à jour de l'affichage du timer
+        function updateTimerFixed() {
+            const minutes = Math.floor(window.emdrSeries.timeRemaining / 60);
+            const seconds = window.emdrSeries.timeRemaining % 60;
+            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timer = document.getElementById('session-timer-portrait');
+            if (timer) timer.textContent = timeStr;
+        }
+
+        // Gestion de la fin d'une série
+        function endSeriesFixed() {
+            console.log("🏁 Fin de session", window.emdrSeries.mode);
+            
+            // Arrêter le timer
+            if (window.emdrSeries.timer) {
+                clearInterval(window.emdrSeries.timer);
+                window.emdrSeries.timer = null;
+            }
+            
+            // Arrêter l'animation
+            stopVisualAnimation();
+            
+            // Message selon le mode
+            let message = '';
+            switch(window.emdrSeries.mode) {
+                case 'professional':
+                    message = '🎉 Session EMDR professionnelle terminée !\n\n12 minutes de traitement EMDR complétées.\nPassage à l\'évaluation finale...';
+                    break;
+                case 'standard':
+                    message = '✨ Session EMDR standard terminée !\n\n5 minutes de traitement EMDR complétées.\nPassage à l\'évaluation finale...';
+                    break;
+                case 'quick':
+                    message = '⚡ Session EMDR rapide terminée !\n\n2 minutes de traitement EMDR complétées.\nPassage à l\'évaluation finale...';
+                    break;
+                default:
+                    message = '✨ Session EMDR terminée !';
+            }
+            
+            alert(message);
+            
+            // Remettre les boutons
+            document.getElementById('start-emdr-btn').style.display = 'inline-block';
+            document.getElementById('stop-emdr-btn').style.display = 'none';
+            
+            // Aller à l'évaluation
+            DataManager.logToolUsage('emdr');
+            goToScreen('emdr-evaluation');
+        }
+
+        // Fonctions pour démarrer/arrêter l'animation visuelle
+        function startVisualAnimation(speed) {
+            // Utiliser le code d'animation existant mais sans le timer
+            const canvas = document.getElementById('emdr-canvas');
+            const dot = document.getElementById('emdr-dot');
+            
+            if (!canvas || !dot) return;
+            
+            let direction = 1;
+            let position = 0;
+            const maxPosition = canvas.offsetWidth - 50;
+            const animationSpeed = parseInt(speed) || 50;
+            
+            function animate() {
+                position += direction * 3;
+                
+                if (position >= maxPosition || position <= 0) {
+                    direction *= -1;
+                }
+                
+                dot.style.left = position + 'px';
+            }
+            
+            window.emdrSeries.animation = setInterval(animate, animationSpeed);
+        }
+
+        function stopVisualAnimation() {
+            if (window.emdrSeries.animation) {
+                clearInterval(window.emdrSeries.animation);
+                window.emdrSeries.animation = null;
+            }
+        }
+
+        // Fonction d'arrêt EMDR
+        window.stopEMDRFixed = function() {
+            console.log("🛑 Arrêt EMDR demandé");
+            
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                // Arrêter tout
+                if (window.emdrSeries.timer) {
+                    clearInterval(window.emdrSeries.timer);
+                    window.emdrSeries.timer = null;
+                }
+                stopVisualAnimation();
+                
+                // Remettre les boutons
+                document.getElementById('start-emdr-btn').style.display = 'inline-block';
+                document.getElementById('stop-emdr-btn').style.display = 'none';
+                
+                // Aller à l'évaluation
+                DataManager.logToolUsage('emdr');
+                goToScreen('emdr-evaluation');
+            }
+        };
+
+        // ============ FIN SOLUTION DEFINITIVE ============
+
+        // ============ FONCTION SCROLL AUTOMATIQUE ============
+        
+        // Fonction pour scroller en haut de la page
+        function scrollToTop() {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+
+        // ============ FIN FONCTION SCROLL ============
+
+        // (Ancienne surcharge supprimée - remplacée par la version directe plus bas)
+
+        // ============ FONCTION NAVIGATION EMDR ÉVALUATION ============
+        
+        // Fonction spécifique pour aller à l'évaluation EMDR
+        function goToEMDREvaluation() {
+            console.log('🎯 Navigation vers évaluation EMDR...');
+            
+            // S'assurer de sortir du plein écran avant l'évaluation
+            if (isFullscreen) {
+                console.log('📺 Sortie du plein écran pour évaluation...');
+                exitFullscreen().then(() => {
+                    console.log('✅ Plein écran quitté, navigation vers évaluation');
+                    goToScreen('emdr-evaluation');
+                }).catch((error) => {
+                    console.log('⚠️ Erreur sortie plein écran:', error);
+                    // Essayer la navigation quand même
+                    goToScreen('emdr-evaluation');
+                });
+            } else {
+                console.log('📋 Navigation directe vers évaluation (pas en plein écran)');
+                goToScreen('emdr-evaluation');
+            }
+        }
+
+        // ============ FIN FONCTION NAVIGATION EMDR ============
+
+        // ============ FONCTIONS NAVIGATION ÉVALUATION EMDR ============
+
+        // Fonction pour revenir à la session EMDR depuis l'évaluation
+        function returnToEMDRSession() {
+            if (confirm('Voulez-vous vraiment revenir à la session EMDR ?\n\nVotre évaluation en cours sera perdue.')) {
+                console.log('🔙 Retour à la session EMDR depuis évaluation');
+                goToScreen('emdr-session');
+            
+            // Afficher immédiatement le bon timer
+            setTimeout(() => {
+                updateTimer();
+            }, 100);
+            }
+        }
+
+        // Fonction pour terminer complètement la session EMDR et revenir au menu
+        function finishEMDRSession() {
+            console.log('✅ Session EMDR terminée - Retour au menu principal');
+            DataManager.logToolUsage('emdr-completed');
+            goToScreen('main-screen');
+        }
+
+        // Fonction améliorée pour remplacer le bouton "Terminer" existant
+        window.completeEMDREvaluation = function() {
+            console.log('✅ Évaluation EMDR terminée - Retour au menu principal');
+            
+            // Sauvegarder l'évaluation si elle a été faite
+            const sudAfter = document.getElementById('sud-after');
+            if (sudAfter && sudAfter.value !== '5') {
+                console.log('💾 Évaluation sauvegardée:', sudAfter.value);
+                if (typeof DataManager !== 'undefined' && DataManager.add) {
+                    DataManager.add('emdrSessions', {
+                        sudBefore: sudBefore || 5,
+                        sudAfter: parseInt(sudAfter.value),
+                        date: new Date().toISOString()
+                    });
+                }
+            }
+            
+            // Utiliser la fonction de navigation robuste
+            navigateToMainScreen();
+        };
+
+        // ============ FIN FONCTIONS NAVIGATION ÉVALUATION ============
+
+        // ============ FONCTION INITIALISATION INTERFACE EMDR ============
+
+        // Fonction pour initialiser correctement l'interface EMDR
+        function initializeEMDRInterface() {
+            const portraitVersion = document.getElementById('portrait-version');
+            if (portraitVersion) {
+                // S'assurer que l'interface est visible
+                portraitVersion.style.display = 'block';
+                
+                // Initialiser l'état des boutons
+                const startBtn = document.getElementById('start-emdr-btn');
+                const stopBtn = document.getElementById('stop-emdr-btn');
+                
+                if (startBtn) startBtn.style.display = 'inline-block';
+                if (stopBtn) stopBtn.style.display = 'none';
+                
+                // Réassigner les fonctions aux boutons (au cas où)
+                setTimeout(() => {
+                    forceAssignEMDRButtons();
+                    console.log('🔄 Boutons réassignés lors de l\'initialisation de l\'interface');
+                }, 100);
+                
+                console.log('✅ Interface EMDR initialisée');
+            }
+        }
+
+        // ============ FIN FONCTION INITIALISATION EMDR ============
+
+        // ============ AMÉLIORATIONS FINALES - EXÉCUTION IMMÉDIATE ============
+        
+        // 1. SCROLL AUTOMATIQUE INTELLIGENT (non-agressif)
+        console.log('🔄 Installation scroll intelligent...');
+        
+        // Fonction scroll centralisée
+        function forceScrollToTop() {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+            console.log('⬆️ Scroll vers le haut');
+        }
+        
+        // Variable pour éviter les conflits
+        let isNavigating = false;
+        
+        // Intercepter les clics SEULEMENT sur les éléments de navigation
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+            
+            // Détecter si c'est un élément de navigation
+            const isNavElement = target.classList.contains('tool-card') ||
+                                target.hasAttribute('data-tool') ||
+                                target.hasAttribute('data-back') ||
+                                target.classList.contains('btn-back-icon') ||
+                                (target.onclick && target.onclick.toString().includes('goToScreen'));
+            
+            if (isNavElement) {
+                console.log('🖱️ Navigation détectée:', target.textContent?.slice(0, 30) || 'Element sans texte');
+                isNavigating = true;
+                
+                // Scroll après délai pour laisser le temps à l'écran de changer
+                setTimeout(() => {
+                    forceScrollToTop();
+                    isNavigating = false;
+                }, 300);
+            }
+        });
+        
+        // Observer SEULEMENT les changements d'écran
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('screen') && target.classList.contains('active')) {
+                        console.log('🔄 Écran activé:', target.id);
+                        
+                        // Scroll seulement si on navigue
+                        setTimeout(() => {
+                            forceScrollToTop();
+                        }, 200);
+                    }
+                }
+            });
+        });
+        
+        // Commencer l'observation
+        observer.observe(document.body, {
+            attributes: true,
+            subtree: true,
+            attributeFilter: ['class']
+        });
+        
+        console.log('✅ Scroll intelligent installé');
+        
+        // 2. BOUTON MENTIONS LÉGALES FLOTTANT
+        console.log('⚖️ Création du bouton mentions légales...');
+        
+        setTimeout(() => {
+            // Créer le bouton
+            const legalBtn = document.createElement('button');
+            legalBtn.innerHTML = '⚖️ Légal';
+            legalBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #2196F3;
+                color: white;
+                border: none;
+                padding: 15px 20px;
+                border-radius: 30px;
+                font-size: 14px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 10000;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                transition: all 0.3s ease;
+                font-family: Arial, sans-serif;
+            `;
+            
+            // Action du bouton
+            legalBtn.onclick = function() {
+                console.log('🔗 Clic mentions légales');
+                window.goToScreen('legal-screen');
+            };
+            
+            // Effets hover
+            legalBtn.onmouseenter = function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.background = '#1976D2';
+            };
+            
+            legalBtn.onmouseleave = function() {
+                this.style.transform = 'scale(1)';
+                this.style.background = '#2196F3';
+            };
+            
+            document.body.appendChild(legalBtn);
+            console.log('✅ Bouton mentions légales créé');
+            
+        }, 500);
+        
+        // 3. CRÉER L'ÉCRAN MENTIONS LÉGALES
+        console.log('📄 Création de l\'écran mentions légales...');
+        
+        setTimeout(() => {
+            // Créer l'écran
+            const legalScreen = document.createElement('div');
+            legalScreen.id = 'legal-screen';
+            legalScreen.className = 'screen';
+            legalScreen.innerHTML = `
+                <header class="tool-header">
+                    <button class="btn-back-icon" onclick="goToScreen('home-screen')">←</button>
+                    <h1>Mentions Légales</h1>
+                </header>
+                <div class="container">
+                    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+                        
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">📋 Informations Générales</h2>
+                            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #2196F3;">
+                                <h3 style="color: #2196F3; margin-top: 0;">Nature de l'Application</h3>
+                                <p style="line-height: 1.6; color: #555;">Cette application ("Pass Anxiété") est un outil d'auto-assistance psychologique pour la gestion de l'anxiété, du stress et des traumatismes légers.</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #e74c3c; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;">⚠️ Avertissements Importants</h2>
+                            <div style="background: linear-gradient(135deg, #fff5f5, #ffebee); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #e74c3c;">
+                                <h3 style="color: #e74c3c; margin-top: 0;">🔴 Cette application NE remplace PAS :</h3>
+                                <ul style="line-height: 1.6; color: #555;">
+                                    <li>Une consultation médicale professionnelle</li>
+                                    <li>Un diagnostic psychiatrique ou psychologique</li>
+                                    <li>Un traitement médical prescrit</li>
+                                    <li>Une psychothérapie avec un professionnel qualifié</li>
+                                    <li>Une intervention d'urgence en cas de crise suicidaire</li>
+                                </ul>
+                                <h3 style="color: #e74c3c;">🚨 En cas d'urgence :</h3>
+                                <ul style="line-height: 1.6; color: #555;">
+                                    <li><strong>SAMU :</strong> 15</li>
+                                    <li><strong>Pompiers :</strong> 18</li>
+                                    <li><strong>Police :</strong> 17</li>
+                                    <li><strong>SOS Amitié :</strong> 09 72 39 40 50</li>
+                                    <li><strong>Suicide Écoute :</strong> 01 45 39 40 00</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">🔒 Responsabilité</h2>
+                            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #2196F3;">
+                                <p style="line-height: 1.6; color: #555;"><strong>Utilisation à vos risques.</strong> Les développeurs ne peuvent être tenus responsables de l'efficacité des techniques ou des effets secondaires.</p>
+                                <h3 style="color: #2196F3;">Contre-indications :</h3>
+                                <ul style="line-height: 1.6; color: #555;">
+                                    <li>Troubles psychotiques actifs</li>
+                                    <li>Épisodes maniaques</li>
+                                    <li>Troubles dissociatifs sévères</li>
+                                    <li>Épilepsie (pour les techniques visuelles)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">📱 Données</h2>
+                            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #2196F3;">
+                                <p style="line-height: 1.6; color: #555;"><strong>Stockage 100% local.</strong> Aucune donnée n'est transmise à des serveurs externes. Vos données restent sur votre appareil.</p>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; text-align: center; border: 2px dashed #2196F3;">
+                            <p><strong style="color: #2196F3;">Dernière mise à jour :</strong> Novembre 2025</p>
+                            <p><em>En utilisant cette application, vous acceptez ces conditions.</em></p>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+            
+            // Insérer l'écran dans la page
+            document.body.appendChild(legalScreen);
+            console.log('✅ Écran mentions légales créé');
+            
+        }, 1000);
+        
+        console.log('🎉 Toutes les améliorations installées !');
+        
+        // Fonction globale pour forcer le scroll (utilisable manuellement)
+        window.forceScrollTop = function() {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+            console.log('📍 Scroll forcé manuellement');
+        };
+        
+        console.log('💡 Fonction disponible: forceScrollTop() si besoin');
+        
+        // ============ STYLES SUIVI COLORÉS ============
+        
+        // Ajouter les styles colorés pour l'écran de suivi
+        setTimeout(() => {
+            const trackingStyles = document.createElement('style');
+            trackingStyles.textContent = `
+                /* Améliorations écran de suivi */
+                .stat-card {
+                    position: relative !important;
+                    overflow: hidden !important;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+                }
+                
+                .stat-card:hover {
+                    transform: translateY(-5px) !important;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+                }
+                
+                .stat-card.sessions {
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-card.favorite {
+                    background: linear-gradient(135deg, #FF6B6B 0%, #E91E63 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-card.anxiety {
+                    background: linear-gradient(135deg, #4ECDC4 0%, #00BCD4 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-card.streak {
+                    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-icon {
+                    font-size: 2.5rem;
+                    margin-bottom: 10px;
+                    opacity: 0.9;
+                }
+                
+                .stat-number {
+                    color: inherit !important;
+                    margin: 10px 0 5px 0 !important;
+                }
+                
+                .stat-text {
+                    color: inherit !important;
+                    margin: 10px 0 5px 0 !important;
+                }
+                
+                .stat-subtitle {
+                    font-size: 0.85rem;
+                    opacity: 0.8;
+                    margin-top: 5px;
+                }
+                
+                .progress-section {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    margin: 25px 0;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                }
+                
+                .progress-section h3 {
+                    color: #2196F3;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                
+                .progress-chart {
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    padding: 20px;
+                }
+                
+                .chart-placeholder {
+                    display: flex;
+                    align-items: end;
+                    justify-content: space-between;
+                    height: 120px;
+                    margin-bottom: 10px;
+                    gap: 8px;
+                }
+                
+                .chart-bar {
+                    flex: 1;
+                    border-radius: 6px 6px 0 0;
+                    min-height: 20px;
+                    transition: all 0.3s ease;
+                }
+                
+                .chart-bar:hover {
+                    opacity: 0.8;
+                    transform: scaleY(1.1);
+                }
+                
+                .chart-labels {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.8rem;
+                    color: #666;
+                    padding: 0 5px;
+                }
+                
+                .achievements-section {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    margin: 25px 0;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                }
+                
+                .achievements-section h3 {
+                    color: #4CAF50;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                
+                .badges-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 15px;
+                }
+                
+                .achievement-badge {
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    padding: 15px;
+                    text-align: center;
+                    transition: all 0.3s ease;
+                    border: 2px solid transparent;
+                }
+                
+                .achievement-badge.earned {
+                    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                    color: white;
+                    border-color: #4CAF50;
+                }
+                
+                .achievement-badge.locked {
+                    background: #e9ecef;
+                    color: #6c757d;
+                    border-color: #dee2e6;
+                }
+                
+                .badge-icon {
+                    font-size: 2rem;
+                    margin-bottom: 8px;
+                }
+                
+                .badge-title {
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    margin-bottom: 5px;
+                }
+                
+                .badge-desc {
+                    font-size: 0.75rem;
+                    opacity: 0.8;
+                }
+            `;
+            document.head.appendChild(trackingStyles);
+            console.log('🎨 Styles colorés de suivi ajoutés');
+        }, 500);
+        
+        // ============ FIN STYLES SUIVI COLORÉS ============
+        
+        // ============ AMÉLIORATION CONTENU SUIVI ============
+        
+        // Fonction pour améliorer l'écran de suivi
+        function enhanceTrackingScreen() {
+            const trackingScreen = document.getElementById('tracking-screen');
+            if (!trackingScreen) return;
+            
+            // Ajouter les classes colorées aux cartes existantes
+            const statCards = trackingScreen.querySelectorAll('.stat-card');
+            if (statCards.length >= 4) {
+                statCards[0].classList.add('sessions');
+                statCards[0].innerHTML = `
+                    <div class="stat-icon">🏆</div>
+                    <h3>Sessions totales</h3>
+                    <p class="stat-number" id="total-sessions">0</p>
+                    <div class="stat-subtitle">séances réalisées</div>
+                `;
+                
+                statCards[1].classList.add('favorite');
+                statCards[1].innerHTML = `
+                    <div class="stat-icon">❤️</div>
+                    <h3>Outil favori</h3>
+                    <p class="stat-text" id="favorite-tool">-</p>
+                    <div class="stat-subtitle">votre préféré</div>
+                `;
+                
+                statCards[2].classList.add('anxiety');
+                statCards[2].innerHTML = `
+                    <div class="stat-icon">😌</div>
+                    <h3>Niveau d'anxiété</h3>
+                    <p class="stat-number" id="avg-anxiety">-</p>
+                    <div class="stat-subtitle">niveau moyen</div>
+                `;
+                
+                statCards[3].classList.add('streak');
+                statCards[3].innerHTML = `
+                    <div class="stat-icon">🔥</div>
+                    <h3>Série actuelle</h3>
+                    <p class="stat-number" id="streak-days">0</p>
+                    <div class="stat-subtitle">jours consécutifs</div>
+                `;
+            }
+            
+            // Ajouter le graphique et les badges après la grille de stats
+            const statsGrid = trackingScreen.querySelector('.stats-grid');
+            if (statsGrid && !trackingScreen.querySelector('.progress-section')) {
+                const additionalContent = `
+                    <!-- Section graphique d'évolution -->
+                    <div class="progress-section">
+                        <h3>📈 Évolution de votre bien-être</h3>
+                        <div class="progress-chart">
+                            <div class="chart-placeholder">
+                                <div class="chart-bar" style="height: 60%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 45%; background: #2196F3;"></div>
+                                <div class="chart-bar" style="height: 80%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 35%; background: #FF9800;"></div>
+                                <div class="chart-bar" style="height: 25%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 70%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 20%; background: #4CAF50;"></div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Lun</span>
+                                <span>Mar</span>
+                                <span>Mer</span>
+                                <span>Jeu</span>
+                                <span>Ven</span>
+                                <span>Sam</span>
+                                <span>Dim</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #666; text-align: center; margin-top: 10px;">
+                                🟢 Excellent  🔵 Bon  🟠 Moyen  🔴 Difficile
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Badges et accomplissements -->
+                    <div class="achievements-section">
+                        <h3>🏅 Vos Accomplissements</h3>
+                        <div class="badges-grid">
+                            <div class="achievement-badge earned">
+                                <div class="badge-icon">🎯</div>
+                                <div class="badge-title">Premier Pas</div>
+                                <div class="badge-desc">Première session réalisée</div>
+                            </div>
+                            <div class="achievement-badge locked">
+                                <div class="badge-icon">🔥</div>
+                                <div class="badge-title">Assidu</div>
+                                <div class="badge-desc">7 jours consécutifs</div>
+                            </div>
+                            <div class="achievement-badge locked">
+                                <div class="badge-icon">💪</div>
+                                <div class="badge-title">Guerrier</div>
+                                <div class="badge-desc">50 sessions totales</div>
+                            </div>
+                            <div class="achievement-badge locked">
+                                <div class="badge-icon">🌟</div>
+                                <div class="badge-title">Maître Zen</div>
+                                <div class="badge-desc">Niveau anxiété &lt; 3</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                statsGrid.insertAdjacentHTML('afterend', additionalContent);
+            }
+            
+            // Améliorer le titre de la section
+            const statsHeader = trackingScreen.querySelector('.stats-header h2');
+            if (statsHeader) {
+                statsHeader.innerHTML = '🎯 Vos Statistiques';
+                statsHeader.insertAdjacentHTML('afterend', '<p style="color: #666; font-size: 0.9rem; margin-top: 5px;">Suivez vos progrès et célébrez vos victoires !</p>');
+            }
+            
+            console.log('🎨 Écran de suivi amélioré avec couleurs');
+        }
+        
+        // Améliorer l'écran de suivi au chargement et lors de la navigation
+        setTimeout(() => {
+            enhanceTrackingScreen();
+            
+            // Améliorer aussi à chaque fois qu'on va sur l'écran de suivi
+            const originalGoToScreen2 = window.goToScreen;
+            window.goToScreen = function(screenId) {
+                if (originalGoToScreen2) {
+                    originalGoToScreen2(screenId);
+                }
+                
+                if (screenId === 'tracking-screen') {
+                    setTimeout(() => {
+                        enhanceTrackingScreen();
+                    }, 100);
+                }
+                
+                // Scroll automatique
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                }, 200);
+            };
+        }, 1000);
+        
+        // ============ FIN AMÉLIORATION CONTENU SUIVI ============
+        
+        // ============ FIN AMÉLIORATIONS FINALES ============
+
+        // ============ ÉCRAN MENTIONS LÉGALES ============
+        
+        // (Ancien code DOMContentLoaded supprimé - remplacé par la version directe plus bas)
+
+        // ============ FIN ÉCRAN MENTIONS LÉGALES ============
     </script>
 </body>
 </html>
