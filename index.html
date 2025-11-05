@@ -6068,7 +6068,7 @@
     </div>
 
     <!-- Écran Respiration d'Urgence -->
-    <div id="emergency-breathing-screen" class="screen">
+    <div id="emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen" class="screen">
         <header class="tool-header">
             <h1>🆘 Respiration d'Urgence</h1>
         </header>
@@ -6471,7 +6471,7 @@
     </div>
 
     <!-- Écran Respiration -->
-    <div id="breathing-screen" class="screen">
+    <div id="breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen" class="screen">
         <header class="tool-header">
             <button class="btn-back-icon" data-back="home-screen">←</button>
             <h1>💓 Cohérence Cardiaque</h1>
@@ -6865,7 +6865,7 @@
                     
                     <div class="strategy-category">
                         <h5>💨 Stratégies immédiates (urgence) :</h5>
-                        <button class="strategy-btn" onclick="goToScreen('breathing-screen')">
+                        <button class="strategy-btn" onclick="goToScreen('breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen')">
                             Respiration 4-7-8
                         </button>
                         <button class="strategy-btn" onclick="startGroundingExercise()">
@@ -7947,7 +7947,7 @@
             const wakeLockScreens = [
                 'emdr-session', 
                 'emdr-simple', 
-                'breathing-screen'
+                'breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen'
             ];
             
             if (wakeLockScreens.includes(screenId)) {
@@ -8648,7 +8648,7 @@
         // Navigation avec vérification d'activation et gestion wake lock
         function goToScreen(screenId) {
             // Vérifier l'activation avant d'accéder aux écrans protégés
-            const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen', 'hypnotherapy-screen', 'meditation-screen', 'tracking-screen', 'tcc-screen', 'tips-screen'];
+            const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen', 'hypnotherapy-screen', 'meditation-screen', 'tracking-screen', 'tcc-screen', 'tips-screen'];
             
             if (protectedScreens.includes(screenId) && !requireActivation()) {
                 return;
@@ -9271,7 +9271,7 @@
                     const screenMap = {
                         'crisis': 'crisis-screen',
                         'emdr': 'emdr-distance',
-                        'breathing': 'breathing-screen',
+                        'breathing': 'breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen',
                         'hypnotherapy': 'hypnotherapy-screen',
                         'meditation': 'meditation-screen',
                         'tips': 'tips-screen',
@@ -9304,7 +9304,7 @@
                 btn.addEventListener('click', () => {
                     const tool = btn.dataset.emergency;
                     if (tool === 'breathing') {
-                        goToScreen('breathing-screen');
+                        goToScreen('breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen');
                     } else if (tool === 'emdr') {
                         // Rediriger vers EMDR Pro complet au lieu d'EMDR simple
                         goToScreen('emdr-distance');
@@ -13427,7 +13427,7 @@
             selectedBreathingType = type;
             
             // Aller sur l'écran mais NE PAS démarrer
-            goToScreen('emergency-breathing-screen');
+            goToScreen('emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen');
             
             // Préparer l'interface selon le type
             const instruction = document.getElementById('emergency-breathing-text');
@@ -14120,8 +14120,8 @@
             const instruction = document.getElementById('emergency-breathing-text');
             const circle = document.getElementById('emergency-circle');
             const counter = document.getElementById('emergency-cycle-count');
-            const startBtn = document.querySelector('#emergency-breathing-screen .btn-primary');
-            const stopBtn = document.querySelector('#emergency-breathing-screen .btn-secondary');
+            const startBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-primary');
+            const stopBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-secondary');
             
             // Reset interface immédiat
             if (instruction) instruction.textContent = 'Exercice arrêté - Respirez naturellement';
@@ -14141,8 +14141,8 @@
             stopEmergencyBreathing();
             
             // Changer le bouton
-            const startBtn = document.querySelector('#emergency-breathing-screen .btn-primary');
-            const stopBtn = document.querySelector('#emergency-breathing-screen .btn-secondary');
+            const startBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-primary');
+            const stopBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-secondary');
             
             if (startBtn) startBtn.style.display = 'none';
             if (stopBtn) stopBtn.style.display = 'inline-block';
@@ -14392,7 +14392,7 @@
                     
                     const screenMap = {
                         'crisis': 'crisis-screen',
-                        'breathing': 'breathing-screen',
+                        'breathing': 'breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen',
                         'emdr': 'emdr-distance', // Écran EMDR complet original
                         'hypnotherapy': 'hypnotherapy-screen',
                         'meditation': 'meditation-screen',
@@ -16317,6 +16317,111 @@
         }, 1000);
         
         // ============ FIN AMÉLIORATION CONTENU SUIVI ============
+        
+        // ============ CORRECTIF BOUTONS EMDR MOBILE ============
+        
+        // Améliorer le positionnement des boutons EMDR en mode plein écran mobile
+        setTimeout(() => {
+            const mobileButtonsStyles = document.createElement('style');
+            mobileButtonsStyles.textContent = `
+                /* CORRECTIF MOBILE: Boutons EMDR en haut en ligne horizontale en mode plein écran */
+                @media (max-width: 768px) {
+                    .emdr-fullscreen .session-controls {
+                        position: fixed !important;
+                        top: 10px !important;
+                        left: 50% !important;
+                        right: auto !important;
+                        bottom: auto !important;
+                        transform: translateX(-50%) !important;
+                        z-index: 10001 !important;
+                        background: rgba(0,0,0,0.85) !important;
+                        padding: 8px 15px !important;
+                        border-radius: 25px !important;
+                        display: flex !important;
+                        flex-direction: row !important;
+                        gap: 8px !important;
+                        max-width: 90vw !important;
+                        justify-content: center !important;
+                        align-items: center !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn {
+                        padding: 6px 12px !important;
+                        font-size: 0.75rem !important;
+                        border-radius: 15px !important;
+                        min-width: auto !important;
+                        white-space: nowrap !important;
+                        flex-shrink: 1 !important;
+                    }
+                    
+                    /* Instructions en bas pour ne pas gêner */
+                    .emdr-fullscreen .floating-instruction {
+                        position: fixed !important;
+                        bottom: 15px !important;
+                        left: 50% !important;
+                        transform: translateX(-50%) !important;
+                        z-index: 10000 !important;
+                        background: rgba(0,0,0,0.6) !important;
+                        color: white !important;
+                        padding: 6px 12px !important;
+                        border-radius: 15px !important;
+                        font-size: 0.7rem !important;
+                        max-width: 80vw !important;
+                        text-align: center !important;
+                    }
+                    
+                    .emdr-fullscreen .emdr-instruction {
+                        position: fixed !important;
+                        bottom: 15px !important;
+                        left: 50% !important;
+                        transform: translateX(-50%) !important;
+                        z-index: 10000 !important;
+                        background: rgba(0,0,0,0.6) !important;
+                        color: white !important;
+                        padding: 6px 12px !important;
+                        border-radius: 15px !important;
+                        font-size: 0.7rem !important;
+                        max-width: 80vw !important;
+                        text-align: center !important;
+                        margin: 0 !important;
+                    }
+                }
+                
+                /* Mode portrait mobile - boutons ultra-compacts */
+                @media (max-width: 768px) and (orientation: portrait) {
+                    .emdr-fullscreen .session-controls {
+                        top: 8px !important;
+                        padding: 6px 12px !important;
+                        gap: 6px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn {
+                        padding: 5px 8px !important;
+                        font-size: 0.7rem !important;
+                        border-radius: 12px !important;
+                    }
+                }
+                
+                /* Mode paysage mobile - boutons très compacts */
+                @media (max-width: 768px) and (orientation: landscape) {
+                    .emdr-fullscreen .session-controls {
+                        top: 5px !important;
+                        padding: 4px 8px !important;
+                        gap: 4px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn {
+                        padding: 4px 6px !important;
+                        font-size: 0.65rem !important;
+                        border-radius: 10px !important;
+                    }
+                }
+            `;
+            document.head.appendChild(mobileButtonsStyles);
+            console.log('📱 Styles boutons EMDR mobile corrigés');
+        }, 600);
+        
+        // ============ FIN CORRECTIF BOUTONS EMDR MOBILE ============
         
         // ============ FIN AMÉLIORATIONS FINALES ============
 
