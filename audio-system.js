@@ -1,30 +1,30 @@
-// ============ SYSTEME AUDIO AVANCÉ PASS ANXIÉTÉ ============
+// ============ MODIFICATION POUR DURÉES RÉELLES + 2 MUSIQUES ============
 
-// Configuration des fichiers audio avec durées réelles et musique de fond
+// Configuration des fichiers audio avec durées RÉELLES
 const hypnoConfig = {
     6: {
         title: 'Session Courte',
         description: 'Relaxation rapide et ancrage positif',
         audioUrl: './audio/hypnotherapie/hypnose_session_courte.mp3',
-        backgroundMusic: './audio/musiques/nature_douce.mp3',
-        realDuration: 420, // 7 minutes réelles
-        displayDuration: '6-7 min'
+        backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+        realDuration: 469, // 7:49 minutes réelles
+        displayDuration: '7:49 min'
     },
     10: {
         title: 'Session Standard', 
         description: 'Induction complète et suggestions thérapeutiques',
         audioUrl: './audio/hypnotherapie/hypnose_session_standard.mp3',
-        backgroundMusic: './audio/musiques/ambiance_zen.mp3',
-        realDuration: 720, // 12 minutes réelles
-        displayDuration: '10-12 min'
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 602, // 10:02 minutes réelles
+        displayDuration: '10:02 min'
     },
     20: {
         title: 'Session Complète',
         description: 'Transformation profonde et intégration durable',
         audioUrl: './audio/hypnotherapie/hypnose_session_complete.mp3',
-        backgroundMusic: './audio/musiques/meditation_profonde.mp3',
-        realDuration: 1380, // 23 minutes réelles
-        displayDuration: '20-23 min'
+        backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+        realDuration: 1109, // 18:29 minutes réelles
+        displayDuration: '18:29 min'
     }
 };
 
@@ -33,26 +33,34 @@ const meditationConfig = {
         title: 'Méditation Express',
         description: 'Retour au calme et centrage rapide',
         audioUrl: './audio/meditation/meditation_express.mp3',
-        backgroundMusic: './audio/musiques/bol_tibetain.mp3',
-        realDuration: 420, // 7 minutes réelles
-        displayDuration: '6-7 min'
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 458, // 7:38 minutes réelles
+        displayDuration: '7:38 min'
     },
     10: {
         title: 'Méditation Guidée',
         description: 'Pleine conscience et observation des pensées',
         audioUrl: './audio/meditation/meditation_guidee.mp3',
-        backgroundMusic: './audio/musiques/nature_foret.mp3',
-        realDuration: 720, // 12 minutes réelles
-        displayDuration: '10-12 min'
+        backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+        realDuration: 662, // 11:02 minutes réelles
+        displayDuration: '11:02 min'
     },
     20: {
         title: 'Méditation Profonde',
         description: 'Exploration intérieure et paix durable',
         audioUrl: './audio/meditation/meditation_profonde.mp3',
-        backgroundMusic: './audio/musiques/ambiance_cosmique.mp3',
-        realDuration: 1320, // 22 minutes réelles
-        displayDuration: '20-22 min'
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 1206, // 20:06 minutes réelles
+        displayDuration: '20:06 min'
     }
+};
+
+// Mode crise avec durée réelle
+const criseConfig = {
+    audioUrl: './audio/crise/scan_corporel_urgence.mp3',
+    backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+    realDuration: 226, // 3:46 minutes réelles
+    displayDuration: '3:46 min'
 };
 
 // Variables globales pour l'audio
@@ -60,21 +68,24 @@ let currentHypnoAudio = null;
 let currentHypnoBackground = null;
 let currentMeditationAudio = null;
 let currentMeditationBackground = null;
+let currentCriseAudio = null;
+let currentCriseBackground = null;
 let hypnoProgressInterval = null;
 let meditationProgressInterval = null;
 let hypnoBackgroundEnabled = true;
 let meditationBackgroundEnabled = true;
+let criseBackgroundEnabled = true;
 
-// ============ FONCTIONS HYPNOTHÉRAPIE AVANCÉES ============
+// ============ FONCTIONS HYPNOTHÉRAPIE MODIFIÉES ============
 
 function startHypnotherapySession(duration) {
     goToScreen('hypnotherapy-session-screen');
     
     const config = hypnoConfig[duration];
     
-    // Configuration de l'interface
+    // Configuration de l'interface avec durées réelles
     document.getElementById('hypno-session-title').textContent = config.title + ' - ' + config.displayDuration;
-    document.getElementById('hypno-total-time').textContent = formatTime(config.realDuration);
+    document.getElementById('hypno-total-time').textContent = config.displayDuration;
     document.getElementById('hypno-current-time').textContent = '0:00';
     document.getElementById('hypno-progress').style.width = '0%';
     
@@ -83,7 +94,7 @@ function startHypnotherapySession(duration) {
     currentHypnoAudio.volume = 0.8;
     currentHypnoAudio.preload = 'auto';
     
-    // Créer la musique de fond
+    // Créer la musique de fond avec les 2 musiques disponibles
     if (hypnoBackgroundEnabled) {
         currentHypnoBackground = new Audio(config.backgroundMusic);
         currentHypnoBackground.volume = 0.2;
@@ -94,10 +105,9 @@ function startHypnotherapySession(duration) {
     // Événements audio principal
     currentHypnoAudio.addEventListener('loadeddata', function() {
         console.log('🎵 Audio hypno chargé:', formatTime(currentHypnoAudio.duration));
-        // Mettre à jour avec la durée réelle
-        if (currentHypnoAudio.duration) {
-            document.getElementById('hypno-total-time').textContent = formatTime(currentHypnoAudio.duration);
-        }
+        // Utiliser la durée réelle détectée ou configurée
+        const actualDuration = currentHypnoAudio.duration || config.realDuration;
+        document.getElementById('hypno-total-time').textContent = formatTime(actualDuration);
     });
     
     currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
@@ -110,9 +120,6 @@ function startHypnotherapySession(duration) {
             console.warn('⚠️ Musique de fond non disponible');
         });
     }
-    
-    // Afficher les contrôles
-    updateHypnoControls('ready');
     
     // Log d'usage avec durée réelle
     DataManager.logToolUsage('hypnotherapy-' + duration + 'min-' + config.displayDuration);
@@ -162,30 +169,17 @@ function toggleHypnoPlayback() {
     }
 }
 
-function updateHypnoProgress() {
-    if (!currentHypnoAudio) return;
-    
-    const currentTime = currentHypnoAudio.currentTime;
-    const duration = currentHypnoAudio.duration;
-    
-    if (duration) {
-        const progress = (currentTime / duration) * 100;
-        document.getElementById('hypno-progress').style.width = progress + '%';
-        document.getElementById('hypno-current-time').textContent = formatTime(currentTime);
-    }
-}
-
 function updateHypnoVolume() {
     const volume = document.getElementById('hypno-volume').value / 100;
     if (currentHypnoAudio) {
-        currentHypnoAudio.volume = volume * 0.8; // Volume principal
+        currentHypnoAudio.volume = volume * 0.8;
     }
 }
 
 function updateHypnoBackgroundVolume() {
     const volume = document.getElementById('hypno-background-volume').value / 100;
     if (currentHypnoBackground) {
-        currentHypnoBackground.volume = volume * 0.3; // Volume fond plus faible
+        currentHypnoBackground.volume = volume * 0.3;
     }
 }
 
@@ -208,57 +202,16 @@ function toggleHypnoBackground() {
     }
 }
 
-function stopHypnotherapySession() {
-    // Arrêter les audios
-    if (currentHypnoAudio) {
-        currentHypnoAudio.pause();
-        currentHypnoAudio = null;
-    }
-    
-    if (currentHypnoBackground) {
-        currentHypnoBackground.pause();
-        currentHypnoBackground = null;
-    }
-    
-    // Arrêter les animations
-    stopAudioVisualization('hypno');
-    
-    // Retour à l'écran principal
-    goToScreen('hypnotherapy-screen');
-    
-    console.log('⏹️ Session hypno arrêtée');
-}
-
-function onHypnoSessionEnd() {
-    document.getElementById('hypno-play-pause').textContent = '✅ Terminé';
-    
-    // Arrêter la musique de fond
-    if (currentHypnoBackground) {
-        currentHypnoBackground.pause();
-    }
-    
-    // Arrêter l'animation
-    stopAudioVisualization('hypno');
-    
-    // Message de fin
-    setTimeout(() => {
-        showNotification('🌟 Session d\'hypnothérapie terminée ! Prenez un moment pour intégrer cette expérience.', 'success');
-        setTimeout(() => {
-            goToScreen('hypnotherapy-screen');
-        }, 3000);
-    }, 1000);
-}
-
-// ============ FONCTIONS MÉDITATION AVANCÉES ============
+// ============ FONCTIONS MÉDITATION MODIFIÉES ============
 
 function startMeditationSession(duration) {
     goToScreen('meditation-session-screen');
     
     const config = meditationConfig[duration];
     
-    // Configuration de l'interface
+    // Configuration de l'interface avec durées réelles
     document.getElementById('meditation-session-title').textContent = config.title + ' - ' + config.displayDuration;
-    document.getElementById('meditation-total-time').textContent = formatTime(config.realDuration);
+    document.getElementById('meditation-total-time').textContent = config.displayDuration;
     document.getElementById('meditation-current-time').textContent = '0:00';
     document.getElementById('meditation-progress').style.width = '0%';
     
@@ -278,9 +231,8 @@ function startMeditationSession(duration) {
     // Événements audio principal
     currentMeditationAudio.addEventListener('loadeddata', function() {
         console.log('🧘 Audio méditation chargé:', formatTime(currentMeditationAudio.duration));
-        if (currentMeditationAudio.duration) {
-            document.getElementById('meditation-total-time').textContent = formatTime(currentMeditationAudio.duration);
-        }
+        const actualDuration = currentMeditationAudio.duration || config.realDuration;
+        document.getElementById('meditation-total-time').textContent = formatTime(actualDuration);
     });
     
     currentMeditationAudio.addEventListener('timeupdate', updateMeditationProgress);
@@ -339,19 +291,6 @@ function toggleMeditationPlayback() {
     }
 }
 
-function updateMeditationProgress() {
-    if (!currentMeditationAudio) return;
-    
-    const currentTime = currentMeditationAudio.currentTime;
-    const duration = currentMeditationAudio.duration;
-    
-    if (duration) {
-        const progress = (currentTime / duration) * 100;
-        document.getElementById('meditation-progress').style.width = progress + '%';
-        document.getElementById('meditation-current-time').textContent = formatTime(currentTime);
-    }
-}
-
 function updateMeditationVolume() {
     const volume = document.getElementById('meditation-volume').value / 100;
     if (currentMeditationAudio) {
@@ -385,48 +324,28 @@ function toggleMeditationBackground() {
     }
 }
 
-function stopMeditationSession() {
-    // Arrêter les audios
-    if (currentMeditationAudio) {
-        currentMeditationAudio.pause();
-        currentMeditationAudio = null;
+// ============ MODE CRISE AVEC MUSIQUE ============
+
+function startEmergencyBreathing() {
+    // Si mode crise avec scan corporel existe, ajouter musique
+    if (criseBackgroundEnabled) {
+        currentCriseBackground = new Audio(criseConfig.backgroundMusic);
+        currentCriseBackground.volume = 0.1; // Volume très faible pour urgence
+        currentCriseBackground.loop = true;
+        currentCriseBackground.play().catch(e => {
+            console.warn('⚠️ Musique de fond crise non disponible');
+        });
     }
-    
-    if (currentMeditationBackground) {
-        currentMeditationBackground.pause();
-        currentMeditationBackground = null;
-    }
-    
-    // Arrêter l'animation de respiration
-    stopBreathingAnimation();
-    
-    // Retour à l'écran principal
-    goToScreen('meditation-screen');
-    
-    console.log('⏹️ Session méditation arrêtée');
 }
 
-function onMeditationSessionEnd() {
-    document.getElementById('meditation-play-pause').textContent = '✅ Terminé';
-    
-    // Arrêter la musique de fond
-    if (currentMeditationBackground) {
-        currentMeditationBackground.pause();
+function stopEmergencyBreathing() {
+    if (currentCriseBackground) {
+        currentCriseBackground.pause();
+        currentCriseBackground = null;
     }
-    
-    // Arrêter l'animation
-    stopBreathingAnimation();
-    
-    // Message de fin
-    setTimeout(() => {
-        showNotification('🧘 Méditation terminée ! Restez encore un moment dans cette paix intérieure.', 'success');
-        setTimeout(() => {
-            goToScreen('meditation-screen');
-        }, 3000);
-    }, 1000);
 }
 
-// ============ FONCTIONS UTILITAIRES AUDIO ============
+// ============ FONCTIONS UTILITAIRES (IDENTIQUES) ============
 
 function formatTime(seconds) {
     if (!seconds || isNaN(seconds)) return '0:00';
@@ -439,6 +358,98 @@ function formatTime(seconds) {
 function handleAudioError(e) {
     console.error('❌ Erreur audio:', e);
     showNotification('❌ Erreur de chargement audio. Vérifiez votre connexion.', 'error');
+}
+
+function updateHypnoProgress() {
+    if (!currentHypnoAudio) return;
+    
+    const currentTime = currentHypnoAudio.currentTime;
+    const duration = currentHypnoAudio.duration;
+    
+    if (duration) {
+        const progress = (currentTime / duration) * 100;
+        document.getElementById('hypno-progress').style.width = progress + '%';
+        document.getElementById('hypno-current-time').textContent = formatTime(currentTime);
+    }
+}
+
+function updateMeditationProgress() {
+    if (!currentMeditationAudio) return;
+    
+    const currentTime = currentMeditationAudio.currentTime;
+    const duration = currentMeditationAudio.duration;
+    
+    if (duration) {
+        const progress = (currentTime / duration) * 100;
+        document.getElementById('meditation-progress').style.width = progress + '%';
+        document.getElementById('meditation-current-time').textContent = formatTime(currentTime);
+    }
+}
+
+function stopHypnotherapySession() {
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+    
+    stopAudioVisualization('hypno');
+    goToScreen('hypnotherapy-screen');
+    console.log('⏹️ Session hypno arrêtée');
+}
+
+function stopMeditationSession() {
+    if (currentMeditationAudio) {
+        currentMeditationAudio.pause();
+        currentMeditationAudio = null;
+    }
+    
+    if (currentMeditationBackground) {
+        currentMeditationBackground.pause();
+        currentMeditationBackground = null;
+    }
+    
+    stopBreathingAnimation();
+    goToScreen('meditation-screen');
+    console.log('⏹️ Session méditation arrêtée');
+}
+
+function onHypnoSessionEnd() {
+    document.getElementById('hypno-play-pause').textContent = '✅ Terminé';
+    
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+    }
+    
+    stopAudioVisualization('hypno');
+    
+    setTimeout(() => {
+        showNotification('🌟 Session d\'hypnothérapie terminée !', 'success');
+        setTimeout(() => {
+            goToScreen('hypnotherapy-screen');
+        }, 3000);
+    }, 1000);
+}
+
+function onMeditationSessionEnd() {
+    document.getElementById('meditation-play-pause').textContent = '✅ Terminé';
+    
+    if (currentMeditationBackground) {
+        currentMeditationBackground.pause();
+    }
+    
+    stopBreathingAnimation();
+    
+    setTimeout(() => {
+        showNotification('🧘 Méditation terminée !', 'success');
+        setTimeout(() => {
+            goToScreen('meditation-screen');
+        }, 3000);
+    }, 1000);
 }
 
 function startAudioVisualization(type) {
@@ -473,9 +484,8 @@ function startBreathingAnimation() {
         isBreathingIn = !isBreathingIn;
     }
     
-    // Cycle de 8 secondes (4s inspiration + 4s expiration)
     breathingInterval = setInterval(breathCycle, 4000);
-    breathCycle(); // Démarrer immédiatement
+    breathCycle();
 }
 
 function stopBreathingAnimation() {
@@ -491,15 +501,14 @@ function stopBreathingAnimation() {
     instruction.textContent = 'Respiration naturelle';
 }
 
-// ============ INITIALISATION ============
-
 // Sauvegarder les préférences utilisateur
 function saveAudioPreferences() {
     const prefs = {
         hypnoBackgroundEnabled,
         meditationBackgroundEnabled,
-        hypnoVolume: document.getElementById('hypno-volume')?.value || 70,
-        meditationVolume: document.getElementById('meditation-volume')?.value || 70
+        criseBackgroundEnabled,
+        hypnoVolume: document.getElementById('hypno-volume')?.value || 80,
+        meditationVolume: document.getElementById('meditation-volume')?.value || 80
     };
     localStorage.setItem('audio-preferences', JSON.stringify(prefs));
 }
@@ -510,24 +519,31 @@ function loadAudioPreferences() {
     
     hypnoBackgroundEnabled = prefs.hypnoBackgroundEnabled !== false;
     meditationBackgroundEnabled = prefs.meditationBackgroundEnabled !== false;
+    criseBackgroundEnabled = prefs.criseBackgroundEnabled !== false;
     
-    // Appliquer les volumes sauvegardés
     if (document.getElementById('hypno-volume')) {
-        document.getElementById('hypno-volume').value = prefs.hypnoVolume || 70;
+        document.getElementById('hypno-volume').value = prefs.hypnoVolume || 80;
     }
     if (document.getElementById('meditation-volume')) {
-        document.getElementById('meditation-volume').value = prefs.meditationVolume || 70;
+        document.getElementById('meditation-volume').value = prefs.meditationVolume || 80;
     }
 }
 
-// Charger les préférences au démarrage
+// Initialisation
 document.addEventListener('DOMContentLoaded', function() {
     loadAudioPreferences();
 });
 
-// Sauvegarder les préférences avant de quitter
 window.addEventListener('beforeunload', function() {
     saveAudioPreferences();
 });
 
-console.log('🎧 Système audio avancé Pass Anxiété initialisé !');
+console.log('🎧 Système audio Pass Anxiété avec durées réelles initialisé !');
+
+// ============ STRUCTURE DES 2 MUSIQUES REQUISES ============
+/*
+📦 audio/
+└── 📁 musiques/
+    ├── Wind_Among_the_Trees.mp3 (3:37 - utilisé pour hypnose courte, complète + méditation guidée)
+    └── Calme_Intrieur.mp3 (3:40 - utilisé pour hypnose standard + méditation express, profonde)
+*/
