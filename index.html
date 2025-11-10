@@ -5125,6 +5125,45 @@
                 gap: 15px;
             }
         }
+
+        /* Contrôles musique en ligne */
+        .music-controls-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-music-change {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-music-change:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-music-change:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .music-controls-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
 </style>
     
     <!-- Styles additionnels pour les boutons EMDR améliorés -->
@@ -6089,6 +6128,12 @@
                         <span class="emergency-icon">👁️</span>
                         <h3>EMDR d'Urgence</h3>
                         <p>Session rapide 2 minutes</p>
+                    </button>
+
+                    <button class="emergency-btn" onclick="startEmergencyScan()">
+                        <span class="emergency-icon">🩺</span>
+                        <h3>Scan corporel express</h3>
+                        <p>Relaxation rapide 3 minutes</p>
                     </button>
                 </div>
             </div>
@@ -7105,7 +7150,14 @@
                     <h4>⚡ Plan d'action anti-crise</h4>
                     <p>Stratégies personnalisées d'urgence</p>
                     <button class="btn-secondary" onclick="createCrisisPlan()">Créer</button>
+                
+                <div class="technique-card" onclick="managePanicAttack()">
+                    <div class="technique-icon">⚠️</div>
+                    <h4>Crise de panique</h4>
+                    <p>Protocole d'urgence pour crise de panique</p>
+                    <button class="btn-secondary">Gérer maintenant</button>
                 </div>
+</div>
 
                 <div class="technique-card">
                     <h4>🎯 Exposition graduelle</h4>
@@ -7207,12 +7259,18 @@
                     <button class="audio-btn secondary" onclick="stopHypnotherapySession()">
                         ⏹️ Arrêter
                     </button>
+                    <button class="audio-btn secondary" onclick="returnFromHypnoSession()">
+                        ← Retour
+                    </button>
                 </div>
 
                 <div class="music-controls">
-                    <div class="music-toggle">
+                    <div class="music-controls-row">
                         <button class="btn-music" id="hypno-music-toggle" onclick="toggleHypnoBackground()">
                             🎵 Musique : ON
+                        </button>
+                        <button class="btn-music-change" id="hypno-music-change" onclick="changeHypnoMusic()">
+                            Changer
                         </button>
                     </div>
 
@@ -7491,9 +7549,12 @@
 
                 
                 <div class="music-controls">
-                    <div class="music-toggle">
+                    <div class="music-controls-row">
                         <button class="btn-music" id="meditation-music-toggle" onclick="toggleMeditationBackground()">
                             🎵 Ambiance : ON
+                        </button>
+                        <button class="btn-music-change" id="meditation-music-change" onclick="changeMeditationMusic()">
+                            Changer
                         </button>
                     </div>
 
@@ -13281,6 +13342,15 @@ const meditationConfig = {
     }
 };
 
+// Liste des musiques disponibles pour changer la musique de fond
+const availableMusic = [
+    { name: 'Wind Among Trees', file: './audio/musiques/Wind_Among_the_Trees.mp3' },
+    { name: 'Calme Intérieur', file: './audio/musiques/Calme_Intrieur.mp3' }
+];
+
+let currentHypnoMusicIndex = 0;
+let currentMeditationMusicIndex = 1;
+
 // Variables globales pour l'audio
 let currentHypnoAudio = null;
 let currentHypnoBackground = null;
@@ -13378,6 +13448,7 @@ function toggleHypnoPlayback() {
 
     if (!currentHypnoAudio) {
         console.error('Aucun audio hypno chargé');
+        alert('Erreur: aucune session chargée. Retournez à la sélection.');
         return;
     }
 
@@ -13754,6 +13825,202 @@ function updateMeditationMusicVolume() {
     const display = document.querySelector('#meditation-music-volume + .volume-display');
     if (display) {
         display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// Changer la musique d'hypnose
+function changeHypnoMusic() {
+    if (!hypnoBackgroundEnabled) return;
+
+    currentHypnoMusicIndex = (currentHypnoMusicIndex + 1) % availableMusic.length;
+    const newMusic = availableMusic[currentHypnoMusicIndex];
+
+    if (currentHypnoBackground) {
+        const wasPlaying = !currentHypnoBackground.paused;
+        currentHypnoBackground.pause();
+
+        currentHypnoBackground = new Audio(newMusic.file);
+        const slider = document.getElementById('hypno-music-volume');
+        const volume = slider ? slider.value / 100 : 0.3;
+        currentHypnoBackground.volume = volume * 0.4;
+        currentHypnoBackground.loop = true;
+        currentHypnoBackground.preload = 'auto';
+
+        if (wasPlaying && currentHypnoAudio && !currentHypnoAudio.paused) {
+            currentHypnoBackground.play().catch(e => {
+                console.warn('Impossible de jouer la nouvelle musique', e);
+            });
+        }
+    }
+
+    if (typeof showNotification === 'function') {
+        showNotification('Musique changée: ' + newMusic.name, 'info');
+    }
+    console.log('Musique hypno changée pour:', newMusic.name);
+}
+
+// Changer la musique de méditation
+function changeMeditationMusic() {
+    if (!meditationBackgroundEnabled) return;
+
+    currentMeditationMusicIndex = (currentMeditationMusicIndex + 1) % availableMusic.length;
+    const newMusic = availableMusic[currentMeditationMusicIndex];
+
+    if (currentMeditationBackground) {
+        const wasPlaying = !currentMeditationBackground.paused;
+        currentMeditationBackground.pause();
+
+        currentMeditationBackground = new Audio(newMusic.file);
+        const slider = document.getElementById('meditation-music-volume');
+        const volume = slider ? slider.value / 100 : 0.3;
+        currentMeditationBackground.volume = volume * 0.4;
+        currentMeditationBackground.loop = true;
+        currentMeditationBackground.preload = 'auto';
+
+        if (wasPlaying && currentMeditationAudio && !currentMeditationAudio.paused) {
+            currentMeditationBackground.play().catch(e => {
+                console.warn('Impossible de jouer la nouvelle ambiance', e);
+            });
+        }
+    }
+
+    if (typeof showNotification === 'function') {
+        showNotification('Ambiance changée: ' + newMusic.name, 'info');
+    }
+    console.log('Musique méditation changée pour:', newMusic.name);
+}
+
+// Gestion crise de panique depuis les techniques TCC
+function managePanicAttack() {
+    // Aller sur l'écran Mode Crise
+    goToScreen('crisis-screen');
+
+    // Notification spéciale pour crise de panique
+    setTimeout(() => {
+        if (typeof showNotification === 'function') {
+            showNotification('Mode crise de panique activé. Respirez avec moi.', 'warning');
+        }
+
+        // Démarrer automatiquement la respiration d'urgence anti-panique
+        setTimeout(() => {
+            // Utilise la logique existante de sélection et démarrage
+            startCrisisBreathing('anti-panic');
+        }, 1000);
+    }, 500);
+
+    console.log('Gestion crise de panique activée');
+}
+
+// Hypnose de crise - Scan corporel d'urgence
+function startEmergencyScan() {
+    // Aller à l'écran hypnothérapie en mode crise
+    goToScreen('hypnotherapy-session-screen');
+
+    // Configuration spéciale pour la crise
+    const criseConfig = {
+        title: "Scan Corporel d'Urgence",
+        audioUrl: './audio/crise/scan_corporel_urgence.mp3',
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 226, // 3:46 minutes réelles
+        displayDuration: '3:46 min'
+    };
+
+    // Nettoyer les anciens audios
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+
+    // Configuration de l'interface
+    document.getElementById('hypno-session-title').textContent =
+        criseConfig.title + ' - ' + criseConfig.displayDuration;
+    document.getElementById('hypno-total-time').textContent = criseConfig.displayDuration;
+    document.getElementById('hypno-current-time').textContent = '0:00';
+    document.getElementById('hypno-progress').style.width = '0%';
+
+    // Créer l'audio de crise
+    currentHypnoAudio = new Audio(criseConfig.audioUrl);
+    const voiceSlider = document.getElementById('hypno-volume');
+    currentHypnoAudio.volume = voiceSlider ? voiceSlider.value / 100 : 0.9;
+    currentHypnoAudio.preload = 'auto';
+
+    // Créer la musique de fond (plus douce pour crise)
+    if (hypnoBackgroundEnabled) {
+        currentHypnoBackground = new Audio(criseConfig.backgroundMusic);
+        const musicSlider = document.getElementById('hypno-music-volume');
+        const baseVolume = musicSlider ? musicSlider.value / 100 : 0.3;
+        currentHypnoBackground.volume = baseVolume * 0.3; // encore plus doux
+        currentHypnoBackground.loop = true;
+        currentHypnoBackground.preload = 'auto';
+    }
+
+    // Événements audio
+    currentHypnoAudio.addEventListener('loadeddata', function () {
+        const actualDuration = currentHypnoAudio.duration || criseConfig.realDuration;
+        document.getElementById('hypno-total-time').textContent = formatTime(actualDuration);
+    });
+
+    currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
+    currentHypnoAudio.addEventListener('ended', function () {
+        const btn = document.getElementById('hypno-play-pause');
+        if (btn) btn.textContent = '✅ Terminé';
+
+        if (currentHypnoBackground) {
+            currentHypnoBackground.pause();
+        }
+
+        setTimeout(() => {
+            if (typeof showNotification === 'function') {
+                showNotification('Scan corporel terminé. Vous devriez vous sentir plus calme.', 'success');
+            }
+            setTimeout(() => {
+                goToScreen('crisis-screen');
+            }, 2000);
+        }, 1000);
+    });
+
+    currentHypnoAudio.addEventListener('error', function (e) {
+        console.error('Erreur audio crise:', e);
+        alert("Erreur: Impossible de charger l'audio de crise");
+    });
+
+    // Notification spéciale
+    if (typeof showNotification === 'function') {
+        showNotification("Scan corporel d'urgence prêt. Installez-vous confortablement.", 'info');
+    }
+
+    // Log
+    DataManager.logToolUsage('emergency-scan-3min-46s');
+    console.log('Session de crise prête: Scan corporel 3:46');
+}
+
+// Bouton retour intelligent (mode crise vs hypno normal)
+function returnFromHypnoSession() {
+    const titleEl = document.getElementById('hypno-session-title');
+    const title = titleEl ? titleEl.textContent : '';
+
+    // Arrêter les audios en cours
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+    if (hypnoProgressInterval) {
+        clearInterval(hypnoProgressInterval);
+        hypnoProgressInterval = null;
+    }
+
+    if (title.includes('Urgence') || title.includes('Crise')) {
+        goToScreen('crisis-screen');
+    } else {
+        goToScreen('hypnotherapy-screen');
     }
 }
 
