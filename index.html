@@ -5038,7 +5038,94 @@
             from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
-    </style>
+    
+        /* Contrôles musique (hypnose & méditation) */
+        .music-controls {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .music-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-music {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-music:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-music.disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .volume-controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .volume-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-control label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .volume-control input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .volume-display {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .volume-controls-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+</style>
     
     <!-- Styles additionnels pour les boutons EMDR améliorés -->
     <style>
@@ -7102,23 +7189,45 @@
                     <h2 id="hypno-session-title">Session 6 minutes</h2>
                     <p>Installez-vous confortablement et fermez les yeux...</p>
                 </div>
-                
+
                 <div class="session-progress">
                     <div class="progress-bar">
                         <div class="progress-fill" id="hypno-progress"></div>
                     </div>
                     <div class="time-display">
-                        <span id="hypno-current-time">0:00</span> / <span id="hypno-total-time">0:00</span>
+                        <span id="hypno-current-time">0:00</span> /
+                        <span id="hypno-total-time">0:00</span>
                     </div>
                 </div>
-                
+
                 <div class="audio-controls">
-                    <button class="btn-primary" id="hypno-play-pause" onclick="toggleHypnoPlayback()">
-                        ▶️ Commencer la Session
+                    <button class="audio-btn" id="hypno-play-pause" onclick="toggleHypnoPlayback()">
+                        ▶️ Commencer
                     </button>
-                    <button class="btn-secondary" onclick="goToScreen('hypnotherapy-screen')">
-                        ← Retour
+                    <button class="audio-btn secondary" onclick="stopHypnotherapySession()">
+                        ⏹️ Arrêter
                     </button>
+                </div>
+
+                <div class="music-controls">
+                    <div class="music-toggle">
+                        <button class="btn-music" id="hypno-music-toggle" onclick="toggleHypnoBackground()">
+                            🎵 Musique : ON
+                        </button>
+                    </div>
+
+                    <div class="volume-controls-grid">
+                        <div class="volume-control">
+                            <label>🎙️ Voix</label>
+                            <input type="range" id="hypno-volume" min="0" max="100" value="80" onchange="updateHypnoVolume()">
+                            <span class="volume-display">80%</span>
+                        </div>
+                        <div class="volume-control">
+                            <label>🎵 Musique</label>
+                            <input type="range" id="hypno-music-volume" min="0" max="100" value="30" onchange="updateHypnoMusicVolume()">
+                            <span class="volume-display">30%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -7380,10 +7489,28 @@
                     </button>
                 </div>
 
-                <div class="volume-control">
-                    <label>🔊 Volume</label>
-                    <input type="range" id="meditation-volume" min="0" max="100" value="70" onchange="updateMeditationVolume()">
+                
+                <div class="music-controls">
+                    <div class="music-toggle">
+                        <button class="btn-music" id="meditation-music-toggle" onclick="toggleMeditationBackground()">
+                            🎵 Ambiance : ON
+                        </button>
+                    </div>
+
+                    <div class="volume-controls-grid">
+                        <div class="volume-control">
+                            <label>🎙️ Voix</label>
+                            <input type="range" id="meditation-volume" min="0" max="100" value="70" onchange="updateMeditationVolume()">
+                            <span class="volume-display">70%</span>
+                        </div>
+                        <div class="volume-control">
+                            <label>🎵 Ambiance</label>
+                            <input type="range" id="meditation-music-volume" min="0" max="100" value="30" onchange="updateMeditationMusicVolume()">
+                            <span class="volume-display">30%</span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <div class="session-instructions">
@@ -13165,19 +13292,28 @@ let meditationBreathingInterval = null;
 let hypnoBackgroundEnabled = true;
 let meditationBackgroundEnabled = true;
 
-// Démarrer une session d'hypnothérapie
+// Fonction utilitaire pour formater le temps
+function formatTime(seconds) {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return minutes + ':' + secs.toString().padStart(2, '0');
+}
+
+// 1) Démarrer une session d'hypnothérapie
 function startHypnotherapySession(duration) {
     goToScreen('hypnotherapy-session-screen');
+
     const config = hypnoConfig[duration];
 
-    // Configuration de l'interface avec durées réelles
-    document.getElementById('hypno-session-title').textContent =
-        config.title + ' - ' + config.displayDuration;
-    document.getElementById('hypno-total-time').textContent = config.displayDuration;
-    document.getElementById('hypno-current-time').textContent = '0:00';
-    document.getElementById('hypno-progress').style.width = '0%';
+    // Vérification de configuration
+    if (!config) {
+        console.error('Configuration non trouvée pour durée:', duration);
+        alert('Erreur: Session non configurée');
+        return;
+    }
 
-    // Nettoyer l'ancien audio
+    // Nettoyer les anciens audios
     if (currentHypnoAudio) {
         currentHypnoAudio.pause();
         currentHypnoAudio = null;
@@ -13187,18 +13323,25 @@ function startHypnotherapySession(duration) {
         currentHypnoBackground = null;
     }
 
-    // Créer l'élément audio principal
+    // UI avec durées réelles
+    document.getElementById('hypno-session-title').textContent =
+        config.title + ' - ' + config.displayDuration;
+    document.getElementById('hypno-total-time').textContent = config.displayDuration;
+    document.getElementById('hypno-current-time').textContent = '0:00';
+    document.getElementById('hypno-progress').style.width = '0%';
+
+    // Audio principal (voix)
     currentHypnoAudio = new Audio(config.audioUrl);
-    const hypnoVolumeSlider = document.getElementById('hypno-volume');
-    currentHypnoAudio.volume = hypnoVolumeSlider
-        ? hypnoVolumeSlider.value / 100
-        : 0.8;
+    const voiceSlider = document.getElementById('hypno-volume');
+    currentHypnoAudio.volume = voiceSlider ? voiceSlider.value / 100 : 0.8;
     currentHypnoAudio.preload = 'auto';
 
-    // Créer la musique de fond
+    // Musique de fond
     if (hypnoBackgroundEnabled) {
         currentHypnoBackground = new Audio(config.backgroundMusic);
-        currentHypnoBackground.volume = 0.2;
+        const musicSlider = document.getElementById('hypno-music-volume');
+        const baseVolume = musicSlider ? musicSlider.value / 100 : 0.3;
+        currentHypnoBackground.volume = baseVolume * 0.4;
         currentHypnoBackground.loop = true;
         currentHypnoBackground.preload = 'auto';
     }
@@ -13210,28 +13353,29 @@ function startHypnotherapySession(duration) {
             formatTime(actualDuration);
     });
 
-    currentHypnoAudio.addEventListener('timeupdate', function () {
-        updateHypnoProgress(currentHypnoAudio);
-    });
-
+    currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
     currentHypnoAudio.addEventListener('ended', onHypnoSessionEnd);
-
     currentHypnoAudio.addEventListener('error', function (e) {
         console.error('Erreur audio hypno:', e);
-        alert('Erreur de chargement audio. Vérifiez votre connexion.');
+        alert('Erreur de chargement audio: ' + config.audioUrl);
     });
 
-    // Log d'usage avec durée réelle
+    if (currentHypnoBackground) {
+        currentHypnoBackground.addEventListener('error', function (e) {
+            console.warn('Musique de fond hypno non disponible', e);
+        });
+    }
+
+    // Log d'usage
     DataManager.logToolUsage(
         'hypnotherapy-' + duration + 'min-' + config.displayDuration
     );
-
-    console.log(`🌀 Session d'hypnothérapie ${config.displayDuration} prête`);
 }
 
-// Basculer lecture/pause hypnose avec musique de fond
+// 2) Lecture / pause hypnose
 function toggleHypnoPlayback() {
     const btn = document.getElementById('hypno-play-pause');
+
     if (!currentHypnoAudio) {
         console.error('Aucun audio hypno chargé');
         return;
@@ -13244,97 +13388,138 @@ function toggleHypnoPlayback() {
                 btn.textContent = '⏸️ Pause';
                 if (currentHypnoBackground && hypnoBackgroundEnabled) {
                     currentHypnoBackground.play().catch((e) => {
-                        console.warn('Impossible de jouer la musique de fond', e);
+                        console.warn('Musique de fond hypno non lue:', e);
                     });
                 }
             })
             .catch((e) => {
-                console.error('Lecture hypno impossible:', e);
-                alert("Impossible de lire l'audio. Vérifiez votre connexion.");
+                console.error('Erreur lecture hypno:', e);
+                alert("Impossible de lire l'audio.");
             });
     } else {
         currentHypnoAudio.pause();
-        btn.textContent = '▶️ Reprendre';
+        btn.textContent = '▶️ Commencer';
         if (currentHypnoBackground) {
             currentHypnoBackground.pause();
         }
     }
 }
 
-// Mettre à jour le progrès de l'hypnose
-function updateHypnoProgress(audio = currentHypnoAudio) {
-    if (!audio) return;
+// 3) Activer / couper la musique de fond hypnose
+function toggleHypnoBackground() {
+    hypnoBackgroundEnabled = !hypnoBackgroundEnabled;
+    const btn = document.getElementById('hypno-music-toggle');
 
-    const currentTime = audio.currentTime || 0;
-    const duration = audio.duration || 1;
+    if (!btn) {
+        console.error('Bouton musique hypno non trouvé');
+        return;
+    }
+
+    if (hypnoBackgroundEnabled) {
+        btn.textContent = '🎵 Musique : ON';
+        btn.classList.remove('disabled');
+
+        // Si session en cours, démarrer la musique
+        if (currentHypnoBackground && currentHypnoAudio && !currentHypnoAudio.paused) {
+            currentHypnoBackground.play().catch((e) => {
+                console.warn('Impossible de jouer la musique de fond hypno', e);
+            });
+        }
+    } else {
+        btn.textContent = '🎵 Musique : OFF';
+        btn.classList.add('disabled');
+
+        // Arrêter la musique
+        if (currentHypnoBackground) {
+            currentHypnoBackground.pause();
+        }
+    }
+}
+
+// 4) Volume voix hypnose
+function updateHypnoVolume() {
+    const slider = document.getElementById('hypno-volume');
+    if (!slider) return;
+
+    const volume = slider.value / 100;
+    if (currentHypnoAudio) {
+        currentHypnoAudio.volume = volume;
+    }
+
+    // Mettre à jour l'affichage
+    const display = document.querySelector('#hypno-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// 5) Volume musique hypnose
+function updateHypnoMusicVolume() {
+    const slider = document.getElementById('hypno-music-volume');
+    if (!slider) return;
+
+    const volume = slider.value / 100;
+    if (currentHypnoBackground) {
+        currentHypnoBackground.volume = volume * 0.4; // musique plus douce
+    }
+
+    // Mettre à jour l'affichage
+    const display = document.querySelector('#hypno-music-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// Progression hypnose
+function updateHypnoProgress() {
+    if (!currentHypnoAudio) return;
+
+    const currentTime = currentHypnoAudio.currentTime || 0;
+    const duration = currentHypnoAudio.duration || 1;
 
     const progress = (currentTime / duration) * 100;
     document.getElementById('hypno-progress').style.width = progress + '%';
-
-    const minutes = Math.floor(currentTime / 60);
-    const seconds = Math.floor(currentTime % 60);
     document.getElementById('hypno-current-time').textContent =
-        minutes + ':' + seconds.toString().padStart(2, '0');
+        formatTime(currentTime);
 }
 
-// Fin de session hypnose
+// 6) Fin de session hypnose
 function onHypnoSessionEnd() {
     if (hypnoProgressInterval) {
         clearInterval(hypnoProgressInterval);
         hypnoProgressInterval = null;
     }
 
-    if (currentHypnoAudio) {
-        currentHypnoAudio.pause();
-        currentHypnoAudio.currentTime = 0;
-    }
-    if (currentHypnoBackground) {
-        currentHypnoBackground.pause();
-        currentHypnoBackground.currentTime = 0;
-    }
-
     const btn = document.getElementById('hypno-play-pause');
     if (btn) btn.textContent = '✅ Terminé';
 
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+    }
+
     setTimeout(() => {
-        alert(
-            "🌟 Session d'hypnothérapie terminée ! Prenez un moment pour intégrer cette expérience positive."
-        );
+        alert("🌟 Session d'hypnothérapie terminée ! Prenez un moment pour intégrer cette expérience.");
         goToScreen('hypnotherapy-screen');
     }, 1000);
 }
 
-// Arrêter session hypnose
+// 7) Arrêt manuel hypnose
 function stopHypnotherapySession() {
     if (currentHypnoAudio) {
         currentHypnoAudio.pause();
         currentHypnoAudio = null;
     }
-
     if (currentHypnoBackground) {
         currentHypnoBackground.pause();
         currentHypnoBackground = null;
     }
-
     if (hypnoProgressInterval) {
         clearInterval(hypnoProgressInterval);
         hypnoProgressInterval = null;
     }
-
     const btn = document.getElementById('hypno-play-pause');
-    if (btn) btn.textContent = '▶️ Commencer la Session';
-
+    if (btn) btn.textContent = '▶️ Commencer';
     goToScreen('hypnotherapy-screen');
-}
-
-// Mettre à jour volume hypnose (voix)
-function updateHypnoVolume() {
-    const slider = document.getElementById('hypno-volume');
-    if (!slider) return;
-    const volume = slider.value / 100;
-    if (currentHypnoAudio) {
-        currentHypnoAudio.volume = volume;
-    }
 }
 
 // ============ FONCTIONS MÉDITATION ============
@@ -13345,15 +13530,13 @@ function startMeditationSession(duration) {
 
     const config = meditationConfig[duration];
 
-    // Configuration de l'interface avec durées réelles
-    document.getElementById('meditation-session-title').textContent =
-        config.title + ' - ' + config.displayDuration;
-    document.getElementById('meditation-total-time').textContent =
-        config.displayDuration;
-    document.getElementById('meditation-current-time').textContent = '0:00';
-    document.getElementById('meditation-progress').style.width = '0%';
+    if (!config) {
+        console.error('Configuration méditation non trouvée pour durée:', duration);
+        alert('Erreur: Session de méditation non configurée');
+        return;
+    }
 
-    // Nettoyer anciens audios
+    // Nettoyer les anciens audios
     if (currentMeditationAudio) {
         currentMeditationAudio.pause();
         currentMeditationAudio = null;
@@ -13363,18 +13546,26 @@ function startMeditationSession(duration) {
         currentMeditationBackground = null;
     }
 
-    // Créer l'élément audio principal
+    // UI avec durées réelles
+    document.getElementById('meditation-session-title').textContent =
+        config.title + ' - ' + config.displayDuration;
+    document.getElementById('meditation-total-time').textContent =
+        config.displayDuration;
+    document.getElementById('meditation-current-time').textContent = '0:00';
+    document.getElementById('meditation-progress').style.width = '0%';
+
+    // Audio principal
     currentMeditationAudio = new Audio(config.audioUrl);
-    const meditationVolumeSlider = document.getElementById('meditation-volume');
-    currentMeditationAudio.volume = meditationVolumeSlider
-        ? meditationVolumeSlider.value / 100
-        : 0.8;
+    const voiceSlider = document.getElementById('meditation-volume');
+    currentMeditationAudio.volume = voiceSlider ? voiceSlider.value / 100 : 0.8;
     currentMeditationAudio.preload = 'auto';
 
-    // Créer la musique de fond
+    // Musique de fond
     if (meditationBackgroundEnabled) {
         currentMeditationBackground = new Audio(config.backgroundMusic);
-        currentMeditationBackground.volume = 0.15;
+        const musicSlider = document.getElementById('meditation-music-volume');
+        const baseVolume = musicSlider ? musicSlider.value / 100 : 0.3;
+        currentMeditationBackground.volume = baseVolume * 0.4;
         currentMeditationBackground.loop = true;
         currentMeditationBackground.preload = 'auto';
     }
@@ -13387,26 +13578,29 @@ function startMeditationSession(duration) {
             formatTime(actualDuration);
     });
 
-    currentMeditationAudio.addEventListener('timeupdate', function () {
-        updateMeditationProgress(currentMeditationAudio);
-    });
-
+    currentMeditationAudio.addEventListener(
+        'timeupdate',
+        updateMeditationProgress
+    );
     currentMeditationAudio.addEventListener('ended', onMeditationSessionEnd);
-
     currentMeditationAudio.addEventListener('error', function (e) {
         console.error('Erreur audio méditation:', e);
-        alert('Erreur de chargement audio. Vérifiez votre connexion.');
+        alert('Erreur de chargement audio: ' + config.audioUrl);
     });
+
+    if (currentMeditationBackground) {
+        currentMeditationBackground.addEventListener('error', function (e) {
+            console.warn('Musique de fond méditation non disponible', e);
+        });
+    }
 
     // Démarrer l'animation de respiration
     startBreathingAnimation();
 
-    // Log d'usage avec durée réelle
+    // Log d'usage
     DataManager.logToolUsage(
         'meditation-' + duration + 'min-' + config.displayDuration
     );
-
-    console.log(`🧘 Session de méditation ${config.displayDuration} prête`);
 }
 
 // Animation de respiration pour la méditation
@@ -13426,19 +13620,21 @@ function startBreathingAnimation() {
         breathingIn = !breathingIn;
     }
 
-    // Cycle de respiration toutes les 7 secondes
+    // Réinitialiser si nécessaire
     if (meditationBreathingInterval) {
         clearInterval(meditationBreathingInterval);
     }
+
     meditationBreathingInterval = setInterval(breathCycle, 7000);
     breathCycle();
 }
 
-// Basculer lecture/pause méditation avec musique
+// Lecture / pause méditation
 function toggleMeditationPlayback() {
     const btn = document.getElementById('meditation-play-pause');
+
     if (!currentMeditationAudio) {
-        console.error('Aucun audio méditation chargé');
+        alert('Erreur: aucune session de méditation chargée.');
         return;
     }
 
@@ -13448,38 +13644,39 @@ function toggleMeditationPlayback() {
             .then(() => {
                 btn.textContent = '⏸️ Pause';
                 if (currentMeditationBackground && meditationBackgroundEnabled) {
-                    currentMeditationBackground.play().catch((e) =>
-                        console.warn('Impossible de jouer la musique de fond', e)
-                    );
+                    currentMeditationBackground.play().catch((e) => {
+                        console.warn(
+                            'Musique de fond méditation non lue:',
+                            e
+                        );
+                    });
                 }
             })
-            .catch((e) =>
-                console.error('Lecture méditation impossible:', e)
-            );
+            .catch((e) => {
+                console.error('Erreur lecture méditation:', e);
+                alert("Impossible de lire l'audio.");
+            });
     } else {
         currentMeditationAudio.pause();
-        btn.textContent = '▶️ Reprendre';
+        btn.textContent = '▶️ Commencer';
         if (currentMeditationBackground) {
             currentMeditationBackground.pause();
         }
     }
 }
 
-// Mettre à jour le progrès de la méditation
-function updateMeditationProgress(audio = currentMeditationAudio) {
-    if (!audio) return;
+// Progression méditation
+function updateMeditationProgress() {
+    if (!currentMeditationAudio) return;
 
-    const currentTime = audio.currentTime || 0;
-    const duration = audio.duration || 1;
+    const currentTime = currentMeditationAudio.currentTime || 0;
+    const duration = currentMeditationAudio.duration || 1;
 
     const progress = (currentTime / duration) * 100;
     document.getElementById('meditation-progress').style.width =
         progress + '%';
-
-    const minutes = Math.floor(currentTime / 60);
-    const seconds = Math.floor(currentTime % 60);
     document.getElementById('meditation-current-time').textContent =
-        minutes + ':' + seconds.toString().padStart(2, '0');
+        formatTime(currentTime);
 }
 
 // Fin de session méditation
@@ -13489,81 +13686,91 @@ function onMeditationSessionEnd() {
         meditationProgressInterval = null;
     }
 
+    const btn = document.getElementById('meditation-play-pause');
+    if (btn) btn.textContent = '✅ Terminé';
+
+    if (currentMeditationBackground) {
+        currentMeditationBackground.pause();
+    }
+
     if (meditationBreathingInterval) {
         clearInterval(meditationBreathingInterval);
         meditationBreathingInterval = null;
     }
 
-    if (currentMeditationAudio) {
-        currentMeditationAudio.pause();
-        currentMeditationAudio.currentTime = 0;
-    }
-    if (currentMeditationBackground) {
-        currentMeditationBackground.pause();
-        currentMeditationBackground.currentTime = 0;
-    }
-
-    const btn = document.getElementById('meditation-play-pause');
-    if (btn) btn.textContent = '✅ Terminé';
-    const instruction = document.getElementById('meditation-instruction');
-    if (instruction) instruction.textContent = 'Session terminée';
-
     setTimeout(() => {
-        alert(
-            '🕯️ Session de méditation terminée ! Restez encore un moment dans cette paix intérieure.'
-        );
+        alert('🧘 Session de méditation terminée.');
         goToScreen('meditation-screen');
     }, 1000);
 }
 
-// Arrêter session méditation
+// Arrêt manuel méditation
 function stopMeditationSession() {
     if (currentMeditationAudio) {
         currentMeditationAudio.pause();
         currentMeditationAudio = null;
     }
-
     if (currentMeditationBackground) {
         currentMeditationBackground.pause();
         currentMeditationBackground = null;
     }
-
     if (meditationProgressInterval) {
         clearInterval(meditationProgressInterval);
         meditationProgressInterval = null;
     }
-
     if (meditationBreathingInterval) {
         clearInterval(meditationBreathingInterval);
         meditationBreathingInterval = null;
     }
-
     const btn = document.getElementById('meditation-play-pause');
-    if (btn) btn.textContent = '▶️ Commencer la Session';
-
+    if (btn) btn.textContent = '▶️ Commencer';
     goToScreen('meditation-screen');
 }
 
-// Mettre à jour volume méditation (voix)
+// Volume voix méditation
 function updateMeditationVolume() {
     const slider = document.getElementById('meditation-volume');
     if (!slider) return;
+
     const volume = slider.value / 100;
     if (currentMeditationAudio) {
         currentMeditationAudio.volume = volume;
     }
+    const display = document.querySelector('#meditation-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
 }
 
-// Fonction utilitaire pour formater le temps
-function formatTime(seconds) {
-    if (!seconds || isNaN(seconds)) return '0:00';
+// Volume musique méditation
+function updateMeditationMusicVolume() {
+    const slider = document.getElementById('meditation-music-volume');
+    if (!slider) return;
 
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return minutes + ':' + secs.toString().padStart(2, '0');
+    const volume = slider.value / 100;
+    if (currentMeditationBackground) {
+        currentMeditationBackground.volume = volume * 0.4;
+    }
+    const display = document.querySelector('#meditation-music-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
 }
 
-// ============ FIN FONCTIONS HYPNO/MÉDITATION ===========
+// Fonction de test pour le système hypno
+function testHypnoSystem() {
+    console.log('TEST SYSTÈME HYPNO:');
+    console.log('- currentHypnoAudio:', currentHypnoAudio);
+    console.log('- currentHypnoBackground:', currentHypnoBackground);
+    console.log('- hypnoBackgroundEnabled:', hypnoBackgroundEnabled);
+    console.log('- Bouton play:', document.getElementById('hypno-play-pause'));
+    console.log('- Bouton musique:', document.getElementById('hypno-music-toggle'));
+    console.log('- Slider voix:', document.getElementById('hypno-volume'));
+    console.log('- Slider musique:', document.getElementById('hypno-music-volume'));
+}
+
+// ============ FIN FONCTIONS HYPNO/MÉDITATION ============
+
 
         // ============ FONCTIONS MODE CRISE AMÉLIORÉ ============
 
