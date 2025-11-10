@@ -13393,124 +13393,7 @@
             }
         }
 
-        
-
-// Démarrer la relaxation progressive (audio de crise)
-function startProgressiveRelaxationAudio() {
-    // Aller à l'écran de session hypnothérapie
-    goToScreen('hypnotherapy-session-screen');
-    
-    // Configuration pour relaxation progressive
-    const relaxationConfig = {
-        title: 'Détente Musculaire Guidée',
-        audioUrl: './audio/crise/scan_corporel_urgence.mp3',
-        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
-        realDuration: 226, // 3:46 minutes réelles
-        displayDuration: '3:46 min'
-    };
-    
-    // Nettoyer les anciens audios
-    if (currentHypnoAudio) {
-        currentHypnoAudio.pause();
-        currentHypnoAudio = null;
-    }
-    if (currentHypnoBackground) {
-        currentHypnoBackground.pause();
-        currentHypnoBackground = null;
-    }
-    
-    // Configuration de l'interface
-    document.getElementById('hypno-session-title').textContent = 
-        relaxationConfig.title + ' - ' + relaxationConfig.displayDuration;
-    document.getElementById('hypno-total-time').textContent = relaxationConfig.displayDuration;
-    document.getElementById('hypno-current-time').textContent = '0:00';
-    document.getElementById('hypno-progress').style.width = '0%';
-    
-    // Créer l'audio de relaxation
-    currentHypnoAudio = new Audio(relaxationConfig.audioUrl);
-    currentHypnoAudio.volume = 0.8;
-    currentHypnoAudio.preload = 'auto';
-    
-    // Créer la musique de fond
-    if (hypnoBackgroundEnabled) {
-        currentHypnoBackground = new Audio(relaxationConfig.backgroundMusic);
-        currentHypnoBackground.volume = 0.2; // Volume doux pour relaxation
-        currentHypnoBackground.loop = true;
-        currentHypnoBackground.preload = 'auto';
-        
-        currentHypnoBackground.addEventListener('error', function(e) {
-            console.warn('⚠️ Musique de fond relaxation non disponible', e);
-        });
-    }
-    
-    // Événements audio principal
-    currentHypnoAudio.addEventListener('loadeddata', function() {
-        console.log('🎵 Audio relaxation chargé:', formatTime(currentHypnoAudio.duration));
-        const actualDuration = currentHypnoAudio.duration || relaxationConfig.realDuration;
-        const minutes = Math.floor(actualDuration / 60);
-        const seconds = Math.floor(actualDuration % 60);
-        document.getElementById('hypno-total-time').textContent = 
-            minutes + ':' + seconds.toString().padStart(2, '0');
-    });
-    
-    currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
-    currentHypnoAudio.addEventListener('ended', function() {
-        const btn = document.getElementById('hypno-play-pause');
-        if (btn) btn.textContent = '✅ Terminé';
-        
-        // Arrêter la musique de fond
-        if (currentHypnoBackground) {
-            currentHypnoBackground.pause();
-        }
-        
-        setTimeout(() => {
-            if (typeof showNotification === 'function') {
-                showNotification('🌸 Relaxation progressive terminée ! Vous devriez vous sentir détendu.', 'success');
-            }
-            setTimeout(() => {
-                // Retourner vers l'écran d'origine (mode crise par défaut)
-                returnFromProgressiveRelaxation();
-            }, 2000);
-        }, 1000);
-    });
-    
-    currentHypnoAudio.addEventListener('error', function(e) {
-        console.error('❌ Erreur audio relaxation:', e);
-        alert('Erreur: Impossible de charger l\'audio de relaxation');
-    });
-    
-    // Notification
-    if (typeof showNotification === 'function') {
-        showNotification('🧘‍♀️ Relaxation progressive prête. Installez-vous confortablement.', 'info');
-    }
-    
-    // Log d'usage
-    if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
-        DataManager.logToolUsage('progressive-relaxation-3min46s');
-    }
-    
-    console.log('🌿 Session de relaxation progressive prête: 3:46');
-}
-
-// Fonction pour retourner intelligemment après relaxation
-function returnFromProgressiveRelaxation() {
-    // À ce stade, la relaxation est toujours appelée depuis le mode crise
-    goToScreen('emergency-screen');
-}
-
-// Adapter le bouton Retour en fonction du type de session
-function returnFromHypnoSession() {
-    const titleEl = document.getElementById('hypno-session-title');
-    const title = titleEl ? titleEl.textContent : '';
-    
-    if (title.includes('Urgence') || title.includes('Crise') || title.includes('Détente Musculaire')) {
-        goToScreen('emergency-screen');
-    } else {
-        goToScreen('hypnotherapy-screen');
-    }
-}
-
-// ============ FIN FONCTIONS HYPNO/MÉDITATION ============
+        // ============ FIN FONCTIONS HYPNO/MÉDITATION ============
 
         // ============ FONCTIONS MODE CRISE AMÉLIORÉ ============
 
@@ -13895,7 +13778,7 @@ function returnFromHypnoSession() {
                     <h2>Détente Musculaire Guidée</h2>
                     <div class="relaxation-timer">
                         <div class="timer-display" id="relaxation-timer">8:00</div>
-                        <button class="btn-primary" onclick="startProgressiveRelaxationAudio()">Commencer la Relaxation</button>
+                        <button class="btn-primary" onclick="startProgressiveRelaxation()">Commencer la Relaxation</button>
                     </div>
                     
                     <div class="relaxation-instructions" id="relaxation-text">
@@ -17216,6 +17099,169 @@ function returnFromHypnoSession() {
         // (Ancien code DOMContentLoaded supprimé - remplacé par la version directe plus bas)
 
         // ============ FIN ÉCRAN MENTIONS LÉGALES ============
-    </script>
+    
+
+// ============ FONCTION RELAXATION PROGRESSIVE (INDÉPENDANTE) ============
+function startProgressiveRelaxation() {
+    console.log('🌿 Démarrage relaxation progressive...');
+
+    // Aller à l'écran de session d'hypnothérapie
+    goToScreen('hypnotherapy-session-screen');
+
+    // Variables locales : ne touchent pas aux audios globaux
+    let relaxationAudio = null;
+    let relaxationBackground = null;
+
+    // Récupérer les éléments d'interface
+    const titleEl = document.getElementById('hypno-session-title');
+    const totalEl = document.getElementById('hypno-total-time');
+    const currentEl = document.getElementById('hypno-current-time');
+    const progressEl = document.getElementById('hypno-progress');
+    const playBtn = document.getElementById('hypno-play-pause');
+
+    // Sauvegarder l'attribut onclick original du bouton lecture
+    const originalOnclickAttr = playBtn ? playBtn.getAttribute('onclick') : null;
+
+    // Configuration spécifique à la relaxation progressive
+    const RELAXATION_CONFIG = {
+        title: 'Détente Musculaire Guidée',
+        audioUrl: './audio/crise/scan_corporel_urgence.mp3',
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        displayDuration: '3:46 min'
+    };
+
+    // Mettre à jour l'interface
+    if (titleEl) titleEl.textContent = RELAXATION_CONFIG.title;
+    if (totalEl) totalEl.textContent = RELAXATION_CONFIG.displayDuration;
+    if (currentEl) currentEl.textContent = '0:00';
+    if (progressEl) progressEl.style.width = '0%';
+
+    // Créer l'audio principal (local)
+    relaxationAudio = new Audio(RELAXATION_CONFIG.audioUrl);
+    relaxationAudio.volume = 0.8;
+    relaxationAudio.preload = 'auto';
+
+    // Créer l'audio de fond (local)
+    relaxationBackground = new Audio(RELAXATION_CONFIG.backgroundMusic);
+    relaxationBackground.volume = 0.2;
+    relaxationBackground.loop = true;
+    relaxationBackground.preload = 'auto';
+
+    // Mise à jour de la durée réelle quand l'audio est chargé
+    relaxationAudio.addEventListener('loadeddata', function () {
+        console.log('🎵 Audio relaxation chargé :', relaxationAudio.duration, 'secondes');
+        if (relaxationAudio.duration && totalEl) {
+            const minutes = Math.floor(relaxationAudio.duration / 60);
+            const seconds = Math.floor(relaxationAudio.duration % 60);
+            totalEl.textContent = minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+    });
+
+    // Mise à jour de la progression et du temps
+    relaxationAudio.addEventListener('timeupdate', function () {
+        if (!relaxationAudio || !relaxationAudio.duration) return;
+
+        const currentTime = relaxationAudio.currentTime;
+        const duration = relaxationAudio.duration;
+
+        if (progressEl) {
+            const progress = (currentTime / duration) * 100;
+            progressEl.style.width = progress + '%';
+        }
+
+        if (currentEl) {
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            currentEl.textContent = minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+    });
+
+    // Gestion de la fin de l'audio
+    relaxationAudio.addEventListener('ended', function () {
+        console.log('✅ Relaxation progressive terminée');
+
+        if (relaxationBackground) {
+            relaxationBackground.pause();
+        }
+
+        if (playBtn) {
+            playBtn.textContent = '✅ Terminé';
+        }
+
+        setTimeout(function () {
+            alert('Détente musculaire terminée ! Vous devriez vous sentir plus détendu.');
+
+            // Nettoyer les références locales
+            relaxationAudio = null;
+            relaxationBackground = null;
+
+            // Restaurer le comportement normal du bouton lecture
+            if (playBtn) {
+                playBtn.onclick = null;
+                if (originalOnclickAttr) {
+                    playBtn.setAttribute('onclick', originalOnclickAttr);
+                }
+                playBtn.textContent = '▶️ Commencer';
+            }
+
+            // Retour vers le mode crise
+            goToScreen('emergency-screen');
+        }, 1500);
+    });
+
+    // Gestion des erreurs de chargement
+    relaxationAudio.addEventListener('error', function (e) {
+        console.error('❌ Erreur audio relaxation:', e);
+        alert('Erreur: Impossible de charger l\'audio de relaxation (scan_corporel_urgence.mp3)');
+    });
+
+    // Attacher TEMPORAIREMENT le bouton play/pause à cette séance locale
+    if (playBtn) {
+        // Retirer l'onclick HTML pour ne pas déclencher toggleHypnoPlayback
+        playBtn.removeAttribute('onclick');
+
+        playBtn.onclick = function () {
+            if (!relaxationAudio) return;
+
+            if (relaxationAudio.paused) {
+                relaxationAudio.play().then(function () {
+                    playBtn.textContent = '⏸️ Pause';
+
+                    if (relaxationBackground) {
+                        relaxationBackground.play().catch(function () {
+                            console.warn('Musique de fond relaxation non disponible');
+                        });
+                    }
+                }).catch(function (e) {
+                    console.error('Erreur lecture relaxation:', e);
+                    alert('Impossible de lire l\'audio de relaxation');
+                });
+            } else {
+                relaxationAudio.pause();
+                playBtn.textContent = '▶️ Reprendre';
+
+                if (relaxationBackground) {
+                    relaxationBackground.pause();
+                }
+            }
+        };
+
+        // Texte initial du bouton
+        playBtn.textContent = '▶️ Commencer';
+    }
+
+    // Préchargement
+    try {
+        relaxationAudio.load();
+        relaxationBackground.load();
+    } catch (e) {
+        console.warn('Erreur préchargement relaxation:', e);
+    }
+
+    console.log('🌸 Relaxation progressive prête - scan corporel 3:46');
+}
+// ============ FIN FONCTION RELAXATION PROGRESSIVE ============
+
+</script>
 </body>
 </html>
