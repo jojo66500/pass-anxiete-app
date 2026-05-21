@@ -16990,51 +16990,24 @@ function testHypnoSystem() {
         
         console.log('✅ Scroll intelligent installé');
         
-        // 2. BOUTON MENTIONS LÉGALES FLOTTANT
-        console.log('⚖️ Création du bouton mentions légales...');
-        
-        setTimeout(() => {
-            // Créer le bouton
-            const legalBtn = document.createElement('button');
-            legalBtn.innerHTML = '⚖️ Légal';
-            legalBtn.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: #2196F3;
-                color: white;
-                border: none;
-                padding: 15px 20px;
-                border-radius: 30px;
-                font-size: 14px;
-                font-weight: bold;
-                cursor: pointer;
-                z-index: 10000;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                transition: all 0.3s ease;
-                font-family: Arial, sans-serif;
-            `;
-            
-            // Action du bouton
-            legalBtn.onclick = function() {
-                console.log('🔗 Clic mentions légales');
-                window.goToScreen('legal-screen');
-            };
-            
-            // Effets hover
-            legalBtn.onmouseenter = function() {
-                this.style.transform = 'scale(1.1)';
-                this.style.background = '#1976D2';
-            };
-            
-            legalBtn.onmouseleave = function() {
-                this.style.transform = 'scale(1)';
-                this.style.background = '#2196F3';
-            };
-            
-            document.body.appendChild(legalBtn);
-            console.log('✅ Bouton mentions légales créé');
-            
+        // 2. BOUTON MENTIONS LÉGALES — discret dans le footer de l'accueil uniquement
+        setTimeout(function() {
+            // Ajouter un lien discret dans le bas de l'écran home-screen uniquement
+            var homeScreen = document.getElementById('home-screen');
+            if (!homeScreen) return;
+
+            var footer = document.createElement('div');
+            footer.style.cssText = 'text-align:center;padding:15px 0 25px;margin-top:10px;';
+            footer.innerHTML = '<button onclick="goToScreen(\'legal-screen\')" style="'
+                + 'background:none;border:none;color:#aaa;font-size:0.75rem;'
+                + 'cursor:pointer;text-decoration:underline;font-family:inherit;'
+                + 'padding:8px 16px;">⚖️ Mentions légales</button>';
+
+            var container = homeScreen.querySelector('.container');
+            if (container) {
+                container.appendChild(footer);
+            }
+            console.log('✅ Lien mentions légales ajouté en bas de l\'accueil');
         }, 500);
         
         // 3. CRÉER L'ÉCRAN MENTIONS LÉGALES
@@ -18435,11 +18408,26 @@ function testHypnoSystem() {
 
                 liaHistory.push({ role: 'user', content: userMsg });
 
+                // Timeout de sécurité : si pas de réponse en 10 sec → fallback
+                const timeoutId = setTimeout(() => {
+                    liaHideTyping();
+                    liaHistory.pop(); // retirer le message sans réponse
+                    const fallbackCards = [
+                        { key: 'crisis',    icon: '🚨', title: 'Mode Crise',          sub: 'Pour les urgences et paniques' },
+                        { key: 'breathing', icon: '💓', title: 'Cohérence Cardiaque', sub: 'Pour se calmer rapidement' },
+                        { key: 'tcc',       icon: '🧠', title: 'TCC',                 sub: 'Pour les pensées négatives' }
+                    ];
+                    liaAddMsg('ai',
+                        'Je rencontre une difficulté de connexion. Voici les modules qui peuvent vous aider :',
+                        fallbackCards
+                    );
+                    liaIsWaiting = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                }, 10000);
+
                 fetch('/.netlify/functions/claude', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         model: 'claude-sonnet-4-20250514',
                         max_tokens: 350,
@@ -18447,10 +18435,15 @@ function testHypnoSystem() {
                         messages: liaHistory
                     })
                 })
-                .then(r => r.json())
-                .then(data => {
-                    const aiText = data.content?.[0]?.text
-                        || 'Je vous écoute. Pouvez-vous me décrire plus précisément ce que vous ressentez ?';
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    clearTimeout(timeoutId);
+
+                    const aiText = (data.content && data.content[0] && data.content[0].text)
+                        ? data.content[0].text
+                        : null;
+
+                    if (!aiText) throw new Error('Réponse vide');
 
                     liaHistory.push({ role: 'assistant', content: aiText });
                     liaHideTyping();
@@ -18458,7 +18451,7 @@ function testHypnoSystem() {
                     const match = aiText.match(/REDIRECT:(\w+)/);
                     if (match && LIA_MODULES[match[1]]) {
                         liaAddMsg('ai', aiText);
-                        setTimeout(() => liaShowRedirect(match[1]), 1000);
+                        setTimeout(function() { liaShowRedirect(match[1]); }, 1000);
                     } else {
                         liaAddMsg('ai', aiText);
                     }
@@ -18466,18 +18459,31 @@ function testHypnoSystem() {
                     liaIsWaiting = false;
                     if (sendBtn) sendBtn.disabled = false;
                 })
-                .catch(err => {
+                .catch(function(err) {
+                    clearTimeout(timeoutId);
                     console.error('Lia API error:', err);
                     liaHideTyping();
-                    const fallbackCards = [
-                        { key: 'crisis', icon: '🚨', title: 'Mode Crise', sub: 'Pour les urgences et paniques' },
-                        { key: 'breathing', icon: '💓', title: 'Cohérence Cardiaque', sub: 'Pour se calmer rapidement' },
-                        { key: 'tcc', icon: '🧠', title: 'TCC', sub: 'Pour les pensées négatives' }
-                    ];
-                    liaAddMsg('ai',
-                        'Je rencontre une difficulté de connexion. Voici les modules qui peuvent vous aider :',
-                        fallbackCards
-                    );
+
+                    // Fallback local par mots-clés si l'API est indisponible
+                    var detected = liaDetectModule(userMsg);
+                    var mod = LIA_MODULES[detected];
+                    if (mod) {
+                        liaAddMsg('ai',
+                            'Je ne peux pas me connecter en ce moment, mais j\'ai analysé votre message. Je vous recommande ce module :'
+                        );
+                        setTimeout(function() { liaShowRedirect(detected); }, 800);
+                    } else {
+                        var fallbackCards = [
+                            { key: 'crisis',    icon: '🚨', title: 'Mode Crise',          sub: 'Pour les urgences et paniques' },
+                            { key: 'breathing', icon: '💓', title: 'Cohérence Cardiaque', sub: 'Pour se calmer rapidement' },
+                            { key: 'tcc',       icon: '🧠', title: 'TCC',                 sub: 'Pour les pensées négatives' }
+                        ];
+                        liaAddMsg('ai',
+                            'Je rencontre une difficulté de connexion. Voici les modules qui peuvent vous aider :',
+                            fallbackCards
+                        );
+                    }
+
                     liaIsWaiting = false;
                     if (sendBtn) sendBtn.disabled = false;
                 });
