@@ -5865,7 +5865,403 @@
             transform: scale(1.1);
         }
         /* ============ FIN STYLES BOUTONS EMDR ============ */
-    </style>
+    
+
+        /* ============ STYLES ASSISTANT IA "LIA" ============ */
+        #ai-screen {
+            background: var(--gradient-calm);
+            min-height: 100vh;
+        }
+
+        .lia-app {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .lia-header {
+            background: var(--gradient);
+            padding: 20px 20px 18px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .lia-header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 130px;
+            height: 130px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .lia-header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .lia-back {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .lia-back:hover { background: rgba(255,255,255,0.3); }
+        .lia-avatar {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            flex-shrink: 0;
+            animation: liaBreathe 3s ease-in-out infinite;
+        }
+        @keyframes liaBreathe {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .lia-header-text { flex: 1; }
+        .lia-header-text h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .lia-header-text p {
+            font-size: 0.78rem;
+            opacity: 0.85;
+            margin: 2px 0 0;
+        }
+        .lia-online {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.73rem;
+            opacity: 0.9;
+        }
+        .lia-dot {
+            width: 7px;
+            height: 7px;
+            background: #7fffd4;
+            border-radius: 50%;
+            animation: liaPulse 2s infinite;
+        }
+        @keyframes liaPulse {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .lia-subscreen { display: none; flex: 1; flex-direction: column; }
+        .lia-subscreen.active { display: flex; }
+
+        .lia-welcome {
+            padding: 22px 18px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .lia-intro {
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--primary);
+        }
+        .lia-intro p { font-size: 0.95rem; line-height: 1.6; color: #2C3E50; }
+        .lia-intro .lia-question {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: block;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .lia-options { display: flex; flex-direction: column; gap: 10px; }
+        .lia-opt-btn {
+            background: white;
+            border: 2px solid #e8ecf0;
+            border-radius: 14px;
+            padding: 13px 16px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            color: #2C3E50;
+            transition: all 0.22s ease;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .lia-opt-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+            transform: translateX(4px);
+            box-shadow: 0 3px 12px rgba(107,155,209,0.15);
+        }
+        .lia-opt-icon { font-size: 1.4rem; width: 28px; text-align: center; flex-shrink: 0; }
+        .lia-opt-text { flex: 1; }
+        .lia-opt-text strong { display: block; font-weight: 500; margin-bottom: 1px; }
+        .lia-opt-text small { color: #6b7c93; font-size: 0.78rem; }
+        .lia-opt-arrow { color: #bcc4cc; font-size: 1.1rem; transition: transform 0.2s; }
+        .lia-opt-btn:hover .lia-opt-arrow { transform: translateX(3px); }
+
+        .lia-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f7f9fb;
+        }
+        .lia-messages::-webkit-scrollbar { width: 3px; }
+        .lia-messages::-webkit-scrollbar-thumb { background: #d0d9e4; border-radius: 2px; }
+        .lia-msg { display: flex; gap: 8px; animation: liaFadeUp 0.28s ease; }
+        @keyframes liaFadeUp {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lia-msg.user { flex-direction: row-reverse; }
+        .lia-msg-av {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            background: #e8ecf0;
+            margin-top: 2px;
+        }
+        .lia-msg.ai .lia-msg-av { background: var(--gradient); color: white; }
+        .lia-msg-bubble {
+            max-width: 78%;
+            padding: 11px 15px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            white-space: pre-line;
+        }
+        .lia-msg.ai .lia-msg-bubble {
+            background: white;
+            color: #2C3E50;
+            border-radius: 3px 12px 12px 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .lia-msg.user .lia-msg-bubble {
+            background: var(--gradient);
+            color: white;
+            border-radius: 12px 3px 12px 12px;
+        }
+        .lia-typing { display: flex; gap: 5px; align-items: center; padding: 12px 15px; }
+        .lia-typing span {
+            width: 6px;
+            height: 6px;
+            background: #bcc4cc;
+            border-radius: 50%;
+            animation: liaTypeBounce 1.2s infinite;
+        }
+        .lia-typing span:nth-child(2) { animation-delay: 0.18s; }
+        .lia-typing span:nth-child(3) { animation-delay: 0.36s; }
+        @keyframes liaTypeBounce {
+            0%,60%,100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        .lia-redirect-cards { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+        .lia-rcard {
+            background: white;
+            border: 2px solid #e0e8f0;
+            border-radius: 10px;
+            padding: 10px 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: inherit;
+            font-size: 0.84rem;
+            color: #2C3E50;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .lia-rcard:hover { border-color: var(--primary); background: #f0f7ff; transform: scale(1.01); }
+        .lia-rcard .lri { font-size: 1.2rem; }
+        .lia-rcard .lrt { flex: 1; }
+        .lia-rcard .lrt strong { display: block; font-weight: 500; font-size: 0.85rem; }
+        .lia-rcard .lrt small { color: #6b7c93; font-size: 0.76rem; }
+
+        .lia-input-zone {
+            padding: 12px 18px 16px;
+            border-top: 1px solid #eef0f3;
+            background: white;
+        }
+        .lia-input-row { display: flex; gap: 9px; align-items: flex-end; }
+        .lia-textarea {
+            flex: 1;
+            border: 2px solid #e8ecf0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            color: #2C3E50;
+            resize: none;
+            min-height: 42px;
+            max-height: 110px;
+            transition: border-color 0.2s;
+            background: #fafbfc;
+        }
+        .lia-textarea:focus { outline: none; border-color: var(--primary); background: white; }
+        .lia-send {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: var(--gradient);
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .lia-send:hover { transform: scale(1.06); }
+        .lia-send:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+        .lia-redirect {
+            padding: 36px 24px;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 18px;
+            background: white;
+        }
+        .lia-mod-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            background: var(--gradient);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.3);
+            animation: liaPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+            margin: 0 auto;
+        }
+        @keyframes liaPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .lia-mod-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+        .lia-mod-desc {
+            font-size: 0.88rem;
+            color: #6b7c93;
+            line-height: 1.6;
+            max-width: 340px;
+        }
+        .lia-mod-tip {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.84rem;
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+            text-align: left;
+            max-width: 340px;
+            width: 100%;
+        }
+        .lia-go-btn {
+            padding: 14px 36px;
+            border-radius: 50px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.35);
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 280px;
+        }
+        .lia-go-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.5); }
+        .lia-back-link {
+            color: #6b7c93;
+            font-size: 0.83rem;
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        .lia-back-link:hover { color: #2C3E50; }
+
+        #tracking-screen .chart-placeholder {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 110px;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .tracking-bar {
+            flex: 1;
+            border-radius: 5px 5px 0 0;
+            transition: height 0.6s cubic-bezier(0.34,1.56,0.64,1);
+            min-height: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+        .tracking-bar:hover::after {
+            content: attr(data-val);
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2C3E50;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        .tracking-empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #6b7c93;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        /* ============ FIN STYLES LIA ============ */
+</style>
 </head>
 <body>
     <!-- Recommandation orientation -->
@@ -5951,6 +6347,89 @@
 
     <!-- ============ FIN SYSTÈME ACTIVATION ============ -->
 
+    <!-- ============ ÉCRAN ASSISTANT IA "LIA" ============ -->
+    <div id="ai-screen" class="screen">
+        <div class="lia-app">
+            <div class="lia-header">
+                <div class="lia-header-row">
+                    <button class="lia-back" onclick="goToScreen('home-screen')" aria-label="Retour">←</button>
+                    <div class="lia-avatar">🌸</div>
+                    <div class="lia-header-text">
+                        <h2>Lia — Votre accompagnatrice</h2>
+                        <p>Assistante thérapeutique · Pass Anxiété Pro</p>
+                    </div>
+                    <div class="lia-online"><div class="lia-dot"></div><span>Disponible</span></div>
+                </div>
+            </div>
+
+            <div class="lia-subscreen active" id="liaWelcome">
+                <div class="lia-welcome">
+                    <div class="lia-intro">
+                        <p>Bonjour 🌿 Je suis <strong>Lia</strong>, votre accompagnatrice personnelle.<br>
+                        Je vais vous écouter et vous guider vers l'outil le plus adapté à votre état.</p>
+                        <span class="lia-question">Comment vous sentez-vous en ce moment ?</span>
+                    </div>
+
+                    <div class="lia-options">
+                        <button class="lia-opt-btn" onclick="liaStartChat('Je vis une crise d\'angoisse intense en ce moment, j\'ai besoin d\'aide immédiate')">
+                            <span class="lia-opt-icon">🆘</span>
+                            <span class="lia-opt-text"><strong>C'est urgent — j'ai une crise</strong><small>Aide immédiate, respiration, ancrage</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('J\'ai des pensées négatives qui tournent en boucle, je n\'arrive pas à m\'en libérer et cela m\'épuise')">
+                            <span class="lia-opt-icon">🌀</span>
+                            <span class="lia-opt-text"><strong>Des pensées en boucle</strong><small>Ruminations, catastrophisme, stress</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('Je me sens anxieux de façon diffuse, sans raison précise, une tension générale difficile à nommer')">
+                            <span class="lia-opt-icon">😰</span>
+                            <span class="lia-opt-text"><strong>Anxiété diffuse, sans raison claire</strong><small>Tension, inquiétude, mal-être général</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('Je veux travailler sur un souvenir ou une situation traumatisante qui continue de me perturber')">
+                            <span class="lia-opt-icon">💭</span>
+                            <span class="lia-opt-text"><strong>Un souvenir ou traumatisme</strong><small>EMDR, retraitement émotionnel</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('J\'ai besoin d\'une relaxation profonde ou d\'une méditation pour me ressourcer')">
+                            <span class="lia-opt-icon">🧘</span>
+                            <span class="lia-opt-text"><strong>Me ressourcer, me recentrer</strong><small>Méditation, hypnose, relaxation</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaOpenFreeChat()">
+                            <span class="lia-opt-icon">✏️</span>
+                            <span class="lia-opt-text"><strong>Écrire librement…</strong><small>Décrivez ce que vous ressentez</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lia-subscreen" id="liaChat">
+                <div class="lia-messages" id="liaMessages"></div>
+            </div>
+            <div class="lia-input-zone" id="liaInputZone" style="display:none;">
+                <div class="lia-input-row">
+                    <textarea class="lia-textarea" id="liaInput" placeholder="Parlez-moi de ce que vous ressentez…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();liaSend()}"></textarea>
+                    <button class="lia-send" id="liaSendBtn" onclick="liaSend()">›</button>
+                </div>
+            </div>
+
+            <div class="lia-subscreen" id="liaRedirect">
+                <div class="lia-redirect">
+                    <div class="lia-mod-icon" id="liaModIcon">🧠</div>
+                    <div class="lia-mod-title" id="liaModTitle">Module recommandé</div>
+                    <div class="lia-mod-desc" id="liaModDesc"></div>
+                    <div class="lia-mod-tip" id="liaModTip" style="display:none;"></div>
+                    <button class="lia-go-btn" id="liaGoBtn" onclick="liaGoToModule()">Commencer →</button>
+                    <button class="lia-back-link" onclick="liaReset()">← Retour à l'accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============ FIN ÉCRAN LIA ============ -->
+
+
     <!-- Écran NFC (masqué par défaut maintenant) -->
     <div id="nfc-screen" class="screen">
         <div class="container">
@@ -6035,6 +6514,13 @@
                     <span class="tool-icon">📊</span>
                     <h3>Suivi</h3>
                     <p>Vos progrès</p>
+                </button>
+
+
+                <button class="tool-card" data-tool="ai">
+                    <span class="tool-icon">🤖</span>
+                    <h3>Assistant Lia</h3>
+                    <p>Guidé selon votre état</p>
                 </button>
 
                 <button class="tool-card" data-tool="therapist">
@@ -9480,7 +9966,8 @@
                         'journal': 'journal-screen',
                         'techniques': 'techniques-screen',
                         'thoughts-history': 'thoughts-history-screen',
-                        'therapist': 'therapist-screen'
+                        'therapist': 'therapist-screen',
+                        'ai': 'ai-screen'
                     };
                     if (screenMap[tool]) {
                         goToScreen(screenMap[tool]);
@@ -15049,7 +15536,8 @@ function testHypnoSystem() {
                         'journal': 'journal-screen',
                         'techniques': 'techniques-screen',
                         'thoughts-history': 'thoughts-history-screen',
-                        'therapist': 'therapist-screen'
+                        'therapist': 'therapist-screen',
+                        'ai': 'ai-screen'
                     };
                     
                     if (screenMap[tool]) {
@@ -17743,6 +18231,360 @@ function testHypnoSystem() {
         // (Ancien code DOMContentLoaded supprimé - remplacé par la version directe plus bas)
 
         // ============ FIN ÉCRAN MENTIONS LÉGALES ============
-    </script>
+    
+
+            // ============================================================
+            //   ASSISTANT "LIA" — Pass Anxiété Pro, version locale sécurisée
+            // ============================================================
+            const LIA_MODULES = {
+                crisis: {
+                    icon: '🚨',
+                    title: 'Mode Crise',
+                    desc: 'Techniques d\'urgence immédiates : respiration anti-panique, ancrage 5-4-3-2-1 et apaisement rapide.',
+                    tip: '💨 Commencez doucement. L’objectif n’est pas de forcer le calme, mais de retrouver un point d’appui.',
+                    screen: 'crisis-screen',
+                    gradient: 'linear-gradient(135deg, #f44336, #e91e63)'
+                },
+                emdr: {
+                    icon: '👁️',
+                    title: 'EMDR Professionnel',
+                    desc: 'Session de mouvements oculaires pour travailler sur un souvenir, une situation ou une charge émotionnelle persistante.',
+                    tip: '🧠 Commencez par évaluer votre niveau de détresse avant la session.',
+                    screen: 'emdr-distance',
+                    gradient: 'linear-gradient(135deg, #667eea, #764ba2)'
+                },
+                breathing: {
+                    icon: '💓',
+                    title: 'Cohérence Cardiaque',
+                    desc: 'Respiration guidée pour réguler le système nerveux et retrouver progressivement un état plus stable.',
+                    tip: '❤️ Quelques minutes peuvent déjà aider à faire redescendre la tension.',
+                    screen: 'breathing-screen',
+                    gradient: 'linear-gradient(135deg, #4CAF50, #8BC34A)'
+                },
+                tcc: {
+                    icon: '🧠',
+                    title: 'TCC — Restructuration cognitive',
+                    desc: 'Travail sur les pensées automatiques, les ruminations et les scénarios catastrophe.',
+                    tip: '💭 Notez la pensée exacte, puis cherchez une formulation plus équilibrée.',
+                    screen: 'tcc-screen',
+                    gradient: 'linear-gradient(135deg, #FF9800, #F57C00)'
+                },
+                meditation: {
+                    icon: '🧘',
+                    title: 'Méditation guidée',
+                    desc: 'Session de présence et de recentrage pour calmer le mental et revenir à l’instant présent.',
+                    tip: '🌿 Laissez passer les pensées comme des nuages. Rien à réussir, seulement revenir.',
+                    screen: 'meditation-screen',
+                    gradient: 'linear-gradient(135deg, #9C27B0, #673AB7)'
+                },
+                hypnotherapy: {
+                    icon: '🌀',
+                    title: 'Hypnothérapie guidée',
+                    desc: 'Session d’hypnose thérapeutique pour une relaxation profonde et un travail intérieur doux.',
+                    tip: '🎧 Installez-vous dans un endroit calme, idéalement avec un casque.',
+                    screen: 'hypnotherapy-screen',
+                    gradient: 'linear-gradient(135deg, #3F51B5, #2196F3)'
+                },
+                journal: {
+                    icon: '📝',
+                    title: 'Journal de bord TCC',
+                    desc: 'Écriture thérapeutique pour clarifier vos émotions, vos déclencheurs et votre progression.',
+                    tip: '✍️ Écrire même quelques lignes peut remettre de l’ordre dans le brouillard intérieur.',
+                    screen: 'journal-screen',
+                    gradient: 'linear-gradient(135deg, #009688, #4CAF50)'
+                }
+            };
+
+            let liaCurrentModule = null;
+            let liaIsWaiting = false;
+            let liaHistory = [];
+
+            function liaShowSub(name) {
+                ['liaWelcome','liaChat','liaRedirect'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.remove('active');
+                });
+                const target = document.getElementById('lia' + name.charAt(0).toUpperCase() + name.slice(1));
+                if (target) target.classList.add('active');
+
+                const inputZone = document.getElementById('liaInputZone');
+                if (inputZone) inputZone.style.display = (name === 'chat') ? 'block' : 'none';
+            }
+
+            function liaStartChat(msg) {
+                liaShowSub('chat');
+                liaHistory = [];
+                liaAddMsg('user', msg);
+                liaCallAI(msg);
+            }
+
+            function liaOpenFreeChat() {
+                liaShowSub('chat');
+                liaHistory = [];
+                liaAddMsg('ai', 'Prenez votre temps 🌿 Décrivez-moi ce que vous ressentez, je suis là pour vous écouter.');
+                setTimeout(() => document.getElementById('liaInput')?.focus(), 100);
+            }
+
+            function liaAddMsg(role, text, cards) {
+                const container = document.getElementById('liaMessages');
+                if (!container) return;
+
+                const div = document.createElement('div');
+                div.className = `lia-msg ${role}`;
+
+                const av = document.createElement('div');
+                av.className = 'lia-msg-av';
+                av.textContent = role === 'ai' ? '🌸' : '👤';
+
+                const bubble = document.createElement('div');
+                bubble.className = 'lia-msg-bubble';
+                bubble.textContent = String(text || '').replace(/REDIRECT:\w+/g, '').trim();
+
+                if (cards && cards.length > 0) {
+                    const cardsDiv = document.createElement('div');
+                    cardsDiv.className = 'lia-redirect-cards';
+                    cards.forEach(c => {
+                        const btn = document.createElement('button');
+                        btn.className = 'lia-rcard';
+                        const icon = document.createElement('span');
+                        icon.className = 'lri';
+                        icon.textContent = c.icon;
+                        const txt = document.createElement('span');
+                        txt.className = 'lrt';
+                        const strong = document.createElement('strong');
+                        strong.textContent = c.title;
+                        const small = document.createElement('small');
+                        small.textContent = c.sub;
+                        txt.appendChild(strong);
+                        txt.appendChild(small);
+                        const arrow = document.createElement('span');
+                        arrow.textContent = '›';
+                        btn.appendChild(icon);
+                        btn.appendChild(txt);
+                        btn.appendChild(arrow);
+                        btn.onclick = () => liaShowRedirect(c.key);
+                        cardsDiv.appendChild(btn);
+                    });
+                    bubble.appendChild(cardsDiv);
+                }
+
+                if (role === 'ai') {
+                    div.appendChild(av);
+                    div.appendChild(bubble);
+                } else {
+                    div.appendChild(bubble);
+                    div.appendChild(av);
+                }
+
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            function liaShowTyping() {
+                const container = document.getElementById('liaMessages');
+                if (!container) return;
+                const div = document.createElement('div');
+                div.className = 'lia-msg ai';
+                div.id = 'liaTyping';
+                const av = document.createElement('div');
+                av.className = 'lia-msg-av';
+                av.textContent = '🌸';
+                const b = document.createElement('div');
+                b.className = 'lia-msg-bubble lia-typing';
+                b.innerHTML = '<span></span><span></span><span></span>';
+                div.appendChild(av);
+                div.appendChild(b);
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            function liaHideTyping() {
+                document.getElementById('liaTyping')?.remove();
+            }
+
+            function liaSend() {
+                if (liaIsWaiting) return;
+                const input = document.getElementById('liaInput');
+                const text = (input?.value || '').trim();
+                if (!text) return;
+                input.value = '';
+                input.style.height = 'auto';
+                liaAddMsg('user', text);
+                liaCallAI(text);
+            }
+
+            function liaDetectModule(text) {
+                const msg = String(text || '').toLowerCase();
+                const has = words => words.some(w => msg.includes(w));
+
+                if (has(['crise', 'panique', 'angoisse intense', 'hyperventilation', 'urgence', 'j’étouffe', "j'etouffe", 'tachycardie', 'tétanie'])) return 'crisis';
+                if (has(['trauma', 'traumatisme', 'souvenir', 'choc', 'emdr', 'flashback', 'agression', 'accident'])) return 'emdr';
+                if (has(['pensée', 'pensee', 'rumination', 'boucle', 'catastrophe', 'négative', 'negative', 'obsession', 'je pense trop'])) return 'tcc';
+                if (has(['fatigue', 'épuisé', 'epuise', 'relaxation profonde', 'hypnose', 'lâcher prise', 'lacher prise'])) return 'hypnotherapy';
+                if (has(['méditation', 'meditation', 'calme', 'recentrer', 'pleine conscience', 'ressourcer'])) return 'meditation';
+                if (has(['écrire', 'ecrire', 'journal', 'exprimer', 'faire le point', 'poser mes émotions', 'poser mes emotions'])) return 'journal';
+                return 'breathing';
+            }
+
+            function liaCallAI(userMsg) {
+                if (liaIsWaiting) return;
+                liaIsWaiting = true;
+                const sendBtn = document.getElementById('liaSendBtn');
+                if (sendBtn) sendBtn.disabled = true;
+                liaShowTyping();
+                liaHistory.push({ role: 'user', content: userMsg });
+
+                setTimeout(() => {
+                    liaHideTyping();
+                    const moduleKey = liaDetectModule(userMsg);
+                    const mod = LIA_MODULES[moduleKey];
+                    const msg = `Merci de l’avoir exprimé 🌿 D’après ce que vous décrivez, je vous propose de commencer par le module ${mod.title}.`;
+                    liaHistory.push({ role: 'assistant', content: msg });
+                    liaAddMsg('ai', msg);
+                    setTimeout(() => liaShowRedirect(moduleKey), 850);
+                    liaIsWaiting = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                }, 650);
+            }
+
+            function liaShowRedirect(moduleKey) {
+                const mod = LIA_MODULES[moduleKey];
+                if (!mod) return;
+                liaCurrentModule = moduleKey;
+
+                const icon = document.getElementById('liaModIcon');
+                const title = document.getElementById('liaModTitle');
+                const desc = document.getElementById('liaModDesc');
+                const tip = document.getElementById('liaModTip');
+
+                if (icon) {
+                    icon.textContent = mod.icon;
+                    icon.style.background = mod.gradient;
+                }
+                if (title) title.textContent = mod.title;
+                if (desc) desc.textContent = mod.desc;
+                if (tip) {
+                    tip.textContent = mod.tip || '';
+                    tip.style.display = mod.tip ? 'block' : 'none';
+                }
+
+                liaShowSub('redirect');
+            }
+
+            function liaGoToModule() {
+                const mod = LIA_MODULES[liaCurrentModule];
+                if (!mod) return;
+                if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                    DataManager.logToolUsage('ai-' + liaCurrentModule);
+                }
+                if (typeof goToScreen === 'function') goToScreen(mod.screen);
+            }
+
+            function liaReset() {
+                liaHistory = [];
+                liaCurrentModule = null;
+                liaIsWaiting = false;
+                const msgs = document.getElementById('liaMessages');
+                if (msgs) msgs.innerHTML = '';
+                const input = document.getElementById('liaInput');
+                if (input) {
+                    input.value = '';
+                    input.style.height = 'auto';
+                }
+                const sendBtn = document.getElementById('liaSendBtn');
+                if (sendBtn) sendBtn.disabled = false;
+                liaShowSub('welcome');
+            }
+
+            document.getElementById('liaInput')?.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 110) + 'px';
+            });
+
+            function updateTrackingScreenFixed() {
+                if (typeof DataManager === 'undefined') return;
+                const usage = DataManager.getToolUsage ? DataManager.getToolUsage() : [];
+                const anxiety = DataManager.getAnxietyHistory ? DataManager.getAnxietyHistory() : [];
+
+                const total = usage.length;
+                const counts = {};
+                usage.forEach(e => { counts[e.tool] = (counts[e.tool] || 0) + 1; });
+                const fav = Object.keys(counts).length ? Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b) : null;
+                const avgAnx = anxiety.length ? (anxiety.reduce((s, e) => s + Number(e.level || 0), 0) / anxiety.length).toFixed(1) : null;
+
+                const dates = [...new Set(usage.map(e => new Date(e.timestamp).toISOString().split('T')[0]))].sort().reverse();
+                let streak = 0;
+                for (let i = 0; i < dates.length; i++) {
+                    const expected = new Date();
+                    expected.setDate(expected.getDate() - i);
+                    if (dates[i] === expected.toISOString().split('T')[0]) streak++;
+                    else break;
+                }
+
+                const labels = {
+                    emdr:'EMDR', breathing:'Respiration', crisis:'Mode Crise',
+                    'tcc-thoughts':'TCC Pensées', 'tcc-emotions':'TCC Émotions',
+                    'tcc-journal':'Journal TCC', meditation:'Méditation',
+                    hypnotherapy:'Hypnothérapie', ai:'Assistant Lia'
+                };
+
+                const els = {
+                    'total-sessions': total,
+                    'streak-days': streak,
+                    'avg-anxiety': avgAnx ? avgAnx + '/10' : '-',
+                    'favorite-tool': fav ? (labels[fav] || fav) : '-'
+                };
+                Object.entries(els).forEach(([id, val]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = val;
+                });
+
+                const chartContainer = document.querySelector('#tracking-screen .chart-placeholder');
+                if (!chartContainer) return;
+
+                const days7 = [];
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    const dStr = d.toISOString().split('T')[0];
+                    const dayEntries = anxiety.filter(e => new Date(e.timestamp).toISOString().split('T')[0] === dStr);
+                    const avg = dayEntries.length ? dayEntries.reduce((s, e) => s + Number(e.level || 0), 0) / dayEntries.length : null;
+                    const label = d.toLocaleDateString('fr-FR', { weekday: 'short' });
+                    days7.push({ label, avg, hasData: dayEntries.length > 0 });
+                }
+
+                if (!days7.some(d => d.hasData)) {
+                    chartContainer.innerHTML = '<div class="tracking-empty-state">📊 Commencez à utiliser l\'app pour voir votre graphique d\'anxiété évoluer au fil des jours.</div>';
+                    return;
+                }
+
+                function barColor(val) {
+                    if (val === null) return '#e0e0e0';
+                    if (val <= 3) return '#4CAF50';
+                    if (val <= 5) return '#8BC34A';
+                    if (val <= 7) return '#FF9800';
+                    return '#f44336';
+                }
+
+                chartContainer.innerHTML = days7.map(d => `
+                    <div class="tracking-bar"
+                        style="height:${d.avg !== null ? Math.max(10, d.avg * 10) : 10}%;background:${barColor(d.avg)};"
+                        data-val="${d.avg !== null ? d.avg.toFixed(1) + '/10' : 'Aucune donnée'}"
+                        title="${d.label}: ${d.avg !== null ? d.avg.toFixed(1) + '/10' : 'Aucune donnée'}">
+                    </div>
+                `).join('') + `
+                    <div style="width:100%;position:absolute;bottom:-22px;left:0;display:flex;justify-content:space-between;font-size:0.68rem;color:#6b7c93;">
+                        ${days7.map(d => `<span style="flex:1;text-align:center;">${d.label}</span>`).join('')}
+                    </div>
+                `;
+                chartContainer.style.position = 'relative';
+                chartContainer.style.marginBottom = '28px';
+            }
+
+            window.updateTrackingScreen = updateTrackingScreenFixed;
+            // ============================================================
+            //   FIN ASSISTANT "LIA"
+            // ============================================================
+</script>
 </body>
 </html>
