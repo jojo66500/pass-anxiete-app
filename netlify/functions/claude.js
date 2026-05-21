@@ -1,0 +1,18648 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass Anxiété Pro - Version Unifiée</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6B9BD1;
+            --secondary: #A8D5BA;
+            --danger: #F44336;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-calm: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--gradient-calm);
+            color: #2C3E50;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .screen {
+            display: none !important;
+            min-height: 100vh;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 { font-size: 1.8rem; color: var(--primary); }
+        #current-time { font-size: 0.9rem; color: #666; margin-top: 5px; }
+
+        .tool-header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn-back-icon {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* Écran NFC */
+        #nfc-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+        }
+        .nfc-card-visual {
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+        .nfc-card-visual h1 {
+            font-size: 3rem;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .nfc-waves {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        /* Jauge anxiété */
+        .anxiety-gauge {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .gauge-slider input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, var(--success) 0%, var(--warning) 50%, var(--danger) 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .gauge-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .anxiety-value {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Recommandation */
+        .recommendation-card {
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Grille outils */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tool-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .tool-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+        .tool-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
+        .tool-card p { font-size: 0.85rem; color: #666; }
+
+        /* Mode Crise */
+        .emergency-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .emergency-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .emergency-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .emergency-btn {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        .emergency-btn:hover { transform: scale(1.02); }
+        .emergency-icon { font-size: 4rem; display: block; margin-bottom: 15px; }
+
+        /* EMDR */
+        .emdr-phase {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .emdr-phase h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .phase-number {
+            background: var(--gradient);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .emdr-info-box {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .emdr-info-box.warning {
+            background: #fff8e1;
+            border-left-color: var(--warning);
+        }
+        .emdr-info-box.success {
+            background: #e8f5e9;
+            border-left-color: var(--success);
+        }
+
+        .sud-scale { margin: 20px 0; }
+        .sud-slider { position: relative; margin: 30px 0; }
+        .sud-slider input[type="range"] {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, 
+                #4CAF50 0%, #8BC34A 20%, #FFF176 40%, 
+                #FFB74D 60%, #FF7043 80%, #F44336 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .sud-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            border: 3px solid var(--primary);
+        }
+        .sud-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .sud-value {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .sud-description {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .thought-prompts {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .prompt-item {
+            background: white;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+        .prompt-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .emdr-settings {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .emdr-settings label { flex: 1; min-width: 150px; }
+        .emdr-settings select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .distance-setup {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .distance-icon { font-size: 4rem; margin: 20px 0; }
+        .distance-measurement {
+            background: var(--gradient-calm);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .distance-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        #emdr-canvas, #emdr-canvas-portrait {
+            background: #000;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Mobile - Hauteurs adaptées */
+        @media (max-width: 768px) {
+            #emdr-canvas, #emdr-canvas-portrait {
+                min-height: 250px;
+                border-radius: 15px;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            #emdr-canvas, #emdr-canvas-portrait {
+                min-height: 200px;
+                border-radius: 10px;
+            }
+        }
+        #emdr-canvas-landscape {
+            flex: 1;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #emdr-dot, #emdr-dot-portrait, #emdr-dot-landscape {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            z-index: 5;
+            /* Point centré par JavaScript */
+        }
+
+        .session-info-portrait {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .session-timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .floating-instruction {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 500;
+            z-index: 50;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .question-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.95);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+            z-index: 15000;
+        }
+        .question-overlay.visible { transform: translateY(0); }
+        .question-text { font-size: 1.3rem; margin: 15px 0; line-height: 1.6; }
+
+        .sud-comparison {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .comparison-bars {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            align-items: flex-end;
+            height: 200px;
+        }
+        .comparison-bar { flex: 1; text-align: center; }
+        .bar-container {
+            position: relative;
+            height: 180px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: var(--gradient);
+            transition: height 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .bar-fill.improved {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+        .bar-label { margin-top: 10px; font-weight: 500; }
+
+        .result-message {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+        }
+        .result-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4CAF50;
+        }
+        .result-message.warning {
+            background: #fff8e1;
+            color: #f57c00;
+            border: 2px solid var(--warning);
+        }
+
+        /* Respiration */
+        .breathing-info {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #breathing-circle-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        #breathing-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 8px 30px rgba(107, 155, 209, 0.4);
+            transition: all 5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #breathing-instruction {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        #breathing-counter {
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+        .instruction {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Boutons */
+        .btn-primary, .btn-secondary, .btn-back {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-back { background: #f5f5f5; color: #2C3E50; }
+
+        .emdr-controls, .breathing-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .session-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .control-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .control-btn.stop {
+            background: var(--danger);
+            color: white;
+        }
+
+        .control-btn.fullscreen {
+            background: var(--primary);
+            color: white;
+        }
+
+        .control-btn.fullscreen:hover {
+            background: #5a8bc4;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* EMDR - Interface non-intrusive */
+        .emdr-canvas {
+            background: #000;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .session-info-portrait {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .session-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+            background: rgba(0,0,0,0.8);
+            padding: 8px 15px;
+            border-radius: 25px;
+        }
+
+        .floating-instruction {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+            max-width: 280px;
+            line-height: 1.1;
+            height: auto;
+            min-height: auto;
+        }
+
+        /* Container EMDR avec positionnement relatif */
+        .emdr-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        /* EMDR Plein écran - Reset complet des containers */
+        .emdr-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: #000 !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .emdr-fullscreen * {
+            box-sizing: border-box !important;
+        }
+
+        .emdr-fullscreen .tool-header {
+            display: none !important;
+        }
+
+        .emdr-fullscreen .container {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+        }
+
+        .emdr-fullscreen .emdr-container {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            border: none !important;
+            background: transparent !important;
+        }
+
+        .emdr-fullscreen #emdr-canvas-portrait {
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            max-height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            background: #000 !important;
+            box-sizing: border-box !important;
+            z-index: 1 !important;
+        }
+
+        .emdr-fullscreen .session-info-portrait {
+            position: fixed !important;
+            top: 10px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 20px !important;
+            font-size: 1rem !important;
+            font-weight: 500 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        .emdr-fullscreen .session-controls {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            padding: 12px 24px !important;
+            border-radius: 30px !important;
+            display: flex !important;
+            gap: 16px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        .emdr-fullscreen .control-btn {
+            padding: 10px 20px !important;
+            font-size: 1rem !important;
+            font-weight: 500 !important;
+            border-radius: 20px !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .emdr-fullscreen .floating-instruction {
+            position: fixed !important;
+            bottom: 80px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.6) !important;
+            color: white !important;
+            padding: 2px 6px !important;
+            border-radius: 6px !important;
+            font-size: 0.7rem !important;
+            text-align: center !important;
+            backdrop-filter: blur(4px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            max-width: 280px !important;
+            line-height: 1.1 !important;
+            height: auto !important;
+            min-height: auto !important;
+        }
+
+        /* Mobile Portrait - Instructions ultra-compactes en hauteur */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .emdr-fullscreen .floating-instruction {
+                bottom: 70px !important;
+                font-size: 0.65rem !important;
+                padding: 1px 4px !important;
+                max-width: 240px !important;
+                border-radius: 4px !important;
+                line-height: 1.05 !important;
+            }
+        }
+
+        /* Mobile Landscape - Instructions hyper-compactes */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-fullscreen .floating-instruction {
+                bottom: 50px !important;
+                font-size: 0.6rem !important;
+                padding: 1px 3px !important;
+                max-width: 200px !important;
+                border-radius: 3px !important;
+                background: rgba(0,0,0,0.5) !important;
+                line-height: 1.0 !important;
+            }
+        }
+
+        /* Desktop - Instructions discrètes mais lisibles */
+        @media (min-width: 769px) {
+            .emdr-fullscreen .floating-instruction {
+                bottom: 100px !important;
+                font-size: 0.8rem !important;
+                padding: 3px 8px !important;
+                max-width: 320px !important;
+                border-radius: 8px !important;
+                line-height: 1.15 !important;
+            }
+        }
+
+        /* Mobile optimisations */
+        @media (max-width: 768px) {
+            .emdr-container {
+                min-height: 300px;
+            }
+            
+            .session-info-portrait {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .control-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .floating-instruction {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Mobile horizontal - Interface minimale */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-container {
+                min-height: 250px;
+            }
+            
+            .session-info-portrait {
+                top: 5px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            
+            .session-controls {
+                bottom: 5px;
+                padding: 4px 8px;
+            }
+            
+            .control-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .floating-instruction {
+                bottom: 35px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Suivi */
+        .stats-header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .stat-text {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .orientation-recommendation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--gradient);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+        .orientation-recommendation.show { display: block; }
+        .recommendation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .rec-btn {
+            padding: 8px 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .rec-btn.primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tools-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .emdr-settings { flex-direction: column; }
+            .emdr-settings label { min-width: 100%; }
+        }
+
+        /* ============ STYLES TCC ============ */
+
+        /* Distorsions cognitives */
+        .distortions-list {
+            margin: 20px 0;
+        }
+        .distortion-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            border-left: 4px solid var(--warning);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .distortion-item h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .distortion-item p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        /* Roue des émotions */
+        .emotions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .emotion-btn {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .emotion-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+        .emotion-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Intensité émotions */
+        .emotion-intensity {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+        }
+
+        /* Stratégies de gestion */
+        .coping-strategies {
+            margin: 20px 0;
+        }
+        .strategy-category {
+            margin: 20px 0;
+        }
+        .strategy-category h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .strategy-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid var(--secondary);
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        .strategy-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Journal de bord */
+        .journal-entry-form {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .journal-section {
+            margin: 20px 0;
+        }
+        .journal-section h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .journal-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        .journal-section textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .mood-slider {
+            margin: 15px 0;
+        }
+        .mood-slider input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, 
+                #F44336 0%, #FF9800 25%, #FFC107 50%, 
+                #8BC34A 75%, #4CAF50 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .mood-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .journal-actions {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .journal-history {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .journal-entry-item {
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .journal-entry-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .journal-entry-mood {
+            color: var(--primary);
+        }
+
+        /* Techniques pratiques */
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .technique-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .technique-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .technique-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Overlay pour techniques */
+        .technique-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+        .technique-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .technique-content {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+        }
+        .technique-content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .technique-content p {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .technique-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Instruction EMDR - Fixe sous le canvas */
+        .emdr-instruction {
+            text-align: center;
+            color: #666;
+            font-size: 1rem;
+            margin: 15px 0;
+            padding: 0 20px;
+            font-style: italic;
+        }
+
+        /* Mobile - Instruction adaptée */
+        @media (max-width: 768px) {
+            .emdr-instruction {
+                font-size: 0.9rem;
+                margin: 10px 0;
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-instruction {
+                font-size: 0.8rem;
+                margin: 8px 0;
+            }
+        }
+
+        /* Mode plein écran - Contrôles dans les coins supérieurs */
+        .emdr-fullscreen .session-controls {
+            position: fixed !important;
+            top: 15px !important;
+            right: 15px !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            padding: 8px 12px !important;
+            border-radius: 20px !important;
+            display: flex !important;
+            gap: 10px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        .emdr-fullscreen .control-btn {
+            padding: 8px 16px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            border-radius: 15px !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+
+        /* Session info dans le coin supérieur gauche en plein écran */
+        .emdr-fullscreen .session-info-portrait {
+            position: fixed !important;
+            top: 15px !important;
+            left: 15px !important;
+            right: auto !important;
+            transform: none !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        /* Mobile Portrait - Contrôles compacts dans les coins */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .emdr-fullscreen .session-controls {
+                top: 10px !important;
+                right: 10px !important;
+                padding: 6px 8px !important;
+                gap: 8px !important;
+            }
+            
+            .emdr-fullscreen .control-btn {
+                padding: 6px 12px !important;
+                font-size: 0.8rem !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 10px !important;
+                left: 10px !important;
+                padding: 6px 12px !important;
+                font-size: 0.8rem !important;
+            }
+        }
+
+        /* Mobile Landscape - Interface ultra-compacte en coins */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-fullscreen .session-controls {
+                top: 8px !important;
+                right: 8px !important;
+                padding: 4px 6px !important;
+                gap: 6px !important;
+            }
+            
+            .emdr-fullscreen .control-btn {
+                padding: 4px 8px !important;
+                font-size: 0.7rem !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 8px !important;
+                left: 8px !important;
+                padding: 4px 8px !important;
+                font-size: 0.7rem !important;
+            }
+        }
+
+        /* Desktop - Interface élégante dans les coins */
+        @media (min-width: 769px) {
+            .emdr-fullscreen .session-controls {
+                top: 20px !important;
+                right: 20px !important;
+                padding: 10px 16px !important;
+                gap: 12px !important;
+            }
+            
+            .emdr-fullscreen .control-btn {
+                padding: 10px 20px !important;
+                font-size: 1rem !important;
+            }
+            
+            .emdr-fullscreen .session-info-portrait {
+                top: 20px !important;
+                left: 20px !important;
+                padding: 10px 20px !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Mode plein écran - Masquer l'instruction fixe */
+        .emdr-fullscreen .emdr-instruction {
+            display: none !important;
+        }
+            .emdr-container {
+                min-height: 300px;
+            }
+            
+            #emdr-canvas-portrait {
+                min-height: 250px;
+                border-radius: 15px;
+            }
+            
+            .session-info-portrait {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .control-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .floating-instruction {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Mobile horizontal - Interface minimale et canvas optimal */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .emdr-container {
+                min-height: 200px;
+            }
+            
+            #emdr-canvas-portrait {
+                min-height: 180px;
+                border-radius: 10px;
+            }
+            
+            .session-info-portrait {
+                top: 5px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            
+            .session-controls {
+                bottom: 5px;
+                padding: 4px 8px;
+            }
+            
+            .control-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .floating-instruction {
+                bottom: 35px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Historique des exercices de pensées */
+        .thoughts-history-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .history-header h3 {
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thoughts-history-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .thought-history-item {
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 15px 0;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .thought-history-item:hover {
+            background: #f0f7ff;
+            transform: translateX(5px);
+        }
+
+        .thought-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .thought-date {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .thought-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thought-action-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .thought-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .thought-action-btn.delete {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .thought-action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .thought-content {
+            margin: 15px 0;
+        }
+
+        .thought-section {
+            margin: 12px 0;
+        }
+
+        .thought-section-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .thought-section-content {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .thought-section-content.alternative {
+            border-left-color: var(--success);
+            background: #f0fff4;
+        }
+
+        .thoughts-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .thoughts-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* ============ FIN STYLES TCC ============ */
+
+        /* ============ STYLES HYPNOTHÉRAPIE & MÉDITATION ============ */
+
+        /* Grille des sessions */
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        /* Cartes de session */
+        .session-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+            border-color: var(--primary);
+        }
+
+        .session-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .session-card h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .session-card p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .session-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .session-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Lecteur audio - Container principal */
+        .audio-player-container {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .session-info-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .session-info-header h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* Barre de progression */
+        .session-progress {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Visualisation audio pour l'hypnose */
+        .audio-visualization {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .audio-waves {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .wave {
+            width: 6px;
+            height: 20px;
+            background: var(--gradient);
+            border-radius: 3px;
+            animation: audioWave 1.5s ease-in-out infinite;
+        }
+
+        .wave:nth-child(2) { animation-delay: 0.1s; }
+        .wave:nth-child(3) { animation-delay: 0.2s; }
+        .wave:nth-child(4) { animation-delay: 0.3s; }
+        .wave:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes audioWave {
+            0%, 100% { height: 20px; }
+            50% { height: 60px; }
+        }
+
+        /* Visualisation méditation - Cercle de respiration */
+        .meditation-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .breathing-circle {
+            width: 150px;
+            height: 150px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 4s ease-in-out;
+        }
+
+        .inner-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            transition: all 4s ease-in-out;
+        }
+
+        .breathing-circle.breathe-in {
+            transform: scale(1.2);
+        }
+
+        .breathing-circle.breathe-in .inner-circle {
+            transform: scale(1.3);
+        }
+
+        .meditation-instruction {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Contrôles audio */
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .audio-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--gradient);
+            color: white;
+        }
+
+        .audio-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .audio-btn.secondary {
+            background: #6c757d;
+        }
+
+        .audio-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        /* Contrôle de volume */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .volume-control label {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .volume-control input[type="range"] {
+            width: 200px;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Instructions de session */
+        .session-instructions {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+            margin-top: 20px;
+        }
+
+        .session-instructions p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        /* Responsive pour les nouveaux modules */
+        @media (max-width: 768px) {
+            .sessions-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .session-card {
+                padding: 20px;
+            }
+            
+            .audio-player-container {
+                padding: 20px;
+            }
+            
+            .breathing-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .inner-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .volume-control input[type="range"] {
+                width: 150px;
+            }
+        }
+
+        /* ============ FIN STYLES HYPNO/MÉDITATION ============ */
+
+        /* ============ STYLES ASTUCES & RESSOURCES ============ */
+
+        /* Section Numéros d'Urgence */
+        .emergency-section {
+            margin-bottom: 40px;
+        }
+
+        .emergency-section h2 {
+            color: #dc3545;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .emergency-numbers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .emergency-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #ffc107;
+            transition: all 0.3s ease;
+        }
+
+        .emergency-card.urgent {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff5f5, #fff);
+        }
+
+        .emergency-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .emergency-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .emergency-icon {
+            font-size: 1.5rem;
+        }
+
+        .emergency-card h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .emergency-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #dc3545;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .emergency-card p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Section Astuces */
+        .tips-section {
+            margin-bottom: 40px;
+        }
+
+        .tips-section h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        /* Onglets de catégories */
+        .tips-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .category-tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .category-tab:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .category-tab.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Contenu des astuces */
+        .tips-content {
+            display: none;
+        }
+
+        .tips-content.active {
+            display: block;
+        }
+
+        .tip-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .tip-card.urgent {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff5f5, #fff);
+        }
+
+        .tip-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tip-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .tip-card h3 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .tip-badge {
+            background: var(--gradient);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tip-card p {
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .tip-usage {
+            background: #f8f9ff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Section Ressources */
+        .resources-section h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .resource-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .resource-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .resource-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .resource-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .resource-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive pour la section astuces */
+        @media (max-width: 768px) {
+            .emergency-numbers {
+                grid-template-columns: 1fr;
+            }
+            
+            .tips-categories {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .category-tab {
+                flex-shrink: 0;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            
+            .tip-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .resource-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============ FIN STYLES ASTUCES ============ */
+
+        /* ============ STYLES MODE CRISE AMÉLIORÉ ============ */
+
+        /* Évaluation du niveau de crise */
+        .crisis-assessment {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .crisis-assessment h2 {
+            color: #d63031;
+            margin-bottom: 20px;
+        }
+
+        .crisis-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .crisis-level {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .crisis-level:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .crisis-level.mild {
+            border-color: #fdcb6e;
+        }
+
+        .crisis-level.mild:hover {
+            background: #ffeaa7;
+        }
+
+        .crisis-level.moderate {
+            border-color: #e17055;
+        }
+
+        .crisis-level.moderate:hover {
+            background: #fab1a0;
+        }
+
+        .crisis-level.severe {
+            border-color: #d63031;
+        }
+
+        .crisis-level.severe:hover {
+            background: #ff7675;
+            color: white;
+        }
+
+        .level-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .crisis-level h3 {
+            margin: 10px 0 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .crisis-level p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        /* Groupes d'actions par niveau */
+        .crisis-actions-group {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .crisis-actions-group h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Alerte médicale urgente */
+        .medical-alert {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .medical-alert h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .medical-alert ul {
+            text-align: left;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .medical-alert li {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .medical-emergency-btn {
+            background: #fff;
+            color: #d63031;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            animation: urgentPulse 2s infinite;
+        }
+
+        .medical-emergency-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.3);
+        }
+
+        @keyframes urgentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Boutons d'urgence spécialisés */
+        .emergency-btn.severe {
+            border: 2px solid #d63031;
+            background: linear-gradient(135deg, #fff, #fff5f5);
+        }
+
+        .emergency-btn.severe:hover {
+            background: linear-gradient(135deg, #d63031, #b71c1c);
+            color: white;
+        }
+
+        /* Instructions de crise */
+        .crisis-instructions {
+            margin: 30px 0;
+        }
+
+        .instruction-card {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .instruction-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .instruction-card ul {
+            text-align: left;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .instruction-card li {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        /* Respiration d'urgence */
+        .emergency-breathing-container {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .breathing-instruction {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 30px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emergency-breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #d63031;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 3s ease-in-out;
+        }
+
+        .emergency-breathing-circle .inner-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border-radius: 50%;
+            transition: all 3s ease-in-out;
+        }
+
+        .emergency-breathing-circle.inhale {
+            transform: scale(1.3);
+        }
+
+        .emergency-breathing-circle.inhale .inner-circle {
+            transform: scale(1.4);
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+
+        .breathing-counter {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin: 20px 0;
+        }
+
+        .breathing-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        /* Container technique spécialisée */
+        .technique-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Responsive mode crise */
+        @media (max-width: 768px) {
+            .crisis-levels {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .crisis-level {
+                padding: 15px;
+            }
+            
+            .level-icon {
+                font-size: 2rem;
+            }
+            
+            .emergency-breathing-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .emergency-breathing-circle .inner-circle {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .breathing-instruction {
+                font-size: 1.2rem;
+            }
+            
+            .medical-alert {
+                padding: 15px;
+            }
+            
+            .crisis-actions-group {
+                padding: 15px;
+            }
+        }
+
+        /* ============ FIN STYLES MODE CRISE ============ */
+
+        /* ============ STYLES COHÉRENCE CARDIAQUE BULLE ============ */
+
+        /* Container principal cohérence */
+        .coherence-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 400px;
+            justify-content: center;
+        }
+
+        /* Animation bulle respiration */
+        .breathing-bubble {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bubble-inner {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 50%;
+            transition: all 5s ease-in-out;
+            box-shadow: 0 4px 20px rgba(116, 185, 255, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .bubble-glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(116, 185, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transition: all 5s ease-in-out;
+            z-index: 1;
+        }
+
+        /* Animation inspiration - bulle monte et grossit */
+        .breathing-bubble.inhale .bubble-inner {
+            transform: translateY(-20px) scale(1.5);
+            background: linear-gradient(135deg, #55efc4, #00b894);
+            box-shadow: 0 8px 30px rgba(85, 239, 196, 0.6);
+        }
+
+        .breathing-bubble.inhale .bubble-glow {
+            transform: translateY(-20px) scale(1.8);
+            background: radial-gradient(circle, rgba(85, 239, 196, 0.4) 0%, transparent 70%);
+        }
+
+        /* Animation expiration - bulle descend et diminue */
+        .breathing-bubble.exhale .bubble-inner {
+            transform: translateY(15px) scale(0.7);
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            box-shadow: 0 2px 15px rgba(253, 121, 168, 0.5);
+        }
+
+        .breathing-bubble.exhale .bubble-glow {
+            transform: translateY(15px) scale(0.9);
+            background: radial-gradient(circle, rgba(253, 121, 168, 0.3) 0%, transparent 70%);
+        }
+
+        /* Instructions de respiration */
+        .breathing-instruction {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breathing-phase {
+            font-size: 1rem;
+            color: var(--secondary);
+            text-align: center;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        /* Compteurs cohérence */
+        .coherence-counter {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .counter-item {
+            text-align: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 120px;
+        }
+
+        .counter-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .counter-item span:last-child {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Bénéfices de la cohérence cardiaque */
+        .breathing-benefits {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .breathing-benefits h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9ff;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .benefit-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        /* Améliorations styles breathing existants */
+        .breathing-info {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .breathing-info p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .breathing-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Améliorations animations respiration d'urgence - DURÉES EXACTES */
+        .emergency-breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #74b9ff;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* TRANSITION DYNAMIQUE - sera modifiée par JavaScript */
+            transition: all 1s ease-in-out;
+            position: relative;
+        }
+
+        .emergency-breathing-circle .inner-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 50%;
+            /* TRANSITION DYNAMIQUE - sera modifiée par JavaScript */
+            transition: all 1s ease-in-out;
+            box-shadow: 0 4px 20px rgba(116, 185, 255, 0.4);
+        }
+
+        /* Classes pour durées spécifiques - appliquées dynamiquement */
+        .emergency-breathing-circle.duration-4s,
+        .emergency-breathing-circle.duration-4s .inner-circle {
+            transition: all 4s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-5s,
+        .emergency-breathing-circle.duration-5s .inner-circle {
+            transition: all 5s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-7s,
+        .emergency-breathing-circle.duration-7s .inner-circle {
+            transition: all 7s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-8s,
+        .emergency-breathing-circle.duration-8s .inner-circle {
+            transition: all 8s ease-in-out;
+        }
+
+        .emergency-breathing-circle.duration-10s,
+        .emergency-breathing-circle.duration-10s .inner-circle {
+            transition: all 10s ease-in-out;
+        }
+
+        /* Animation inspiration - CHANGEMENT VISIBLE ET FLUIDE */
+        .emergency-breathing-circle.inhale {
+            transform: scale(1.4);
+            border-color: #55efc4;
+        }
+
+        .emergency-breathing-circle.inhale .inner-circle {
+            transform: scale(1.5);
+            background: linear-gradient(135deg, #55efc4, #00b894);
+            box-shadow: 0 8px 30px rgba(85, 239, 196, 0.6);
+        }
+
+        /* Animation expiration - CHANGEMENT VISIBLE ET FLUIDE */
+        .emergency-breathing-circle.exhale {
+            transform: scale(0.7);
+            border-color: #fd79a8;
+        }
+
+        .emergency-breathing-circle.exhale .inner-circle {
+            transform: scale(0.6);
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            box-shadow: 0 2px 15px rgba(253, 121, 168, 0.5);
+        }
+
+        /* Instructions d'urgence - plus visibles et stables */
+        .breathing-instruction {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(116, 185, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(116, 185, 255, 0.3);
+            /* TRANSITION DOUCE POUR LE TEXTE */
+            transition: background-color 0.3s ease;
+        }
+
+        /* Compteur d'urgence */
+        .breathing-counter {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-align: center;
+            margin: 20px 0;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive cohérence cardiaque */
+        @media (max-width: 768px) {
+            .coherence-container {
+                padding: 20px 10px;
+                min-height: 300px;
+            }
+            
+            .breathing-bubble {
+                width: 100px;
+                height: 100px;
+                margin: 20px auto;
+            }
+            
+            .bubble-inner {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .bubble-glow {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .breathing-instruction {
+                font-size: 1.1rem;
+                margin: 15px 0;
+            }
+            
+            .coherence-counter {
+                gap: 20px;
+            }
+            
+            .counter-item {
+                padding: 10px 15px;
+                min-width: 100px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .breathing-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .breathing-controls button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        /* ============ FIN STYLES COHÉRENCE CARDIAQUE ============ */
+
+        /* ============ STYLES VOTRE THÉRAPEUTE ============ */
+
+        /* Profil thérapeute */
+        .therapist-profile {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .therapist-photo {
+            flex-shrink: 0;
+        }
+
+        .profile-circle {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .therapist-intro h2 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .therapist-title {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+
+        .credentials {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .credential {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Message personnel */
+        .personal-message {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .message-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .message-header h3 {
+            color: #8B4513;
+            font-size: 1.3rem;
+        }
+
+        .message-content {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            color: rgba(139, 69, 19, 0.3);
+            position: absolute;
+            left: -10px;
+            top: -10px;
+        }
+
+        .quote-end {
+            right: -10px;
+            left: auto;
+            top: auto;
+            bottom: -20px;
+        }
+
+        .main-message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #8B4513;
+            font-weight: 600;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .support-message, .hope-message {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #A0522D;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 25px;
+            font-style: italic;
+            color: #8B4513;
+        }
+
+        .signature-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        /* Section contact */
+        .contact-section {
+            margin: 30px 0;
+        }
+
+        .contact-section h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-info h4 {
+            color: var(--primary);
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .contact-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
+        }
+
+        .whatsapp-link {
+            background: #25D366;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+        }
+
+        .whatsapp-link:hover {
+            background: #128C7E;
+        }
+
+        .contact-note {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        /* Spécialités */
+        .specialties-section {
+            margin: 30px 0;
+        }
+
+        .specialties-section h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .specialty-item {
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .specialty-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            margin: 40px 0;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .cta-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .cta-card p {
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        .phone-btn {
+            background: white;
+            color: var(--primary);
+        }
+
+        .phone-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        /* Responsive thérapeute */
+        @media (max-width: 768px) {
+            .therapist-profile {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .profile-circle {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            .therapist-intro h2 {
+                font-size: 1.5rem;
+            }
+            
+            .credentials {
+                justify-content: center;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .specialties-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .main-message {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* ============ FIN STYLES VOTRE THÉRAPEUTE ============ */
+
+        /* ============ STYLES MODALS TCC AVANCÉES ============ */
+
+        .tcc-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .tcc-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        /* Graphique émotionnel */
+        .emotion-chart-container {
+            padding: 30px;
+        }
+
+        .emotion-sliders {
+            margin: 20px 0;
+        }
+
+        .emotion-slider-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .emotion-slider-item label {
+            min-width: 100px;
+            font-weight: 600;
+        }
+
+        .emotion-slider-item input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .emotion-slider-item input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .emotion-chart {
+            margin: 30px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .chart-bars {
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            height: 200px;
+            justify-content: space-around;
+        }
+
+        .emotion-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .bar-fill {
+            width: 40px;
+            background: var(--primary);
+            border-radius: 20px 20px 0 0;
+            transition: height 0.5s ease;
+            margin-bottom: 10px;
+            opacity: 0.7; /* Transparence pour voir les infos derrière */
+        }
+
+        .bar-fill.joy { background: rgba(76, 175, 80, 0.7); } /* Vert transparent */
+        .bar-fill.sadness { background: rgba(33, 150, 243, 0.7); } /* Bleu transparent */
+        .bar-fill.anxiety { background: rgba(255, 152, 0, 0.7); } /* Orange transparent */
+        .bar-fill.anger { background: rgba(244, 67, 54, 0.7); } /* Rouge transparent */
+
+        .bar-label {
+            font-size: 1.5rem;
+        }
+
+        .emotion-interpretation {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Plan de crise */
+        .crisis-plan-form {
+            padding: 30px;
+        }
+
+        .plan-section {
+            margin: 25px 0;
+        }
+
+        .plan-section h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .plan-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .plan-section textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .action-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-checklist label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .action-checklist label:hover {
+            background: #e9ecef;
+        }
+
+        .plan-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        /* Exposition graduelle */
+        .exposure-container {
+            padding: 30px;
+        }
+
+        .fear-identification input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .exposure-ladder {
+            margin: 25px 0;
+        }
+
+        .ladder-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .ladder-step input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .difficulty {
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .difficulty-low { color: #4CAF50; }
+        .difficulty-medium { color: #FF9800; }
+        .difficulty-high { color: #FF5722; }
+        .difficulty-max { color: #F44336; }
+
+        .exposure-tips {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .exposure-tips ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .exposure-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        /* Journal des réussites */
+        .journal-container {
+            padding: 30px;
+        }
+
+        .success-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .success-form select,
+        .success-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .pride-level {
+            margin: 15px 0;
+        }
+
+        .pride-stars {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.3s;
+        }
+
+        .star:hover {
+            color: #ffd700;
+        }
+
+        .success-entry {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .success-category-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin: 5px 0;
+        }
+
+        .success-category-badge.social { background: #e3f2fd; color: #1976d2; }
+        .success-category-badge.professionnel { background: #fff3e0; color: #f57c00; }
+        .success-category-badge.personnel { background: #e8f5e9; color: #388e3c; }
+        .success-category-badge.autre { background: #f3e5f5; color: #7b1fa2; }
+
+        .no-success {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .no-success p {
+            margin: 10px 0;
+        }
+
+        .journal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #pride-text {
+            font-weight: 600;
+            color: var(--primary);
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+
+        .success-text {
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .success-pride {
+            color: #ffd700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Responsive pour modals */
+        @media (max-width: 768px) {
+            .tcc-modal-content {
+                max-width: 95vw;
+                max-height: 95vh;
+            }
+            
+            .modal-header {
+                padding: 15px 20px;
+            }
+            
+            .emotion-chart-container,
+            .crisis-plan-form,
+            .exposure-container,
+            .journal-container {
+                padding: 20px;
+            }
+            
+            .chart-bars {
+                gap: 10px;
+            }
+            
+            .ladder-step {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ============ FIN STYLES MODALS TCC ============ */
+
+        /* ============ STYLES HISTORIQUES ============ */
+
+        .emotion-history, .crisis-plan-history {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .emotion-history-entry, .crisis-history-entry {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .emotion-history-header, .crisis-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .emotion-date, .crisis-date {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .emotion-rank {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .crisis-completeness {
+            background: #e8f5e9;
+            color: #388e3c;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .emotion-values {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .emotion-value {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .emotion-value.joy { background: rgba(76, 175, 80, 0.2); }
+        .emotion-value.sadness { background: rgba(33, 150, 243, 0.2); }
+        .emotion-value.anxiety { background: rgba(255, 152, 0, 0.2); }
+        .emotion-value.anger { background: rgba(244, 67, 54, 0.2); }
+
+        .emotion-summary {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .crisis-preview {
+            margin: 10px 0;
+        }
+
+        .crisis-section-preview {
+            font-size: 0.9rem;
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .crisis-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-mini {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-mini:hover {
+            background: var(--primary-dark);
+        }
+
+        .no-emotion-history, .no-crisis-history {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Exposition graduelle */
+        .exposure-explanation {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .explanation-box {
+            margin-top: 15px;
+        }
+
+        .explanation-box p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .fear-examples {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .fear-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .fear-tag {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .fear-tag:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .ladder-instruction {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+        }
+
+        .button-help {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        #track-exposure-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-progress {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-indicator {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step-status {
+            display: flex;
+            gap: 10px;
+        }
+
+        .step-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .step-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Responsive pour historiques */
+        @media (max-width: 768px) {
+            .emotion-values {
+                gap: 8px;
+            }
+            
+            .emotion-value {
+                font-size: 0.8rem;
+                padding: 3px 6px;
+            }
+            
+            .crisis-actions {
+                flex-direction: column;
+            }
+            
+            .fear-tags {
+                gap: 5px;
+            }
+            
+            .fear-tag {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* ============ FIN STYLES HISTORIQUES ============ */
+
+        /* ============ STYLES INTERFACE SUIVI PRATIQUE ============ */
+
+        .exercise-practice {
+            max-width: 700px;
+        }
+
+        .exercise-header {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .current-step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .step-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .step-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .current-exercise {
+            margin: 20px 0;
+        }
+
+        .exercise-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .exercise-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .exercise-difficulty {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .exercise-setup {
+            margin: 25px 0;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 12px;
+        }
+
+        .objective-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .objective-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .objective-item label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .objective-item select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .anxiety-scale {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .anxiety-scale input[type="range"] {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .anxiety-scale input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff5722;
+            cursor: pointer;
+        }
+
+        .exercise-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        /* Style spécial pour les boutons Google Agenda */
+        .btn-google-calendar {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-google-calendar:hover {
+            background: linear-gradient(135deg, #3367d6 0%, #2d8e47 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+
+        .btn-google-calendar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-google-calendar:hover::before {
+            left: 100%;
+        }
+
+        .progress-overview {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .progress-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+        }
+
+        .progress-step.completed {
+            border-left-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .progress-step.current {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #4caf50;
+        }
+
+        .progress-step.current .step-circle {
+            background: #ff9800;
+        }
+
+        .progress-step.in-progress {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .progress-step.active-mission {
+            border-left-color: #2196f3;
+            background: #e3f2fd;
+        }
+
+        .progress-step.overdue {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #4caf50;
+        }
+
+        .progress-step.current .step-circle {
+            background: #ff9800;
+        }
+
+        .progress-step.in-progress .step-circle {
+            background: #ff9800;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .progress-step.active-mission .step-circle {
+            background: #2196f3;
+        }
+
+        .progress-step.overdue .step-circle {
+            background: #f44336;
+        }
+
+        .progress-actions {
+            margin-top: 8px;
+        }
+
+        .mission-preview {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            padding: 5px 8px;
+            background: rgba(33, 150, 243, 0.1);
+            border-radius: 6px;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-state {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .exercise-history {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 12px;
+        }
+
+        .session-entry {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .session-duration {
+            color: var(--primary);
+        }
+
+        .session-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .session-success {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .session-partial {
+            color: #ff9800;
+            font-weight: 600;
+        }
+
+        .mission-entry {
+            border-left-color: #2196f3;
+        }
+
+        .mission-success {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .mission-target {
+            color: #2196f3;
+            font-weight: 600;
+        }
+
+        .mission-notes {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        /* Interface de séance en cours */
+        .session-timer {
+            margin-top: 15px;
+        }
+
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .timer-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: #ffeb3b;
+            width: 0%;
+            transition: width 1s linear;
+            border-radius: 4px;
+        }
+
+        .session-content {
+            padding: 20px 0;
+        }
+
+        .exercise-focus {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2e7d32;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .session-guidance {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 10px;
+        }
+
+        .session-guidance ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .session-guidance li {
+            margin: 8px 0;
+        }
+
+        .anxiety-tracker {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fce4ec;
+            border-radius: 10px;
+        }
+
+        .anxiety-scale-live {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .anxiety-scale-live input[type="range"] {
+            flex: 1;
+        }
+
+        .anxiety-note {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin: 5px 0 0 0;
+        }
+
+        .exercise-completed {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .completion-stats {
+            margin: 20px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .objective-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .exercise-actions {
+                flex-direction: column;
+            }
+            
+            .session-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        /* ============ FIN STYLES INTERFACE SUIVI PRATIQUE ============ */
+
+        /* ============ STYLES INTERFACE MISSIONS ============ */
+
+        .mission-planning {
+            display: grid;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .planning-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .planning-item label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .planning-item select,
+        .planning-item input[type="date"] {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .planning-item select:focus,
+        .planning-item input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .support-strategies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .support-strategies label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: normal;
+        }
+
+        .support-strategies label:hover {
+            background: #e9ecef;
+        }
+
+        .support-strategies input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Mission créée */
+        .mission-created {
+            padding: 20px 0;
+        }
+
+        .mission-header {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .mission-id {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .mission-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .mission-objective {
+            margin-bottom: 20px;
+        }
+
+        .objective-text {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2e7d32;
+            text-align: center;
+            border: 2px solid #4caf50;
+        }
+
+        .mission-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .detail-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .mission-strategies {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .mission-strategies h6 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+
+        .mission-strategies ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .mission-strategies li {
+            margin: 5px 0;
+        }
+
+        .mission-motivation {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .mission-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .missions-list {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 12px;
+        }
+
+        .active-mission-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .mission-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .mission-step {
+            background: var(--primary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .mission-date {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .mission-text {
+            color: #333;
+            margin: 8px 0;
+        }
+
+        .mission-quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        /* Feedback mission */
+        .mission-feedback {
+            max-width: 500px;
+        }
+
+        .feedback-container {
+            padding: 30px;
+        }
+
+        .feedback-item {
+            margin: 20px 0;
+        }
+
+        .feedback-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .success-rating {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .success-rating label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: normal;
+            transition: background 0.3s;
+        }
+
+        .success-rating label:hover {
+            background: #e9ecef;
+        }
+
+        .success-rating input[type="radio"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .feedback-item textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        /* Responsive missions */
+        @media (max-width: 768px) {
+            .mission-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .mission-actions {
+                flex-direction: column;
+            }
+            
+            .mission-summary {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .support-strategies {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============ FIN STYLES INTERFACE MISSIONS ============ */
+
+        /* ============ STYLES GESTION AVANCÉE ============ */
+
+        .exposure-management {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .exposure-management h6 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .management-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .completion-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .reset-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .reset-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .reset-options {
+            margin: 20px 0;
+        }
+
+        .reset-choice {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .reset-choice label {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .reset-choice label:hover {
+            background: #e9ecef;
+        }
+
+        .reset-choice input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .reminder-settings {
+            margin: 20px 0;
+        }
+
+        .reminder-option {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .reminder-option label {
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .reminder-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .reminder-preview {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+        }
+
+        .notification-preview {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .reminder-note {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+        }
+
+        .history-stats {
+            margin-bottom: 25px;
+        }
+
+        .detailed-history {
+            margin: 20px 0;
+        }
+
+        /* Responsive gestion avancée */
+        @media (max-width: 768px) {
+            .management-actions {
+                justify-content: center;
+            }
+            
+            .completion-actions {
+                flex-direction: column;
+            }
+            
+            .reset-choice label {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+
+        /* ============ FIN STYLES GESTION AVANCÉE ============ */
+
+        /* ============ STYLES SYSTÈME ACTIVATION ============ */
+
+        /* Écran d'activation */
+        .activation-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .activation-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .activation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .activation-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .activation-header h2 {
+            color: #2C3E50;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .activation-header p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* Visuel carte */
+        .card-visual {
+            position: relative;
+            margin: 30px 0;
+            padding: 20px;
+        }
+
+        .nfc-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .nfc-waves-activation {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.2);
+            position: relative;
+            animation: pulseActivation 2s infinite;
+        }
+
+        @keyframes pulseActivation {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 1; 
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            50% { 
+                transform: scale(1.1); 
+                opacity: 0.8; 
+                box-shadow: 0 0 0 20px rgba(102, 126, 234, 0);
+            }
+        }
+
+        /* Méthodes d'activation */
+        .activation-methods {
+            margin: 30px 0;
+        }
+
+        .method-section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .method-section:hover {
+            border-color: var(--primary);
+            background: #f8fafe;
+        }
+
+        .method-section h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .method-section p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .method-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-weight: 500;
+        }
+
+        .method-divider::before,
+        .method-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .method-divider span {
+            padding: 0 15px;
+            background: white;
+        }
+
+        /* Code d'activation */
+        .code-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .activation-input {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .activation-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .activation-btn {
+            padding: 15px 25px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .activation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .activation-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Bouton NFC */
+        .nfc-btn {
+            padding: 15px 25px;
+            background: #f0f7ff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .nfc-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nfc-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .nfc-status.active {
+            display: block;
+            background: #e3f2fd;
+            color: var(--primary);
+        }
+
+        .nfc-status.error {
+            display: block;
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .nfc-status.success {
+            display: block;
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        /* Messages d'erreur */
+        .error-message {
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffebee;
+            color: var(--danger);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Section info sécurité */
+        .activation-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .activation-info h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .activation-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .activation-info li {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Lien d'achat */
+        .purchase-link {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .purchase-link p {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .purchase-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #ff6b35;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .purchase-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive activation */
+        @media (max-width: 768px) {
+            .activation-card {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .activation-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .code-input-container {
+                gap: 15px;
+            }
+        }
+
+        /* ============ FIN STYLES ACTIVATION ============ */
+
+        /* Animation pour notifications */
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+    
+        /* Contrôles musique (hypnose & méditation) */
+        .music-controls {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .music-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-music {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-music:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-music.disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .volume-controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .volume-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-control label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .volume-control input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .volume-display {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .volume-controls-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        /* Contrôles musique en ligne */
+        .music-controls-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-music-change {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-music-change:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-music-change:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .music-controls-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+</style>
+    
+    <!-- Styles additionnels pour les boutons EMDR améliorés -->
+    <style>
+        /* ============ STYLES BOUTONS EMDR AMÉLIORÉS ============ */
+        .control-btn.start {
+            background: var(--success);
+            color: white;
+        }
+        .control-btn.start:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+        
+        .control-btn.menu {
+            background: var(--secondary);
+            color: #2C3E50;
+        }
+        .control-btn.menu:hover {
+            background: #95c9a8;
+            transform: scale(1.05);
+        }
+
+        .control-btn.stop {
+            background: var(--danger);
+            color: white;
+        }
+        .control-btn.stop:hover {
+            background: #da190b;
+            transform: scale(1.05);
+        }
+
+        .control-btn.fullscreen {
+            background: var(--primary);
+            color: white;
+        }
+        .control-btn.fullscreen:hover {
+            background: #5a8bc4;
+            transform: scale(1.05);
+        }
+
+        /* Espacement des boutons de contrôle EMDR */
+        .session-controls {
+            margin-top: 40px !important;
+            margin-bottom: 30px !important;
+            padding: 20px 0 !important;
+            gap: 12px !important;
+            display: flex !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+        }
+        
+        .control-btn {
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            min-width: 120px !important;
+            margin: 5px !important;
+        }
+
+        /* Instructions EMDR avec plus d'espace */
+        .emdr-instruction {
+            margin-top: 35px !important;
+            padding: 20px !important;
+            background: rgba(255,255,255,0.95) !important;
+            border-radius: 15px !important;
+            backdrop-filter: blur(10px) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+        }
+
+        /* Canvas EMDR avec marge pour éviter la collision avec les boutons */
+        #emdr-canvas-portrait {
+            margin-bottom: 20px !important;
+            border-radius: 15px !important;
+        }
+
+        /* Session info avec plus d'espace */
+        .session-info-portrait {
+            margin: 15px 0 !important;
+            padding: 15px !important;
+        }
+
+        /* Plein écran - boutons EN HAUT À DROITE */
+        .emdr-fullscreen .session-controls {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            padding: 12px 15px !important;
+            border-radius: 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            margin: 0 !important;
+            max-width: 200px !important;
+        }
+
+        /* Cacher tous les autres éléments en plein écran */
+        .emdr-fullscreen .tool-header {
+            display: none !important;
+        }
+
+        .emdr-fullscreen .session-info-portrait {
+            position: fixed !important;
+            top: 20px !important;
+            left: 20px !important;
+            z-index: 10001 !important;
+            background: rgba(0,0,0,0.85) !important;
+            margin: 0 !important;
+            padding: 10px 15px !important;
+            border-radius: 15px !important;
+            font-size: 0.9rem !important;
+        }
+
+        .emdr-fullscreen .container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .emdr-fullscreen .emdr-container {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            z-index: 1000 !important;
+        }
+
+        .emdr-fullscreen .control-btn {
+            padding: 8px 15px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            border-radius: 15px !important;
+            min-width: 80px !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Instructions en plein écran - position discrète */
+        .emdr-fullscreen .floating-instruction {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10000 !important;
+            background: rgba(0,0,0,0.6) !important;
+            color: white !important;
+            padding: 8px 15px !important;
+            border-radius: 20px !important;
+            font-size: 0.85rem !important;
+            text-align: center !important;
+            backdrop-filter: blur(4px) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            max-width: 300px !important;
+            line-height: 1.3 !important;
+            display: block !important;
+        }
+
+        /* Instruction EMDR en mode normal - visible */
+        .emdr-instruction {
+            margin-top: 30px !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff) !important;
+            border-radius: 15px !important;
+            border-left: 4px solid var(--primary) !important;
+            font-size: 1.1rem !important;
+            color: #2C3E50 !important;
+            text-align: center !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            max-width: 600px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            display: block !important;
+        }
+
+        /* En plein écran - créer une version floating des instructions normales */
+        .emdr-fullscreen .emdr-instruction {
+            position: fixed !important;
+            bottom: 30px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 10000 !important;
+            background: rgba(0,0,0,0.8) !important;
+            color: white !important;
+            padding: 12px 24px !important;
+            border-radius: 25px !important;
+            font-size: 1rem !important;
+            font-weight: 500 !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+            backdrop-filter: blur(10px) !important;
+            max-width: 400px !important;
+            margin: 0 !important;
+            border-left: none !important;
+            display: block !important;
+        }
+
+        /* S'assurer que les instructions floating sont visibles */
+        .floating-instruction {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 500;
+            z-index: 50;
+            animation: float 3s ease-in-out infinite;
+            display: block !important;
+        }
+
+        /* Responsive pour les boutons de contrôle */
+        @media (max-width: 768px) {
+            .session-controls {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 10px !important;
+                margin-top: 35px !important;
+                padding: 15px 0 !important;
+            }
+            
+            .control-btn {
+                width: 90% !important;
+                max-width: 250px !important;
+                font-size: 0.95rem !important;
+                padding: 12px 20px !important;
+                min-width: auto !important;
+            }
+            
+            .emdr-instruction {
+                margin-top: 25px !important;
+                padding: 15px !important;
+                font-size: 0.95rem !important;
+            }
+
+            /* Mobile plein écran - boutons compacts en haut à droite */
+            .emdr-fullscreen .session-controls {
+                top: 10px !important;
+                right: 10px !important;
+                padding: 8px 10px !important;
+                max-width: 160px !important;
+                gap: 6px !important;
+            }
+
+            .emdr-fullscreen .control-btn {
+                padding: 6px 10px !important;
+                font-size: 0.8rem !important;
+                border-radius: 12px !important;
+                min-width: 60px !important;
+            }
+
+            .emdr-fullscreen .floating-instruction {
+                bottom: 15px !important;
+                font-size: 0.75rem !important;
+                padding: 6px 12px !important;
+                max-width: 250px !important;
+            }
+        }
+
+        /* Desktop plein écran - boutons bien visibles en haut à droite */
+        @media (min-width: 769px) {
+            .emdr-fullscreen .session-controls {
+                top: 30px !important;
+                right: 30px !important;
+                padding: 15px 18px !important;
+                border-radius: 25px !important;
+                max-width: 220px !important;
+                gap: 10px !important;
+            }
+
+            .emdr-fullscreen .control-btn {
+                padding: 10px 18px !important;
+                font-size: 0.95rem !important;
+                border-radius: 18px !important;
+                min-width: 100px !important;
+            }
+
+            .emdr-fullscreen .floating-instruction {
+                bottom: 30px !important;
+                font-size: 0.9rem !important;
+                padding: 10px 20px !important;
+                border-radius: 25px !important;
+            }
+        }
+
+        /* ============ STYLES EMDR CONTAINER AMÉLIORÉ ============ */
+        
+        /* Container principal EMDR avec espacement optimisé */
+        .emdr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 500px;
+            gap: 20px;
+        }
+
+        /* Canvas EMDR avec dimensions et espacement fixes */
+        #emdr-canvas-portrait {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background: #000;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px !important;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Canvas en plein écran - suppression de tous les cadres */
+        .emdr-fullscreen #emdr-canvas-portrait {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            z-index: 1000 !important;
+            background: #000 !important;
+        }
+
+        /* Point EMDR en plein écran - ajustement pour l'écran complet */
+        .emdr-fullscreen #emdr-dot-portrait {
+            width: 60px !important;
+            height: 60px !important;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 1) !important;
+            z-index: 1001 !important;
+        }
+
+        /* Point EMDR */
+        #emdr-dot-portrait {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+            z-index: 5;
+            transition: all 0.1s ease;
+        }
+
+        /* Info session avec meilleur espacement */
+        .session-info-portrait {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 200px;
+        }
+
+        .session-timer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(107, 155, 209, 0.5);
+        }
+
+        /* Zone de contrôles bien séparée */
+        .session-controls {
+            margin-top: 40px !important;
+            margin-bottom: 20px !important;
+            padding: 20px !important;
+            background: rgba(248, 249, 250, 0.8) !important;
+            border-radius: 20px !important;
+            width: 100% !important;
+            max-width: 600px !important;
+            display: flex !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+            gap: 15px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            backdrop-filter: blur(5px) !important;
+        }
+
+        /* Instructions bien séparées en bas */
+        .emdr-instruction {
+            margin-top: 30px !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff) !important;
+            border-radius: 15px !important;
+            border-left: 4px solid var(--primary) !important;
+            font-size: 1.1rem !important;
+            color: #2C3E50 !important;
+            text-align: center !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            max-width: 600px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        /* Mobile - container adapté */
+        @media (max-width: 768px) {
+            .emdr-container {
+                padding: 15px;
+                margin: 15px 0;
+                min-height: 450px;
+                gap: 15px;
+            }
+
+            #emdr-canvas-portrait {
+                height: 250px;
+                margin-bottom: 20px !important;
+                border-width: 2px;
+            }
+
+            .session-info-portrait {
+                padding: 12px 20px;
+                margin: 15px 0;
+                font-size: 0.95rem;
+            }
+
+            .session-timer {
+                font-size: 1.5rem;
+            }
+
+            .session-controls {
+                margin-top: 30px !important;
+                padding: 15px !important;
+            }
+
+            .emdr-instruction {
+                margin-top: 25px !important;
+                padding: 15px !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* ============ FIN STYLES EMDR CONTAINER ============ */
+
+        /* ============ STYLES DESCRIPTION EMDR ============ */
+        
+        .emdr-description {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .emdr-intro-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .emdr-intro-section h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .emdr-definition {
+            background: linear-gradient(135deg, #f8f9ff, #e8eaff);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .benefit-item h4 {
+            color: var(--primary);
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .benefit-item p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .mechanism-steps {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--primary);
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            margin: 0;
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .efficacy-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: var(--gradient);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1rem !important;
+            opacity: 1 !important;
+            line-height: 1.4;
+            color: white !important;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .safety-alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .safety-alert h4 {
+            color: #856404;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .safety-alert p {
+            color: #856404;
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Responsive pour description EMDR */
+        @media (max-width: 768px) {
+            .emdr-description {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .efficacy-stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* ============ FIN STYLES DESCRIPTION EMDR ============ */
+
+        /* Bouton Terminer la session */
+        .btn-back {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+            min-width: 200px;
+        }
+
+        .btn-back:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Navigation dans l'évaluation EMDR */
+        #emdr-evaluation .tool-header {
+            background: white !important;
+            color: #2C3E50 !important;
+        }
+
+        #emdr-evaluation .btn-back-icon {
+            color: var(--primary) !important;
+            background: rgba(107, 155, 209, 0.1) !important;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #emdr-evaluation .btn-back-icon:hover {
+            background: rgba(107, 155, 209, 0.2) !important;
+            transform: scale(1.1);
+        }
+        /* ============ FIN STYLES BOUTONS EMDR ============ */
+    
+
+        /* ============ STYLES ASSISTANT IA "LIA" ============ */
+        #ai-screen {
+            background: var(--gradient-calm);
+            min-height: 100vh;
+        }
+
+        .lia-app {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .lia-header {
+            background: var(--gradient);
+            padding: 20px 20px 18px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .lia-header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 130px;
+            height: 130px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .lia-header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .lia-back {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .lia-back:hover { background: rgba(255,255,255,0.3); }
+        .lia-avatar {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            flex-shrink: 0;
+            animation: liaBreathe 3s ease-in-out infinite;
+        }
+        @keyframes liaBreathe {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .lia-header-text { flex: 1; }
+        .lia-header-text h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .lia-header-text p {
+            font-size: 0.78rem;
+            opacity: 0.85;
+            margin: 2px 0 0;
+        }
+        .lia-online {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.73rem;
+            opacity: 0.9;
+        }
+        .lia-dot {
+            width: 7px;
+            height: 7px;
+            background: #7fffd4;
+            border-radius: 50%;
+            animation: liaPulse 2s infinite;
+        }
+        @keyframes liaPulse {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .lia-subscreen { display: none; flex: 1; flex-direction: column; }
+        .lia-subscreen.active { display: flex; }
+
+        .lia-welcome {
+            padding: 22px 18px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .lia-intro {
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--primary);
+        }
+        .lia-intro p { font-size: 0.95rem; line-height: 1.6; color: #2C3E50; }
+        .lia-intro .lia-question {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: block;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .lia-options { display: flex; flex-direction: column; gap: 10px; }
+        .lia-opt-btn {
+            background: white;
+            border: 2px solid #e8ecf0;
+            border-radius: 14px;
+            padding: 13px 16px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            color: #2C3E50;
+            transition: all 0.22s ease;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .lia-opt-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+            transform: translateX(4px);
+            box-shadow: 0 3px 12px rgba(107,155,209,0.15);
+        }
+        .lia-opt-icon { font-size: 1.4rem; width: 28px; text-align: center; flex-shrink: 0; }
+        .lia-opt-text { flex: 1; }
+        .lia-opt-text strong { display: block; font-weight: 500; margin-bottom: 1px; }
+        .lia-opt-text small { color: #6b7c93; font-size: 0.78rem; }
+        .lia-opt-arrow { color: #bcc4cc; font-size: 1.1rem; transition: transform 0.2s; }
+        .lia-opt-btn:hover .lia-opt-arrow { transform: translateX(3px); }
+
+        .lia-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f7f9fb;
+        }
+        .lia-messages::-webkit-scrollbar { width: 3px; }
+        .lia-messages::-webkit-scrollbar-thumb { background: #d0d9e4; border-radius: 2px; }
+        .lia-msg { display: flex; gap: 8px; animation: liaFadeUp 0.28s ease; }
+        @keyframes liaFadeUp {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lia-msg.user { flex-direction: row-reverse; }
+        .lia-msg-av {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            background: #e8ecf0;
+            margin-top: 2px;
+        }
+        .lia-msg.ai .lia-msg-av { background: var(--gradient); color: white; }
+        .lia-msg-bubble {
+            max-width: 78%;
+            padding: 11px 15px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            white-space: pre-line;
+        }
+        .lia-msg.ai .lia-msg-bubble {
+            background: white;
+            color: #2C3E50;
+            border-radius: 3px 12px 12px 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .lia-msg.user .lia-msg-bubble {
+            background: var(--gradient);
+            color: white;
+            border-radius: 12px 3px 12px 12px;
+        }
+        .lia-typing { display: flex; gap: 5px; align-items: center; padding: 12px 15px; }
+        .lia-typing span {
+            width: 6px;
+            height: 6px;
+            background: #bcc4cc;
+            border-radius: 50%;
+            animation: liaTypeBounce 1.2s infinite;
+        }
+        .lia-typing span:nth-child(2) { animation-delay: 0.18s; }
+        .lia-typing span:nth-child(3) { animation-delay: 0.36s; }
+        @keyframes liaTypeBounce {
+            0%,60%,100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        .lia-redirect-cards { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+        .lia-rcard {
+            background: white;
+            border: 2px solid #e0e8f0;
+            border-radius: 10px;
+            padding: 10px 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: inherit;
+            font-size: 0.84rem;
+            color: #2C3E50;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .lia-rcard:hover { border-color: var(--primary); background: #f0f7ff; transform: scale(1.01); }
+        .lia-rcard .lri { font-size: 1.2rem; }
+        .lia-rcard .lrt { flex: 1; }
+        .lia-rcard .lrt strong { display: block; font-weight: 500; font-size: 0.85rem; }
+        .lia-rcard .lrt small { color: #6b7c93; font-size: 0.76rem; }
+
+        .lia-input-zone {
+            padding: 12px 18px 16px;
+            border-top: 1px solid #eef0f3;
+            background: white;
+        }
+        .lia-input-row { display: flex; gap: 9px; align-items: flex-end; }
+        .lia-textarea {
+            flex: 1;
+            border: 2px solid #e8ecf0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            color: #2C3E50;
+            resize: none;
+            min-height: 42px;
+            max-height: 110px;
+            transition: border-color 0.2s;
+            background: #fafbfc;
+        }
+        .lia-textarea:focus { outline: none; border-color: var(--primary); background: white; }
+        .lia-send {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: var(--gradient);
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .lia-send:hover { transform: scale(1.06); }
+        .lia-send:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+        .lia-redirect {
+            padding: 36px 24px;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 18px;
+            background: white;
+        }
+        .lia-mod-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            background: var(--gradient);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.3);
+            animation: liaPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+            margin: 0 auto;
+        }
+        @keyframes liaPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .lia-mod-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+        .lia-mod-desc {
+            font-size: 0.88rem;
+            color: #6b7c93;
+            line-height: 1.6;
+            max-width: 340px;
+        }
+        .lia-mod-tip {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.84rem;
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+            text-align: left;
+            max-width: 340px;
+            width: 100%;
+        }
+        .lia-go-btn {
+            padding: 14px 36px;
+            border-radius: 50px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.35);
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 280px;
+        }
+        .lia-go-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.5); }
+        .lia-back-link {
+            color: #6b7c93;
+            font-size: 0.83rem;
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        .lia-back-link:hover { color: #2C3E50; }
+
+        #tracking-screen .chart-placeholder {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 110px;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .tracking-bar {
+            flex: 1;
+            border-radius: 5px 5px 0 0;
+            transition: height 0.6s cubic-bezier(0.34,1.56,0.64,1);
+            min-height: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+        .tracking-bar:hover::after {
+            content: attr(data-val);
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2C3E50;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        .tracking-empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #6b7c93;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        /* ============ FIN STYLES LIA ============ */
+</style>
+</head>
+<body>
+    <!-- Recommandation orientation -->
+    <div id="orientation-recommendation" class="orientation-recommendation">
+        <p><strong>💡 Mode Paysage Recommandé pour EMDR</strong></p>
+        <div class="recommendation-buttons">
+            <button class="rec-btn primary" onclick="hideOrientationRecommendation()">J'ai compris</button>
+        </div>
+    </div>
+
+    <!-- ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============ -->
+    
+    <!-- Écran d'activation obligatoire -->
+    <div id="activation-screen" class="screen activation-screen active">
+        <div class="activation-container">
+            <div class="activation-card">
+                <div class="activation-header">
+                    <h1>🌟 Pass Anxiété Pro</h1>
+                    <h2>Activation Carte Unique</h2>
+                    <p>Cette application nécessite votre carte physique exclusive</p>
+                </div>
+
+                <div class="activation-content">
+                    <div class="card-visual">
+                        <div class="nfc-icon">📱</div>
+                        <div class="nfc-waves-activation"></div>
+                    </div>
+
+                    <div class="activation-methods">
+                        <div class="method-section">
+                            <h3>🔢 Code d'Activation</h3>
+                            <p>Saisissez le code unique gravé sur votre carte :</p>
+                            <div class="code-input-container">
+                                <input 
+                                    type="text" 
+                                    id="activation-code" 
+                                    placeholder="XXXX-XXXX"
+                                    maxlength="9"
+                                    class="activation-input"
+                                >
+                                <button class="activation-btn" onclick="activateWithCode()">
+                                    ✨ Activer ✨
+                                </button>
+                            </div>
+                            <div id="code-error" class="error-message"></div>
+                        </div>
+
+                        <div class="method-divider">
+                            <span>OU</span>
+                        </div>
+
+                        <div class="method-section">
+                            <h3>📱 Scan NFC</h3>
+                            <p>Approchez votre carte de votre téléphone :</p>
+                            <button class="nfc-btn" onclick="activateWithNFC()">
+                                📡 Scanner ma carte NFC
+                            </button>
+                            <div id="nfc-status" class="nfc-status"></div>
+                        </div>
+                    </div>
+
+                    <div class="activation-info">
+                        <h4>🛡️ Sécurité & Exclusivité</h4>
+                        <ul>
+                            <li>✅ Chaque carte est unique et traçable</li>
+                            <li>✅ Protection contre le partage non autorisé</li>
+                            <li>✅ Accès illimité à votre propriétaire uniquement</li>
+                            <li>✅ Mise à jour automatique du contenu</li>
+                        </ul>
+                    </div>
+
+                    <div class="purchase-link">
+                        <p>Vous n'avez pas encore votre carte Pass Anxiété ?</p>
+                        <a href="https://www.hypnotarot.fr/" target="_blank" class="purchase-btn" onclick="trackPurchaseClick()">🛒 Commander sur HypnoTarot.fr</a>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">
+                            Livraison mondiale • Carte unique • Garantie 30 jours
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FIN SYSTÈME ACTIVATION ============ -->
+
+    <!-- ============ ÉCRAN ASSISTANT IA "LIA" ============ -->
+    <div id="ai-screen" class="screen">
+        <div class="lia-app">
+            <div class="lia-header">
+                <div class="lia-header-row">
+                    <button class="lia-back" onclick="goToScreen('home-screen')" aria-label="Retour">←</button>
+                    <div class="lia-avatar">🌸</div>
+                    <div class="lia-header-text">
+                        <h2>Lia — Votre accompagnatrice</h2>
+                        <p>Assistante thérapeutique · Pass Anxiété Pro</p>
+                    </div>
+                    <div class="lia-online"><div class="lia-dot"></div><span>Disponible</span></div>
+                </div>
+            </div>
+
+            <div class="lia-subscreen active" id="liaWelcome">
+                <div class="lia-welcome">
+                    <div class="lia-intro">
+                        <p>Bonjour 🌿 Je suis <strong>Lia</strong>, votre accompagnatrice personnelle.<br>
+                        Je vais vous écouter et vous guider vers l'outil le plus adapté à votre état.</p>
+                        <span class="lia-question">Comment vous sentez-vous en ce moment ?</span>
+                    </div>
+
+                    <div class="lia-options">
+                        <button class="lia-opt-btn" onclick="liaStartChat('Je vis une crise d\'angoisse intense en ce moment, j\'ai besoin d\'aide immédiate')">
+                            <span class="lia-opt-icon">🆘</span>
+                            <span class="lia-opt-text"><strong>C'est urgent — j'ai une crise</strong><small>Aide immédiate, respiration, ancrage</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('J\'ai des pensées négatives qui tournent en boucle, je n\'arrive pas à m\'en libérer et cela m\'épuise')">
+                            <span class="lia-opt-icon">🌀</span>
+                            <span class="lia-opt-text"><strong>Des pensées en boucle</strong><small>Ruminations, catastrophisme, stress</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('Je me sens anxieux de façon diffuse, sans raison précise, une tension générale difficile à nommer')">
+                            <span class="lia-opt-icon">😰</span>
+                            <span class="lia-opt-text"><strong>Anxiété diffuse, sans raison claire</strong><small>Tension, inquiétude, mal-être général</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('Je veux travailler sur un souvenir ou une situation traumatisante qui continue de me perturber')">
+                            <span class="lia-opt-icon">💭</span>
+                            <span class="lia-opt-text"><strong>Un souvenir ou traumatisme</strong><small>EMDR, retraitement émotionnel</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaStartChat('J\'ai besoin d\'une relaxation profonde ou d\'une méditation pour me ressourcer')">
+                            <span class="lia-opt-icon">🧘</span>
+                            <span class="lia-opt-text"><strong>Me ressourcer, me recentrer</strong><small>Méditation, hypnose, relaxation</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                        <button class="lia-opt-btn" onclick="liaOpenFreeChat()">
+                            <span class="lia-opt-icon">✏️</span>
+                            <span class="lia-opt-text"><strong>Écrire librement…</strong><small>Décrivez ce que vous ressentez</small></span>
+                            <span class="lia-opt-arrow">›</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lia-subscreen" id="liaChat">
+                <div class="lia-messages" id="liaMessages"></div>
+            </div>
+            <div class="lia-input-zone" id="liaInputZone" style="display:none;">
+                <div class="lia-input-row">
+                    <textarea class="lia-textarea" id="liaInput" placeholder="Parlez-moi de ce que vous ressentez…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();liaSend()}"></textarea>
+                    <button class="lia-send" id="liaSendBtn" onclick="liaSend()">›</button>
+                </div>
+            </div>
+
+            <div class="lia-subscreen" id="liaRedirect">
+                <div class="lia-redirect">
+                    <div class="lia-mod-icon" id="liaModIcon">🧠</div>
+                    <div class="lia-mod-title" id="liaModTitle">Module recommandé</div>
+                    <div class="lia-mod-desc" id="liaModDesc"></div>
+                    <div class="lia-mod-tip" id="liaModTip" style="display:none;"></div>
+                    <button class="lia-go-btn" id="liaGoBtn" onclick="liaGoToModule()">Commencer →</button>
+                    <button class="lia-back-link" onclick="liaReset()">← Retour à l'accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============ FIN ÉCRAN LIA ============ -->
+
+
+    <!-- Écran NFC (masqué par défaut maintenant) -->
+    <div id="nfc-screen" class="screen">
+        <div class="container">
+            <div class="nfc-card-visual">
+                <div class="nfc-waves"></div>
+                <h1>🌸 Pass Anxiété</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9;">Application Complète Pro</p>
+            </div>
+            <button id="skip-nfc" class="btn-secondary">Commencer</button>
+        </div>
+    </div>
+
+    <!-- Écran Accueil -->
+    <div id="home-screen" class="screen">
+        <header>
+            <h1>🌸 Pass Anxiété Pro</h1>
+            <div id="current-time"></div>
+        </header>
+
+        <div class="container">
+            <div class="anxiety-gauge">
+                <h2>Comment vous sentez-vous maintenant ?</h2>
+                <div class="gauge-slider">
+                    <input type="range" id="anxiety-level" min="0" max="10" value="5">
+                    <div class="gauge-labels">
+                        <span>😌 Calme</span>
+                        <span>😰 Très anxieux</span>
+                    </div>
+                </div>
+                <p class="anxiety-value">Niveau : <span id="anxiety-display">5</span>/10</p>
+            </div>
+
+            <div class="recommendation-card">
+                <h3>🎯 Recommandé pour vous maintenant</h3>
+                <div id="recommended-tool"></div>
+            </div>
+
+            <div class="tools-grid">
+                <button class="tool-card" data-tool="crisis">
+                    <span class="tool-icon">🚨</span>
+                    <h3>Mode Crise</h3>
+                    <p>Aide immédiate</p>
+                </button>
+
+                <button class="tool-card" data-tool="emdr">
+                    <span class="tool-icon">👁️</span>
+                    <h3>EMDR Pro</h3>
+                    <p>Thérapie professionnelle</p>
+                </button>
+
+                <button class="tool-card" data-tool="breathing">
+                    <span class="tool-icon">💓</span>
+                    <h3>Respiration</h3>
+                    <p>Cohérence cardiaque</p>
+                </button>
+
+                <button class="tool-card" data-tool="hypnotherapy">
+                    <span class="tool-icon">🌀</span>
+                    <h3>Hypnothérapie</h3>
+                    <p>Sessions guidées</p>
+                </button>
+
+                <button class="tool-card" data-tool="meditation">
+                    <span class="tool-icon">🧘</span>
+                    <h3>Méditation</h3>
+                    <p>Pleine conscience</p>
+                </button>
+
+                <button class="tool-card" data-tool="tcc">
+                    <span class="tool-icon">🧠</span>
+                    <h3>TCC</h3>
+                    <p>Pensées & Émotions</p>
+                </button>
+
+                <button class="tool-card" data-tool="tips">
+                    <span class="tool-icon">💡</span>
+                    <h3>Astuces & Aide</h3>
+                    <p>Conseils & Urgences</p>
+                </button>
+
+                <button class="tool-card" data-tool="tracking">
+                    <span class="tool-icon">📊</span>
+                    <h3>Suivi</h3>
+                    <p>Vos progrès</p>
+                </button>
+
+
+                <button class="tool-card" data-tool="ai">
+                    <span class="tool-icon">🤖</span>
+                    <h3>Assistant Lia</h3>
+                    <p>Guidé selon votre état</p>
+                </button>
+
+                <button class="tool-card" data-tool="therapist">
+                    <span class="tool-icon">👨‍⚕️</span>
+                    <h3>Votre Thérapeute</h3>
+                    <p>Rencontrez Joffrey</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Mode Crise -->
+    <div id="crisis-screen" class="screen">
+        <div class="emergency-header">
+            <h1>🚨 Mode Crise</h1>
+            <p>Vous allez vous sentir mieux, nous sommes là pour vous aider</p>
+        </div>
+        <div class="container">
+            
+            <!-- Évaluation rapide du niveau de crise -->
+            <div class="crisis-assessment">
+                <h2>📊 Évaluez votre état actuel</h2>
+                <div class="crisis-levels">
+                    <button class="crisis-level mild" onclick="showCrisisActions('mild')">
+                        <span class="level-icon">😰</span>
+                        <h3>Anxiété Légère</h3>
+                        <p>Stress, inquiétude, tension</p>
+                    </button>
+                    
+                    <button class="crisis-level moderate" onclick="showCrisisActions('moderate')">
+                        <span class="level-icon">😨</span>
+                        <h3>Crise d'Angoisse</h3>
+                        <p>Panique, oppression, vertiges</p>
+                    </button>
+                    
+                    <button class="crisis-level severe" onclick="showCrisisActions('severe')">
+                        <span class="level-icon">🆘</span>
+                        <h3>Crise Sévère</h3>
+                        <p>Tétanie, tachycardie, souffle coupé</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions pour anxiété légère -->
+            <div id="mild-actions" class="crisis-actions-group" style="display: none;">
+                <h2>🌱 Techniques de Gestion Rapide</h2>
+                <div class="emergency-actions">
+                    <button class="emergency-btn" onclick="startCrisisBreathing('4-7-8')">
+                        <span class="emergency-icon">💨</span>
+                        <h3>Respiration 4-7-8</h3>
+                        <p>Calme immédiat en 2 minutes</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startGrounding()">
+                        <span class="emergency-icon">🌍</span>
+                        <h3>Ancrage 5-4-3-2-1</h3>
+                        <p>Reconnexion avec le présent</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startColdWater()">
+                        <span class="emergency-icon">❄️</span>
+                        <h3>Technique du Froid</h3>
+                        <p>Activation nerf vague</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions pour crise d'angoisse -->
+            <div id="moderate-actions" class="crisis-actions-group" style="display: none;">
+                <h2>🆘 Gestion Crise d'Angoisse</h2>
+                <div class="emergency-actions">
+                    <button class="emergency-btn" onclick="startCrisisBreathing('anti-panic')">
+                        <span class="emergency-icon">🫁</span>
+                        <h3>Respiration Anti-Panique</h3>
+                        <p>Régulation système nerveux</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startProgressiveRelaxation()">
+                        <span class="emergency-icon">🧘‍♀️</span>
+                        <h3>Relaxation Progressive</h3>
+                        <p>Détente musculaire guidée</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="startRealityCheck()">
+                        <span class="emergency-icon">✅</span>
+                        <h3>Test de Réalité</h3>
+                        <p>Décatastrophisation cognitive</p>
+                    </button>
+                    
+                    <button class="emergency-btn" onclick="goToScreen('emdr-distance')">
+                        <span class="emergency-icon">👁️</span>
+                        <h3>EMDR d'Urgence</h3>
+                        <p>Session rapide 2 minutes</p>
+                    </button>
+
+                    <button class="emergency-btn" onclick="startEmergencyScan()">
+                        <span class="emergency-icon">🩺</span>
+                        <h3>Scan corporel express</h3>
+                        <p>Relaxation rapide 3 minutes</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions pour crise sévère -->
+            <div id="severe-actions" class="crisis-actions-group" style="display: none;">
+                <h2>🚨 Crise Sévère - Actions Immédiates</h2>
+                
+                <!-- Alerte urgence médicale -->
+                <div class="medical-alert">
+                    <h3>⚠️ Si vous ressentez :</h3>
+                    <ul>
+                        <li>💓 Douleur thoracique intense</li>
+                        <li>🫀 Battements cardiaques très irréguliers</li>
+                        <li>🫁 Difficulté respiratoire sévère</li>
+                        <li>🧠 Perte de conscience imminente</li>
+                    </ul>
+                    <button class="medical-emergency-btn" onclick="callEmergency()">
+                        📞 APPELER LE 15 MAINTENANT
+                    </button>
+                </div>
+
+                <div class="emergency-actions">
+                    <button class="emergency-btn severe" onclick="startCrisisBreathing('severe')">
+                        <span class="emergency-icon">🆘</span>
+                        <h3>Respiration d'Urgence</h3>
+                        <p>Contrôle hyperventilation</p>
+                    </button>
+                    
+                    <button class="emergency-btn severe" onclick="startTetanieHelp()">
+                        <span class="emergency-icon">🤲</span>
+                        <h3>Aide Tétanie</h3>
+                        <p>Exercices anti-contractures</p>
+                    </button>
+                    
+                    <button class="emergency-btn severe" onclick="startTachycardiaHelp()">
+                        <span class="emergency-icon">💓</span>
+                        <h3>Tachycardie</h3>
+                        <p>Techniques ralentissement</p>
+                    </button>
+                    
+                    <button class="emergency-btn severe" onclick="contactSupport()">
+                        <span class="emergency-icon">📞</span>
+                        <h3>3114 - Urgence</h3>
+                        <p>Ligne de crise gratuite</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions générales toujours visibles -->
+            <div class="crisis-instructions">
+                <div class="instruction-card">
+                    <h3>🧠 Rappelez-vous :</h3>
+                    <ul>
+                        <li>Cette crise est temporaire et va passer</li>
+                        <li>Vous n'êtes pas en danger de mort</li>
+                        <li>Concentrez-vous sur votre respiration</li>
+                        <li>Vous avez déjà survécu à cela avant</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn-back" data-back="home-screen">← Retour Accueil</button>
+        </div>
+    </div>
+
+    <!-- Écran Respiration d'Urgence -->
+    <div id="emergency-breathing-screen" class="screen">
+        <header class="tool-header">
+            <h1>🆘 Respiration d'Urgence</h1>
+        </header>
+        <div class="container">
+            <div class="emergency-breathing-container">
+                <div class="breathing-instruction" id="emergency-breathing-text">
+                    Sélectionnez votre technique et appuyez sur "Commencer"
+                </div>
+                
+                <div class="emergency-breathing-circle" id="emergency-circle">
+                    <div class="inner-circle"></div>
+                </div>
+                
+                <div class="breathing-counter">
+                    Cycle: <span id="emergency-cycle-count">0</span><span id="emergency-cycle-total">/8</span>
+                </div>
+                
+                <div class="breathing-controls">
+                    <button class="btn-primary" onclick="startEmergencyBreathing()">
+                        ▶️ Commencer
+                    </button>
+                    <button class="btn-secondary" onclick="stopEmergencyBreathing()" style="display: none;">
+                        ⏹️ Arrêter
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn-back" onclick="goToScreen('crisis-screen')">← Retour Mode Crise</button>
+        </div>
+    </div>
+
+    <!-- Écran Techniques Spécialisées -->
+    <div id="specialized-techniques-screen" class="screen">
+        <header class="tool-header">
+            <h1 id="technique-title">🧘‍♀️ Technique Spécialisée</h1>
+        </header>
+        <div class="container">
+            <div class="technique-container" id="technique-content">
+                <!-- Le contenu sera injecté dynamiquement -->
+            </div>
+            
+            <button class="btn-back" onclick="goToScreen('crisis-screen')">← Retour Mode Crise</button>
+        </div>
+    </div>
+
+    <!-- EMDR: Distance optimale -->
+    <div id="emdr-distance" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🧠 EMDR - Thérapie par Mouvements Oculaires</h1>
+        </header>
+        <div class="container">
+            <div class="distance-setup">
+                <h2>📏 Distance Optimale</h2>
+                <div class="distance-icon">📱👁️</div>
+                
+                <!-- Description complète de l'EMDR -->
+                <div class="emdr-description">
+                    <div class="emdr-intro-section">
+                        <h2>🧠 Qu'est-ce que l'EMDR ?</h2>
+                        <div class="emdr-definition">
+                            <p><strong>EMDR</strong> signifie <em>Eye Movement Desensitization and Reprocessing</em> (Désensibilisation et Retraitement par les Mouvements Oculaires). Cette thérapie révolutionnaire, développée par Dr. Francine Shapiro en 1987, aide à traiter les traumatismes et les souvenirs perturbants.</p>
+                        </div>
+                    </div>
+
+                    <div class="emdr-benefits-section">
+                        <h3>✨ Les Bienfaits de l'EMDR</h3>
+                        <div class="benefits-grid">
+                            <div class="benefit-item">
+                                <span class="benefit-icon">🎯</span>
+                                <h4>Traitement des Traumatismes</h4>
+                                <p>Efficace pour les traumatismes (PTSD), les chocs émotionnels, et les souvenirs douloureux</p>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-icon">😌</span>
+                                <h4>Réduction de l'Anxiété</h4>
+                                <p>Diminue l'impact émotionnel des phobies, angoisses et peurs</p>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-icon">🔄</span>
+                                <h4>Retraitement Adaptatif</h4>
+                                <p>Transforme les souvenirs négatifs en expériences intégrées et apaisées</p>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-icon">🧘</span>
+                                <h4>Bien-être Mental</h4>
+                                <p>Améliore l'estime de soi et la capacité de gestion émotionnelle</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emdr-mechanism-section">
+                        <h3>🔬 Comment ça fonctionne ?</h3>
+                        <div class="mechanism-steps">
+                            <div class="step-item">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <h4>Activation du Souvenir</h4>
+                                    <p>Vous vous concentrez sur un souvenir ou une situation problématique</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <h4>Stimulation Bilatérale</h4>
+                                    <p>Les mouvements oculaires stimulent alternativement les deux hémisphères cérébraux</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <h4>Retraitement Naturel</h4>
+                                    <p>Le cerveau traite et intègre l'information de manière adaptative</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <h4>Résolution</h4>
+                                    <p>La charge émotionnelle diminue et de nouvelles perspectives émergent</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emdr-efficacy-section">
+                        <h3>📊 Efficacité Scientifique</h3>
+                        <div class="efficacy-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">80%</span>
+                                <span class="stat-label">des patients voient une amélioration significative</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">3-6</span>
+                                <span class="stat-label">séances suffisent souvent pour un trauma simple</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">OMS</span>
+                                <span class="stat-label">Organisation Mondiale de la Santé recommande l'EMDR pour les traumatismes (PTSD)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emdr-safety-note">
+                        <div class="safety-alert">
+                            <h4>⚠️ Important</h4>
+                            <p>Cette application propose une version simplifiée d'auto-traitement. Pour des traumatismes importants, consultez un thérapeute EMDR certifié pour un accompagnement professionnel adapté.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>📏 Configuration & Distance Optimale</h2>
+                
+                <div class="emdr-info-box success">
+                    <p><strong>📚 Recherche scientifique (Shapiro, 2001)</strong></p>
+                    <p>La distance optimale pour l'EMDR est celle où les yeux effectuent des mouvements latéraux complets sans effort excessif.</p>
+                </div>
+
+                <div class="distance-measurement">
+                    <h3>Distance recommandée :</h3>
+                    <div class="distance-value">40-50 cm</div>
+                    <p style="margin-top: 10px;">
+                        <strong>📱 Smartphone :</strong> 40-50 cm (longueur d'un avant-bras)<br>
+                        <strong>💻 Tablette :</strong> 50-60 cm<br>
+                        <strong>🖥️ Ordinateur :</strong> 60-70 cm
+                    </p>
+                </div>
+
+                <div class="emdr-info-box warning">
+                    <p><strong>💡 Mode Paysage vs Portrait :</strong></p>
+                    <p><strong>🌟 Paysage (horizontal) - RECOMMANDÉ</strong></p>
+                    <p>✅ Amplitude maximale des mouvements oculaires</p>
+                    <p>✅ Plus efficace thérapeutiquement</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="goToScreen('emdr-setup')">
+                Distance configurée →
+            </button>
+        </div>
+    </div>
+
+    <!-- EMDR: Préparation & SUD Initial -->
+    <div id="emdr-setup" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="emdr-distance">←</button>
+            <h1>Préparation EMDR</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">1</span> Identification de la cible</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Choisissez un souvenir ou une situation qui vous dérange</strong></p>
+                </div>
+
+                <div class="thought-prompts">
+                    <h4>💭 Questions pour vous guider :</h4>
+                    <div class="prompt-item">
+                        <strong>Quelle image représente le pire moment ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Visualisez une "photo" mentale du moment le plus perturbant</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Quelle pensée négative avez-vous sur vous-même ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Ex: "Je ne suis pas capable", "Je suis en danger"</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Où ressentez-vous cette émotion dans votre corps ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Gorge serrée, ventre noué, poitrine oppressée...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">2</span> Échelle SUD Initiale</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Évaluez votre niveau de détresse MAINTENANT</strong></p>
+                    <p>En pensant à ce souvenir/situation, quel est votre niveau de malaise ?</p>
+                </div>
+
+                <div class="sud-scale">
+                    <h4>Niveau de détresse actuel :</h4>
+                    <div class="sud-slider">
+                        <input type="range" id="sud-before" min="0" max="10" value="5">
+                    </div>
+                    <div class="sud-labels">
+                        <span>0 - Aucune détresse</span>
+                        <span>10 - Détresse maximale</span>
+                    </div>
+                    <div class="sud-value" id="sud-before-value">5</div>
+                    <div class="sud-description" id="sud-before-desc">Malaise modéré</div>
+                </div>
+            </div>
+
+            <div class="emdr-settings">
+                <label>Mode Session :
+                    <select id="emdr-mode">
+                        <option value="professional">Mode Professionnel (12 min continues)</option>
+                        <option value="quick">Mode Rapide (2 min continues)</option>
+                        <option value="standard">Mode Standard (5 min continues)</option>
+                    </select>
+                </label>
+                <label>Vitesse :
+                    <select id="emdr-speed">
+                        <option value="slow">Lent</option>
+                        <option value="medium" selected>Moyen</option>
+                        <option value="fast">Rapide</option>
+                    </select>
+                </label>
+            </div>
+
+            <button class="btn-primary" onclick="startEMDRSessionImproved()">
+                Commencer la session EMDR →
+            </button>
+        </div>
+    </div>
+
+    <!-- EMDR: Session Active -->
+    <div id="emdr-session" class="screen">
+        <div id="portrait-version">
+            <header class="tool-header">
+                <h1>Session EMDR</h1>
+            </header>
+            <div class="container">
+                <div class="emdr-container">
+                    <div id="emdr-canvas-portrait">
+                        <div id="emdr-dot-portrait"></div>
+                    </div>
+                    
+                    <div class="session-info-portrait">
+                        <div>Série: <span id="current-series-portrait">1</span>/<span id="total-series-portrait">4</span></div>
+                        <div class="session-timer" id="session-timer-portrait">2:00</div>
+                    </div>
+
+                    <div class="session-controls">
+                        <button class="control-btn start" onclick="startEMDRFixed()" id="start-emdr-btn">
+                            ▶️ Démarrer
+                        </button>
+                        <button class="control-btn fullscreen" onclick="toggleFullscreen()" id="fullscreen-btn">
+                            📺 Plein Écran
+                        </button>
+                        <button class="control-btn stop" onclick="stopEMDRFixed()" id="stop-emdr-btn" style="display: none;">■ Arrêter</button>
+                        <button class="control-btn menu" onclick="returnToMainMenu()" id="menu-btn">
+                            🏠 Menu
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="emdr-instruction">
+                    Suivez le point avec vos yeux, sans bouger la tête
+                    <span style="opacity: 0.7; display: none;" id="keyboard-hint"> • Touche F pour le plein écran</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-overlay" id="question-overlay">
+            <div class="question-text" id="question-text"></div>
+            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">Continuez à suivre le point des yeux</div>
+        </div>
+    </div>
+
+    <!-- EMDR: Évaluation Finale -->
+    <div id="emdr-evaluation" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>Évaluation Finale</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">3</span> Réévaluation SUD</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Pensez à nouveau au souvenir/situation de départ</strong></p>
+                    <p>Comment vous sentez-vous MAINTENANT ?</p>
+                </div>
+
+                <div class="sud-scale">
+                    <h4>Niveau de détresse actuel :</h4>
+                    <div class="sud-slider">
+                        <input type="range" id="sud-after" min="0" max="10" value="5">
+                    </div>
+                    <div class="sud-labels">
+                        <span>0 - Aucune détresse</span>
+                        <span>10 - Détresse maximale</span>
+                    </div>
+                    <div class="sud-value" id="sud-after-value">5</div>
+                    <div class="sud-description" id="sud-after-desc">Malaise modéré</div>
+                </div>
+            </div>
+
+            <div class="sud-comparison" id="comparison-section" style="display:none;">
+                <h3>📊 Comparaison Avant / Après</h3>
+                <div class="comparison-bars">
+                    <div class="comparison-bar">
+                        <div class="bar-container">
+                            <div class="bar-fill" id="bar-before">0</div>
+                        </div>
+                        <div class="bar-label">Avant</div>
+                    </div>
+                    <div class="comparison-bar">
+                        <div class="bar-container">
+                            <div class="bar-fill improved" id="bar-after">0</div>
+                        </div>
+                        <div class="bar-label">Après</div>
+                    </div>
+                </div>
+
+                <div id="result-message" class="result-message"></div>
+
+                <div class="emdr-info-box">
+                    <p><strong>Interprétation :</strong></p>
+                    <p id="interpretation-text"></p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="evaluateResults()">
+                Valider mon évaluation
+            </button>
+            <button class="btn-back" onclick="completeEMDREvaluation()">✅ Terminer la session</button>
+        </div>
+    </div>
+
+    <!-- Écran EMDR Simple -->
+    <div id="emdr-simple" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>EMDR - Mouvement Oculaire</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-settings">
+                <label>Vitesse :
+                    <select id="emdr-speed-simple">
+                        <option value="slow">Lent</option>
+                        <option value="medium" selected>Moyen</option>
+                        <option value="fast">Rapide</option>
+                    </select>
+                </label>
+                <label>Durée :
+                    <select id="emdr-duration-simple">
+                        <option value="2">2 minutes</option>
+                        <option value="5" selected>5 minutes</option>
+                        <option value="10">10 minutes</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="emdr-canvas">
+                <div id="emdr-dot"></div>
+            </div>
+
+            <div class="emdr-controls">
+                <button id="emdr-start" class="btn-primary">Commencer</button>
+                <button id="emdr-stop" class="btn-secondary" style="display:none;">Arrêter</button>
+            </div>
+
+            <div id="emdr-timer" class="timer">5:00</div>
+            <p class="instruction">Suivez le point des yeux sans bouger la tête</p>
+        </div>
+    </div>
+
+    <!-- Écran Respiration -->
+    <div id="breathing-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>💓 Cohérence Cardiaque</h1>
+        </header>
+        <div class="container">
+            <div class="breathing-info">
+                <p><strong>🫁 Technique :</strong> 5 secondes inspiration (nez) - 5 secondes expiration (bouche)</p>
+                <p><strong>⏱️ Durée :</strong> 5 minutes (30 cycles) pour optimiser la variabilité cardiaque</p>
+            </div>
+
+            <div class="coherence-container" id="coherence-container">
+                <div class="breathing-bubble" id="breathing-bubble">
+                    <div class="bubble-inner"></div>
+                    <div class="bubble-glow"></div>
+                </div>
+                
+                <div class="breathing-instruction" id="breathing-instruction">
+                    Prêt à commencer la cohérence cardiaque
+                </div>
+                
+                <div class="breathing-phase" id="breathing-phase">
+                    Phase : Préparation
+                </div>
+            </div>
+
+            <div class="coherence-counter">
+                <div class="counter-item">
+                    <span class="counter-label">Cycle :</span>
+                    <span id="cycle-count">0</span> / 30
+                </div>
+                <div class="counter-item">
+                    <span class="counter-label">Temps :</span>
+                    <span id="time-remaining">5:00</span>
+                </div>
+            </div>
+
+            <div class="breathing-controls">
+                <button class="btn-primary" id="start-breathing-btn" onclick="startCoherenceCardiaque()">
+                    ▶️ Commencer
+                </button>
+                <button class="btn-secondary" id="stop-breathing-btn" onclick="stopCoherenceCardiaque()" style="display: none;">
+                    ⏹️ Arrêter
+                </button>
+                <button class="btn-secondary" onclick="resetCoherenceCardiaque()">
+                    🔄 Recommencer
+                </button>
+            </div>
+
+            <div class="breathing-benefits">
+                <h3>🌟 Bienfaits de la Cohérence Cardiaque :</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">❤️</span>
+                        <span>Régulation cardiaque</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">😌</span>
+                        <span>Réduction stress</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🧠</span>
+                        <span>Clarté mentale</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">💤</span>
+                        <span>Meilleur sommeil</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Suivi -->
+    <div id="tracking-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>📊 Votre Suivi</h1>
+        </header>
+        <div class="container">
+            <div class="stats-header">
+                <h2>Vos Statistiques</h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Sessions totales</h3>
+                    <p class="stat-number" id="total-sessions">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Outil favori</h3>
+                    <p class="stat-text" id="favorite-tool">-</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Niveau d'anxiété</h3>
+                    <p class="stat-number" id="avg-anxiety">-</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Série actuelle</h3>
+                    <p class="stat-number" id="streak-days">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SECTION TCC ============ -->
+    
+    <!-- Écran TCC - Menu Principal -->
+    <div id="tcc-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🧠 TCC - Thérapie Cognitive & Comportementale</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>💡 La TCC vous aide à :</strong></p>
+                <p>• Identifier et modifier vos pensées négatives</p>
+                <p>• Mieux comprendre et gérer vos émotions</p>
+                <p>• Développer des stratégies d'adaptation</p>
+                <p>• Tenir un journal de bord de vos progrès</p>
+            </div>
+
+            <div class="tools-grid">
+                <button class="tool-card" data-tool="thoughts">
+                    <span class="tool-icon">💭</span>
+                    <h3>Pensées</h3>
+                    <p>Comprendre & modifier</p>
+                </button>
+
+                <button class="tool-card" data-tool="emotions">
+                    <span class="tool-icon">❤️</span>
+                    <h3>Émotions</h3>
+                    <p>Gérer sa sensibilité</p>
+                </button>
+
+                <button class="tool-card" data-tool="journal">
+                    <span class="tool-icon">📝</span>
+                    <h3>Journal</h3>
+                    <p>Suivi quotidien</p>
+                </button>
+
+                <button class="tool-card" data-tool="techniques">
+                    <span class="tool-icon">🛠️</span>
+                    <h3>Techniques</h3>
+                    <p>Outils pratiques</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TCC: Travail sur les Pensées -->
+    <div id="thoughts-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>💭 Comprendre & Modifier ses Pensées</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">1</span> Identifier les pensées automatiques</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Les pensées automatiques négatives (PAN)</strong> surgissent spontanément et influencent notre humeur.</p>
+                </div>
+
+                <div class="thought-prompts">
+                    <h4>🔍 Exercice : Identifiez votre pensée actuelle</h4>
+                    <textarea id="current-thought" placeholder="Décrivez la pensée négative qui vous préoccupe maintenant...&#10;&#10;Exemple : 'Je ne vais jamais y arriver' ou 'Tout le monde me juge'" style="width: 100%; height: 100px; padding: 15px; border: 2px solid var(--primary); border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">2</span> Analyser la pensée</h3>
+                
+                <div class="thought-prompts">
+                    <h4>❓ Questions d'analyse :</h4>
+                    <div class="prompt-item">
+                        <strong>Cette pensée est-elle réaliste ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Y a-t-il des preuves pour et contre ?</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Que dirais-je à un ami dans cette situation ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Souvent nous sommes plus bienveillants envers les autres</p>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Quel est le pire qui puisse arriver ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Et comment pourrais-je gérer cette situation ?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">3</span> Restructurer la pensée</h3>
+                
+                <div class="thought-prompts">
+                    <h4>✨ Créez une pensée alternative :</h4>
+                    <textarea id="alternative-thought" placeholder="Reformulez votre pensée de manière plus équilibrée et réaliste...&#10;&#10;Exemple : 'C'est difficile mais je peux y arriver étape par étape' ou 'La plupart des gens sont préoccupés par eux-mêmes, pas par moi'" style="width: 100%; height: 80px; padding: 15px; border: 2px solid var(--success); border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <div class="emdr-info-box success">
+                    <p><strong>💡 Critères d'une pensée équilibrée :</strong></p>
+                    <p>• Réaliste et factuelle</p>
+                    <p>• Bienveillante envers soi</p>
+                    <p>• Axée sur les solutions</p>
+                    <p>• Encourage l'action positive</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="saveThoughtExercise()">
+                💾 Sauvegarder cet exercice
+            </button>
+            <button class="btn-secondary" onclick="showThoughtHistory()">
+                📚 Voir mes exercices sauvegardés
+            </button>
+            <button class="btn-secondary" onclick="goToScreen('distortions-screen')">
+                🔍 Voir les distorsions cognitives
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Historique des Exercices de Pensées -->
+    <div id="thoughts-history-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="thoughts-screen">←</button>
+            <h1>📚 Historique des Exercices de Pensées</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>📖 Vos derniers exercices de restructuration cognitive</strong></p>
+                <p>Relisez vos progrès et observez l'évolution de votre travail sur les pensées négatives.</p>
+            </div>
+
+            <div class="thoughts-history-container">
+                <div class="history-header">
+                    <h3>💭 Mes Exercices (Limite : 10 derniers)</h3>
+                    <div class="history-actions">
+                        <button class="action-btn" onclick="exportThoughts()">📤 Exporter</button>
+                        <button class="action-btn" onclick="clearThoughtsHistory()">🗑️ Effacer tout</button>
+                    </div>
+                </div>
+
+                <div id="thoughts-history-list" class="thoughts-history-list">
+                    <!-- Sera rempli par JavaScript -->
+                </div>
+            </div>
+
+            <div class="emdr-info-box success">
+                <p><strong>💡 Conseil thérapeutique :</strong></p>
+                <p>Relire vos anciens exercices vous aide à :</p>
+                <p>• <strong>Voir vos progrès</strong> dans la restructuration cognitive</p>
+                <p>• <strong>Identifier les patterns</strong> de pensées récurrentes</p>
+                <p>• <strong>Réutiliser les pensées alternatives</strong> efficaces</p>
+                <p>• <strong>Renforcer les apprentissages</strong> positifs</p>
+            </div>
+
+            <button class="btn-primary" onclick="goToScreen('thoughts-screen')">
+                ✍️ Nouvel exercice de pensées
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Distorsions Cognitives -->
+    <div id="distortions-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="thoughts-screen">←</button>
+            <h1>🔍 Distorsions Cognitives</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>Les distorsions cognitives</strong> sont des façons biaisées d'interpréter la réalité qui maintiennent l'anxiété.</p>
+            </div>
+
+            <div class="distortions-list">
+                <div class="distortion-item">
+                    <h4>🔮 Pensée catastrophique</h4>
+                    <p><strong>Quoi :</strong> Imaginer le pire scénario possible</p>
+                    <p><strong>Exemple :</strong> "Si j'échoue à cet examen, ma vie est fichue"</p>
+                    <p><strong>Antidote :</strong> "Quel est le scénario le plus probable ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🎭 Tout ou rien</h4>
+                    <p><strong>Quoi :</strong> Voir les choses en noir ou blanc</p>
+                    <p><strong>Exemple :</strong> "Je suis un échec total" ou "Je dois être parfait"</p>
+                    <p><strong>Antidote :</strong> "Où suis-je sur une échelle de 1 à 10 ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🔮 Lecture de pensée</h4>
+                    <p><strong>Quoi :</strong> Croire savoir ce que pensent les autres</p>
+                    <p><strong>Exemple :</strong> "Ils pensent que je suis bizarre"</p>
+                    <p><strong>Antidote :</strong> "Ai-je des preuves de ce que je pense ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🏷️ Étiquetage</h4>
+                    <p><strong>Quoi :</strong> Se définir par ses erreurs</p>
+                    <p><strong>Exemple :</strong> "Je suis nul" au lieu de "J'ai fait une erreur"</p>
+                    <p><strong>Antidote :</strong> "Que ferais-je différemment la prochaine fois ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🔍 Filtre mental</h4>
+                    <p><strong>Quoi :</strong> Se concentrer uniquement sur le négatif</p>
+                    <p><strong>Exemple :</strong> Ignorer 9 compliments pour 1 critique</p>
+                    <p><strong>Antidote :</strong> "Qu'est-ce qui s'est bien passé aussi ?"</p>
+                </div>
+
+                <div class="distortion-item">
+                    <h4>🎯 Personnalisation</h4>
+                    <p><strong>Quoi :</strong> Se blâmer pour tout ce qui va mal</p>
+                    <p><strong>Exemple :</strong> "C'est de ma faute si l'ambiance est mauvaise"</p>
+                    <p><strong>Antidote :</strong> "Quels autres facteurs peuvent expliquer cela ?"</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="goToScreen('thoughts-screen')">
+                ← Retour aux exercices
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Travail sur les Émotions -->
+    <div id="emotions-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>❤️ Mieux Gérer ses Émotions</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-phase">
+                <h3><span class="phase-number">1</span> Identifier l'émotion</h3>
+                
+                <div class="emdr-info-box">
+                    <p><strong>Première étape :</strong> Nommer précisément ce que vous ressentez</p>
+                </div>
+
+                <div class="emotions-wheel">
+                    <h4>🎨 Roue des émotions - Cliquez sur ce que vous ressentez :</h4>
+                    <div class="emotions-grid">
+                        <button class="emotion-btn" data-emotion="anxiété" data-intensity="0">😰 Anxiété</button>
+                        <button class="emotion-btn" data-emotion="tristesse" data-intensity="0">😢 Tristesse</button>
+                        <button class="emotion-btn" data-emotion="colère" data-intensity="0">😠 Colère</button>
+                        <button class="emotion-btn" data-emotion="peur" data-intensity="0">😨 Peur</button>
+                        <button class="emotion-btn" data-emotion="honte" data-intensity="0">😳 Honte</button>
+                        <button class="emotion-btn" data-emotion="culpabilité" data-intensity="0">😔 Culpabilité</button>
+                        <button class="emotion-btn" data-emotion="frustration" data-intensity="0">😤 Frustration</button>
+                        <button class="emotion-btn" data-emotion="déception" data-intensity="0">😞 Déception</button>
+                        <button class="emotion-btn" data-emotion="joie" data-intensity="0">😊 Joie</button>
+                        <button class="emotion-btn" data-emotion="sérénité" data-intensity="0">😌 Sérénité</button>
+                    </div>
+                </div>
+
+                <div class="emotion-intensity" id="emotion-intensity-section" style="display:none;">
+                    <h4>📊 Intensité de cette émotion :</h4>
+                    <div class="sud-slider">
+                        <input type="range" id="emotion-intensity" min="1" max="10" value="5">
+                    </div>
+                    <div class="sud-labels">
+                        <span>1 - Très légère</span>
+                        <span>10 - Très intense</span>
+                    </div>
+                    <div class="sud-value">
+                        <span id="selected-emotion">Émotion</span> : <span id="emotion-intensity-value">5</span>/10
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">2</span> Comprendre l'émotion</h3>
+                
+                <div class="thought-prompts">
+                    <h4>🔍 Questions de compréhension :</h4>
+                    <div class="prompt-item">
+                        <strong>Qu'est-ce qui a déclenché cette émotion ?</strong>
+                        <textarea id="emotion-trigger" placeholder="Décrivez la situation, la pensée ou l'événement qui a déclenché cette émotion..."></textarea>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Où ressentez-vous cette émotion dans votre corps ?</strong>
+                        <textarea id="emotion-body" placeholder="Gorge serrée, nœud au ventre, tension dans les épaules..."></textarea>
+                    </div>
+                    <div class="prompt-item">
+                        <strong>Quel message cette émotion vous envoie-t-elle ?</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Les émotions sont des signaux. L'anxiété signale un danger potentiel, la colère une injustice, la tristesse une perte...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emdr-phase">
+                <h3><span class="phase-number">3</span> Stratégies de gestion</h3>
+                
+                <div class="coping-strategies">
+                    <h4>🛠️ Choisissez une stratégie adaptée :</h4>
+                    
+                    <div class="strategy-category">
+                        <h5>💨 Stratégies immédiates (urgence) :</h5>
+                        <button class="strategy-btn" onclick="goToScreen('breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen')">
+                            Respiration 4-7-8
+                        </button>
+                        <button class="strategy-btn" onclick="startGroundingExercise()">
+                            Technique 5-4-3-2-1
+                        </button>
+                        <button class="strategy-btn" onclick="startBodyScanExercise()">
+                            Scan corporel rapide
+                        </button>
+                    </div>
+
+                    <div class="strategy-category">
+                        <h5>🧠 Stratégies cognitives :</h5>
+                        <button class="strategy-btn" onclick="goToScreen('thoughts-screen')">
+                            Restructuration cognitive
+                        </button>
+                        <button class="strategy-btn" onclick="startDistanceExercise()">
+                            Prise de distance
+                        </button>
+                        <button class="strategy-btn" onclick="startAcceptanceExercise()">
+                            Acceptation émotionnelle
+                        </button>
+                    </div>
+
+                    <div class="strategy-category">
+                        <h5>🎯 Stratégies comportementales :</h5>
+                        <button class="strategy-btn" onclick="startActivityExercise()">
+                            Activité plaisante
+                        </button>
+                        <button class="strategy-btn" onclick="startMovementExercise()">
+                            Mouvement physique
+                        </button>
+                        <button class="strategy-btn" onclick="startSocialExercise()">
+                            Contact social
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="saveEmotionExercise()">
+                💾 Sauvegarder cette analyse
+            </button>
+        </div>
+    </div>
+
+    <!-- TCC: Journal de Bord -->
+    <div id="journal-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>📝 Journal de Bord TCC</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>📖 Votre journal TCC</strong> vous aide à prendre du recul et suivre vos progrès au quotidien.</p>
+            </div>
+
+            <div class="journal-entry-form">
+                <h3>✍️ Nouvelle entrée - <span id="current-date"></span></h3>
+                
+                <div class="journal-section">
+                    <h4>🌤️ Humeur générale aujourd'hui :</h4>
+                    <div class="mood-slider">
+                        <input type="range" id="daily-mood" min="1" max="10" value="5">
+                        <div class="sud-labels">
+                            <span>😔 Très mauvaise</span>
+                            <span>😊 Excellente</span>
+                        </div>
+                        <div class="sud-value">
+                            Humeur : <span id="mood-value">5</span>/10
+                        </div>
+                    </div>
+                </div>
+
+                <div class="journal-section">
+                    <h4>💭 Pensées principales de la journée :</h4>
+                    <textarea id="daily-thoughts" placeholder="Quelles ont été vos principales préoccupations ou pensées récurrentes aujourd'hui ?"></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>❤️ Émotions ressenties :</h4>
+                    <textarea id="daily-emotions" placeholder="Décrivez les principales émotions vécues et leur intensité..."></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>⚡ Situations déclenchantes :</h4>
+                    <textarea id="daily-triggers" placeholder="Y a-t-il eu des situations particulièrement difficiles ? Comment avez-vous réagi ?"></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>🛠️ Stratégies utilisées :</h4>
+                    <textarea id="daily-strategies" placeholder="Quelles techniques avez-vous utilisées ? Ont-elles été efficaces ?"></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>🌟 Points positifs :</h4>
+                    <textarea id="daily-positives" placeholder="Notez 3 choses positives de votre journée, même petites..."></textarea>
+                </div>
+
+                <div class="journal-section">
+                    <h4>🎯 Objectif pour demain :</h4>
+                    <textarea id="daily-goal" placeholder="Un petit objectif réalisable pour demain..."></textarea>
+                </div>
+            </div>
+
+            <div class="journal-actions">
+                <button class="btn-primary" onclick="saveJournalEntry()">
+                    💾 Sauvegarder cette entrée
+                </button>
+                <button class="btn-secondary" onclick="showJournalHistory()">
+                    📚 Voir l'historique
+                </button>
+            </div>
+
+            <div class="journal-history" id="journal-history" style="display:none;">
+                <h3>📚 Historique de votre journal</h3>
+                <div id="journal-entries-list">
+                    <!-- Sera rempli par JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TCC: Techniques Pratiques -->
+    <div id="techniques-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="tcc-screen">←</button>
+            <h1>🛠️ Techniques TCC Pratiques</h1>
+        </header>
+        <div class="container">
+            <div class="techniques-grid">
+                <div class="technique-card">
+                    <h4>🔢 Technique 5-4-3-2-1</h4>
+                    <p>Pour l'ancrage en cas de crise d'anxiété</p>
+                    <button class="btn-secondary" onclick="startGroundingTechnique()">Commencer</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>🎭 Dialogue avec ses pensées</h4>
+                    <p>Questionner ses pensées négatives</p>
+                    <button class="btn-secondary" onclick="startThoughtDialogue()">Commencer</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>📊 Graphique émotionnel</h4>
+                    <p>Visualiser l'évolution de ses émotions</p>
+                    <button class="btn-secondary" onclick="showEmotionChart()">Voir</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>⚡ Plan d'action anti-crise</h4>
+                    <p>Stratégies personnalisées d'urgence</p>
+                    <button class="btn-secondary" onclick="createCrisisPlan()">Créer</button>
+                
+                <div class="technique-card" onclick="managePanicAttack()">
+                    <div class="technique-icon">⚠️</div>
+                    <h4>Crise de panique</h4>
+                    <p>Protocole d'urgence pour crise de panique</p>
+                    <button class="btn-secondary">Gérer maintenant</button>
+                </div>
+</div>
+
+                <div class="technique-card">
+                    <h4>🎯 Exposition graduelle</h4>
+                    <p>Affronter progressivement ses peurs</p>
+                    <button class="btn-secondary" onclick="startExposureExercise()">Planifier</button>
+                </div>
+
+                <div class="technique-card">
+                    <h4>🏆 Journal des réussites</h4>
+                    <p>Valoriser ses progrès et succès</p>
+                    <button class="btn-secondary" onclick="showSuccessJournal()">Ouvrir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FIN SECTION TCC ============ -->
+
+    <!-- Écran Hypnothérapie -->
+    <div id="hypnotherapy-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🌀 Hypnothérapie</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>🌟 Sessions d'hypnothérapie guidées</strong></p>
+                <p>Techniques avancées de relaxation profonde et restructuration mentale pour réduire l'anxiété et développer la confiance en soi.</p>
+            </div>
+
+            <div class="sessions-grid">
+                <div class="session-card" data-duration="6">
+                    <div class="session-icon">⏰</div>
+                    <h3>Session Courte</h3>
+                    <p>7:49 min</p>
+                    <div class="session-description">Relaxation rapide et ancrage positif</div>
+                    <button class="btn-primary session-btn" onclick="startHypnotherapySession(6)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="10">
+                    <div class="session-icon">🌙</div>
+                    <h3>Session Standard</h3>
+                    <p>10:02 min</p>
+                    <div class="session-description">Induction complète et suggestions thérapeutiques</div>
+                    <button class="btn-primary session-btn" onclick="startHypnotherapySession(10)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="20">
+                    <div class="session-icon">🌟</div>
+                    <h3>Session Complète</h3>
+                    <p>18:29 min</p>
+                    <div class="session-description">Transformation profonde et intégration durable</div>
+                    <button class="btn-primary session-btn" onclick="startHypnotherapySession(20)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+            </div>
+
+            <div class="emdr-info-box success">
+                <p><strong>💡 Conseils pour optimiser votre session :</strong></p>
+                <p>• Installez-vous confortablement dans un endroit calme</p>
+                <p>• Utilisez un casque ou des écouteurs de qualité</p>
+                <p>• Fermez les yeux et laissez-vous guider par la voix</p>
+                <p>• Pratiquez régulièrement pour des résultats durables</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Session Hypnothérapie Active -->
+    <div id="hypnotherapy-session-screen" class="screen">
+        <header class="tool-header">
+            <h1>🌀 Session d'Hypnothérapie</h1>
+        </header>
+        <div class="container">
+            <div class="audio-player-container">
+                <div class="session-info-header">
+                    <h2 id="hypno-session-title">Session 6 minutes</h2>
+                    <p>Installez-vous confortablement et fermez les yeux...</p>
+                </div>
+
+                <div class="session-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="hypno-progress"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="hypno-current-time">0:00</span> /
+                        <span id="hypno-total-time">0:00</span>
+                    </div>
+                </div>
+
+                <div class="audio-controls">
+                    <button class="audio-btn" id="hypno-play-pause" onclick="toggleHypnoPlayback()">
+                        ▶️ Commencer
+                    </button>
+                    <button class="audio-btn secondary" onclick="stopHypnotherapySession()">
+                        ⏹️ Arrêter
+                    </button>
+                    <button class="audio-btn secondary" onclick="returnFromHypnoSession()">
+                        ← Retour
+                    </button>
+                </div>
+
+                <div class="music-controls">
+                    <div class="music-controls-row">
+                        <button class="btn-music" id="hypno-music-toggle" onclick="toggleHypnoBackground()">
+                            🎵 Musique : ON
+                        </button>
+                        <button class="btn-music-change" id="hypno-music-change" onclick="changeHypnoMusic()">
+                            Changer
+                        </button>
+                    </div>
+
+                    <div class="volume-controls-grid">
+                        <div class="volume-control">
+                            <label>🎙️ Voix</label>
+                            <input type="range" id="hypno-volume" min="0" max="100" value="80" onchange="updateHypnoVolume()">
+                            <span class="volume-display">80%</span>
+                        </div>
+                        <div class="volume-control">
+                            <label>🎵 Musique</label>
+                            <input type="range" id="hypno-music-volume" min="0" max="100" value="30" onchange="updateHypnoMusicVolume()">
+                            <span class="volume-display">30%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Votre Thérapeute -->
+    <div id="therapist-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>👨‍⚕️ Votre Thérapeute</h1>
+        </header>
+        <div class="container">
+            
+            <!-- Photo et Présentation -->
+            <div class="therapist-profile">
+                <div class="therapist-photo">
+                    <div class="profile-circle">
+                        <span class="profile-initial">JR</span>
+                    </div>
+                </div>
+                
+                <div class="therapist-intro">
+                    <h2>Joffrey ROS</h2>
+                    <p class="therapist-title">Créateur de HypnoTarot & Hypnothérapeute</p>
+                    <div class="credentials">
+                        <span class="credential">🎓 Hypnothérapeute Certifié</span>
+                        <span class="credential">🔬 Spécialiste Anxiété</span>
+                        <span class="credential">💡 Innovateur Digital</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Personnel -->
+            <div class="personal-message">
+                <div class="message-header">
+                    <h3>💝 Un Message Personnel pour Vous</h3>
+                </div>
+                
+                <div class="message-content">
+                    <div class="quote-icon">❝</div>
+                    <p class="main-message">
+                        Il y a longtemps de ça, un Psychologue m'a expliqué qu'une <strong>crise d'angoisse a un début et une fin</strong>, et une fois qu'elle est à son point le plus élevé, <strong>elle ne peut que redescendre !</strong>
+                    </p>
+                    
+                    <p class="support-message">
+                        Cette vérité m'a accompagné dans la création de cette application. Chaque outil, chaque technique a été pensée pour vous rappeler que <strong>vous avez le pouvoir de traverser ces moments difficiles</strong>.
+                    </p>
+                    
+                    <p class="hope-message">
+                        L'anxiété fait partie de la condition humaine, mais elle ne vous définit pas. Avec les bons outils et le bon accompagnement, vous pouvez retrouver votre sérénité.
+                    </p>
+                    <div class="quote-icon quote-end">❞</div>
+                </div>
+                
+                <div class="signature">
+                    <p>Avec bienveillance et espoir,</p>
+                    <p class="signature-name">Joffrey ROS</p>
+                </div>
+            </div>
+
+            <!-- Contact Professionnel -->
+            <div class="contact-section">
+                <h3>📞 Me Contacter</h3>
+                
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">🏠</div>
+                        <div class="contact-info">
+                            <h4>Cabinet</h4>
+                            <p>3 rue de Verdun<br>66170 Néfiach</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-info">
+                            <h4>Téléphone</h4>
+                            <a href="tel:0759684359" class="contact-link">07 59 68 43 59</a>
+                            <p class="contact-note">Appel ou SMS</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-info">
+                            <h4>WhatsApp Pro</h4>
+                            <a href="https://wa.me/33759684359" class="contact-link whatsapp-link" target="_blank">
+                                Discuter maintenant
+                            </a>
+                            <p class="contact-note">Réponse rapide</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-info">
+                            <h4>Site Web</h4>
+                            <a href="https://www.hypnosejoffrey.fr" class="contact-link" target="_blank">
+                                www.hypnosejoffrey.fr
+                            </a>
+                            <p class="contact-note">Infos & RDV en ligne</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-info">
+                            <h4>Email</h4>
+                            <a href="mailto:contact@hypnosejoffrey.fr" class="contact-link">
+                                contact@hypnosejoffrey.fr
+                            </a>
+                            <p class="contact-note">Réponse sous 24h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spécialités -->
+            <div class="specialties-section">
+                <h3>🎯 Mes Spécialités</h3>
+                <div class="specialties-grid">
+                    <div class="specialty-item">
+                        <span class="specialty-icon">😰</span>
+                        <span>Gestion de l'Anxiété</span>
+                    </div>
+                    <div class="specialty-item">
+                        <span class="specialty-icon">🌪️</span>
+                        <span>Crises de Panique</span>
+                    </div>
+                    <div class="specialty-item">
+                        <span class="specialty-icon">😴</span>
+                        <span>Troubles du Sommeil</span>
+                    </div>
+                    <div class="specialty-item">
+                        <span class="specialty-icon">💪</span>
+                        <span>Confiance en Soi</span>
+                    </div>
+                    <div class="specialty-item">
+                        <span class="specialty-icon">🎭</span>
+                        <span>Phobies</span>
+                    </div>
+                    <div class="specialty-item">
+                        <span class="specialty-icon">🏥</span>
+                        <span>Maladies Chroniques</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <div class="cta-card">
+                    <h3>🌟 Prêt(e) pour un Accompagnement Personnel ?</h3>
+                    <p>Parfois, une application ne suffit pas. Un accompagnement humain peut faire toute la différence.</p>
+                    
+                    <div class="cta-buttons">
+                        <a href="https://wa.me/33759684359?text=Bonjour Joffrey, j'aimerais prendre rendez-vous suite à l'utilisation de votre application HypnoTarot" 
+                           class="cta-btn whatsapp-btn" target="_blank">
+                            💬 Discuter sur WhatsApp
+                        </a>
+                        
+                        <a href="tel:0759684359" class="cta-btn phone-btn">
+                            📞 Appeler Maintenant
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Écran Méditation -->
+    <div id="meditation-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>🧘 Méditation</h1>
+        </header>
+        <div class="container">
+            <div class="emdr-info-box">
+                <p><strong>🕯️ Méditations guidées de pleine conscience</strong></p>
+                <p>Techniques de mindfulness et de méditation pour cultiver la paix intérieure, réduire le stress et développer la présence à l'instant.</p>
+            </div>
+
+            <div class="sessions-grid">
+                <div class="session-card" data-duration="6">
+                    <div class="session-icon">🌱</div>
+                    <h3>Méditation Express</h3>
+                    <p>7:38 min</p>
+                    <div class="session-description">Retour au calme et centrage rapide</div>
+                    <button class="btn-primary session-btn" onclick="startMeditationSession(6)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="10">
+                    <div class="session-icon">🍃</div>
+                    <h3>Méditation Guidée</h3>
+                    <p>11:02 min</p>
+                    <div class="session-description">Pleine conscience et observation des pensées</div>
+                    <button class="btn-primary session-btn" onclick="startMeditationSession(10)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+
+                <div class="session-card" data-duration="20">
+                    <div class="session-icon">🕉️</div>
+                    <h3>Méditation Profonde</h3>
+                    <p>20:06 min</p>
+                    <div class="session-description">Exploration intérieure et paix durable</div>
+                    <button class="btn-primary session-btn" onclick="startMeditationSession(20)">
+                        ▶️ Commencer
+                    </button>
+                </div>
+            </div>
+
+            <div class="emdr-info-box success">
+                <p><strong>🧘‍♀️ Guide pour une méditation optimale :</strong></p>
+                <p>• Adoptez une posture droite mais détendue</p>
+                <p>• Respirez naturellement sans forcer</p>
+                <p>• Observez vos pensées sans les juger</p>
+                <p>• Revenez doucement à votre respiration si l'esprit s'évade</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Session Méditation Active -->
+    <div id="meditation-session-screen" class="screen">
+        <header class="tool-header">
+            <h1>🧘 Session de Méditation</h1>
+        </header>
+        <div class="container">
+            <div class="audio-player-container">
+                <div class="session-info-header">
+                    <h2 id="meditation-session-title">Méditation 6 minutes</h2>
+                    <div class="session-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="meditation-progress"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="meditation-current-time">0:00</span> / <span id="meditation-total-time">6:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meditation-visual">
+                    <div class="breathing-circle" id="meditation-circle">
+                        <div class="inner-circle"></div>
+                    </div>
+                    <div class="meditation-instruction" id="meditation-instruction">
+                        Respirez naturellement
+                    </div>
+                </div>
+
+                <div class="audio-controls">
+                    <button class="audio-btn" id="meditation-play-pause" onclick="toggleMeditationPlayback()">
+                        ▶️ Commencer
+                    </button>
+                    <button class="audio-btn secondary" onclick="stopMeditationSession()">
+                        ⏹️ Arrêter
+                    </button>
+                </div>
+
+                
+                <div class="music-controls">
+                    <div class="music-controls-row">
+                        <button class="btn-music" id="meditation-music-toggle" onclick="toggleMeditationBackground()">
+                            🎵 Ambiance : ON
+                        </button>
+                        <button class="btn-music-change" id="meditation-music-change" onclick="changeMeditationMusic()">
+                            Changer
+                        </button>
+                    </div>
+
+                    <div class="volume-controls-grid">
+                        <div class="volume-control">
+                            <label>🎙️ Voix</label>
+                            <input type="range" id="meditation-volume" min="0" max="100" value="70" onchange="updateMeditationVolume()">
+                            <span class="volume-display">70%</span>
+                        </div>
+                        <div class="volume-control">
+                            <label>🎵 Ambiance</label>
+                            <input type="range" id="meditation-music-volume" min="0" max="100" value="30" onchange="updateMeditationMusicVolume()">
+                            <span class="volume-display">30%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="session-instructions">
+                <p>🧘‍♀️ <strong>Trouvez une position confortable</strong></p>
+                <p>Laissez la méditation guidée vous accompagner vers un état de paix et de présence.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FIN NOUVEAUX MODULES ============ -->
+
+    <!-- Écran Astuces -->
+    <div id="tips-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>💡 Astuces & Conseils</h1>
+        </header>
+        <div class="container">
+            
+            <!-- Numéros d'urgence -->
+            <div class="emergency-numbers">
+                <h2>🚨 Numéros d'Urgence</h2>
+                <div class="emergency-grid">
+                    <div class="emergency-card urgent">
+                        <div class="emergency-icon">📞</div>
+                        <h3>Urgences Vitales</h3>
+                        <div class="phone-number">15 - SAMU</div>
+                        <div class="phone-number">18 - Pompiers</div>
+                        <div class="phone-number">112 - Urgences EU</div>
+                    </div>
+
+                    <div class="emergency-card crisis">
+                        <div class="emergency-icon">💭</div>
+                        <h3>Détresse Psychologique</h3>
+                        <div class="phone-number">3114 - Numéro National</div>
+                        <div class="phone-subtitle">Gratuit, 24h/24</div>
+                        <div class="phone-number">01 45 39 40 00 - SOS Amitié</div>
+                    </div>
+
+                    <div class="emergency-card support">
+                        <div class="emergency-icon">🤝</div>
+                        <h3>Écoute & Soutien</h3>
+                        <div class="phone-number">0 800 23 13 13 - Suicide Écoute</div>
+                        <div class="phone-subtitle">Gratuit, 24h/24</div>
+                        <div class="phone-number">09 72 39 40 50 - Phare Enfants-Parents</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conseils naturels -->
+            <div class="tips-section">
+                <h2>🌿 Conseils Naturels</h2>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">🍊</div>
+                    <h3>Huile Essentielle de Yuzu</h3>
+                    <p><strong>Étude récente :</strong> Diffuser de l'huile essentielle de yuzu 30 minutes avant le coucher améliore significativement la qualité du sommeil et réduit l'anxiété nocturne.</p>
+                    <div class="tip-usage">
+                        <span>💧 3-4 gouttes dans un diffuseur</span>
+                        <span>⏰ 30 min avant le coucher</span>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🌸</div>
+                    <h3>Technique 5-4-3-2-1</h3>
+                    <p><strong>Grounding anti-anxiété :</strong> Nommez 5 choses que vous voyez, 4 que vous touchez, 3 que vous entendez, 2 que vous sentez, 1 que vous goûtez.</p>
+                    <div class="tip-usage">
+                        <span>🧘‍♀️ En cas de crise d'anxiété</span>
+                        <span>⚡ Efficacité immédiate</span>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">❄️</div>
+                    <h3>Technique du Froid</h3>
+                    <p><strong>Nerf vague :</strong> Appliquez de l'eau froide sur vos poignets ou votre nuque. Cela active le système nerveux parasympathique et calme instantanément l'anxiété.</p>
+                    <div class="tip-usage">
+                        <span>🚿 Eau froide 30 secondes</span>
+                        <span>📍 Poignets, nuque, visage</span>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🍃</div>
+                    <h3>Respiration par le Nez</h3>
+                    <p><strong>Science :</strong> Respirer uniquement par le nez active le nerf vague et produit de l'oxyde nitrique, réduisant naturellement l'anxiété et améliorant la concentration.</p>
+                    <div class="tip-usage">
+                        <span>👃 Bouche fermée toute la journée</span>
+                        <span>🧘 Particulièrement en méditation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habitudes quotidiennes -->
+            <div class="tips-section">
+                <h2>📅 Habitudes Quotidiennes</h2>
+                
+                <div class="habit-grid">
+                    <div class="habit-card">
+                        <div class="habit-time">🌅 Matin</div>
+                        <h4>Routine Matinale</h4>
+                        <ul>
+                            <li>💧 Verre d'eau au réveil</li>
+                            <li>☀️ 10 min de lumière naturelle</li>
+                            <li>🧘 5 min de méditation</li>
+                            <li>📝 3 gratitudes écrites</li>
+                        </ul>
+                    </div>
+
+                    <div class="habit-card">
+                        <div class="habit-time">🏃‍♀️ Journée</div>
+                        <h4>Gestion du Stress</h4>
+                        <ul>
+                            <li>🚶‍♀️ Marche de 20 min minimum</li>
+                            <li>💨 Exercices de respiration</li>
+                            <li>📱 Pauses écrans régulières</li>
+                            <li>🧘‍♀️ Micro-méditations 2 min</li>
+                        </ul>
+                    </div>
+
+                    <div class="habit-card">
+                        <div class="habit-time">🌙 Soir</div>
+                        <h4>Préparation Sommeil</h4>
+                        <ul>
+                            <li>📱 Arrêt écrans 1h avant</li>
+                            <li>🍊 Diffusion huile essentielle</li>
+                            <li>📖 Lecture ou journal</li>
+                            <li>🧘 Relaxation guidée</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alimentation anti-anxiété -->
+            <div class="tips-section">
+                <h2>🥗 Alimentation Anti-Anxiété</h2>
+                
+                <div class="nutrition-grid">
+                    <div class="nutrition-card beneficial">
+                        <h4>✅ Aliments Bénéfiques</h4>
+                        <div class="food-list">
+                            <div class="food-item">🐟 <span>Poissons gras (oméga-3)</span></div>
+                            <div class="food-item">🥑 <span>Avocat (magnésium)</span></div>
+                            <div class="food-item">🍫 <span>Chocolat noir 70%+</span></div>
+                            <div class="food-item">🥬 <span>Épinards (folate)</span></div>
+                            <div class="food-item">🥜 <span>Noix (vitamine E)</span></div>
+                            <div class="food-item">🍵 <span>Thé vert (L-théanine)</span></div>
+                        </div>
+                    </div>
+
+                    <div class="nutrition-card harmful">
+                        <h4>❌ À Limiter</h4>
+                        <div class="food-list">
+                            <div class="food-item">☕ <span>Caféine excessive</span></div>
+                            <div class="food-item">🍷 <span>Alcool</span></div>
+                            <div class="food-item">🍰 <span>Sucre raffiné</span></div>
+                            <div class="food-item">🍟 <span>Aliments transformés</span></div>
+                            <div class="food-item">🥤 <span>Boissons énergisantes</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications recommandées -->
+            <div class="tips-section">
+                <h2>📱 Outils Complémentaires</h2>
+                
+                <div class="tools-grid">
+                    <div class="tool-recommendation">
+                        <div class="tool-icon-rec">🎵</div>
+                        <h4>Sons Apaisants</h4>
+                        <p>Bruit blanc, pluie, vagues pour masquer les bruits stressants</p>
+                    </div>
+
+                    <div class="tool-recommendation">
+                        <div class="tool-icon-rec">📊</div>
+                        <h4>Journal d'Humeur</h4>
+                        <p>Tracker quotidien pour identifier les déclencheurs d'anxiété</p>
+                    </div>
+
+                    <div class="tool-recommendation">
+                        <div class="tool-icon-rec">🌡️</div>
+                        <h4>Mesure VFC</h4>
+                        <p>Variabilité cardiaque pour évaluer le niveau de stress</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="important-note">
+                <h3>⚠️ Important</h3>
+                <p>Ces conseils ne remplacent pas un avis médical professionnel. En cas d'anxiété persistante ou sévère, consultez un professionnel de santé mentale.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Astuces & Ressources -->
+    <div id="tips-screen" class="screen">
+        <header class="tool-header">
+            <button class="btn-back-icon" data-back="home-screen">←</button>
+            <h1>💡 Astuces & Ressources</h1>
+        </header>
+        <div class="container">
+            
+            <!-- Section Numéros d'Urgence -->
+            <div class="emergency-section">
+                <h2>🚨 Numéros d'Urgence & Détresse</h2>
+                <div class="emergency-numbers">
+                    <div class="emergency-card urgent">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">🆘</span>
+                            <h3>Urgence Vitale</h3>
+                        </div>
+                        <div class="emergency-number">15 - SAMU</div>
+                        <p>Urgences médicales, détresse vitale</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">💬</span>
+                            <h3>SOS Amitié</h3>
+                        </div>
+                        <div class="emergency-number">09 72 39 40 50</div>
+                        <p>Écoute bienveillante 24h/24, 7j/7</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">🧠</span>
+                            <h3>Suicide Écoute</h3>
+                        </div>
+                        <div class="emergency-number">01 45 39 40 00</div>
+                        <p>Prévention suicide, 24h/24</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">👥</span>
+                            <h3>Croix-Rouge Écoute</h3>
+                        </div>
+                        <div class="emergency-number">0 800 858 858</div>
+                        <p>Soutien psychologique gratuit</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">📱</span>
+                            <h3>3114 - Numéro National</h3>
+                        </div>
+                        <div class="emergency-number">3114</div>
+                        <p>Prévention suicide, gratuit 24h/24</p>
+                    </div>
+
+                    <div class="emergency-card">
+                        <div class="emergency-header">
+                            <span class="emergency-icon">💭</span>
+                            <h3>Fil Santé Jeunes</h3>
+                        </div>
+                        <div class="emergency-number">0 800 235 236</div>
+                        <p>12-25 ans, anonyme et gratuit</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Astuces Bien-être -->
+            <div class="tips-section">
+                <h2>🌿 Astuces Bien-être Scientifiques</h2>
+                
+                <div class="tips-categories">
+                    <button class="category-tab active" data-category="sleep">😴 Sommeil</button>
+                    <button class="category-tab" data-category="aromatherapy">🌸 Aromathérapie</button>
+                    <button class="category-tab" data-category="nutrition">🥗 Nutrition</button>
+                    <button class="category-tab" data-category="lifestyle">🏃 Mode de vie</button>
+                    <button class="category-tab" data-category="immediate">⚡ Urgence</button>
+                </div>
+
+                <!-- Onglet Sommeil -->
+                <div class="tips-content active" data-category="sleep">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍊</span>
+                            <h3>Huile Essentielle de Yuzu</h3>
+                            <span class="tip-badge">Étude 2024</span>
+                        </div>
+                        <p><strong>Une étude récente montre</strong> que diffuser de l'huile essentielle de yuzu 30 minutes avant le coucher améliore la qualité du sommeil de 73% et réduit l'anxiété nocturne.</p>
+                        <div class="tip-usage">
+                            <strong>Usage :</strong> 3-4 gouttes dans un diffuseur, 30min avant le coucher
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">❄️</span>
+                            <h3>Technique du Froid</h3>
+                            <span class="tip-badge">Efficace</span>
+                        </div>
+                        <p>Passer ses poignets sous l'eau froide 2 minutes active le système nerveux parasympathique et induit naturellement la somnolence.</p>
+                        <div class="tip-usage">
+                            <strong>Moment :</strong> 15 minutes avant de se mettre au lit
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">📖</span>
+                            <h3>Règle des 10 Pages</h3>
+                            <span class="tip-badge">Simple</span>
+                        </div>
+                        <p>Lire exactement 10 pages d'un livre (papier) au lit programme le cerveau à associer lecture et endormissement.</p>
+                        <div class="tip-usage">
+                            <strong>Important :</strong> Livre papier uniquement, pas d'écrans
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Aromathérapie -->
+                <div class="tips-content" data-category="aromatherapy">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🌿</span>
+                            <h3>Lavande Vraie</h3>
+                            <span class="tip-badge">Classique</span>
+                        </div>
+                        <p>2 gouttes sur l'oreiller ou en diffusion. Réduction de l'anxiété prouvée par +50 études scientifiques.</p>
+                        <div class="tip-usage">
+                            <strong>Dosage :</strong> Toujours diluer, jamais pure sur la peau
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍋</span>
+                            <h3>Bergamote</h3>
+                            <span class="tip-badge">Anti-stress</span>
+                        </div>
+                        <p>Inhalation de bergamote réduit le cortisol (hormone du stress) de 35% en 15 minutes selon étude japonaise 2023.</p>
+                        <div class="tip-usage">
+                            <strong>Usage :</strong> 1 goutte sur un mouchoir, inhaler 2 minutes
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🌲</span>
+                            <h3>Pin Sylvestre</h3>
+                            <span class="tip-badge">Nouveau</span>
+                        </div>
+                        <p>L'essence de pin en diffusion améliore la concentration et réduit les ruminations anxieuses de 40%.</p>
+                        <div class="tip-usage">
+                            <strong>Quand :</strong> Pendant le travail ou méditation
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Nutrition -->
+                <div class="tips-content" data-category="nutrition">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍌</span>
+                            <h3>Banane + Amandes</h3>
+                            <span class="tip-badge">Magnésium</span>
+                        </div>
+                        <p>Collation anti-anxiété parfaite : 1 banane + 10 amandes. Riche en magnésium, tryptophane et vitamine B6.</p>
+                        <div class="tip-usage">
+                            <strong>Timing :</strong> 2h avant un événement stressant
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🍵</span>
+                            <h3>Thé Vert au Theanine</h3>
+                            <span class="tip-badge">L-Theanine</span>
+                        </div>
+                        <p>Le thé vert contient de la L-théanine qui favorise la relaxation sans somnolence. Efficace en 30-40 minutes.</p>
+                        <div class="tip-usage">
+                            <strong>Astuce :</strong> Infuser 2-3 minutes max pour moins de caféine
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🐟</span>
+                            <h3>Oméga-3 (Poissons Gras)</h3>
+                            <span class="tip-badge">Long terme</span>
+                        </div>
+                        <p>2 portions de poissons gras/semaine réduisent l'anxiété de 20% après 6 semaines (saumon, sardines, maquereau).</p>
+                        <div class="tip-usage">
+                            <strong>Alternative :</strong> Huile de lin ou graines de chia
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Mode de vie -->
+                <div class="tips-content" data-category="lifestyle">
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🌅</span>
+                            <h3>Lumière Matinale</h3>
+                            <span class="tip-badge">Circadien</span>
+                        </div>
+                        <p>15 minutes de lumière naturelle dès le réveil régulent cortisol et mélatonine, réduisant l'anxiété de 30%.</p>
+                        <div class="tip-usage">
+                            <strong>Hiver :</strong> Lampe de luminothérapie 10 000 lux
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🚶</span>
+                            <h3>Marche de 8 Minutes</h3>
+                            <span class="tip-badge">Immédiat</span>
+                        </div>
+                        <p>8 minutes de marche rapide libèrent endorphines et GABA, calmant l'anxiété aussi efficacement qu'un anxiolytique léger.</p>
+                        <div class="tip-usage">
+                            <strong>Idéal :</strong> En nature ou dans un parc
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-header">
+                            <span class="tip-icon">🎵</span>
+                            <h3>Musique à 60 BPM</h3>
+                            <span class="tip-badge">Scientifique</span>
+                        </div>
+                        <p>Écouter de la musique à 60 battements/minute synchronise le cœur et réduit l'anxiété de 65% en 10 minutes.</p>
+                        <div class="tip-usage">
+                            <strong>Genres :</strong> Classique, ambient, nature sounds
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Urgence -->
+                <div class="tips-content" data-category="immediate">
+                    <div class="tip-card urgent">
+                        <div class="tip-header">
+                            <span class="tip-icon">🧊</span>
+                            <h3>Technique du Glaçon</h3>
+                            <span class="tip-badge">SOS</span>
+                        </div>
+                        <p><strong>Crise de panique :</strong> Tenir un glaçon dans chaque main. Le froid stoppe l'escalade anxieuse en 2-3 minutes.</p>
+                        <div class="tip-usage">
+                            <strong>Alternative :</strong> Eau très froide sur les poignets
+                        </div>
+                    </div>
+
+                    <div class="tip-card urgent">
+                        <div class="tip-header">
+                            <span class="tip-icon">👀</span>
+                            <h3>Règle 5-4-3-2-1</h3>
+                            <span class="tip-badge">Grounding</span>
+                        </div>
+                        <p><strong>Ancrage immédiat :</strong> Nommer 5 choses vues, 4 entendues, 3 touchées, 2 senties, 1 goûtée.</p>
+                        <div class="tip-usage">
+                            <strong>But :</strong> Ramener l'attention au présent
+                        </div>
+                    </div>
+
+                    <div class="tip-card urgent">
+                        <div class="tip-header">
+                            <span class="tip-icon">💪</span>
+                            <h3>Tension-Relâchement</h3>
+                            <span class="tip-badge">Musculaire</span>
+                        </div>
+                        <p><strong>Contracter tous les muscles</strong> 5 secondes puis relâcher d'un coup. Répéter 3 fois. Évacue tension physique.</p>
+                        <div class="tip-usage">
+                            <strong>Discret :</strong> Fonctionne même assis en public
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Ressources Professionnelles -->
+            <div class="resources-section">
+                <h2>🩺 Ressources Professionnelles</h2>
+                <div class="resource-cards">
+                    <div class="resource-card">
+                        <span class="resource-icon">🏥</span>
+                        <h3>Psycom</h3>
+                        <p>Information officielle sur la santé mentale</p>
+                        <a href="https://www.psycom.org" target="_blank" class="resource-link">psycom.org</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <span class="resource-icon">📍</span>
+                        <h3>Trouver un Psy</h3>
+                        <p>Annuaire psychologues et psychiatres</p>
+                        <a href="https://www.doctolib.fr" target="_blank" class="resource-link">doctolib.fr</a>
+                    </div>
+
+                    <div class="resource-card">
+                        <span class="resource-icon">💰</span>
+                        <h3>Consultation Gratuite</h3>
+                        <p>CMP et BAPU pour consultations gratuites</p>
+                        <a href="#" class="resource-link">Chercher "CMP + votre ville"</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let emdrInterval = null;
+        let emdrTimeRemaining = 0;
+        let emdrTimerInterval = null;
+        let sudBefore = 5;
+        let sudAfter = 5;
+        window.currentSeries = 0;  // Variable globale
+        window.totalSeries = 4;    // Variable globale
+        let questionInterval = null;
+        let currentMode = 'portrait';
+        let recommendationDismissed = false;
+        let breathingInterval = null;
+        let breathingCycles = 0;
+        let isActivated = false;
+        let wakeLock = null; // Pour maintenir l'écran allumé
+
+        // ============ SYSTÈME WAKE LOCK (ÉCRAN ALLUMÉ) ============
+
+        // Demander de maintenir l'écran allumé
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('🔋 Écran maintenu allumé');
+                    
+                    // Écouter si le wake lock est libéré
+                    wakeLock.addEventListener('release', () => {
+                        console.log('💤 Wake Lock libéré');
+                    });
+                    
+                    return true;
+                } else {
+                    console.log('⚠️ Wake Lock API non supportée');
+                    return false;
+                }
+            } catch (err) {
+                console.error('❌ Erreur Wake Lock:', err);
+                return false;
+            }
+        }
+
+        // Libérer le wake lock
+        async function releaseWakeLock() {
+            if (wakeLock !== null) {
+                try {
+                    await wakeLock.release();
+                    wakeLock = null;
+                    console.log('💤 Wake Lock libéré manuellement');
+                } catch (err) {
+                    console.error('❌ Erreur libération Wake Lock:', err);
+                }
+            }
+        }
+
+        // Réactiver le wake lock quand l'onglet redevient visible
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('🔋 Wake Lock réactivé');
+                } catch (err) {
+                    console.error('❌ Erreur réactivation Wake Lock:', err);
+                }
+            }
+        });
+
+        // Gérer le wake lock selon l'écran actif
+        function manageWakeLockForScreen(screenId) {
+            const wakeLockScreens = [
+                'emdr-session', 
+                'emdr-simple', 
+                'breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen'
+            ];
+            
+            if (wakeLockScreens.includes(screenId)) {
+                // Activer le wake lock pour les écrans thérapeutiques
+                requestWakeLock();
+            } else {
+                // Libérer le wake lock pour les autres écrans
+                releaseWakeLock();
+            }
+        }
+
+        // ============ FIN SYSTÈME WAKE LOCK ============
+
+        // ============ SYSTÈME PLEIN ÉCRAN EMDR ============
+
+        let isFullscreen = false;
+
+        // Basculer en mode plein écran
+        async function toggleFullscreen() {
+            try {
+                if (!isFullscreen) {
+                    // Entrer en plein écran
+                    const emdrSession = document.getElementById('emdr-session');
+                    
+                    if (emdrSession.requestFullscreen) {
+                        await emdrSession.requestFullscreen();
+                    } else if (emdrSession.webkitRequestFullscreen) {
+                        await emdrSession.webkitRequestFullscreen();
+                    } else if (emdrSession.msRequestFullscreen) {
+                        await emdrSession.msRequestFullscreen();
+                    }
+                    
+                    // Appliquer les styles plein écran
+                    emdrSession.classList.add('emdr-fullscreen');
+                    isFullscreen = true;
+                    
+                    // Redimensionner le canvas pour le plein écran après un délai
+                    setTimeout(() => {
+                        resizeEMDRCanvas();
+                        
+                        // Forcer la mise à jour de l'animation si elle est active
+                        const canvas = document.getElementById('emdr-canvas-portrait');
+                        if (canvas && emdrInterval) {
+                            console.log(`🔄 Canvas plein écran: ${canvas.offsetWidth}x${canvas.offsetHeight}`);
+                        }
+                    }, 100);
+                    
+                    // Mettre à jour les boutons
+                    updateFullscreenButtons('📱 Quitter Plein Écran');
+                    
+                    // Notification adaptée
+                    const isMobile = window.innerWidth <= 768;
+                    const message = isMobile ? 
+                        '📺 Mode plein écran activé' : 
+                        '📺 Mode plein écran - Échap pour quitter';
+                    showFullscreenNotification(message);
+                    
+                } else {
+                    // Quitter le plein écran
+                    await exitFullscreen();
+                }
+            } catch (error) {
+                console.log('Plein écran non supporté:', error);
+                // Fallback: plein écran simulé
+                toggleSimulatedFullscreen();
+            }
+        }
+
+        // Quitter le plein écran avec nettoyage complet
+        async function exitFullscreen() {
+            try {
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    await document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    await document.msExitFullscreen();
+                }
+            } catch (error) {
+                console.log('Erreur sortie plein écran:', error);
+            }
+            
+            // Retirer les styles plein écran
+            const emdrSession = document.getElementById('emdr-session');
+            emdrSession.classList.remove('emdr-fullscreen');
+            isFullscreen = false;
+            
+            // Redimensionner le canvas pour le mode normal
+            setTimeout(() => {
+                resizeEMDRCanvas();
+                console.log('🔄 Retour au mode normal');
+            }, 100);
+            
+            // Mettre à jour les boutons
+            updateFullscreenButtons('📺 Plein Écran');
+        }
+
+        // Plein écran simulé avec redimensionnement correct
+        function toggleSimulatedFullscreen() {
+            const emdrSession = document.getElementById('emdr-session');
+            
+            if (!isFullscreen) {
+                emdrSession.classList.add('emdr-fullscreen');
+                isFullscreen = true;
+                updateFullscreenButtons('📱 Quitter Plein Écran');
+                showFullscreenNotification('📺 Mode plein écran activé');
+                
+                // Redimensionner le canvas
+                setTimeout(() => {
+                    resizeEMDRCanvas();
+                }, 100);
+            } else {
+                emdrSession.classList.remove('emdr-fullscreen');
+                isFullscreen = false;
+                updateFullscreenButtons('📺 Plein Écran');
+                
+                // Redimensionner le canvas
+                setTimeout(() => {
+                    resizeEMDRCanvas();
+                }, 100);
+            }
+        }
+
+        // Mettre à jour le texte des boutons plein écran
+        function updateFullscreenButtons(text) {
+            const btn1 = document.getElementById('fullscreen-btn');
+            const btn2 = document.getElementById('fullscreen-btn-landscape');
+            
+            if (btn1) btn1.textContent = text;
+            if (btn2) btn2.textContent = text;
+        }
+
+        // Notification plein écran
+        function showFullscreenNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.9);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 15px;
+                z-index: 10001;
+                font-size: 1.1rem;
+                text-align: center;
+                max-width: 80%;
+                animation: fadeIn 0.5s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Gérer les événements de changement de plein écran
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            const isDocumentFullscreen = !!(document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.msFullscreenElement);
+            
+            if (!isDocumentFullscreen && isFullscreen) {
+                // L'utilisateur a quitté le plein écran (ex: touche Échap)
+                exitFullscreen();
+            }
+        }
+
+        // Raccourci clavier pour plein écran (Desktop uniquement)
+        document.addEventListener('keydown', (e) => {
+            // Vérifier si on est sur desktop (largeur > 768px)
+            if (window.innerWidth > 768 && document.getElementById('emdr-session').classList.contains('active')) {
+                if (e.key === 'F11' || (e.key === 'f' || e.key === 'F')) {
+                    e.preventDefault();
+                    toggleFullscreen();
+                }
+                
+                // Échap pour quitter (Desktop uniquement)
+                if (e.key === 'Escape' && isFullscreen) {
+                    exitFullscreen();
+                }
+            }
+        });
+
+        // Redimensionnement EMDR simplifié et efficace
+        function resizeEMDRCanvas() {
+            const canvas = document.getElementById('emdr-canvas-portrait');
+            if (!canvas) return;
+            
+            const isFullscreen = document.getElementById('emdr-session').classList.contains('emdr-fullscreen');
+            
+            if (isFullscreen) {
+                // Mode plein écran - FORCER les dimensions d'écran
+                canvas.style.cssText = `
+                    width: 100vw !important;
+                    height: 100vh !important;
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    border: none !important;
+                    border-radius: 0 !important;
+                    background: #000 !important;
+                    z-index: 1 !important;
+                `;
+                
+                console.log(`📺 FORCE Plein Écran: ${window.innerWidth}x${window.innerHeight}`);
+            } else {
+                // Mode normal - Réinitialiser
+                canvas.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                    background: #000;
+                    border-radius: 20px;
+                    min-height: 400px;
+                `;
+                
+                // Ajustements responsive
+                const isMobile = window.innerWidth <= 768;
+                const isLandscape = window.innerWidth > window.innerHeight;
+                
+                if (isMobile && isLandscape) {
+                    canvas.style.minHeight = '200px';
+                    canvas.style.borderRadius = '10px';
+                } else if (isMobile) {
+                    canvas.style.minHeight = '250px';
+                    canvas.style.borderRadius = '15px';
+                }
+                
+                console.log(`📱 Mode Normal: ${canvas.offsetWidth}x${canvas.offsetHeight}`);
+            }
+        }
+
+        // Écouter les changements d'orientation avec redimensionnement EMDR
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                resizeEMDRCanvas();
+                
+                // Si en plein écran EMDR, s'assurer que tout est correct
+                if (isFullscreen && document.getElementById('emdr-session').classList.contains('active')) {
+                    console.log('🔄 Orientation changée en plein écran EMDR');
+                    const canvas = document.getElementById('emdr-canvas-portrait');
+                    if (canvas) {
+                        canvas.style.width = '100vw';
+                        canvas.style.height = '100vh';
+                    }
+                }
+            }, 150); // Plus de temps pour stabiliser l'orientation
+        });
+
+        // Écouter le redimensionnement de fenêtre avec optimisation EMDR
+        window.addEventListener('resize', () => {
+            resizeEMDRCanvas();
+            
+            // Optimisation spéciale pour le plein écran
+            if (isFullscreen) {
+                setTimeout(() => {
+                    const canvas = document.getElementById('emdr-canvas-portrait');
+                    if (canvas) {
+                        const rect = canvas.getBoundingClientRect();
+                        console.log(`📏 Resize plein écran: ${Math.round(rect.width)}x${Math.round(rect.height)}`);
+                    }
+                }, 50);
+            }
+        });
+
+        // ============ FIN SYSTÈME PLEIN ÉCRAN ============
+
+        // ============ SYSTÈME D'ACTIVATION CARTE UNIQUE ============
+
+        // Base de données des codes valides (en production, ceci serait sur serveur sécurisé)
+        const VALID_ACTIVATION_CODES = [
+            // Format: XXXX-XXXX (première partie = série, deuxième = numéro unique)
+            'PA01-1001', 'PA01-1002', 'PA01-1003', 'PA01-1004', 'PA01-1005',
+            'PA01-1006', 'PA01-1007', 'PA01-1008', 'PA01-1009', 'PA01-1010',
+            'PA02-2001', 'PA02-2002', 'PA02-2003', 'PA02-2004', 'PA02-2005',
+            'PA03-3001', 'PA03-3002', 'PA03-3003', 'PA03-3004', 'PA03-3005',
+            // Codes de test (à retirer en production)
+            'TEST-0001', 'DEMO-0001', 'BETA-0001'
+        ];
+
+        // IDs NFC des cartes valides (simulation - en réalité ces IDs viendraient du scan)
+        const VALID_NFC_IDS = [
+            '04:12:34:56:78:90:AB',
+            '04:AB:CD:EF:12:34:56',
+            '04:98:76:54:32:10:FE',
+            // IDs de test
+            'TEST:NFC:001',
+            'DEMO:NFC:001'
+        ];
+
+        // Vérifier l'activation au chargement
+        function checkActivationStatus() {
+            const activated = localStorage.getItem('passAnxiete_activated');
+            const activationCode = localStorage.getItem('passAnxiete_activation_code');
+            const activationDate = localStorage.getItem('passAnxiete_activation_date');
+            
+            if (activated === 'true' && activationCode && activationDate) {
+                // Vérifier que l'activation n'est pas trop ancienne (optionnel)
+                const activationTime = new Date(activationDate);
+                const now = new Date();
+                const daysSinceActivation = (now - activationTime) / (1000 * 60 * 60 * 24);
+                
+                // Si l'activation a plus de 365 jours, demander réactivation (optionnel)
+                if (daysSinceActivation > 365) {
+                    showReactivationNeeded();
+                    return false;
+                }
+                
+                isActivated = true;
+                logActivationAttempt('auto_login', { code: activationCode });
+                return true;
+            }
+            return false;
+        }
+
+        // Activation par code
+        function activateWithCode() {
+            const codeInput = document.getElementById('activation-code');
+            const errorDiv = document.getElementById('code-error');
+            const btn = document.querySelector('.activation-btn');
+            
+            const inputCode = codeInput.value.trim().toUpperCase();
+            
+            // Reset
+            hideError(errorDiv);
+            
+            // Validation
+            if (!inputCode) {
+                showError(errorDiv, 'Veuillez saisir votre code d\'activation');
+                return;
+            }
+            
+            if (inputCode.length < 8) {
+                showError(errorDiv, 'Le code doit contenir 8 caractères (format XXXX-XXXX)');
+                return;
+            }
+            
+            // État de chargement
+            btn.disabled = true;
+            btn.textContent = '🔍 Vérification...';
+            
+            // Simulation délai réseau + vérification
+            setTimeout(() => {
+                if (VALID_ACTIVATION_CODES.includes(inputCode)) {
+                    // Succès
+                    performActivation('code', inputCode);
+                } else {
+                    // Échec
+                    showError(errorDiv, '❌ Code invalide. Vérifiez votre carte physique.');
+                    logActivationAttempt('invalid_code', { attemptedCode: inputCode });
+                    
+                    // Réinitialiser le bouton
+                    btn.disabled = false;
+                    btn.textContent = '✨ Activer ✨';
+                }
+            }, 2000);
+        }
+
+        // Activation par NFC
+        function activateWithNFC() {
+            const statusDiv = document.getElementById('nfc-status');
+            
+            statusDiv.className = 'nfc-status active';
+            statusDiv.textContent = '📡 Recherche de votre carte NFC...';
+            
+            // Vérifier si NFC est disponible
+            if (!('NDEFReader' in window)) {
+                statusDiv.className = 'nfc-status error';
+                statusDiv.textContent = '❌ NFC non disponible sur cet appareil';
+                return;
+            }
+            
+            try {
+                const reader = new NDEFReader();
+                
+                reader.scan().then(() => {
+                    statusDiv.textContent = '✅ NFC activé - Approchez votre carte...';
+                    
+                    reader.addEventListener('reading', ({ message, serialNumber }) => {
+                        // Simuler la vérification de l'ID NFC
+                        const nfcId = serialNumber || 'SIMULATED:NFC:' + Date.now();
+                        
+                        // En production, vérifier l'ID contre la base de données
+                        if (VALID_NFC_IDS.includes(nfcId) || nfcId.startsWith('SIMULATED:')) {
+                            statusDiv.className = 'nfc-status success';
+                            statusDiv.textContent = '✅ Carte reconnue ! Activation...';
+                            
+                            setTimeout(() => {
+                                performActivation('nfc', nfcId);
+                            }, 1000);
+                        } else {
+                            statusDiv.className = 'nfc-status error';
+                            statusDiv.textContent = '❌ Carte non reconnue';
+                            logActivationAttempt('invalid_nfc', { nfcId });
+                        }
+                    });
+                    
+                }).catch(error => {
+                    statusDiv.className = 'nfc-status error';
+                    statusDiv.textContent = '❌ Erreur NFC: ' + error.message;
+                });
+                
+            } catch (error) {
+                statusDiv.className = 'nfc-status error';
+                statusDiv.textContent = '❌ Erreur: ' + error.message;
+            }
+        }
+
+        // Effectuer l'activation réussie (transition directe)
+        function performActivation(method, identifier) {
+            const activationData = {
+                activated: true,
+                method: method,
+                identifier: identifier,
+                timestamp: new Date().toISOString(),
+                deviceInfo: {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language
+                }
+            };
+            
+            // Sauvegarder l'activation
+            localStorage.setItem('passAnxiete_activated', 'true');
+            localStorage.setItem('passAnxiete_activation_code', identifier);
+            localStorage.setItem('passAnxiete_activation_date', activationData.timestamp);
+            localStorage.setItem('passAnxiete_activation_method', method);
+            
+            // Log l'activation
+            logActivationAttempt('successful_activation', activationData);
+            
+            // Transition directe vers l'application avec animation
+            showActivationTransition();
+        }
+
+        // Animation de transition d'activation
+        function showActivationTransition() {
+            const activationScreen = document.getElementById('activation-screen');
+            
+            // Animation de fondu sortant
+            activationScreen.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            activationScreen.style.opacity = '0';
+            activationScreen.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                isActivated = true;
+                goToScreen('home-screen');
+                showActivationSuccess();
+            }, 800);
+        }
+
+        // Afficher le message de succès avec info wake lock
+        function showActivationSuccess() {
+            // Créer une notification de succès temporaire
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%) translateY(-100%);
+                background: linear-gradient(135deg, #4CAF50, #8BC34A);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 15px;
+                box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+                z-index: 10000;
+                font-weight: 600;
+                max-width: 90%;
+                text-align: center;
+                transition: all 0.5s ease;
+                opacity: 0;
+            `;
+            
+            const wakeLockSupported = 'wakeLock' in navigator;
+            const wakeLockMessage = wakeLockSupported ? 
+                '<br><small style="opacity: 0.9;">💡 L\'écran restera allumé pendant vos sessions thérapeutiques</small>' :
+                '<br><small style="opacity: 0.9;">⚠️ Ajustez vos paramètres d\'écran pour éviter la mise en veille</small>';
+            
+            notification.innerHTML = '✨ Bienvenue dans votre Pass Anxiété Pro !' + wakeLockMessage;
+            
+            document.body.appendChild(notification);
+            
+            // Animation d'entrée
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-50%) translateY(0)';
+                notification.style.opacity = '1';
+            }, 100);
+            
+            // Animation de sortie et suppression
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-50%) translateY(-100%)';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
+        }
+
+        // Afficher/masquer erreurs
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.add('show');
+        }
+        
+        function hideError(element) {
+            element.classList.remove('show');
+        }
+
+        // Logger les tentatives d'activation (pour analytics/sécurité)
+        function logActivationAttempt(type, data) {
+            const logEntry = {
+                type: type,
+                timestamp: new Date().toISOString(),
+                data: data,
+                sessionId: getSessionId()
+            };
+            
+            // Sauvegarder dans localStorage (en production: envoyer au serveur)
+            let logs = JSON.parse(localStorage.getItem('passAnxiete_activation_logs') || '[]');
+            logs.push(logEntry);
+            
+            // Garder seulement les 50 derniers logs
+            if (logs.length > 50) {
+                logs = logs.slice(-50);
+            }
+            
+            localStorage.setItem('passAnxiete_activation_logs', JSON.stringify(logs));
+            
+            // En production, envoyer au serveur pour monitoring
+            // sendToServer('/api/activation-log', logEntry);
+        }
+
+        // Générer un ID de session unique
+        function getSessionId() {
+            let sessionId = sessionStorage.getItem('passAnxiete_session_id');
+            if (!sessionId) {
+                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('passAnxiete_session_id', sessionId);
+            }
+            return sessionId;
+        }
+
+        // Réactivation nécessaire
+        function showReactivationNeeded() {
+            alert('⚠️ Réactivation requise\n\nVotre activation a expiré après 1 an.\nVeuillez réactiver votre carte pour continuer.');
+            localStorage.removeItem('passAnxiete_activated');
+            localStorage.removeItem('passAnxiete_activation_code');
+            localStorage.removeItem('passAnxiete_activation_date');
+        }
+
+        // Auto-formatage du code d'activation
+        function setupActivationInput() {
+            const codeInput = document.getElementById('activation-code');
+            if (codeInput) {
+                codeInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^A-Z0-9]/g, '').toUpperCase();
+                    
+                    // Auto-format avec tiret après 4 caractères
+                    if (value.length > 4) {
+                        value = value.substring(0, 4) + '-' + value.substring(4, 8);
+                    }
+                    
+                    e.target.value = value;
+                });
+                
+                // Activation avec Enter
+                codeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        activateWithCode();
+                    }
+                });
+            }
+        }
+
+        // Vérifier l'activation avant d'utiliser l'app
+        function requireActivation() {
+            if (!isActivated) {
+                goToScreen('activation-screen');
+                return false;
+            }
+            return true;
+        }
+
+        // ============ FIN SYSTÈME ACTIVATION ============
+
+        // Tracking clic boutique
+        function trackPurchaseClick() {
+            logActivationAttempt('purchase_redirect', {
+                source: 'activation_screen',
+                destination: 'hypnotarot.fr',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Système de stockage
+        class DataManager {
+            static saveAnxietyLevel(level) {
+                const entry = {
+                    level: parseInt(level),
+                    timestamp: new Date().toISOString()
+                };
+                let history = this.getAnxietyHistory();
+                history.push(entry);
+                localStorage.setItem('anxietyHistory', JSON.stringify(history));
+            }
+
+            static getAnxietyHistory() {
+                const history = localStorage.getItem('anxietyHistory');
+                return history ? JSON.parse(history) : [];
+            }
+
+            static logToolUsage(tool) {
+                const entry = {
+                    tool: tool,
+                    timestamp: new Date().toISOString()
+                };
+                let usage = this.getToolUsage();
+                usage.push(entry);
+                localStorage.setItem('toolUsage', JSON.stringify(usage));
+            }
+
+            static getToolUsage() {
+                const usage = localStorage.getItem('toolUsage');
+                return usage ? JSON.parse(usage) : [];
+            }
+        }
+
+        // Questions EMDR
+        const EMDR_QUESTIONS = [
+            "Racontez votre souvenir problématique (Trauma, phobie, angoisse etc...) que ce soit à haute voix ou dans votre tête",
+            "Que remarquez-vous maintenant ?",
+            "Restez concentré sur le souvenir...",
+            "Quelles pensées émergent ?",
+            "Posez votre main sur la zone de votre corps qui est la plus douloureuse quand vous vous connectez à ce souvenir",
+            "Que ressentez-vous dans votre corps ?",
+            "Laissez venir ce qui vient...",
+            "Restez avec l'image du souvenir",
+            "Quelles émotions traversez-vous ?"
+        ];
+
+        // Descriptions SUD
+        const SUD_DESCRIPTIONS = {
+            0: "Aucune détresse - Totalement neutre",
+            1: "Détresse minimale - Très légère gêne", 
+            2: "Détresse très légère - À peine perceptible",
+            3: "Détresse légère - Légèrement inconfortable",
+            4: "Détresse modérée-légère - Commence à être gênant",
+            5: "Détresse modérée - Nettement inconfortable",
+            6: "Détresse modérée-forte - Assez perturbant",
+            7: "Détresse forte - Très perturbant",
+            8: "Détresse très forte - Difficilement supportable",
+            9: "Détresse extrême - Presque insupportable",
+            10: "Détresse maximale - La pire possible"
+        };
+
+        // Détection orientation
+        function checkOrientation() {
+            return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+        }
+
+        function updateSessionDisplay() {
+            const orientation = checkOrientation();
+            const portraitDiv = document.getElementById('portrait-version');
+            const recommendation = document.getElementById('orientation-recommendation');
+            
+            if (orientation === 'landscape') {
+                portraitDiv.style.display = 'block';
+                recommendation.classList.remove('show');
+                currentMode = 'landscape';
+            } else {
+                portraitDiv.style.display = 'block';
+                if (!recommendationDismissed && document.getElementById('emdr-session').classList.contains('active')) {
+                    recommendation.classList.add('show');
+                }
+                currentMode = 'portrait';
+            }
+        }
+
+        function hideOrientationRecommendation() {
+            console.log('🔧 Masquage recommendation orientation');
+            recommendationDismissed = true;
+            const recommendation = document.getElementById('orientation-recommendation');
+            if (recommendation) {
+                recommendation.classList.remove('show');
+                recommendation.style.display = 'none';
+                console.log('✅ Recommendation masquée');
+            } else {
+                console.warn('⚠️ Element orientation-recommendation non trouvé');
+            }
+        }
+
+        // Navigation avec vérification d'activation et gestion wake lock
+        function goToScreen(screenId) {
+            // Vérifier l'activation avant d'accéder aux écrans protégés
+            const protectedScreens = ['home-screen', 'crisis-screen', 'emdr-distance', 'breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen', 'hypnotherapy-screen', 'meditation-screen', 'tracking-screen', 'tcc-screen', 'tips-screen'];
+            
+            if (protectedScreens.includes(screenId) && !requireActivation()) {
+                return;
+            }
+            
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            const screen = document.getElementById(screenId);
+            screen.classList.add('active');
+            
+            // Gérer le wake lock selon l'écran
+            manageWakeLockForScreen(screenId);
+            
+            // Initialisation spécifique selon l'écran
+            if (screenId === 'emdr-setup' || screenId === 'emdr-evaluation') {
+                // Réinitialiser les sliders SUD quand on accède aux écrans EMDR
+                setTimeout(() => {
+                    setupSUDSliders();
+                    console.log('🎯 Sliders SUD réinitialisés');
+                }, 100);
+            }
+            
+            if (screenId === 'emdr-session') {
+                recommendationDismissed = false;
+                updateSessionDisplay();
+            } else if (screenId === 'tracking-screen') {
+                updateTrackingScreen();
+            } else if (screenId === 'tips-screen') {
+                DataManager.logToolUsage('tips-accessed');
+            }
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = `${dateString} - ${timeString}`;
+            }
+        }
+
+        function updateRecommendations() {
+            const hour = new Date().getHours();
+            let recommendation = '';
+            
+            if (hour >= 6 && hour < 10) {
+                recommendation = '<h4>🌅 Méditation Matinale</h4><p>Commencez votre journée avec calme</p>';
+            } else if (hour >= 10 && hour < 14) {
+                recommendation = '<h4>💓 Cohérence Cardiaque</h4><p>5 minutes pour réguler</p>';
+            } else if (hour >= 14 && hour < 18) {
+                recommendation = '<h4>👁️ EMDR Pro</h4><p>Session de recentrage</p>';
+            } else if (hour >= 18 && hour < 22) {
+                recommendation = '<h4>🎧 Hypnose du Soir</h4><p>Libérez les tensions</p>';
+            } else {
+                recommendation = '<h4>💨 Respiration Calme</h4><p>Pour faciliter l\'endormissement</p>';
+            }
+            
+            const el = document.getElementById('recommended-tool');
+            if (el) el.innerHTML = recommendation;
+        }
+
+        // Configuration SUD sliders
+        function setupSUDSliders() {
+            const sudBefore = document.getElementById('sud-before');
+            const sudAfter = document.getElementById('sud-after');
+            
+            if (sudBefore) {
+                sudBefore.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    document.getElementById('sud-before-value').textContent = value;
+                    document.getElementById('sud-before-desc').textContent = SUD_DESCRIPTIONS[value];
+                });
+            }
+            
+            if (sudAfter) {
+                sudAfter.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    document.getElementById('sud-after-value').textContent = value;
+                    document.getElementById('sud-after-desc').textContent = SUD_DESCRIPTIONS[value];
+                });
+            }
+        }
+
+        // Session EMDR professionnelle
+        function startEMDRSession() {
+            sudBefore = parseInt(document.getElementById('sud-before').value);
+            const mode = document.getElementById('emdr-mode').value;
+            
+            // Redimensionner le canvas avant de commencer
+            setTimeout(() => {
+                resizeEMDRCanvas();
+            }, 100);
+            
+            switch(mode) {
+                case 'professional':
+                    window.totalSeries = 4;
+                    emdrTimeRemaining = 180;
+                    break;
+                case 'quick':
+                    window.totalSeries = 1;
+                    emdrTimeRemaining = 120;
+                    break;
+                case 'standard':
+                    window.totalSeries = 2;
+                    emdrTimeRemaining = 150;
+                    break;
+            }
+            
+            window.currentSeries = 1;
+            document.getElementById('total-series-portrait').textContent = totalSeries;
+            
+            goToScreen('emdr-session');
+            
+            // Afficher immédiatement le bon timer
+            setTimeout(() => {
+                updateTimer();
+            }, 100);
+            
+            setTimeout(() => {
+                startEMDRAnimation();
+            }, 3000);
+        }
+
+        function startEMDRAnimation() {
+            const speed = document.getElementById('emdr-speed').value;
+            updateTimer();
+            
+            const dot = document.getElementById('emdr-dot-portrait');
+            const canvas = document.getElementById('emdr-canvas-portrait');
+            
+            if (!dot || !canvas) {
+                console.error('❌ Éléments EMDR introuvables');
+                return;
+            }
+            
+            const dotSize = 50;
+            let direction = 1;
+            let currentX = 25; // Centre du point au départ
+            
+            const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
+            const cycleDuration = speedConfig[speed];
+            
+            function animate() {
+                // Détecter si on est en mode plein écran
+                const isFullscreen = document.getElementById('emdr-session').classList.contains('emdr-fullscreen');
+                
+                let canvasWidth, canvasHeight;
+                
+                if (isFullscreen) {
+                    // En plein écran : utiliser les dimensions d'écran réelles
+                    canvasWidth = window.innerWidth;
+                    canvasHeight = window.innerHeight;
+                    console.log(`📺 Plein écran détecté: ${canvasWidth}x${canvasHeight}`);
+                } else {
+                    // Mode normal : utiliser les dimensions du canvas
+                    canvasWidth = canvas.offsetWidth;
+                    canvasHeight = canvas.offsetHeight;
+                }
+                
+                // Limites : centre du point de 25px à (largeur-25px)
+                const minX = 25;
+                const maxX = canvasWidth - 25;
+                
+                // Mouvement
+                const increment = (maxX - minX) / (cycleDuration / 50);
+                currentX += increment * direction;
+                
+                // Rebond
+                if (currentX >= maxX) {
+                    currentX = maxX;
+                    direction = -1;
+                } else if (currentX <= minX) {
+                    currentX = minX;
+                    direction = 1;
+                }
+                
+                // Position CSS (point positionné par son coin supérieur gauche)
+                const cssX = currentX - 25;
+                const cssY = (canvasHeight / 2) - 25;
+                
+                dot.style.left = cssX + 'px';
+                dot.style.top = cssY + 'px';
+                
+                // Debug occasionnel
+                if (Math.random() < 0.01) {
+                    console.log(`🎯 Point: ${Math.round(currentX)} dans ${canvasWidth}px (${minX}→${maxX})`);
+                }
+            }
+            
+            // Position initiale
+            dot.style.left = '0px';
+            dot.style.top = ((canvas.offsetHeight / 2) - 25) + 'px';
+            
+            emdrInterval = setInterval(animate, 50);
+
+            // Afficher le timer initial
+            updateTimer();
+            
+            emdrTimerInterval = setInterval(() => {
+                emdrTimeRemaining--;
+                updateTimer();
+                
+                if (emdrTimeRemaining <= 0) {
+                    stopEMDRAnimation();
+                    // SÉRIE SUIVANTE GÉRÉE DIRECTEMENT ICI
+                    console.log("⏰ Série terminée:", currentSeries, "/", totalSeries);
+                    
+                    if (window.currentSeries >= window.totalSeries) {
+                        console.log("✅ Toutes les séries terminées");
+                        DataManager.logToolUsage("emdr");
+                        goToScreen("emdr-evaluation");
+                    } else {
+                        console.log("➡️ Passage à la série suivante");
+                        if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                            window.currentSeries++;
+                            document.getElementById("current-series-portrait").textContent = window.currentSeries;
+                            
+                            const mode = document.getElementById("emdr-mode").value;
+                            switch(mode) {
+                                case "professional":
+                                    emdrTimeRemaining = 180;
+                                    break;
+                                case "standard":
+                                    emdrTimeRemaining = 150;
+                                    break;
+                                case "quick":
+                                    emdrTimeRemaining = 120;
+                                    break;
+                                default:
+                                    emdrTimeRemaining = 150;
+                            }
+                            
+                            console.log("🔄 Redémarrage série", currentSeries, "avec", emdrTimeRemaining, "secondes");
+                            startEMDRAnimation();
+                        } else {
+                            DataManager.logToolUsage("emdr");
+                            goToScreen("emdr-evaluation");
+                        }
+                    }
+                }
+            }, 1000);
+            
+            // Questions thérapeutiques
+            let questionIndex = 0;
+            questionInterval = setInterval(() => {
+                showQuestion(EMDR_QUESTIONS[questionIndex % EMDR_QUESTIONS.length]);
+                questionIndex++;
+            }, 15000);
+        }
+
+        function stopEMDRAnimation() {
+            if (emdrInterval) clearInterval(emdrInterval);
+            if (emdrTimerInterval) clearInterval(emdrTimerInterval);
+            if (questionInterval) clearInterval(questionInterval);
+        }
+
+        function stopEMDRSession() {
+            stopEMDRAnimation();
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                DataManager.logToolUsage('emdr');
+                goToScreen('emdr-evaluation');
+            } else {
+                startEMDRAnimation();
+            }
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(emdrTimeRemaining / 60);
+            const seconds = emdrTimeRemaining % 60;
+            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timer = document.getElementById('session-timer-portrait');
+            if (timer) timer.textContent = timeStr;
+        }
+
+        function showQuestion(question) {
+            const overlay = document.getElementById('question-overlay');
+            document.getElementById('question-text').textContent = question;
+            overlay.classList.add('visible');
+            
+            setTimeout(() => {
+                overlay.classList.remove('visible');
+            }, 7000);
+        }
+
+        // Fonction globale pour gérer les séries EMDR
+        window.completeSeries = function() {
+            if (window.currentSeries >= window.totalSeries) {
+                DataManager.logToolUsage('emdr');
+                goToScreen('emdr-evaluation');
+            } else {
+                if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                    window.currentSeries++;
+                    document.getElementById('current-series-portrait').textContent = currentSeries;
+                    
+                    const mode = document.getElementById('emdr-mode').value;
+                    switch(mode) {
+                        case 'professional':
+                            emdrTimeRemaining = 180;
+                            break;
+                        case 'standard':
+                            emdrTimeRemaining = 150;
+                            break;
+                    }
+                    
+                    startEMDRAnimation();
+                } else {
+                    DataManager.logToolUsage('emdr');
+                    goToScreen('emdr-evaluation');
+                }
+            }
+        }
+
+        // Évaluation EMDR
+        function evaluateResults() {
+            sudAfter = parseInt(document.getElementById('sud-after').value);
+            
+            document.getElementById('comparison-section').style.display = 'block';
+            
+            const heightBefore = (sudBefore / 10) * 100;
+            const heightAfter = (sudAfter / 10) * 100;
+            
+            document.getElementById('bar-before').style.height = heightBefore + '%';
+            document.getElementById('bar-before').textContent = sudBefore;
+            
+            document.getElementById('bar-after').style.height = heightAfter + '%';
+            document.getElementById('bar-after').textContent = sudAfter;
+            
+            const improvement = sudBefore - sudAfter;
+            const improvementPercent = ((improvement / sudBefore) * 100).toFixed(0);
+            
+            const resultMsg = document.getElementById('result-message');
+            const interpretation = document.getElementById('interpretation-text');
+            
+            if (sudAfter <= 2) {
+                resultMsg.className = 'result-message success';
+                resultMsg.innerHTML = `
+                    <strong>✅ Excellent résultat !</strong><br>
+                    Amélioration de ${improvement} points (-${improvementPercent}%)<br>
+                    Le souvenir est maintenant faiblement perturbant.
+                `;
+                interpretation.innerHTML = `
+                    <strong>Retraitement réussi !</strong><br>
+                    Votre cerveau a intégré l'information émotionnelle. Le souvenir reste accessible mais n'est plus chargé émotionnellement.<br><br>
+                    <strong>Recommandation :</strong> Le travail sur cette cible est terminé.
+                `;
+            } else if (improvement >= 3) {
+                resultMsg.className = 'result-message success';
+                resultMsg.innerHTML = `
+                    <strong>👍 Bonne amélioration !</strong><br>
+                    Amélioration de ${improvement} points (-${improvementPercent}%)<br>
+                    Le retraitement a bien commencé.
+                `;
+                interpretation.innerHTML = `
+                    <strong>Progrès significatif</strong><br>
+                    Le retraitement est en cours. Plusieurs séries supplémentaires pourraient être bénéfiques.<br><br>
+                    <strong>Recommandation :</strong> Refaire une session EMDR sur la même cible dans les prochains jours.
+                `;
+            } else {
+                resultMsg.className = 'result-message warning';
+                resultMsg.innerHTML = `
+                    <strong>⚠️ Amélioration légère</strong><br>
+                    Amélioration de ${improvement} point(s)<br>
+                    Le retraitement nécessite plus de travail.
+                `;
+                interpretation.innerHTML = `
+                    <strong>Retraitement incomplet</strong><br>
+                    Le souvenir nécessite plus de séries de stimulation bilatérale.<br><br>
+                    <strong>Recommandation :</strong> Consulter un thérapeute EMDR certifié pour un accompagnement professionnel.
+                `;
+            }
+            
+            document.getElementById('comparison-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // EMDR Simple
+        function startSimpleEMDR() {
+            const speed = document.getElementById('emdr-speed-simple').value;
+            const duration = parseInt(document.getElementById('emdr-duration-simple').value);
+            
+            const speedConfig = { slow: 4000, medium: 2500, fast: 1500 };
+            const cycleDuration = speedConfig[speed];
+            
+            emdrTimeRemaining = duration * 60;
+            updateSimpleEMDRTimer();
+            
+            const dot = document.getElementById('emdr-dot');
+            const canvas = document.getElementById('emdr-canvas');
+            const canvasWidth = canvas.offsetWidth;
+            const dotWidth = dot.offsetWidth;
+            const maxPosition = canvasWidth - dotWidth;
+            
+            let position = 0;
+            let direction = 1;
+            
+            function animate() {
+                const increment = maxPosition / (cycleDuration / 50);
+                position += increment * direction;
+                
+                if (position >= maxPosition) {
+                    position = maxPosition;
+                    direction = -1;
+                } else if (position <= 0) {
+                    position = 0;
+                    direction = 1;
+                }
+                
+                dot.style.left = position + 'px';
+            }
+            
+            emdrInterval = setInterval(animate, 50);
+
+            // Afficher le timer initial
+            updateTimer();
+            
+            emdrTimerInterval = setInterval(() => {
+                emdrTimeRemaining--;
+                updateSimpleEMDRTimer();
+                
+                if (emdrTimeRemaining <= 0) {
+                    stopSimpleEMDR();
+                    DataManager.logToolUsage('emdr');
+                    alert('✨ Session EMDR terminée ! Bravo !');
+                }
+            }, 1000);
+            
+            document.getElementById('emdr-start').style.display = 'none';
+            document.getElementById('emdr-stop').style.display = 'inline-block';
+        }
+
+        function stopSimpleEMDR() {
+            if (emdrInterval) clearInterval(emdrInterval);
+            if (emdrTimerInterval) clearInterval(emdrTimerInterval);
+            
+            document.getElementById('emdr-dot').style.left = '0px';
+            document.getElementById('emdr-start').style.display = 'inline-block';
+            document.getElementById('emdr-stop').style.display = 'none';
+            
+            const duration = parseInt(document.getElementById('emdr-duration-simple').value);
+            emdrTimeRemaining = duration * 60;
+            updateSimpleEMDRTimer();
+        }
+
+        function updateSimpleEMDRTimer() {
+            const minutes = Math.floor(emdrTimeRemaining / 60);
+            const seconds = emdrTimeRemaining % 60;
+            document.getElementById('emdr-timer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Respiration
+        function startBreathing() {
+            breathingCycles = 0;
+            updateCycleCounter();
+            
+            const circle = document.getElementById('breathing-circle');
+            const instruction = document.getElementById('breathing-instruction');
+            
+            function breatheCycle() {
+                instruction.textContent = 'Inspirez... 🌬️';
+                circle.style.transform = 'scale(2)';
+                
+                setTimeout(() => {
+                    instruction.textContent = 'Expirez... 💨';
+                    circle.style.transform = 'scale(1)';
+                    
+                    breathingCycles++;
+                    updateCycleCounter();
+                    
+                    if (breathingCycles >= 30) {
+                        setTimeout(() => {
+                            stopBreathing();
+                            DataManager.logToolUsage('breathing');
+                            alert('🎉 Session terminée ! Bravo !');
+                        }, 5000);
+                    }
+                }, 5000);
+            }
+            
+            breatheCycle();
+            breathingInterval = setInterval(breatheCycle, 10000);
+            
+            document.getElementById('breathing-start').style.display = 'none';
+            document.getElementById('breathing-stop').style.display = 'inline-block';
+        }
+
+        function stopBreathing() {
+            if (breathingInterval) clearInterval(breathingInterval);
+            
+            document.getElementById('breathing-circle').style.transform = 'scale(1)';
+            document.getElementById('breathing-instruction').textContent = 'Prêt à commencer';
+            
+            document.getElementById('breathing-start').style.display = 'inline-block';
+            document.getElementById('breathing-stop').style.display = 'none';
+            
+            breathingCycles = 0;
+            updateCycleCounter();
+        }
+
+        function updateCycleCounter() {
+            document.getElementById('cycle-count').textContent = breathingCycles;
+        }
+
+        // Suivi
+        function updateTrackingScreen() {
+            const usage = DataManager.getToolUsage();
+            const anxiety = DataManager.getAnxietyHistory();
+            
+            const totalSessions = usage.length;
+            
+            const toolCounts = {};
+            usage.forEach(e => {
+                toolCounts[e.tool] = (toolCounts[e.tool] || 0) + 1;
+            });
+            const favTool = Object.keys(toolCounts).reduce((a, b) => 
+                toolCounts[a] > toolCounts[b] ? a : b, '');
+            
+            const avgAnxiety = anxiety.length > 0 ?
+                (anxiety.reduce((sum, e) => sum + e.level, 0) / anxiety.length).toFixed(1) : 0;
+            
+            // Série consécutive
+            const today = new Date().toISOString().split('T')[0];
+            const uniqueDates = [...new Set(usage.map(e => 
+                new Date(e.timestamp).toISOString().split('T')[0]
+            ))].sort().reverse();
+            
+            let streak = 0;
+            for (let i = 0; i < uniqueDates.length; i++) {
+                const expectedDate = new Date();
+                expectedDate.setDate(expectedDate.getDate() - i);
+                const expectedDateStr = expectedDate.toISOString().split('T')[0];
+                
+                if (uniqueDates[i] === expectedDateStr) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            document.getElementById('total-sessions').textContent = totalSessions;
+            
+            const toolNames = {
+                'emdr': 'EMDR',
+                'breathing': 'Respiration',
+                'crisis': 'Mode Crise'
+            };
+            document.getElementById('favorite-tool').textContent = 
+                toolNames[favTool] || '-';
+            
+            document.getElementById('avg-anxiety').textContent = 
+                avgAnxiety > 0 ? avgAnxiety + '/10' : '-';
+            
+            document.getElementById('streak-days').textContent = streak;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // D'abord masquer TOUS les écrans
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Vérifier l'activation en premier
+            if (checkActivationStatus()) {
+                // Déjà activé, aller directement à l'accueil
+                goToScreen('home-screen');
+            } else {
+                // Pas activé, afficher UNIQUEMENT l'écran d'activation
+                document.getElementById('activation-screen').classList.add('active');
+            }
+            
+            // Configuration du système d'activation
+            setupActivationInput();
+            
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 60000);
+            updateRecommendations();
+            
+            // Redimensionner le canvas EMDR au chargement
+            setTimeout(() => {
+                resizeEMDRCanvas();
+                
+                // Afficher l'indication clavier uniquement sur desktop
+                if (window.innerWidth > 768) {
+                    const keyboardHint = document.getElementById('keyboard-hint');
+                    if (keyboardHint) {
+                        keyboardHint.style.display = 'inline';
+                    }
+                }
+            }, 500);
+            
+            // Nettoyage wake lock à la fermeture
+            window.addEventListener('beforeunload', () => {
+                releaseWakeLock();
+            });
+            
+            // Afficher un indicateur si wake lock est actif
+            if ('wakeLock' in navigator) {
+                console.log('✅ Wake Lock API disponible - L\'écran restera allumé pendant les sessions');
+            } else {
+                console.log('⚠️ Wake Lock API non disponible - L\'écran peut s\'éteindre pendant les sessions');
+            }
+            
+            // Skip NFC (maintenant désactivé par défaut)
+            const skipNfc = document.getElementById('skip-nfc');
+            if (skipNfc) {
+                skipNfc.addEventListener('click', () => {
+                    if (requireActivation()) {
+                        goToScreen('home-screen');
+                    }
+                });
+            }
+            
+            // Navigation outils
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const tool = card.dataset.tool;
+                    const screenMap = {
+                        'crisis': 'crisis-screen',
+                        'emdr': 'emdr-distance',
+                        'breathing': 'breathing-screen',
+                        'hypnotherapy': 'hypnotherapy-screen',
+                        'meditation': 'meditation-screen',
+                        'tips': 'tips-screen',
+                        'tracking': 'tracking-screen',
+                        'tcc': 'tcc-screen',
+                        'thoughts': 'thoughts-screen',
+                        'emotions': 'emotions-screen',
+                        'journal': 'journal-screen',
+                        'techniques': 'techniques-screen',
+                        'thoughts-history': 'thoughts-history-screen',
+                        'therapist': 'therapist-screen',
+                        'ai': 'ai-screen'
+                    };
+                    if (screenMap[tool]) {
+                        goToScreen(screenMap[tool]);
+                    } else {
+                        alert('Cette fonctionnalité sera bientôt disponible !');
+                    }
+                });
+            });
+            
+            // Boutons retour
+            document.querySelectorAll('[data-back]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    goToScreen(btn.dataset.back);
+                });
+            });
+            
+            // Boutons urgence
+            document.querySelectorAll('[data-emergency]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tool = btn.dataset.emergency;
+                    if (tool === 'breathing') {
+                        goToScreen('breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen');
+                    } else if (tool === 'emdr') {
+                        // Rediriger vers EMDR Pro complet au lieu d'EMDR simple
+                        goToScreen('emdr-distance');
+                    }
+                });
+            });
+            
+            // Jauge anxiété
+            document.getElementById('anxiety-level').addEventListener('input', (e) => {
+                const value = e.target.value;
+                document.getElementById('anxiety-display').textContent = value;
+                DataManager.saveAnxietyLevel(value);
+            });
+            
+            // EMDR Simple
+            const emdrStartBtn = document.getElementById('emdr-start');
+            const emdrStopBtn = document.getElementById('emdr-stop');
+            
+            if (emdrStartBtn) {
+                emdrStartBtn.addEventListener('click', startSimpleEMDR);
+            }
+            if (emdrStopBtn) {
+                emdrStopBtn.addEventListener('click', stopSimpleEMDR);
+            }
+            
+            // Respiration
+            document.getElementById('breathing-start').addEventListener('click', startBreathing);
+            document.getElementById('breathing-stop').addEventListener('click', stopBreathing);
+            
+            // Configuration SUD sliders
+            setupSUDSliders();
+            
+            // Configuration TCC
+            setupTCCComponents();
+            
+            // Écouteurs d'orientation
+            window.addEventListener('resize', () => {
+                if (document.getElementById('emdr-session').classList.contains('active')) {
+                    updateSessionDisplay();
+                }
+            });
+
+            window.addEventListener('orientationchange', () => {
+                if (document.getElementById('emdr-session').classList.contains('active')) {
+                    setTimeout(updateSessionDisplay, 100);
+                }
+            });
+        });
+
+        // ============ FONCTIONS TCC ============
+
+        // Configuration des composants TCC
+        function setupTCCComponents() {
+            // Date actuelle pour le journal
+            const currentDateEl = document.getElementById('current-date');
+            if (currentDateEl) {
+                currentDateEl.textContent = new Date().toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            }
+
+            // Slider humeur quotidienne
+            const moodSlider = document.getElementById('daily-mood');
+            if (moodSlider) {
+                moodSlider.addEventListener('input', (e) => {
+                    document.getElementById('mood-value').textContent = e.target.value;
+                });
+            }
+
+            // Boutons émotions
+            document.querySelectorAll('.emotion-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Désélectionner tous les autres
+                    document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+                    // Sélectionner celui-ci
+                    btn.classList.add('selected');
+                    
+                    const emotion = btn.dataset.emotion;
+                    document.getElementById('selected-emotion').textContent = emotion.charAt(0).toUpperCase() + emotion.slice(1);
+                    
+                    // Afficher la section intensité
+                    document.getElementById('emotion-intensity-section').style.display = 'block';
+                });
+            });
+
+            // Slider intensité émotion
+            const emotionIntensity = document.getElementById('emotion-intensity');
+            if (emotionIntensity) {
+                emotionIntensity.addEventListener('input', (e) => {
+                    document.getElementById('emotion-intensity-value').textContent = e.target.value;
+                });
+            }
+        }
+
+        // Sauvegarder exercice de pensées (limité à 10)
+        function saveThoughtExercise() {
+            const currentThought = document.getElementById('current-thought').value;
+            const alternativeThought = document.getElementById('alternative-thought').value;
+            
+            if (!currentThought.trim()) {
+                alert('Veuillez d\'abord décrire votre pensée négative');
+                return;
+            }
+
+            const exercise = {
+                type: 'thought-exercise',
+                date: new Date().toISOString(),
+                currentThought: currentThought,
+                alternativeThought: alternativeThought,
+                id: 'thought_' + Date.now()
+            };
+
+            // Récupérer les exercices existants
+            let exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            
+            // Ajouter le nouvel exercice au début
+            exercises.unshift(exercise);
+            
+            // Limiter à 10 exercices maximum
+            if (exercises.length > 10) {
+                exercises = exercises.slice(0, 10);
+            }
+            
+            // Sauvegarder
+            localStorage.setItem('tccThoughtExercises', JSON.stringify(exercises));
+
+            // Log pour le suivi général
+            DataManager.logToolUsage('tcc-thoughts');
+
+            alert('✅ Exercice sauvegardé ! Bien joué pour ce travail sur vos pensées.\n\n💡 Vous pouvez revoir vos exercices dans l\'historique.');
+            
+            // Réinitialiser le formulaire
+            document.getElementById('current-thought').value = '';
+            document.getElementById('alternative-thought').value = '';
+        }
+
+        // Afficher l'historique des exercices de pensées
+        function showThoughtHistory() {
+            goToScreen('thoughts-history-screen');
+            displayThoughtHistory();
+        }
+
+        // Afficher la liste des exercices de pensées
+        function displayThoughtHistory() {
+            const historyList = document.getElementById('thoughts-history-list');
+            const exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            
+            if (exercises.length === 0) {
+                historyList.innerHTML = `
+                    <div class="thoughts-empty">
+                        <div class="thoughts-empty-icon">💭</div>
+                        <h3>Aucun exercice sauvegardé</h3>
+                        <p>Commencez par faire un exercice de restructuration cognitive pour le voir apparaître ici.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = exercises.map((exercise, index) => {
+                const date = new Date(exercise.date);
+                const dateStr = date.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                return `
+                    <div class="thought-history-item" data-id="${exercise.id}">
+                        <div class="thought-history-header">
+                            <div class="thought-date">📅 ${dateStr}</div>
+                            <div class="thought-actions">
+                                <button class="thought-action-btn" onclick="reuseThought('${exercise.id}')">
+                                    🔄 Réutiliser
+                                </button>
+                                <button class="thought-action-btn delete" onclick="deleteThought('${exercise.id}')">
+                                    🗑️ Supprimer
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="thought-content">
+                            <div class="thought-section">
+                                <div class="thought-section-title">💭 Pensée négative :</div>
+                                <div class="thought-section-content">
+                                    ${exercise.currentThought || 'Non renseigné'}
+                                </div>
+                            </div>
+                            
+                            ${exercise.alternativeThought ? `
+                                <div class="thought-section">
+                                    <div class="thought-section-title">✨ Pensée alternative :</div>
+                                    <div class="thought-section-content alternative">
+                                        ${exercise.alternativeThought}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Réutiliser un exercice de pensée
+        function reuseThought(thoughtId) {
+            const exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            const exercise = exercises.find(ex => ex.id === thoughtId);
+            
+            if (exercise) {
+                // Aller à l'écran d'exercice et pré-remplir
+                goToScreen('thoughts-screen');
+                
+                setTimeout(() => {
+                    document.getElementById('current-thought').value = exercise.currentThought || '';
+                    document.getElementById('alternative-thought').value = exercise.alternativeThought || '';
+                    
+                    // Scroll vers le haut pour voir les champs
+                    document.getElementById('current-thought').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }, 100);
+                
+                alert('💡 Exercice rechargé ! Vous pouvez le modifier et le sauvegarder à nouveau.');
+            }
+        }
+
+        // Supprimer un exercice de pensée
+        function deleteThought(thoughtId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) {
+                let exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+                exercises = exercises.filter(ex => ex.id !== thoughtId);
+                localStorage.setItem('tccThoughtExercises', JSON.stringify(exercises));
+                
+                // Rafraîchir l'affichage
+                displayThoughtHistory();
+                
+                alert('🗑️ Exercice supprimé.');
+            }
+        }
+
+        // Exporter les exercices de pensées
+        function exportThoughts() {
+            const exercises = JSON.parse(localStorage.getItem('tccThoughtExercises') || '[]');
+            
+            if (exercises.length === 0) {
+                alert('Aucun exercice à exporter.');
+                return;
+            }
+
+            // Créer le contenu texte
+            let content = '# 💭 Mes Exercices de Pensées - Pass Anxiété\n\n';
+            content += `Exporté le : ${new Date().toLocaleDateString('fr-FR')}\n`;
+            content += `Nombre d'exercices : ${exercises.length}\n\n`;
+            content += '---\n\n';
+
+            exercises.forEach((exercise, index) => {
+                const date = new Date(exercise.date);
+                const dateStr = date.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                content += `## Exercice ${index + 1} - ${dateStr}\n\n`;
+                content += `**💭 Pensée négative :**\n${exercise.currentThought}\n\n`;
+                
+                if (exercise.alternativeThought) {
+                    content += `**✨ Pensée alternative :**\n${exercise.alternativeThought}\n\n`;
+                }
+                
+                content += '---\n\n';
+            });
+
+            // Créer et télécharger le fichier
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `exercices-pensees-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('📤 Exercices exportés ! Le fichier a été téléchargé.');
+        }
+
+        // Effacer tout l'historique des pensées
+        function clearThoughtsHistory() {
+            if (confirm('⚠️ Attention !\n\nÊtes-vous sûr de vouloir supprimer TOUS vos exercices de pensées ?\n\nCette action est irréversible.')) {
+                localStorage.removeItem('tccThoughtExercises');
+                displayThoughtHistory();
+                alert('🗑️ Historique effacé.');
+            }
+        }
+
+        // Sauvegarder exercice d'émotions
+        function saveEmotionExercise() {
+            const selectedEmotion = document.querySelector('.emotion-btn.selected');
+            if (!selectedEmotion) {
+                alert('Veuillez d\'abord sélectionner une émotion');
+                return;
+            }
+
+            const exercise = {
+                type: 'emotion-exercise',
+                date: new Date().toISOString(),
+                emotion: selectedEmotion.dataset.emotion,
+                intensity: document.getElementById('emotion-intensity').value,
+                trigger: document.getElementById('emotion-trigger').value,
+                bodyLocation: document.getElementById('emotion-body').value
+            };
+
+            // Sauvegarder
+            let exercises = JSON.parse(localStorage.getItem('tccExercises') || '[]');
+            exercises.push(exercise);
+            localStorage.setItem('tccExercises', JSON.stringify(exercises));
+
+            DataManager.logToolUsage('tcc-emotions');
+
+            alert('✅ Analyse émotionnelle sauvegardée ! Vous progressez dans la compréhension de vos émotions.');
+            
+            // Réinitialiser
+            document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('emotion-intensity-section').style.display = 'none';
+            document.getElementById('emotion-trigger').value = '';
+            document.getElementById('emotion-body').value = '';
+        }
+
+        // Sauvegarder entrée de journal
+        function saveJournalEntry() {
+            const entry = {
+                type: 'journal-entry',
+                date: new Date().toISOString(),
+                mood: document.getElementById('daily-mood').value,
+                thoughts: document.getElementById('daily-thoughts').value,
+                emotions: document.getElementById('daily-emotions').value,
+                triggers: document.getElementById('daily-triggers').value,
+                strategies: document.getElementById('daily-strategies').value,
+                positives: document.getElementById('daily-positives').value,
+                goal: document.getElementById('daily-goal').value
+            };
+
+            // Vérifier qu'au moins un champ est rempli
+            const hasContent = Object.values(entry).some(value => 
+                typeof value === 'string' && value.trim() !== ''
+            );
+
+            if (!hasContent) {
+                alert('Veuillez remplir au moins une section de votre journal');
+                return;
+            }
+
+            // Sauvegarder
+            let journal = JSON.parse(localStorage.getItem('tccJournal') || '[]');
+            
+            // Vérifier s'il y a déjà une entrée pour aujourd'hui
+            const today = new Date().toISOString().split('T')[0];
+            const existingIndex = journal.findIndex(entry => 
+                entry.date.split('T')[0] === today
+            );
+
+            if (existingIndex >= 0) {
+                // Mettre à jour l'entrée existante
+                journal[existingIndex] = entry;
+                alert('✅ Entrée du jour mise à jour !');
+            } else {
+                // Nouvelle entrée
+                journal.push(entry);
+                alert('✅ Nouvelle entrée de journal sauvegardée !');
+            }
+
+            localStorage.setItem('tccJournal', JSON.stringify(journal));
+            DataManager.logToolUsage('tcc-journal');
+
+            // Réinitialiser le formulaire
+            document.getElementById('daily-mood').value = '5';
+            document.getElementById('mood-value').textContent = '5';
+            document.querySelectorAll('#journal-screen textarea').forEach(textarea => {
+                textarea.value = '';
+            });
+        }
+
+        // Afficher l'historique du journal
+        function showJournalHistory() {
+            const historySection = document.getElementById('journal-history');
+            const entriesList = document.getElementById('journal-entries-list');
+            
+            const journal = JSON.parse(localStorage.getItem('tccJournal') || '[]');
+            
+            if (journal.length === 0) {
+                entriesList.innerHTML = '<p style="text-align: center; color: #666;">Aucune entrée pour le moment.</p>';
+            } else {
+                entriesList.innerHTML = journal
+                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                    .slice(0, 10) // Dernières 10 entrées
+                    .map(entry => {
+                        const date = new Date(entry.date);
+                        const dateStr = date.toLocaleDateString('fr-FR', {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long'
+                        });
+                        
+                        const moodEmoji = entry.mood <= 3 ? '😔' : 
+                                         entry.mood <= 6 ? '😐' : '😊';
+                        
+                        return `
+                            <div class="journal-entry-item">
+                                <div class="journal-entry-header">
+                                    <span>${dateStr}</span>
+                                    <span class="journal-entry-mood">${moodEmoji} ${entry.mood}/10</span>
+                                </div>
+                                <p><strong>Pensées :</strong> ${entry.thoughts.substring(0, 100)}${entry.thoughts.length > 100 ? '...' : ''}</p>
+                                <p><strong>Points positifs :</strong> ${entry.positives.substring(0, 100)}${entry.positives.length > 100 ? '...' : ''}</p>
+                            </div>
+                        `;
+                    }).join('');
+            }
+            
+            historySection.style.display = historySection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // ========== TECHNIQUES PRATIQUES ==========
+
+        // Technique 5-4-3-2-1 (Grounding)
+        function startGroundingTechnique() {
+            showTechniqueOverlay(`
+                <h2>🔢 Technique 5-4-3-2-1</h2>
+                <p><strong>Pour vous ancrer dans le présent :</strong></p>
+                <p>🔍 <strong>5 choses</strong> que vous VOYEZ autour de vous</p>
+                <p>👂 <strong>4 choses</strong> que vous ENTENDEZ</p>
+                <p>✋ <strong>3 choses</strong> que vous TOUCHEZ</p>
+                <p>👃 <strong>2 choses</strong> que vous SENTEZ</p>
+                <p>👅 <strong>1 chose</strong> que vous GOÛTEZ</p>
+                <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">
+                    Prenez votre temps pour chaque étape. Cette technique vous ramène dans l'instant présent.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-grounding');
+        }
+
+        // Dialogue avec ses pensées
+        function startThoughtDialogue() {
+            showTechniqueOverlay(`
+                <h2>🎭 Dialogue avec vos Pensées</h2>
+                <p><strong>Questionnez votre pensée négative :</strong></p>
+                <p>❓ "Est-ce que c'est vraiment vrai ?"</p>
+                <p>🔍 "Quelles preuves ai-je pour et contre ?"</p>
+                <p>🤝 "Que dirais-je à un ami dans cette situation ?"</p>
+                <p>🔮 "Quelle est la probabilité que le pire arrive ?"</p>
+                <p>🛠️ "Comment puis-je agir de manière constructive ?"</p>
+                <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">
+                    Vos pensées ne sont pas des faits. Questionnez-les avec bienveillance.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-dialogue');
+        }
+
+        // Afficher overlay technique
+        function showTechniqueOverlay(content) {
+            const overlay = document.createElement('div');
+            overlay.className = 'technique-overlay visible';
+            overlay.innerHTML = `
+                <div class="technique-content">
+                    <button class="technique-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                    ${content}
+                    <button class="btn-primary" style="margin-top: 30px; width: auto;" onclick="this.parentElement.parentElement.remove()">
+                        ✅ J'ai terminé
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        // Exercices rapides
+        function startGroundingExercise() {
+            startGroundingTechnique();
+        }
+
+        function startBodyScanExercise() {
+            showTechniqueOverlay(`
+                <h2>🧘 Scan Corporel Rapide</h2>
+                <p><strong>Concentrez-vous sur votre corps :</strong></p>
+                <p>🧠 Commencez par le sommet de votre tête</p>
+                <p>👀 Descendez vers vos yeux, votre visage</p>
+                <p>💪 Vos épaules, vos bras</p>
+                <p>❤️ Votre poitrine, votre respiration</p>
+                <p>🤲 Votre ventre, vos hanches</p>
+                <p>🦵 Vos jambes, vos pieds</p>
+                <p style="margin-top: 20px;">
+                    Où ressentez-vous des tensions ? Respirez dans ces zones et relâchez.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-bodyscan');
+        }
+
+        function startDistanceExercise() {
+            showTechniqueOverlay(`
+                <h2>🌅 Prise de Distance</h2>
+                <p><strong>Imaginez-vous dans 5 ans :</strong></p>
+                <p>🔮 Cette situation sera-t-elle encore importante ?</p>
+                <p>🎭 Si vous étiez un observateur externe, que penseriez-vous ?</p>
+                <p>📏 Sur une échelle de 1 à 10, quelle est l'importance réelle de ce problème ?</p>
+                <p>🌊 Imaginez vos émotions comme des vagues : elles montent et redescendent.</p>
+                <p style="margin-top: 20px;">
+                    Le recul temporel aide à relativiser nos préoccupations.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-distance');
+        }
+
+        function startAcceptanceExercise() {
+            showTechniqueOverlay(`
+                <h2>🤗 Acceptation Émotionnelle</h2>
+                <p><strong>Accueillez votre émotion :</strong></p>
+                <p>👋 "Bonjour [nom de l'émotion], je te vois"</p>
+                <p>🎯 "Tu es là pour me protéger, merci"</p>
+                <p>🌊 "Tu peux rester, mais tu n'as pas besoin de me contrôler"</p>
+                <p>💝 "J'accepte de ressentir cela sans me juger"</p>
+                <p style="margin-top: 20px;">
+                    Résister aux émotions les amplifie. Les accueillir les apaise.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-acceptance');
+        }
+
+        function startActivityExercise() {
+            const activities = [
+                "☕ Boire une boisson chaude en pleine conscience",
+                "🎵 Écouter votre musique préférée",
+                "📱 Appeler quelqu'un qui vous fait du bien",
+                "🚶 Faire une courte promenade",
+                "🎨 Dessiner ou colorier",
+                "📚 Lire quelques pages d'un livre",
+                "🧘 Méditer 5 minutes",
+                "🛁 Prendre un bain ou une douche relaxante"
+            ];
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            
+            showTechniqueOverlay(`
+                <h2>🎯 Activité Plaisante</h2>
+                <p><strong>Suggestion personnalisée :</strong></p>
+                <p style="font-size: 1.4rem; color: var(--primary); margin: 20px 0;">
+                    ${randomActivity}
+                </p>
+                <p>Cette activité peut vous aider à changer votre état émotionnel.</p>
+                <button class="btn-secondary" style="margin-top: 20px; width: auto;" onclick="startActivityExercise()">
+                    🔄 Autre suggestion
+                </button>
+            `);
+            DataManager.logToolUsage('tcc-activity');
+        }
+
+        function startMovementExercise() {
+            showTechniqueOverlay(`
+                <h2>🏃 Mouvement Physique</h2>
+                <p><strong>Bougez pour libérer les tensions :</strong></p>
+                <p>🤸 Étirements doux (bras, cou, dos)</p>
+                <p>🚶 Marche de 5-10 minutes</p>
+                <p>💃 Danse sur votre musique préférée</p>
+                <p>🧘 Yoga ou tai-chi</p>
+                <p>👊 Exercices de boxe dans le vide</p>
+                <p style="margin-top: 20px;">
+                    Le mouvement libère les endorphines et évacue le stress physique.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-movement');
+        }
+
+        function startSocialExercise() {
+            showTechniqueOverlay(`
+                <h2>👥 Contact Social</h2>
+                <p><strong>Connectez-vous avec les autres :</strong></p>
+                <p>📞 Appelez un proche</p>
+                <p>💬 Envoyez un message positif à quelqu'un</p>
+                <p>🤗 Demandez un câlin</p>
+                <p>👂 Partagez ce que vous ressentez</p>
+                <p>❤️ Exprimez votre gratitude à quelqu'un</p>
+                <p style="margin-top: 20px;">
+                    Le soutien social est l'un des meilleurs remèdes contre l'anxiété.
+                </p>
+            `);
+            DataManager.logToolUsage('tcc-social');
+        }
+
+        // ============ TECHNIQUES TCC AVANCÉES FONCTIONNELLES ============
+
+        // 📊 Graphique émotionnel interactif avec historique
+        function showEmotionChart() {
+            // Charger l'historique existant
+            const emotionHistory = JSON.parse(localStorage.getItem('emotion-history') || '[]');
+            
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content">
+                    <div class="modal-header">
+                        <h3>📊 Graphique Émotionnel</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="emotion-chart-container">
+                        <h4>🎭 Évaluez vos émotions actuelles :</h4>
+                        
+                        <div class="emotion-sliders">
+                            <div class="emotion-slider-item">
+                                <label>😊 Joie</label>
+                                <input type="range" id="joy-slider" min="0" max="10" value="5" oninput="updateEmotionChart()">
+                                <span id="joy-value">5</span>
+                            </div>
+                            
+                            <div class="emotion-slider-item">
+                                <label>😢 Tristesse</label>
+                                <input type="range" id="sadness-slider" min="0" max="10" value="3" oninput="updateEmotionChart()">
+                                <span id="sadness-value">3</span>
+                            </div>
+                            
+                            <div class="emotion-slider-item">
+                                <label>😰 Anxiété</label>
+                                <input type="range" id="anxiety-slider" min="0" max="10" value="4" oninput="updateEmotionChart()">
+                                <span id="anxiety-value">4</span>
+                            </div>
+                            
+                            <div class="emotion-slider-item">
+                                <label>😠 Colère</label>
+                                <input type="range" id="anger-slider" min="0" max="10" value="2" oninput="updateEmotionChart()">
+                                <span id="anger-value">2</span>
+                            </div>
+                        </div>
+                        
+                        <div class="emotion-chart">
+                            <div class="chart-bars">
+                                <div class="emotion-bar" id="joy-bar">
+                                    <div class="bar-fill joy" style="height: 50%"></div>
+                                    <div class="bar-label">😊</div>
+                                </div>
+                                <div class="emotion-bar" id="sadness-bar">
+                                    <div class="bar-fill sadness" style="height: 30%"></div>
+                                    <div class="bar-label">😢</div>
+                                </div>
+                                <div class="emotion-bar" id="anxiety-bar">
+                                    <div class="bar-fill anxiety" style="height: 40%"></div>
+                                    <div class="bar-label">😰</div>
+                                </div>
+                                <div class="emotion-bar" id="anger-bar">
+                                    <div class="bar-fill anger" style="height: 20%"></div>
+                                    <div class="bar-label">😠</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="emotion-interpretation">
+                            <p id="emotion-analysis">Analysez vos émotions en temps réel...</p>
+                        </div>
+                        
+                        <button class="btn-primary" id="save-emotion-btn">💾 Sauvegarder cette évaluation</button>
+                        
+                        <div class="emotion-history">
+                            <h4>📈 Historique des évaluations (${emotionHistory.length}/5) :</h4>
+                            <div id="emotion-history-list">
+                                ${generateEmotionHistory(emotionHistory)}
+                            </div>
+                            ${emotionHistory.length > 0 ? `
+                                <button class="btn-secondary" id="clear-emotion-history-btn">🗑️ Vider l'historique</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Initialiser le graphique et les événements
+            setTimeout(() => {
+                updateEmotionChart();
+                
+                // Ajouter l'événement de sauvegarde
+                const saveBtn = document.getElementById('save-emotion-btn');
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        console.log('💾 Sauvegarde émotion cliquée');
+                        saveEmotionData();
+                    });
+                }
+                
+                // Ajouter l'événement pour vider l'historique
+                const clearBtn = document.getElementById('clear-emotion-history-btn');
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function() {
+                        console.log('🗑️ Vider historique émotionnel cliqué');
+                        clearEmotionHistory();
+                    });
+                }
+            }, 100);
+            
+            DataManager.logToolUsage('tcc-emotion-chart');
+        }
+
+        // ⚡ Plan d'action anti-crise personnalisé avec historique
+        function createCrisisPlan() {
+            // Charger l'historique des plans
+            const planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content crisis-plan">
+                    <div class="modal-header">
+                        <h3>⚡ Plan d'Action Anti-Crise</h3>
+                        <button class="modal-close" id="close-crisis-modal">&times;</button>
+                    </div>
+                    
+                    <div class="crisis-plan-form">
+                        <h4>🎯 Créez votre stratégie personnalisée :</h4>
+                        
+                        <div class="plan-section">
+                            <h5>1. 🚨 Signaux d'alarme (quand je commence à aller mal) :</h5>
+                            <textarea id="warning-signs" placeholder="Ex: pensées négatives répétitives, difficultés à dormir, isolation sociale..."></textarea>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <h5>2. 🛠️ Mes outils de gestion (ce qui m'aide) :</h5>
+                            <textarea id="coping-tools" placeholder="Ex: respiration 4-7-8, appeler un ami, écouter de la musique, faire une promenade..."></textarea>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <h5>3. 👥 Mes contacts de soutien :</h5>
+                            <textarea id="support-contacts" placeholder="Ex: Marie (06...), thérapeute (05...), SOS Amitié (09 72 39 40 50)..."></textarea>
+                        </div>
+                        
+                        <div class="plan-section">
+                            <h5>4. 🎯 Actions immédiates en cas de crise :</h5>
+                            <div class="action-checklist">
+                                <label><input type="checkbox"> Utiliser l'app Pass Anxiété - Mode Crise</label>
+                                <label><input type="checkbox"> Appeler mon contact de soutien principal</label>
+                                <label><input type="checkbox"> Pratiquer exercice de respiration</label>
+                                <label><input type="checkbox"> Me rappeler : "Cette crise va passer"</label>
+                                <label><input type="checkbox"> Aller dans un lieu sûr</label>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-buttons">
+                            <button class="btn-primary" id="save-crisis-btn">💾 Sauvegarder mon plan</button>
+                            <button class="btn-secondary" id="download-crisis-btn">📄 Télécharger PDF</button>
+                        </div>
+                        
+                        <div class="crisis-plan-history">
+                            <h4>📚 Historique de mes plans (${planHistory.length}/5) :</h4>
+                            <div id="crisis-history-list">
+                                ${generateCrisisHistory(planHistory)}
+                            </div>
+                            ${planHistory.length > 0 ? `
+                                <button class="btn-secondary" id="clear-crisis-history-btn">🗑️ Vider l'historique</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Charger le plan le plus récent si disponible
+            if (planHistory.length > 0) {
+                const latestPlan = planHistory[0];
+                document.getElementById('warning-signs').value = latestPlan.warningSignes || '';
+                document.getElementById('coping-tools').value = latestPlan.copingTools || '';
+                document.getElementById('support-contacts').value = latestPlan.supportContacts || '';
+                
+                // Recocher les actions immédiales
+                if (latestPlan.immediateActions) {
+                    latestPlan.immediateActions.forEach(action => {
+                        const checkbox = Array.from(document.querySelectorAll('.action-checklist input')).find(cb => 
+                            cb.parentElement.textContent.trim().includes(action.trim())
+                        );
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+            }
+            
+            // Ajouter les événements
+            setTimeout(() => {
+                const saveBtn = document.getElementById('save-crisis-btn');
+                const downloadBtn = document.getElementById('download-crisis-btn');
+                const closeBtn = document.getElementById('close-crisis-modal');
+                const clearHistoryBtn = document.getElementById('clear-crisis-history-btn');
+                
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        console.log('💾 Sauvegarde plan de crise cliquée');
+                        saveCrisisPlan();
+                    });
+                }
+                
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', function() {
+                        console.log('📄 Téléchargement plan de crise cliqué');
+                        downloadCrisisPlan();
+                    });
+                }
+                
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        console.log('❌ Fermeture plan de crise cliquée');
+                        closeTCCModal();
+                    });
+                }
+                
+                if (clearHistoryBtn) {
+                    clearHistoryBtn.addEventListener('click', function() {
+                        console.log('🗑️ Vider historique plans de crise cliqué');
+                        clearCrisisHistory();
+                    });
+                }
+                
+                // Ajouter les événements pour les boutons d'historique
+                const loadButtons = document.querySelectorAll('[data-action="load"]');
+                const downloadButtons = document.querySelectorAll('[data-action="download"]');
+                
+                loadButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-plan-index'));
+                        console.log(`📋 Charger plan ${index} cliqué`);
+                        loadCrisisPlan(index);
+                    });
+                });
+                
+                downloadButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-plan-index'));
+                        console.log(`📄 Télécharger plan ${index} cliqué`);
+                        downloadSpecificCrisisPlan(index);
+                    });
+                });
+            }, 100);
+            
+            DataManager.logToolUsage('tcc-crisis-plan');
+        }
+
+        // 🎯 Exposition graduelle avec explication claire du processus
+        function startExposureExercise() {
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content exposure-exercise">
+                    <div class="modal-header">
+                        <h3>🎯 Exposition Graduelle</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="exposure-container">
+                        <div class="exposure-explanation">
+                            <h4>🧠 Comment ça marche ?</h4>
+                            <div class="explanation-box">
+                                <p><strong>🎯 Objectif :</strong> Surmonter progressivement vos peurs en vous y exposant étape par étape</p>
+                                <p><strong>📝 "Créer mon plan" :</strong> Définir votre peur et créer 5 étapes de difficulté croissante</p>
+                                <p><strong>📊 "Commencer le suivi" :</strong> Utiliser votre plan pour pratiquer et marquer vos progrès</p>
+                            </div>
+                        </div>
+                        
+                        <h4>🏔️ Planifiez votre progression :</h4>
+                        
+                        <div class="fear-identification">
+                            <h5>1. 😨 Quelle peur souhaitez-vous travailler ?</h5>
+                            <input type="text" id="main-fear" placeholder="Ex: Parler en public, prendre l'avion, rencontrer de nouvelles personnes...">
+                            <div class="fear-examples">
+                                <p><strong>💡 Exemples de peurs courantes :</strong></p>
+                                <div class="fear-tags">
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Parler en public'">🎤 Parler en public</span>
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Passer des entretiens'">💼 Entretiens</span>
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Rencontrer de nouvelles personnes'">👥 Nouvelles rencontres</span>
+                                    <span class="fear-tag" onclick="document.getElementById('main-fear').value='Prendre l\\'avion'">✈️ Avion</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="exposure-ladder">
+                            <h5>2. 📈 Échelle d'exposition (du plus facile au plus difficile) :</h5>
+                            <p class="ladder-instruction">✨ <strong>Astuce :</strong> Commencez par quelque chose de très facile (niveau 2-3/10) et montez progressivement</p>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">1</span>
+                                <input type="text" placeholder="Ex: Regarder des vidéos de personnes qui parlent en public">
+                                <div class="difficulty">Difficulté: <span class="difficulty-low">Très facile 😌 (2/10)</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">2</span>
+                                <input type="text" placeholder="Ex: S'entraîner seul devant un miroir">
+                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Facile 😐 (4/10)</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">3</span>
+                                <input type="text" placeholder="Ex: Parler 2 minutes devant un ami proche">
+                                <div class="difficulty">Difficulté: <span class="difficulty-medium">Moyen 😟 (6/10)</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">4</span>
+                                <input type="text" placeholder="Ex: Présenter quelque chose devant 3-4 personnes">
+                                <div class="difficulty">Difficulté: <span class="difficulty-high">Difficile 😰 (8/10)</span></div>
+                            </div>
+                            
+                            <div class="ladder-step">
+                                <span class="step-number">5</span>
+                                <input type="text" placeholder="Ex: Faire une présentation devant un groupe de 10+ personnes">
+                                <div class="difficulty">Difficulté: <span class="difficulty-max">Maximum 😱 (10/10)</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exposure-tips">
+                            <h5>💡 Règles d'or pour réussir :</h5>
+                            <ul>
+                                <li>🚀 <strong>Commencez TOUJOURS par l'étape 1</strong> - même si elle vous semble trop facile</li>
+                                <li>⏰ <strong>Pratiquez chaque étape plusieurs fois</strong> jusqu'à ce que votre anxiété diminue</li>
+                                <li>📈 <strong>Ne sautez jamais d'étapes</strong> - la progression doit être graduelle</li>
+                                <li>🎉 <strong>Célébrez chaque victoire</strong> - même les plus petites</li>
+                                <li>🔄 <strong>Si une étape est trop difficile</strong> - ajoutez une étape intermédiaire</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="exposure-buttons">
+                            <button class="btn-primary" id="save-exposure-btn">📝 Créer mon plan</button>
+                            <button class="btn-secondary" id="track-exposure-btn" disabled>📊 Commencer le suivi</button>
+                            <p class="button-help">💡 Créez d'abord votre plan, puis vous pourrez commencer le suivi</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Charger les données existantes si disponibles
+            const existingPlan = localStorage.getItem('exposure-plan');
+            if (existingPlan) {
+                const planData = JSON.parse(existingPlan);
+                document.getElementById('main-fear').value = planData.mainFear || '';
+                const stepInputs = document.querySelectorAll('.ladder-step input');
+                planData.steps.forEach((step, index) => {
+                    if (stepInputs[index]) {
+                        stepInputs[index].value = step;
+                    }
+                });
+                
+                // Activer le bouton de suivi si un plan existe
+                const trackBtn = document.getElementById('track-exposure-btn');
+                if (trackBtn && planData.mainFear) {
+                    trackBtn.disabled = false;
+                    trackBtn.style.opacity = '1';
+                }
+            }
+            
+            // Ajouter les événements
+            setTimeout(() => {
+                const saveBtn = document.getElementById('save-exposure-btn');
+                const trackBtn = document.getElementById('track-exposure-btn');
+                
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', function() {
+                        console.log('📝 Sauvegarde plan exposition cliquée');
+                        saveExposurePlan();
+                    });
+                }
+                
+                if (trackBtn) {
+                    trackBtn.addEventListener('click', function() {
+                        if (!trackBtn.disabled) {
+                            console.log('📊 Suivi exposition cliqué');
+                            startExposureTracking();
+                        }
+                    });
+                }
+                
+                // Activer le suivi quand on tape la peur principale
+                const fearInput = document.getElementById('main-fear');
+                if (fearInput) {
+                    fearInput.addEventListener('input', function() {
+                        const trackBtn = document.getElementById('track-exposure-btn');
+                        if (this.value.trim() && trackBtn) {
+                            trackBtn.disabled = false;
+                            trackBtn.style.opacity = '1';
+                        }
+                    });
+                }
+            }, 100);
+            
+            DataManager.logToolUsage('tcc-exposure');
+        }
+
+        // 🏆 Journal des réussites motivant
+        // 🏆 Journal des réussites motivant avec système d'étoiles fonctionnel
+        function showSuccessJournal() {
+            // Charger les données existantes
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content success-journal">
+                    <div class="modal-header">
+                        <h3>🏆 Journal des Réussites</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    
+                    <div class="journal-container">
+                        <div class="journal-today">
+                            <h4>⭐ Ajoutez une réussite d'aujourd'hui :</h4>
+                            
+                            <div class="success-form">
+                                <select id="success-category">
+                                    <option value="">Choisir une catégorie...</option>
+                                    <option value="social">👥 Social</option>
+                                    <option value="professionnel">💼 Professionnel</option>
+                                    <option value="personnel">🌱 Personnel</option>
+                                    <option value="anxiete">😌 Gestion anxiété</option>
+                                    <option value="autre">✨ Autre</option>
+                                </select>
+                                
+                                <textarea id="success-description" placeholder="Décrivez votre réussite... (ex: J'ai osé poser une question en réunion, j'ai géré une crise d'anxiété avec les techniques apprises...)"></textarea>
+                                
+                                <div class="pride-level">
+                                    <label>Niveau de fierté :</label>
+                                    <div class="pride-stars" id="pride-stars">
+                                        <span class="star" data-level="1">⭐</span>
+                                        <span class="star" data-level="2">⭐</span>
+                                        <span class="star" data-level="3">⭐</span>
+                                        <span class="star" data-level="4">⭐</span>
+                                        <span class="star" data-level="5">⭐</span>
+                                    </div>
+                                    <span id="pride-text">Moyennement fier</span>
+                                </div>
+                                
+                                <button class="btn-primary" onclick="addSuccessEntry()">➕ Ajouter cette réussite</button>
+                            </div>
+                        </div>
+                        
+                        <div class="journal-history">
+                            <h4>📚 Mes réussites récentes (${savedSuccesses.length}/5) :</h4>
+                            <div id="success-list">
+                                ${generateSuccessList(savedSuccesses)}
+                            </div>
+                        </div>
+                        
+                        <div class="journal-stats">
+                            <h4>📊 Mes statistiques de réussite :</h4>
+                            <div class="stats-grid">
+                                ${generateRealStats(savedSuccesses)}
+                            </div>
+                        </div>
+                        
+                        <div class="journal-actions">
+                            <button class="btn-secondary" onclick="exportSuccessJournal()" ${savedSuccesses.length === 0 ? 'disabled' : ''}>📤 Exporter mon journal</button>
+                            <button class="btn-secondary" onclick="clearSuccessJournal()">🗑️ Vider le journal</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Initialiser le système d'étoiles
+            setTimeout(() => {
+                initializePrideStars();
+                
+                // S'assurer que les boutons d'action fonctionnent
+                const exportBtn = document.querySelector('.journal-actions button[onclick*="exportSuccessJournal"]');
+                const clearBtn = document.querySelector('.journal-actions button[onclick*="clearSuccessJournal"]');
+                
+                if (exportBtn) {
+                    exportBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('📤 Bouton export cliqué');
+                        exportSuccessJournal();
+                    });
+                }
+                
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('🗑️ Bouton vider cliqué');
+                        clearSuccessJournal();
+                    });
+                }
+                
+                console.log('✅ Boutons d\'action initialisés');
+            }, 100);
+            
+            DataManager.logToolUsage('tcc-success-journal');
+        }
+
+        // ============ FONCTIONS SUPPORT TCC ============
+
+        // Fermer les modals TCC
+        function closeTCCModal() {
+            const modals = document.querySelectorAll('.tcc-modal');
+            modals.forEach(modal => {
+                modal.remove();
+            });
+        }
+
+        // Mise à jour du graphique émotionnel
+        function updateEmotionChart() {
+            const joy = document.getElementById('joy-slider')?.value || 5;
+            const sadness = document.getElementById('sadness-slider')?.value || 3;
+            const anxiety = document.getElementById('anxiety-slider')?.value || 4;
+            const anger = document.getElementById('anger-slider')?.value || 2;
+            
+            // Mettre à jour les valeurs affichées
+            if (document.getElementById('joy-value')) document.getElementById('joy-value').textContent = joy;
+            if (document.getElementById('sadness-value')) document.getElementById('sadness-value').textContent = sadness;
+            if (document.getElementById('anxiety-value')) document.getElementById('anxiety-value').textContent = anxiety;
+            if (document.getElementById('anger-value')) document.getElementById('anger-value').textContent = anger;
+            
+            // Mettre à jour les barres du graphique
+            if (document.querySelector('#joy-bar .bar-fill')) {
+                document.querySelector('#joy-bar .bar-fill').style.height = (joy * 10) + '%';
+            }
+            if (document.querySelector('#sadness-bar .bar-fill')) {
+                document.querySelector('#sadness-bar .bar-fill').style.height = (sadness * 10) + '%';
+            }
+            if (document.querySelector('#anxiety-bar .bar-fill')) {
+                document.querySelector('#anxiety-bar .bar-fill').style.height = (anxiety * 10) + '%';
+            }
+            if (document.querySelector('#anger-bar .bar-fill')) {
+                document.querySelector('#anger-bar .bar-fill').style.height = (anger * 10) + '%';
+            }
+            
+            // Analyse émotionnelle intelligente
+            const analysisEl = document.getElementById('emotion-analysis');
+            if (analysisEl) {
+                let analysis = '🎭 ';
+                if (anxiety > 7) {
+                    analysis += 'Niveau d\'anxiété élevé - Pratiquez la respiration 4-7-8 ou la cohérence cardiaque.';
+                } else if (sadness > 7) {
+                    analysis += 'Période de tristesse - Contactez vos proches ou consultez le journal des réussites.';
+                } else if (anger > 7) {
+                    analysis += 'Colère présente - Essayez une technique de relaxation ou une activité physique.';
+                } else if (joy > 7) {
+                    analysis += 'Excellent état émotionnel ! Profitez de ce moment positif.';
+                } else {
+                    analysis += 'État émotionnel équilibré - Continuez vos pratiques de bien-être.';
+                }
+                analysisEl.textContent = analysis;
+            }
+        }
+
+        // Sauvegarder les données émotionnelles (version améliorée)
+        function saveEmotionData() {
+            const emotionData = {
+                date: new Date().toISOString(),
+                joy: parseInt(document.getElementById('joy-slider')?.value || 5),
+                sadness: parseInt(document.getElementById('sadness-slider')?.value || 3),
+                anxiety: parseInt(document.getElementById('anxiety-slider')?.value || 4),
+                anger: parseInt(document.getElementById('anger-slider')?.value || 2)
+            };
+            
+            // Charger l'historique existant
+            let saved = JSON.parse(localStorage.getItem('emotion-history') || '[]');
+            
+            // Limiter à 5 évaluations maximum
+            if (saved.length >= 5) {
+                saved = saved.slice(0, 4); // Garder les 4 plus récentes
+            }
+            
+            // Ajouter la nouvelle évaluation en première position
+            saved.unshift(emotionData);
+            localStorage.setItem('emotion-history', JSON.stringify(saved));
+            
+            showNotification('📊 Évaluation émotionnelle sauvegardée !', 'success');
+            
+            // Actualiser l'affichage de l'historique
+            setTimeout(() => {
+                const historyEl = document.getElementById('emotion-history-list');
+                if (historyEl) {
+                    historyEl.innerHTML = generateEmotionHistory(saved);
+                }
+                
+                // Mettre à jour le compteur
+                const titleEl = document.querySelector('.emotion-history h4');
+                if (titleEl) {
+                    titleEl.textContent = `📈 Historique des évaluations (${saved.length}/5) :`;
+                }
+            }, 500);
+        }
+
+        // Générer l'historique des émotions
+        function generateEmotionHistory(history) {
+            if (history.length === 0) {
+                return `
+                    <div class="no-emotion-history">
+                        <p>📊 Aucune évaluation enregistrée pour le moment.</p>
+                        <p>Sauvegardez votre première évaluation émotionnelle !</p>
+                    </div>
+                `;
+            }
+            
+            return history.map((entry, index) => {
+                const date = new Date(entry.date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const isYesterday = new Date(Date.now() - 86400000).toDateString() === date.toDateString();
+                
+                let displayDate;
+                if (isToday) displayDate = 'Aujourd\'hui';
+                else if (isYesterday) displayDate = 'Hier';
+                else displayDate = date.toLocaleDateString('fr-FR');
+                
+                const timeDisplay = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="emotion-history-entry">
+                        <div class="emotion-history-header">
+                            <span class="emotion-date">${displayDate} à ${timeDisplay}</span>
+                            <span class="emotion-rank">#${index + 1}</span>
+                        </div>
+                        <div class="emotion-values">
+                            <span class="emotion-value joy">😊 ${entry.joy}</span>
+                            <span class="emotion-value sadness">😢 ${entry.sadness}</span>
+                            <span class="emotion-value anxiety">😰 ${entry.anxiety}</span>
+                            <span class="emotion-value anger">😠 ${entry.anger}</span>
+                        </div>
+                        <div class="emotion-summary">
+                            ${getEmotionSummary(entry)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Obtenir un résumé de l'état émotionnel
+        function getEmotionSummary(emotion) {
+            const { joy, sadness, anxiety, anger } = emotion;
+            const dominant = Math.max(joy, sadness, anxiety, anger);
+            
+            if (dominant === joy && joy >= 7) return '🌟 État positif';
+            if (dominant === anxiety && anxiety >= 7) return '😰 Anxiété élevée';
+            if (dominant === sadness && sadness >= 7) return '💙 Période difficile';
+            if (dominant === anger && anger >= 7) return '🔥 Colère présente';
+            return '😌 État équilibré';
+        }
+
+        // Vider l'historique émotionnel (version améliorée)
+        function clearEmotionHistory() {
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'tcc-modal';
+            confirmModal.style.zIndex = '15000';
+            confirmModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>🗑️ Vider l'historique</h3>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <p style="margin-bottom: 20px;">Voulez-vous vraiment vider l'historique des évaluations émotionnelles ?</p>
+                        <p style="color: #f44336; font-weight: 600; margin-bottom: 30px;">Cette action est irréversible.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn-secondary" onclick="cancelClearEmotion()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmClearEmotion()" style="background: #f44336;">🗑️ Oui, vider</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+            confirmModal.style.display = 'flex';
+            
+            console.log('🗑️ Modal de confirmation historique émotionnel affichée');
+        }
+        
+        // Annuler le vidage de l'historique émotionnel
+        function cancelClearEmotion() {
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            console.log('❌ Vidage historique émotionnel annulé');
+        }
+        
+        // Confirmer le vidage de l'historique émotionnel
+        function confirmClearEmotion() {
+            localStorage.removeItem('emotion-history');
+            showNotification('🗑️ Historique émotionnel vidé', 'success');
+            
+            // Fermer la modal de confirmation
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            
+            // Actualiser l'affichage de l'historique
+            const historyEl = document.getElementById('emotion-history-list');
+            if (historyEl) {
+                historyEl.innerHTML = generateEmotionHistory([]);
+            }
+            
+            // Mettre à jour le compteur et cacher le bouton
+            const titleEl = document.querySelector('.emotion-history h4');
+            if (titleEl) {
+                titleEl.textContent = '📈 Historique des évaluations (0/5) :';
+            }
+            
+            // Cacher le bouton vider
+            const clearBtn = document.getElementById('clear-emotion-history-btn');
+            if (clearBtn) {
+                clearBtn.style.display = 'none';
+            }
+            
+            console.log('✅ Historique émotionnel vidé et interface actualisée');
+        }
+
+        // Sauvegarder le plan de crise (version améliorée avec historique)
+        function saveCrisisPlan() {
+            const planData = {
+                date: new Date().toISOString(),
+                warningSignes: document.getElementById('warning-signs')?.value || '',
+                copingTools: document.getElementById('coping-tools')?.value || '',
+                supportContacts: document.getElementById('support-contacts')?.value || '',
+                immediateActions: Array.from(document.querySelectorAll('.action-checklist input:checked')).map(cb => cb.parentElement.textContent.trim())
+            };
+            
+            // Vérifier qu'au moins un champ est rempli
+            if (!planData.warningSignes && !planData.copingTools && !planData.supportContacts) {
+                showNotification('Veuillez remplir au moins une section du plan', 'warning');
+                return;
+            }
+            
+            // Charger l'historique existant
+            let planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            
+            // Limiter à 5 plans maximum
+            if (planHistory.length >= 5) {
+                planHistory = planHistory.slice(0, 4); // Garder les 4 plus récents
+            }
+            
+            // Ajouter le nouveau plan en première position
+            planHistory.unshift(planData);
+            localStorage.setItem('crisis-plan-history', JSON.stringify(planHistory));
+            
+            // Maintenir aussi la compatibilité avec l'ancien système
+            localStorage.setItem('crisis-plan', JSON.stringify(planData));
+            
+            showNotification('⚡ Plan de crise sauvegardé !', 'success');
+            
+            // Actualiser l'affichage de l'historique
+            setTimeout(() => {
+                const historyEl = document.getElementById('crisis-history-list');
+                if (historyEl) {
+                    historyEl.innerHTML = generateCrisisHistory(planHistory);
+                }
+                
+                // Mettre à jour le compteur
+                const titleEl = document.querySelector('.crisis-plan-history h4');
+                if (titleEl) {
+                    titleEl.textContent = `📚 Historique de mes plans (${planHistory.length}/5) :`;
+                }
+            }, 500);
+        }
+
+        // Générer l'historique des plans de crise
+        function generateCrisisHistory(history) {
+            if (history.length === 0) {
+                return `
+                    <div class="no-crisis-history">
+                        <p>⚡ Aucun plan de crise enregistré pour le moment.</p>
+                        <p>Créez votre premier plan personnalisé !</p>
+                    </div>
+                `;
+            }
+            
+            return history.map((plan, index) => {
+                const date = new Date(plan.date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const isYesterday = new Date(Date.now() - 86400000).toDateString() === date.toDateString();
+                
+                let displayDate;
+                if (isToday) displayDate = 'Aujourd\'hui';
+                else if (isYesterday) displayDate = 'Hier';
+                else displayDate = date.toLocaleDateString('fr-FR');
+                
+                const timeDisplay = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                // Compter les sections remplies
+                const filledSections = [plan.warningSignes, plan.copingTools, plan.supportContacts].filter(s => s && s.trim()).length;
+                
+                return `
+                    <div class="crisis-history-entry">
+                        <div class="crisis-history-header">
+                            <span class="crisis-date">${displayDate} à ${timeDisplay}</span>
+                            <span class="crisis-completeness">${filledSections}/3 sections remplies</span>
+                        </div>
+                        <div class="crisis-preview">
+                            ${plan.warningSignes ? `<div class="crisis-section-preview"><strong>🚨 Signaux:</strong> ${plan.warningSignes.substring(0, 50)}...</div>` : ''}
+                            ${plan.copingTools ? `<div class="crisis-section-preview"><strong>🛠️ Outils:</strong> ${plan.copingTools.substring(0, 50)}...</div>` : ''}
+                            ${plan.supportContacts ? `<div class="crisis-section-preview"><strong>👥 Contacts:</strong> ${plan.supportContacts.substring(0, 50)}...</div>` : ''}
+                        </div>
+                        <div class="crisis-actions">
+                            <button class="btn-mini" data-plan-index="${index}" data-action="load">📋 Charger ce plan</button>
+                            <button class="btn-mini" data-plan-index="${index}" data-action="download">📄 Télécharger</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Charger un plan de crise spécifique
+        function loadCrisisPlan(index) {
+            const planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            if (planHistory[index]) {
+                const plan = planHistory[index];
+                document.getElementById('warning-signs').value = plan.warningSignes || '';
+                document.getElementById('coping-tools').value = plan.copingTools || '';
+                document.getElementById('support-contacts').value = plan.supportContacts || '';
+                
+                // Décocher toutes les cases puis recocher les bonnes
+                document.querySelectorAll('.action-checklist input').forEach(cb => cb.checked = false);
+                if (plan.immediateActions) {
+                    plan.immediateActions.forEach(action => {
+                        const checkbox = Array.from(document.querySelectorAll('.action-checklist input')).find(cb => 
+                            cb.parentElement.textContent.trim().includes(action.trim())
+                        );
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                showNotification('📋 Plan chargé avec succès !', 'success');
+            }
+        }
+
+        // Télécharger un plan spécifique
+        function downloadSpecificCrisisPlan(index) {
+            const planHistory = JSON.parse(localStorage.getItem('crisis-plan-history') || '[]');
+            if (planHistory[index]) {
+                // Temporairement sauvegarder le plan actuel
+                const currentPlan = localStorage.getItem('crisis-plan');
+                localStorage.setItem('crisis-plan', JSON.stringify(planHistory[index]));
+                
+                // Télécharger
+                downloadCrisisPlan();
+                
+                // Restaurer le plan actuel
+                if (currentPlan) {
+                    localStorage.setItem('crisis-plan', currentPlan);
+                }
+            }
+        }
+
+        // Vider l'historique des plans de crise (version améliorée)
+        function clearCrisisHistory() {
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'tcc-modal';
+            confirmModal.style.zIndex = '15000';
+            confirmModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>🗑️ Vider l'historique</h3>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <p style="margin-bottom: 20px;">Voulez-vous vraiment vider l'historique des plans de crise ?</p>
+                        <p style="color: #f44336; font-weight: 600; margin-bottom: 30px;">Cette action supprimera tous vos plans sauvegardés.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn-secondary" onclick="cancelClearCrisis()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmClearCrisis()" style="background: #f44336;">🗑️ Oui, vider</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+            confirmModal.style.display = 'flex';
+            
+            console.log('🗑️ Modal de confirmation historique plans de crise affichée');
+        }
+        
+        // Annuler le vidage de l'historique des plans de crise
+        function cancelClearCrisis() {
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            console.log('❌ Vidage historique plans de crise annulé');
+        }
+        
+        // Confirmer le vidage de l'historique des plans de crise
+        function confirmClearCrisis() {
+            localStorage.removeItem('crisis-plan-history');
+            showNotification('🗑️ Historique des plans vidé', 'success');
+            
+            // Fermer la modal de confirmation
+            const confirmModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            
+            // Actualiser l'affichage de l'historique
+            const historyEl = document.getElementById('crisis-history-list');
+            if (historyEl) {
+                historyEl.innerHTML = generateCrisisHistory([]);
+            }
+            
+            // Mettre à jour le compteur et cacher le bouton
+            const titleEl = document.querySelector('.crisis-plan-history h4');
+            if (titleEl) {
+                titleEl.textContent = '📚 Historique de mes plans (0/5) :';
+            }
+            
+            // Cacher le bouton vider
+            const clearBtn = document.getElementById('clear-crisis-history-btn');
+            if (clearBtn) {
+                clearBtn.style.display = 'none';
+            }
+            
+            console.log('✅ Historique plans de crise vidé et interface actualisée');
+        }
+
+        // Sauvegarder le plan d'exposition
+        function saveExposurePlan() {
+            const steps = Array.from(document.querySelectorAll('.ladder-step input')).map(input => input.value);
+            const exposureData = {
+                date: new Date().toISOString(),
+                mainFear: document.getElementById('main-fear')?.value || '',
+                steps: steps
+            };
+            
+            localStorage.setItem('exposure-plan', JSON.stringify(exposureData));
+            showNotification('🎯 Plan d\'exposition sauvegardé !', 'success');
+            closeTCCModal();
+        }
+
+        // Ajouter une entrée de réussite
+        function addSuccessEntry() {
+            const category = document.getElementById('success-category')?.value || '';
+            const description = document.getElementById('success-description')?.value || '';
+            
+            if (!category || !description) {
+                showNotification('Veuillez remplir tous les champs', 'warning');
+                return;
+            }
+            
+            const successData = {
+                date: new Date().toISOString(),
+                category: category,
+                description: description,
+                pride: window.currentPrideLevel || 3
+            };
+            
+            const saved = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            saved.unshift(successData);
+            localStorage.setItem('success-journal', JSON.stringify(saved));
+            
+            showNotification('🏆 Réussite ajoutée !', 'success');
+            
+            // Réinitialiser le formulaire
+            document.getElementById('success-category').value = '';
+            document.getElementById('success-description').value = '';
+            setPrideLevel(3);
+        }
+
+        // Définir le niveau de fierté
+        window.currentPrideLevel = 3;
+        function setPrideLevel(level) {
+            window.currentPrideLevel = level;
+            const stars = document.querySelectorAll('.pride-stars .star');
+            stars.forEach((star, index) => {
+                if (index < level) {
+                    star.style.color = '#ffd700';
+                } else {
+                    star.style.color = '#ddd';
+                }
+            });
+        }
+
+        // ============ NOUVELLES FONCTIONS JOURNAL RÉUSSITES ============
+
+        // Générer la liste des réussites
+        function generateSuccessList(successes) {
+            if (successes.length === 0) {
+                return `
+                    <div class="no-success">
+                        <p>🌱 Aucune réussite enregistrée pour le moment.</p>
+                        <p>Commencez par ajouter une petite victoire du jour !</p>
+                    </div>
+                `;
+            }
+            
+            return successes.map(success => {
+                const date = new Date(success.date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                const isYesterday = new Date(Date.now() - 86400000).toDateString() === date.toDateString();
+                
+                let displayDate;
+                if (isToday) displayDate = 'Aujourd\'hui';
+                else if (isYesterday) displayDate = 'Hier';
+                else displayDate = date.toLocaleDateString('fr-FR');
+                
+                const categoryEmojis = {
+                    social: '👥',
+                    professionnel: '💼',
+                    personnel: '🌱',
+                    anxiete: '😌',
+                    autre: '✨'
+                };
+                
+                const categoryNames = {
+                    social: 'Social',
+                    professionnel: 'Professionnel',
+                    personnel: 'Personnel',
+                    anxiete: 'Gestion anxiété',
+                    autre: 'Autre'
+                };
+                
+                const stars = '⭐'.repeat(success.pride);
+                
+                return `
+                    <div class="success-entry">
+                        <div class="success-date">${displayDate}</div>
+                        <div class="success-category-badge ${success.category}">
+                            ${categoryEmojis[success.category] || '✨'} ${categoryNames[success.category] || 'Autre'}
+                        </div>
+                        <div class="success-text">${success.description}</div>
+                        <div class="success-pride">${stars} (${success.pride}/5)</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Générer les vraies statistiques
+        function generateRealStats(successes) {
+            if (successes.length === 0) {
+                return `
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Réussites enregistrées</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">-</div>
+                        <div class="stat-label">Fierté moyenne ⭐</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Cette semaine</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Jours actifs</div>
+                    </div>
+                `;
+            }
+            
+            // Calculer les vraies statistiques
+            const totalSuccesses = successes.length;
+            const averagePride = (successes.reduce((sum, s) => sum + s.pride, 0) / totalSuccesses).toFixed(1);
+            
+            // Compter les jours uniques avec des réussites
+            const uniqueDays = new Set(successes.map(s => new Date(s.date).toDateString())).size;
+            
+            // Réussites cette semaine
+            const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const thisWeekSuccesses = successes.filter(s => new Date(s.date) >= oneWeekAgo).length;
+            
+            return `
+                <div class="stat-item">
+                    <div class="stat-number">${totalSuccesses}</div>
+                    <div class="stat-label">Réussites enregistrées</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${averagePride}</div>
+                    <div class="stat-label">Fierté moyenne ⭐</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${thisWeekSuccesses}</div>
+                    <div class="stat-label">Cette semaine</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${uniqueDays}</div>
+                    <div class="stat-label">Jours actifs</div>
+                </div>
+            `;
+        }
+
+        // Initialiser le système d'étoiles
+        function initializePrideStars() {
+            const stars = document.querySelectorAll('#pride-stars .star');
+            const prideText = document.getElementById('pride-text');
+            
+            const prideLabels = {
+                1: 'Un peu fier',
+                2: 'Assez fier', 
+                3: 'Moyennement fier',
+                4: 'Très fier',
+                5: 'Extrêmement fier'
+            };
+            
+            // Initialiser à 3 étoiles
+            window.currentPrideLevel = 3;
+            updateStarsDisplay(3);
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const level = parseInt(this.getAttribute('data-level'));
+                    window.currentPrideLevel = level;
+                    updateStarsDisplay(level);
+                    if (prideText) {
+                        prideText.textContent = prideLabels[level];
+                    }
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const level = parseInt(this.getAttribute('data-level'));
+                    updateStarsDisplay(level, true);
+                });
+            });
+            
+            const prideContainer = document.getElementById('pride-stars');
+            if (prideContainer) {
+                prideContainer.addEventListener('mouseleave', function() {
+                    updateStarsDisplay(window.currentPrideLevel);
+                });
+            }
+        }
+
+        // Mettre à jour l'affichage des étoiles
+        function updateStarsDisplay(level, isHover = false) {
+            const stars = document.querySelectorAll('#pride-stars .star');
+            stars.forEach((star, index) => {
+                const starLevel = index + 1;
+                if (starLevel <= level) {
+                    star.style.color = isHover ? '#ffeb3b' : '#ffd700';
+                    star.style.textShadow = '0 0 5px rgba(255, 215, 0, 0.5)';
+                } else {
+                    star.style.color = '#ddd';
+                    star.style.textShadow = 'none';
+                }
+            });
+        }
+
+        // Ajouter une entrée de réussite (version améliorée)
+        function addSuccessEntry() {
+            const category = document.getElementById('success-category')?.value || '';
+            const description = document.getElementById('success-description')?.value || '';
+            
+            if (!category || !description.trim()) {
+                showNotification('Veuillez remplir tous les champs', 'warning');
+                return;
+            }
+            
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            // Limiter à 5 réussites
+            if (savedSuccesses.length >= 5) {
+                showNotification('Maximum 5 réussites. Supprimez-en une ou videz le journal.', 'warning');
+                return;
+            }
+            
+            const successData = {
+                date: new Date().toISOString(),
+                category: category,
+                description: description.trim(),
+                pride: window.currentPrideLevel || 3
+            };
+            
+            savedSuccesses.unshift(successData); // Ajouter en premier
+            localStorage.setItem('success-journal', JSON.stringify(savedSuccesses));
+            
+            showNotification('🏆 Réussite ajoutée avec succès !', 'success');
+            
+            // Fermer et rouvrir pour actualiser
+            closeTCCModal();
+            setTimeout(() => {
+                showSuccessJournal();
+            }, 300);
+        }
+
+        // Exporter le journal (fonctionnel)
+        function exportSuccessJournal() {
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            if (savedSuccesses.length === 0) {
+                showNotification('Aucune réussite à exporter', 'warning');
+                return;
+            }
+            
+            // Créer le contenu d'export
+            let exportText = '🏆 MON JOURNAL DES RÉUSSITES\n';
+            exportText += '=' .repeat(40) + '\n\n';
+            
+            savedSuccesses.forEach((success, index) => {
+                const date = new Date(success.date).toLocaleDateString('fr-FR');
+                const stars = '⭐'.repeat(success.pride);
+                
+                exportText += `${index + 1}. ${date}\n`;
+                exportText += `   Catégorie: ${success.category}\n`;
+                exportText += `   Fierté: ${stars} (${success.pride}/5)\n`;
+                exportText += `   Réussite: ${success.description}\n\n`;
+            });
+            
+            // Ajouter les statistiques
+            const totalSuccesses = savedSuccesses.length;
+            const averagePride = (savedSuccesses.reduce((sum, s) => sum + s.pride, 0) / totalSuccesses).toFixed(1);
+            
+            exportText += 'STATISTIQUES:\n';
+            exportText += `-${totalSuccesses} réussites enregistrées\n`;
+            exportText += `-Fierté moyenne: ${averagePride}/5 ⭐\n`;
+            
+            // Créer et télécharger le fichier
+            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `journal-reussites-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('📤 Journal exporté avec succès !', 'success');
+        }
+
+        // Vider le journal (version améliorée)
+        function clearSuccessJournal() {
+            console.log('🗑️ Fonction clearSuccessJournal appelée');
+            
+            // Créer une confirmation personnalisée plus fiable
+            const savedSuccesses = JSON.parse(localStorage.getItem('success-journal') || '[]');
+            
+            if (savedSuccesses.length === 0) {
+                showNotification('Le journal est déjà vide', 'info');
+                return;
+            }
+            
+            // Créer une modal de confirmation personnalisée
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'tcc-modal';
+            confirmModal.style.zIndex = '20000'; // Au-dessus de l'autre modal
+            confirmModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>🗑️ Confirmer la suppression</h3>
+                    </div>
+                    <div style="padding: 30px; text-align: center;">
+                        <p style="margin-bottom: 20px;">Êtes-vous sûr de vouloir vider votre journal des réussites ?</p>
+                        <p style="color: #f44336; font-weight: 600; margin-bottom: 30px;">Cette action supprimera définitivement vos ${savedSuccesses.length} réussites.</p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn-secondary" onclick="cancelClearJournal()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmClearJournal()" style="background: #f44336;">🗑️ Oui, vider</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+            confirmModal.style.display = 'flex';
+            
+            console.log('✅ Modal de confirmation affichée');
+        }
+
+        // ============ NOUVELLES FONCTIONS MANQUANTES ============
+
+        // Télécharger le plan de crise en format texte
+        function downloadCrisisPlan() {
+            const planData = JSON.parse(localStorage.getItem('crisis-plan') || '{}');
+            
+            if (!planData.warningSignes && !planData.copingTools && !planData.supportContacts) {
+                showNotification('Aucun plan à télécharger. Créez d\'abord votre plan.', 'warning');
+                return;
+            }
+            
+            // Créer le contenu du plan
+            let planText = '⚡ MON PLAN D\'ACTION ANTI-CRISE\n';
+            planText += '=' .repeat(50) + '\n\n';
+            
+            planText += '🚨 SIGNAUX D\'ALARME:\n';
+            planText += '-' .repeat(25) + '\n';
+            planText += (planData.warningSignes || 'Non renseigné') + '\n\n';
+            
+            planText += '🛠️ MES OUTILS DE GESTION:\n';
+            planText += '-' .repeat(25) + '\n';
+            planText += (planData.copingTools || 'Non renseigné') + '\n\n';
+            
+            planText += '👥 MES CONTACTS DE SOUTIEN:\n';
+            planText += '-' .repeat(25) + '\n';
+            planText += (planData.supportContacts || 'Non renseigné') + '\n\n';
+            
+            planText += '🎯 ACTIONS IMMÉDIATES:\n';
+            planText += '-' .repeat(25) + '\n';
+            if (planData.immediateActions && planData.immediateActions.length > 0) {
+                planData.immediateActions.forEach((action, index) => {
+                    planText += `${index + 1}. ${action}\n`;
+                });
+            } else {
+                planText += '• Utiliser l\'app Pass Anxiété - Mode Crise\n';
+                planText += '• Appeler mon contact de soutien principal\n';
+                planText += '• Pratiquer exercice de respiration\n';
+                planText += '• Me rappeler : "Cette crise va passer"\n';
+                planText += '• Aller dans un lieu sûr\n';
+            }
+            
+            planText += '\n📅 Plan créé le: ' + new Date().toLocaleDateString('fr-FR');
+            
+            // Télécharger le fichier
+            const blob = new Blob([planText], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `plan-anti-crise-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('📄 Plan de crise téléchargé !', 'success');
+        }
+
+        // Commencer le suivi d'exposition graduelle
+        function startExposureTracking() {
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            if (!planData.mainFear) {
+                showNotification('Créez d\'abord votre plan d\'exposition !', 'warning');
+                return;
+            }
+            
+            // Créer la modal de suivi
+            const trackingModal = document.createElement('div');
+            trackingModal.className = 'tcc-modal';
+            trackingModal.style.zIndex = '15000';
+            trackingModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>📊 Suivi d'Exposition</h3>
+                        <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h4>🎯 Peur travaillée: ${planData.mainFear}</h4>
+                        
+                        <div style="margin: 20px 0;">
+                            <h5>📈 Vos étapes d'exposition:</h5>
+                            <div class="exposure-progress">
+                                ${planData.steps.map((step, index) => `
+                                    <div class="step-progress" data-step="${index + 1}">
+                                        <div class="step-indicator">${index + 1}</div>
+                                        <div class="step-content">
+                                            <div class="step-text">${step || 'Étape non définie'}</div>
+                                            <div class="step-status">
+                                                <button class="step-btn" onclick="markStepComplete(${index + 1})">✅ Terminé</button>
+                                                <button class="step-btn" onclick="markStepInProgress(${index + 1})">⏳ En cours</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <p style="color: #666; font-size: 0.9rem;">Progressez à votre rythme. Chaque petite victoire compte !</p>
+                            <button class="btn-primary" onclick="startPracticalExercises()">💪 Commencer mes exercices</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(trackingModal);
+            trackingModal.style.display = 'flex';
+            
+            showNotification('📊 Suivi d\'exposition activé !', 'success');
+        }
+
+        // Marquer une étape comme terminée
+        // Marquer une étape comme terminée (version corrigée)
+        function markStepComplete(stepNumber) {
+            // Mettre à jour les données de progression
+            let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.completedSteps) progressData.completedSteps = [];
+            
+            // Ajouter l'étape aux étapes terminées si pas déjà présente
+            if (!progressData.completedSteps.includes(stepNumber)) {
+                progressData.completedSteps.push(stepNumber);
+                progressData.completedSteps.sort((a, b) => a - b); // Garder l'ordre
+            }
+            
+            // Retirer des étapes en cours si présente
+            if (progressData.inProgressSteps) {
+                progressData.inProgressSteps = progressData.inProgressSteps.filter(step => step !== stepNumber);
+            }
+            
+            // Sauvegarder
+            localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+            
+            // Mise à jour visuelle
+            showNotification(`✅ Étape ${stepNumber} marquée comme terminée !`, 'success');
+            const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
+            if (stepEl) {
+                stepEl.style.background = '#e8f5e9';
+                stepEl.style.borderLeft = '4px solid #4caf50';
+            }
+            
+            // Log pour debug
+            console.log('✅ Étape terminée via TCC:', stepNumber, 'Total terminées:', progressData.completedSteps);
+        }
+
+        // Marquer une étape comme en cours (version corrigée)
+        function markStepInProgress(stepNumber) {
+            // Mettre à jour les données de progression
+            let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.inProgressSteps) progressData.inProgressSteps = [];
+            
+            // Ajouter l'étape aux étapes en cours si pas déjà présente
+            if (!progressData.inProgressSteps.includes(stepNumber)) {
+                progressData.inProgressSteps.push(stepNumber);
+            }
+            
+            // Retirer des étapes terminées si présente (on peut revenir en arrière)
+            if (progressData.completedSteps) {
+                progressData.completedSteps = progressData.completedSteps.filter(step => step !== stepNumber);
+            }
+            
+            // Sauvegarder
+            localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+            
+            // Mise à jour visuelle
+            showNotification(`⏳ Étape ${stepNumber} en cours de travail`, 'info');
+            const stepEl = document.querySelector(`[data-step="${stepNumber}"]`);
+            if (stepEl) {
+                stepEl.style.background = '#fff3e0';
+                stepEl.style.borderLeft = '4px solid #ff9800';
+            }
+            
+            // Log pour debug
+            console.log('⏳ Étape en cours via TCC:', stepNumber, 'En cours:', progressData.inProgressSteps);
+        }
+
+        // ============ INTERFACE DE SUIVI PRATIQUE ============
+
+        // Commencer les exercices pratiques d'exposition (version avec synchronisation)
+        function startPracticalExercises() {
+            // **CORRECTION PRINCIPALE** : Vérifier et corriger automatiquement la synchronisation
+            const progressData = checkAndFixSynchronization();
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer la vraie étape actuelle basée sur les étapes terminées synchronisées
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Debug info
+            console.log('🎯 startPracticalExercises - Étape actuelle:', currentStep, 'Étapes terminées:', progressData.completedSteps);
+            
+            // Fermer la modal de suivi et ouvrir l'interface d'exercices
+            closeTCCModal();
+            
+            setTimeout(() => {
+                const exerciseModal = document.createElement('div');
+                exerciseModal.className = 'tcc-modal';
+                exerciseModal.innerHTML = `
+                    <div class="tcc-modal-content exercise-practice">
+                        <div class="modal-header">
+                            <h3>💪 Exercices d'Exposition</h3>
+                            <button class="modal-close" onclick="closeTCCModal()">&times;</button>
+                        </div>
+                        
+                        <div class="exercise-container">
+                            <div class="exercise-header">
+                                <h4>🎯 Peur travaillée : ${planData.mainFear}</h4>
+                                <div class="current-step-indicator">
+                                    <span class="step-badge">Étape ${currentStep}/5</span>
+                                    <span class="step-status">${currentStep <= 5 ? 'En cours' : 'Terminé'}</span>
+                                </div>
+                            </div>
+                            
+                            ${currentStep <= 5 ? `
+                                <div class="current-exercise">
+                                    <h5>📋 Exercice actuel :</h5>
+                                    <div class="exercise-card">
+                                        <div class="exercise-text">${planData.steps[currentStep - 1] || 'Exercice non défini'}</div>
+                                        <div class="exercise-difficulty">Difficulté: ${getDifficultyText(currentStep)}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="exercise-setup">
+                                    <h5>📅 Planifiez votre mission :</h5>
+                                    <div class="mission-planning">
+                                        <div class="planning-item">
+                                            <label>🎯 Objectif de réalisation :</label>
+                                            <select id="mission-timeframe">
+                                                <option value="today">Aujourd'hui</option>
+                                                <option value="tomorrow">Demain</option>
+                                                <option value="this-week" selected>Cette semaine</option>
+                                                <option value="next-week">La semaine prochaine</option>
+                                                <option value="this-month">Ce mois-ci</option>
+                                                <option value="custom">Date personnalisée</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="planning-item" id="custom-date-container" style="display: none;">
+                                            <label>📅 Date choisie :</label>
+                                            <input type="date" id="custom-date" min="${new Date().toISOString().split('T')[0]}">
+                                        </div>
+                                        
+                                        <div class="planning-item">
+                                            <label>⏰ Moment de la journée :</label>
+                                            <select id="mission-time">
+                                                <option value="morning">🌅 Matin (8h-12h)</option>
+                                                <option value="afternoon" selected>🌞 Après-midi (12h-18h)</option>
+                                                <option value="evening">🌆 Soirée (18h-22h)</option>
+                                                <option value="flexible">🕐 Flexible</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="planning-item">
+                                            <label>😰 Niveau d'anxiété anticipée :</label>
+                                            <div class="anxiety-scale">
+                                                <input type="range" id="anxiety-anticipated" min="1" max="10" value="5">
+                                                <span id="anxiety-anticipated-value">5/10</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="planning-item">
+                                            <label>💡 Stratégies de soutien :</label>
+                                            <div class="support-strategies">
+                                                <label><input type="checkbox" id="strategy-breathing"> 🌬️ Exercices de respiration</label>
+                                                <label><input type="checkbox" id="strategy-friend"> 👥 Accompagné d'un ami</label>
+                                                <label><input type="checkbox" id="strategy-escape"> 🚪 Plan de sortie préparé</label>
+                                                <label><input type="checkbox" id="strategy-reward"> 🎁 Récompense après l'exercice</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="exercise-actions">
+                                    <button class="btn-primary" onclick="createMissionPlan()">📋 Créer ma mission</button>
+                                    <button class="btn-secondary" onclick="downloadMissionCard()">📄 Télécharger ma fiche mission</button>
+                                    <button class="btn-secondary btn-google-calendar" onclick="addToGoogleCalendar()">📅 Ajouter à Google Agenda</button>
+                                    <button class="btn-secondary" onclick="skipToNextStep()">⏭️ Passer à l'étape suivante</button>
+                                </div>
+                            ` : `
+                                <div class="exercise-completed">
+                                    <h4>🎉 Félicitations !</h4>
+                                    <p>Vous avez terminé toutes les étapes de votre plan d'exposition !</p>
+                                    <div class="completion-stats">
+                                        ${generateCompletionStats(progressData)}
+                                    </div>
+                                    <div class="completion-actions">
+                                        <button class="btn-primary" onclick="resetExposurePlan()">🔄 Recommencer un nouveau plan</button>
+                                        <button class="btn-secondary" onclick="createNewExposurePlan()">➕ Créer un nouveau plan d'exposition</button>
+                                    </div>
+                                </div>
+                            `}
+                            
+                            <div class="progress-overview">
+                                <h5>📊 Votre progression :</h5>
+                                <div class="progress-steps">
+                                    ${generateProgressSteps(planData.steps, progressData, currentStep)}
+                                </div>
+                                
+                                <div class="exposure-management">
+                                    <h6>🔧 Gestion de l'exposition :</h6>
+                                    <div class="management-actions">
+                                        <button class="btn-mini" onclick="resetExposurePlan()">🔄 Réinitialiser</button>
+                                        <button class="btn-mini" onclick="setupMissionReminders()">🔔 Rappels</button>
+                                        <button class="btn-mini" onclick="viewExposureHistory()">📈 Historique</button>
+                                        <button class="btn-mini" onclick="showDebugInfo()" title="Debug info (Console)">🔧 Debug</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="exercise-history">
+                                <h5>📚 Historique des activités :</h5>
+                                <div id="session-history">
+                                    ${generateSessionHistory(progressData)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(exerciseModal);
+                exerciseModal.style.display = 'flex';
+                
+                // Initialiser les événements
+                setTimeout(() => {
+                    const anxietySlider = document.getElementById('anxiety-anticipated');
+                    const anxietyValue = document.getElementById('anxiety-anticipated-value');
+                    
+                    if (anxietySlider && anxietyValue) {
+                        anxietySlider.addEventListener('input', function() {
+                            anxietyValue.textContent = this.value + '/10';
+                        });
+                    }
+                    
+                    // Événement pour la sélection de timeframe
+                    const timeframeSelect = document.getElementById('mission-timeframe');
+                    const customDateContainer = document.getElementById('custom-date-container');
+                    
+                    if (timeframeSelect && customDateContainer) {
+                        timeframeSelect.addEventListener('change', function() {
+                            if (this.value === 'custom') {
+                                customDateContainer.style.display = 'block';
+                            } else {
+                                customDateContainer.style.display = 'none';
+                            }
+                        });
+                    }
+                }, 100);
+                
+            }, 300);
+        }
+
+        // Obtenir le texte de difficulté
+        function getDifficultyText(step) {
+            const difficulties = {
+                1: '😌 Très facile (2/10)',
+                2: '😐 Facile (4/10)', 
+                3: '😟 Moyen (6/10)',
+                4: '😰 Difficile (8/10)',
+                5: '😱 Maximum (10/10)'
+            };
+            return difficulties[step] || '😐 Moyen';
+        }
+
+        // Générer les étapes de progression avec missions et états TCC
+        function generateProgressSteps(steps, progressData, currentStep) {
+            return steps.map((step, index) => {
+                const stepNumber = index + 1;
+                const isCompleted = progressData.completedSteps && progressData.completedSteps.includes(stepNumber);
+                const isInProgress = progressData.inProgressSteps && progressData.inProgressSteps.includes(stepNumber);
+                
+                // Vérifier s'il y a une mission active pour cette étape
+                const activeMission = progressData.missions ? 
+                    progressData.missions.find(m => m.step === stepNumber && (m.status === 'planned' || m.status === 'in-progress')) : null;
+                
+                const isCurrent = stepNumber === currentStep;
+                const hasActiveMission = !!activeMission;
+                
+                let stepClass = 'progress-step';
+                if (isCompleted) stepClass += ' completed';
+                else if (isInProgress) stepClass += ' in-progress';
+                else if (hasActiveMission) stepClass += ' active-mission';
+                else if (isCurrent) stepClass += ' current';
+                
+                // Déterminer le statut et l'icône (priorité: terminé > en cours > mission > actuel > attente)
+                let statusText, statusIcon;
+                if (isCompleted) {
+                    statusText = 'Terminé (TCC)';
+                    statusIcon = '✅';
+                } else if (isInProgress) {
+                    statusText = 'En cours (TCC)';
+                    statusIcon = '⏳';
+                } else if (hasActiveMission) {
+                    const targetDate = new Date(activeMission.targetDate);
+                    const today = new Date();
+                    const isOverdue = targetDate < today;
+                    
+                    if (isOverdue) {
+                        statusText = 'Mission en retard';
+                        statusIcon = '⚠️';
+                        stepClass += ' overdue';
+                    } else {
+                        statusText = `Mission planifiée (${formatMissionDate(activeMission.targetDate)})`;
+                        statusIcon = '📅';
+                    }
+                } else if (isCurrent && !isCompleted && !isInProgress) {
+                    statusText = 'Prêt à planifier';
+                    statusIcon = '🎯';
+                } else {
+                    statusText = 'En attente';
+                    statusIcon = '⏸️';
+                }
+                
+                return `
+                    <div class="${stepClass}">
+                        <div class="step-circle">${stepNumber}</div>
+                        <div class="step-info">
+                            <div class="step-name">${step || 'Étape non définie'}</div>
+                            <div class="step-state">
+                                ${statusIcon} ${statusText}
+                            </div>
+                            ${hasActiveMission && !isCompleted && !isInProgress ? `
+                                <div class="mission-preview">
+                                    🎯 ${activeMission.timeOfDay === 'morning' ? '🌅' : activeMission.timeOfDay === 'evening' ? '🌆' : '🌞'} 
+                                    Anxiété prévue: ${activeMission.anxietyAnticipated}/10
+                                </div>
+                            ` : ''}
+                            ${isInProgress ? `
+                                <div class="progress-actions">
+                                    <button class="btn-mini" onclick="markStepComplete(${stepNumber})">✅ Marquer terminé</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Générer l'historique des séances et missions
+        function generateSessionHistory(progressData) {
+            const allActivities = [];
+            
+            // Ajouter les anciennes sessions (compatibilité)
+            if (progressData.sessions) {
+                progressData.sessions.forEach(session => {
+                    allActivities.push({
+                        type: 'session',
+                        date: session.date,
+                        step: session.step,
+                        data: session
+                    });
+                });
+            }
+            
+            // Ajouter les missions terminées
+            if (progressData.missions) {
+                progressData.missions.filter(m => m.status === 'completed').forEach(mission => {
+                    allActivities.push({
+                        type: 'mission',
+                        date: mission.completedDate || mission.date,
+                        step: mission.step,
+                        data: mission
+                    });
+                });
+            }
+            
+            if (allActivities.length === 0) {
+                return '<p style="text-align: center; color: #666; font-style: italic;">Aucune activité enregistrée pour le moment</p>';
+            }
+            
+            // Trier par date (plus récent en premier)
+            allActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            return allActivities.slice(0, 5).map(activity => {
+                const date = new Date(activity.date);
+                const dateStr = date.toLocaleDateString('fr-FR');
+                const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                if (activity.type === 'mission') {
+                    const mission = activity.data;
+                    const successIcons = {
+                        'partial': '🟡',
+                        'good': '🟢', 
+                        'excellent': '🌟'
+                    };
+                    
+                    return `
+                        <div class="session-entry mission-entry">
+                            <div class="session-header">
+                                <span>🎯 Mission Étape ${mission.step} - ${dateStr} à ${timeStr}</span>
+                                <span class="mission-success">${successIcons[mission.successLevel] || '🟢'} ${mission.successLevel || 'Réussi'}</span>
+                            </div>
+                            <div class="session-progress">
+                                <span>Anxiété: ${mission.anxietyAnticipated}/10 → ${mission.anxietyActual || '?'}/10</span>
+                                <span class="mission-target">Planifié: ${formatMissionDate(mission.targetDate)}</span>
+                            </div>
+                            ${mission.notes ? `<div class="mission-notes">💭 ${mission.notes}</div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    // Ancienne session (compatibilité)
+                    const session = activity.data;
+                    return `
+                        <div class="session-entry">
+                            <div class="session-header">
+                                <span>⏱️ Séance Étape ${session.step} - ${dateStr} à ${timeStr}</span>
+                                <span class="session-duration">${session.actualDuration || session.targetDuration}min</span>
+                            </div>
+                            <div class="session-progress">
+                                <span>Anxiété: ${session.anxietyBefore}/10 → ${session.anxietyAfter || '?'}/10</span>
+                                ${session.completed ? '<span class="session-success">✅ Terminé</span>' : '<span class="session-partial">⏳ Partiel</span>'}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // Générer les stats de completion
+        function generateCompletionStats(progressData) {
+            const totalSessions = progressData.sessions ? progressData.sessions.length : 0;
+            const completedSteps = progressData.completedSteps ? progressData.completedSteps.length : 0;
+            
+            return `
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">${completedSteps}</div>
+                        <div class="stat-label">Étapes terminées</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">${totalSessions}</div>
+                        <div class="stat-label">Séances pratiquées</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============ GESTION DES MISSIONS D'EXPOSITION ============
+
+        // Créer un plan de mission (version corrigée)
+        function createMissionPlan() {
+            const timeframe = document.getElementById('mission-timeframe').value;
+            const customDate = document.getElementById('custom-date').value;
+            const missionTime = document.getElementById('mission-time').value;
+            const anxietyAnticipated = document.getElementById('anxiety-anticipated').value;
+            
+            // Récupérer les stratégies sélectionnées
+            const strategies = [];
+            if (document.getElementById('strategy-breathing').checked) strategies.push('🌬️ Exercices de respiration');
+            if (document.getElementById('strategy-friend').checked) strategies.push('👥 Accompagné d\'un ami');
+            if (document.getElementById('strategy-escape').checked) strategies.push('🚪 Plan de sortie préparé');
+            if (document.getElementById('strategy-reward').checked) strategies.push('🎁 Récompense après l\'exercice');
+            
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer la vraie étape actuelle
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Vérifier qu'on n'a pas dépassé les 5 étapes
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont déjà terminées ! Félicitations !', 'success');
+                return;
+            }
+            
+            // Calculer la date cible
+            let targetDate = new Date();
+            switch(timeframe) {
+                case 'today':
+                    break;
+                case 'tomorrow':
+                    targetDate.setDate(targetDate.getDate() + 1);
+                    break;
+                case 'this-week':
+                    targetDate.setDate(targetDate.getDate() + 3);
+                    break;
+                case 'next-week':
+                    targetDate.setDate(targetDate.getDate() + 7);
+                    break;
+                case 'this-month':
+                    targetDate.setDate(targetDate.getDate() + 14);
+                    break;
+                case 'custom':
+                    if (customDate) {
+                        targetDate = new Date(customDate);
+                    }
+                    break;
+            }
+            
+            // Créer la mission
+            const mission = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                step: currentStep,
+                exercise: planData.steps[currentStep - 1],
+                targetDate: targetDate.toISOString(),
+                timeOfDay: missionTime,
+                anxietyAnticipated: parseInt(anxietyAnticipated),
+                strategies: strategies,
+                status: 'planned' // planned, in-progress, completed, failed
+            };
+            
+            // Sauvegarder la mission
+            if (!progressData.missions) progressData.missions = [];
+            progressData.missions.push(mission);
+            localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+            
+            showNotification('📋 Mission créée pour l\'étape ' + currentStep + ' ! Bonne chance !', 'success');
+            
+            // Afficher l'interface de mission créée
+            showMissionCreated(mission);
+        }
+
+        // Afficher la mission créée
+        function showMissionCreated(mission) {
+            const container = document.querySelector('.exercise-container');
+            const timeOptions = {
+                'morning': '🌅 Matin (8h-12h)',
+                'afternoon': '🌞 Après-midi (12h-18h)', 
+                'evening': '🌆 Soirée (18h-22h)',
+                'flexible': '🕐 Moment flexible'
+            };
+            
+            container.innerHTML = `
+                <div class="mission-created">
+                    <div class="mission-header">
+                        <h4>🎯 Mission Créée !</h4>
+                        <div class="mission-id">Mission #${mission.step}</div>
+                    </div>
+                    
+                    <div class="mission-card">
+                        <div class="mission-objective">
+                            <h5>📋 Votre défi :</h5>
+                            <div class="objective-text">${mission.exercise}</div>
+                        </div>
+                        
+                        <div class="mission-details">
+                            <div class="detail-item">
+                                <span class="detail-label">📅 À réaliser :</span>
+                                <span class="detail-value">${formatMissionDate(mission.targetDate)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">⏰ Moment :</span>
+                                <span class="detail-value">${timeOptions[mission.timeOfDay]}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">😰 Anxiété prévue :</span>
+                                <span class="detail-value">${mission.anxietyAnticipated}/10</span>
+                            </div>
+                        </div>
+                        
+                        ${mission.strategies.length > 0 ? `
+                            <div class="mission-strategies">
+                                <h6>💡 Vos stratégies de soutien :</h6>
+                                <ul>
+                                    ${mission.strategies.map(strategy => `<li>${strategy}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="mission-motivation">
+                            <p>💪 <strong>Rappel important :</strong> Cette mission est un pas vers votre liberté ! Chaque petit progrès compte.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mission-actions">
+                        <button class="btn-primary" onclick="markMissionCompleted(${mission.id})">✅ J'ai réalisé ma mission !</button>
+                        <button class="btn-secondary" onclick="postponeMission(${mission.id})">📅 Reporter la mission</button>
+                        <button class="btn-secondary" onclick="downloadMissionCard()">📄 Télécharger la fiche</button>
+                        <button class="btn-secondary btn-google-calendar" onclick="addMissionToGoogleCalendar(${mission.id})">📅 Google Agenda</button>
+                    </div>
+                    
+                    <div class="missions-list">
+                        <h5>📚 Mes missions en cours :</h5>
+                        <div id="active-missions">
+                            ${generateActiveMissions()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            console.log('✅ Mission créée et affichée');
+        }
+
+        // Formater la date de mission
+        function formatMissionDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Aujourd\'hui';
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return 'Demain';
+            } else {
+                return date.toLocaleDateString('fr-FR', { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long' 
+                });
+            }
+        }
+
+        // Générer la liste des missions actives
+        function generateActiveMissions() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.missions) return '<p style="text-align: center; color: #666;">Aucune mission active</p>';
+            
+            const activeMissions = progressData.missions.filter(m => m.status === 'planned' || m.status === 'in-progress');
+            
+            if (activeMissions.length === 0) {
+                return '<p style="text-align: center; color: #666;">Aucune mission active</p>';
+            }
+            
+            return activeMissions.map(mission => `
+                <div class="active-mission-item">
+                    <div class="mission-summary">
+                        <span class="mission-step">Étape ${mission.step}</span>
+                        <span class="mission-date">${formatMissionDate(mission.targetDate)}</span>
+                    </div>
+                    <div class="mission-text">${mission.exercise.substring(0, 50)}...</div>
+                    <div class="mission-quick-actions">
+                        <button class="btn-mini" onclick="markMissionCompleted(${mission.id})">✅ Fait</button>
+                        <button class="btn-mini" onclick="postponeMission(${mission.id})">📅 Reporter</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Marquer une mission comme terminée
+        function markMissionCompleted(missionId) {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (!mission) return;
+            
+            // Interface de feedback post-mission
+            const modal = document.createElement('div');
+            modal.className = 'tcc-modal';
+            modal.innerHTML = `
+                <div class="tcc-modal-content mission-feedback">
+                    <div class="modal-header">
+                        <h3>🎉 Mission Accomplie !</h3>
+                    </div>
+                    
+                    <div class="feedback-container">
+                        <h4>Bravo ! Comment ça s'est passé ?</h4>
+                        
+                        <div class="feedback-item">
+                            <label>😰 Niveau d'anxiété ressenti :</label>
+                            <div class="anxiety-scale">
+                                <input type="range" id="anxiety-actual" min="1" max="10" value="5">
+                                <span id="anxiety-actual-value">5/10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-item">
+                            <label>🌟 Niveau de réussite :</label>
+                            <div class="success-rating">
+                                <label><input type="radio" name="success" value="partial"> 🟡 Partiel - J'ai essayé mais pas terminé</label>
+                                <label><input type="radio" name="success" value="good" checked> 🟢 Réussi - J'ai fait l'exercice</label>
+                                <label><input type="radio" name="success" value="excellent"> 🌟 Excellent - Dépassé mes attentes</label>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-item">
+                            <label>💭 Notes personnelles (optionnel) :</label>
+                            <textarea id="mission-notes" placeholder="Comment je me suis senti, ce que j'ai appris, mes difficultés..."></textarea>
+                        </div>
+                        
+                        <div class="feedback-actions">
+                            <button class="btn-primary" onclick="completeMissionFeedback(${missionId})">🎯 Valider ma réussite</button>
+                            <button class="btn-secondary" onclick="closeTCCModal()">❌ Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Event listener pour le slider d'anxiété
+            setTimeout(() => {
+                const anxietySlider = document.getElementById('anxiety-actual');
+                const anxietyValue = document.getElementById('anxiety-actual-value');
+                
+                if (anxietySlider && anxietyValue) {
+                    anxietySlider.addEventListener('input', function() {
+                        anxietyValue.textContent = this.value + '/10';
+                    });
+                }
+            }, 100);
+        }
+
+        // Finaliser le feedback de mission (version corrigée)
+        function completeMissionFeedback(missionId) {
+            const anxietyActual = document.getElementById('anxiety-actual').value;
+            const successLevel = document.querySelector('input[name="success"]:checked').value;
+            const notes = document.getElementById('mission-notes').value;
+            
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (mission) {
+                // Marquer la mission comme terminée
+                mission.status = 'completed';
+                mission.completedDate = new Date().toISOString();
+                mission.anxietyActual = parseInt(anxietyActual);
+                mission.successLevel = successLevel;
+                mission.notes = notes;
+                
+                // **CORRECTION PRINCIPALE** : Synchroniser avec les étapes terminées
+                const anxietyReduction = mission.anxietyAnticipated - parseInt(anxietyActual);
+                const isSuccessful = (anxietyReduction >= 1 || parseInt(anxietyActual) <= 4) && successLevel !== 'partial';
+                
+                // Valider l'étape correspondante à la mission
+                if (isSuccessful) {
+                    if (!progressData.completedSteps) progressData.completedSteps = [];
+                    
+                    // Ajouter l'étape de cette mission si pas déjà présente
+                    if (!progressData.completedSteps.includes(mission.step)) {
+                        progressData.completedSteps.push(mission.step);
+                        
+                        // Trier les étapes pour maintenir l'ordre
+                        progressData.completedSteps.sort((a, b) => a - b);
+                        
+                        showNotification(`🏆 Étape ${mission.step} validée ! Votre anxiété a diminué de ${anxietyReduction} points.`, 'success');
+                    } else {
+                        showNotification(`✅ Mission terminée ! Étape ${mission.step} déjà validée.`, 'success');
+                    }
+                } else {
+                    showNotification(`📝 Mission enregistrée. Anxiété encore élevée, vous pouvez réessayer cette étape.`, 'info');
+                }
+                
+                // Sauvegarder les modifications
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                
+                // Log pour debug
+                console.log('✅ Mission complétée:', {
+                    missionStep: mission.step,
+                    anxietyReduction: anxietyReduction,
+                    isSuccessful: isSuccessful,
+                    completedSteps: progressData.completedSteps
+                });
+            }
+            
+            closeTCCModal();
+            showNotification('🎉 Mission terminée ! Félicitations pour votre courage !', 'success');
+            
+            // Retourner à l'interface principale avec refresh
+            setTimeout(() => {
+                startPracticalExercises();
+            }, 1500);
+        }
+
+        // Reporter une mission
+        function postponeMission(missionId) {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (mission) {
+                const currentDate = new Date(mission.targetDate);
+                currentDate.setDate(currentDate.getDate() + 2); // Reporter de 2 jours
+                mission.targetDate = currentDate.toISOString();
+                
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                showNotification('📅 Mission reportée de 2 jours', 'info');
+                
+                // Actualiser l'affichage
+                const activeMissionsEl = document.getElementById('active-missions');
+                if (activeMissionsEl) {
+                    activeMissionsEl.innerHTML = generateActiveMissions();
+                }
+            }
+        }
+
+        // Passer à l'étape suivante (version corrigée)
+        function skipToNextStep() {
+            let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.completedSteps) progressData.completedSteps = [];
+            
+            // Déterminer l'étape actuelle basée sur les étapes terminées
+            let currentStep = 1;
+            if (progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Vérifier qu'on ne dépasse pas les 5 étapes
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont déjà terminées !', 'success');
+                return;
+            }
+            
+            // Ajouter l'étape actuelle aux étapes terminées
+            if (!progressData.completedSteps.includes(currentStep)) {
+                progressData.completedSteps.push(currentStep);
+                progressData.completedSteps.sort((a, b) => a - b); // Garder l'ordre
+                
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                showNotification(`⏭️ Étape ${currentStep} passée → Étape ${currentStep + 1 <= 5 ? currentStep + 1 : 'terminé'}`, 'info');
+                
+                // Log pour debug
+                console.log('⏭️ Étape passée:', {
+                    passedStep: currentStep,
+                    nextStep: currentStep + 1,
+                    completedSteps: progressData.completedSteps
+                });
+                
+                // Actualiser l'interface
+                setTimeout(() => {
+                    closeTCCModal();
+                    startPracticalExercises();
+                }, 500);
+            }
+        }
+
+        // Recommencer le plan
+        function resetExposurePlan() {
+            if (confirm('Voulez-vous vraiment recommencer votre plan d\'exposition depuis le début ?')) {
+                localStorage.removeItem('exposure-progress');
+                showNotification('🔄 Plan d\'exposition réinitialisé', 'success');
+                
+                setTimeout(() => {
+                    closeTCCModal();
+                    startPracticalExercises();
+                }, 500);
+            }
+        }
+
+        // ============ INTÉGRATION GOOGLE AGENDA ============
+
+        // Ajouter la mission à Google Agenda
+        function addToGoogleCalendar() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer l'étape actuelle
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont terminées !', 'success');
+                return;
+            }
+            
+            if (!planData.mainFear || !planData.steps[currentStep - 1]) {
+                showNotification('Aucun plan d\'exposition trouvé', 'warning');
+                return;
+            }
+            
+            // Récupérer les données du formulaire
+            const timeframe = document.getElementById('mission-timeframe')?.value || 'this-week';
+            const customDate = document.getElementById('custom-date')?.value;
+            const missionTime = document.getElementById('mission-time')?.value || 'afternoon';
+            const anxietyAnticipated = document.getElementById('anxiety-anticipated')?.value || '5';
+            
+            // Calculer la date et l'heure de la mission
+            let targetDate = new Date();
+            switch(timeframe) {
+                case 'today': break;
+                case 'tomorrow': targetDate.setDate(targetDate.getDate() + 1); break;
+                case 'this-week': targetDate.setDate(targetDate.getDate() + 3); break;
+                case 'next-week': targetDate.setDate(targetDate.getDate() + 7); break;
+                case 'this-month': targetDate.setDate(targetDate.getDate() + 14); break;
+                case 'custom': 
+                    if (customDate) {
+                        targetDate = new Date(customDate);
+                    }
+                    break;
+            }
+            
+            // Définir l'heure selon le moment choisi
+            let startHour, endHour;
+            switch(missionTime) {
+                case 'morning':
+                    startHour = 9;
+                    endHour = 10;
+                    break;
+                case 'afternoon':
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+                case 'evening':
+                    startHour = 18;
+                    endHour = 19;
+                    break;
+                case 'flexible':
+                default:
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+            }
+            
+            // Créer les dates de début et fin
+            const startDate = new Date(targetDate);
+            startDate.setHours(startHour, 0, 0, 0);
+            
+            const endDate = new Date(targetDate);
+            endDate.setHours(endHour, 0, 0, 0);
+            
+            // Récupérer les stratégies sélectionnées
+            const strategies = [];
+            if (document.getElementById('strategy-breathing')?.checked) strategies.push('🌬️ Exercices de respiration');
+            if (document.getElementById('strategy-friend')?.checked) strategies.push('👥 Accompagné d\'un ami');
+            if (document.getElementById('strategy-escape')?.checked) strategies.push('🚪 Plan de sortie préparé');
+            if (document.getElementById('strategy-reward')?.checked) strategies.push('🎁 Récompense après l\'exercice');
+            
+            // Créer le titre de l'événement
+            const eventTitle = `🎯 Mission Exposition : ${planData.mainFear} (Étape ${currentStep}/5)`;
+            
+            // Créer la description détaillée
+            let eventDescription = `🎯 MISSION D'EXPOSITION GRADUELLE\n\n`;
+            eventDescription += `📋 Étape ${currentStep}/5 : ${planData.steps[currentStep - 1]}\n`;
+            eventDescription += `😰 Niveau d'anxiété anticipé : ${anxietyAnticipated}/10\n`;
+            eventDescription += `🎭 Peur travaillée : ${planData.mainFear}\n\n`;
+            
+            if (strategies.length > 0) {
+                eventDescription += `💡 Stratégies de soutien :\n`;
+                strategies.forEach(strategy => {
+                    eventDescription += `• ${strategy}\n`;
+                });
+                eventDescription += `\n`;
+            }
+            
+            eventDescription += `💪 CONSEILS :\n`;
+            eventDescription += `• Respirez profondément avant de commencer\n`;
+            eventDescription += `• L'anxiété va diminuer progressivement\n`;
+            eventDescription += `• Utilisez vos stratégies si nécessaire\n`;
+            eventDescription += `• Chaque petit pas compte !\n\n`;
+            
+            eventDescription += `📝 APRÈS LA MISSION :\n`;
+            eventDescription += `• Noter le niveau d'anxiété final\n`;
+            eventDescription += `• Retourner dans Pass Anxiété pour valider\n`;
+            eventDescription += `• Se féliciter pour ce courage ! 🎉\n\n`;
+            
+            eventDescription += `📱 Créé avec Pass Anxiété - Exposition Graduelle`;
+            
+            // Créer l'URL Google Calendar
+            const formatDateForGoogle = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+            
+            const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+            calendarUrl.searchParams.set('action', 'TEMPLATE');
+            calendarUrl.searchParams.set('text', eventTitle);
+            calendarUrl.searchParams.set('dates', `${formatDateForGoogle(startDate)}/${formatDateForGoogle(endDate)}`);
+            calendarUrl.searchParams.set('details', eventDescription);
+            calendarUrl.searchParams.set('location', 'À définir selon l\'exercice');
+            calendarUrl.searchParams.set('sf', 'true');
+            calendarUrl.searchParams.set('output', 'xml');
+            
+            // Ouvrir Google Calendar dans un nouvel onglet
+            window.open(calendarUrl.toString(), '_blank');
+            
+            showNotification(`📅 Mission ajoutée à Google Agenda ! ${formatMissionDate(targetDate.toISOString())} à ${startHour}h`, 'success');
+            
+            // Log pour debug
+            console.log('📅 Google Calendar:', {
+                title: eventTitle,
+                start: startDate,
+                end: endDate,
+                anxiety: anxietyAnticipated,
+                url: calendarUrl.toString()
+            });
+        }
+
+        // Ajouter une mission spécifique à Google Agenda
+        function addMissionToGoogleCalendar(missionId) {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            const mission = progressData.missions.find(m => m.id === missionId);
+            
+            if (!mission) {
+                showNotification('Mission non trouvée', 'warning');
+                return;
+            }
+            
+            // Définir l'heure selon le moment choisi
+            let startHour, endHour;
+            switch(mission.timeOfDay) {
+                case 'morning':
+                    startHour = 9;
+                    endHour = 10;
+                    break;
+                case 'afternoon':
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+                case 'evening':
+                    startHour = 18;
+                    endHour = 19;
+                    break;
+                case 'flexible':
+                default:
+                    startHour = 14;
+                    endHour = 15;
+                    break;
+            }
+            
+            // Créer les dates de début et fin
+            const startDate = new Date(mission.targetDate);
+            startDate.setHours(startHour, 0, 0, 0);
+            
+            const endDate = new Date(mission.targetDate);
+            endDate.setHours(endHour, 0, 0, 0);
+            
+            // Créer le titre de l'événement
+            const eventTitle = `🎯 Mission Exposition : ${planData.mainFear} (Étape ${mission.step}/5)`;
+            
+            // Créer la description détaillée
+            let eventDescription = `🎯 MISSION D'EXPOSITION GRADUELLE\n\n`;
+            eventDescription += `📋 Étape ${mission.step}/5 : ${mission.exercise}\n`;
+            eventDescription += `😰 Niveau d'anxiété anticipé : ${mission.anxietyAnticipated}/10\n`;
+            eventDescription += `🎭 Peur travaillée : ${planData.mainFear}\n\n`;
+            
+            if (mission.strategies && mission.strategies.length > 0) {
+                eventDescription += `💡 Stratégies de soutien :\n`;
+                mission.strategies.forEach(strategy => {
+                    eventDescription += `• ${strategy}\n`;
+                });
+                eventDescription += `\n`;
+            }
+            
+            eventDescription += `💪 CONSEILS :\n`;
+            eventDescription += `• Respirez profondément avant de commencer\n`;
+            eventDescription += `• L'anxiété va diminuer progressivement\n`;
+            eventDescription += `• Utilisez vos stratégies si nécessaire\n`;
+            eventDescription += `• Chaque petit pas compte !\n\n`;
+            
+            eventDescription += `📝 PENDANT LA MISSION :\n`;
+            eventDescription += `• Noter l'heure de début\n`;
+            eventDescription += `• Observer le niveau d'anxiété\n`;
+            eventDescription += `• Appliquer les stratégies si besoin\n`;
+            eventDescription += `• Continuer même si c'est difficile\n\n`;
+            
+            eventDescription += `📝 APRÈS LA MISSION :\n`;
+            eventDescription += `• Noter le niveau d'anxiété final\n`;
+            eventDescription += `• Retourner dans Pass Anxiété pour valider\n`;
+            eventDescription += `• Se féliciter pour ce courage ! 🎉\n\n`;
+            
+            eventDescription += `📱 Mission créée avec Pass Anxiété - Exposition Graduelle\n`;
+            eventDescription += `📅 Mission ID: ${mission.id}`;
+            
+            // Créer l'URL Google Calendar
+            const formatDateForGoogle = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+            
+            const calendarUrl = new URL('https://calendar.google.com/calendar/render');
+            calendarUrl.searchParams.set('action', 'TEMPLATE');
+            calendarUrl.searchParams.set('text', eventTitle);
+            calendarUrl.searchParams.set('dates', `${formatDateForGoogle(startDate)}/${formatDateForGoogle(endDate)}`);
+            calendarUrl.searchParams.set('details', eventDescription);
+            calendarUrl.searchParams.set('location', 'À définir selon l\'exercice d\'exposition');
+            calendarUrl.searchParams.set('sf', 'true');
+            calendarUrl.searchParams.set('output', 'xml');
+            
+            // Ouvrir Google Calendar dans un nouvel onglet
+            window.open(calendarUrl.toString(), '_blank');
+            
+            const timeOptions = {
+                'morning': '🌅 Matin (9h)',
+                'afternoon': '🌞 Après-midi (14h)', 
+                'evening': '🌆 Soirée (18h)',
+                'flexible': '🕐 Après-midi (14h)'
+            };
+            
+            showNotification(`📅 Mission ajoutée à Google Agenda ! ${formatMissionDate(mission.targetDate)} - ${timeOptions[mission.timeOfDay]}`, 'success');
+            
+            // Log pour debug
+            console.log('📅 Mission Google Calendar:', {
+                missionId: mission.id,
+                title: eventTitle,
+                start: startDate,
+                end: endDate,
+                anxiety: mission.anxietyAnticipated
+            });
+        }
+
+        // ============ FIN INTÉGRATION GOOGLE AGENDA ============
+
+        // ============ TÉLÉCHARGEMENT FICHE MISSION ============
+
+        // Recommencer le plan (version améliorée avec confirmation)
+        function resetExposurePlan() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const completedSteps = progressData.completedSteps ? progressData.completedSteps.length : 0;
+            const activeMissions = progressData.missions ? progressData.missions.filter(m => m.status === 'planned').length : 0;
+            
+            const resetModal = document.createElement('div');
+            resetModal.className = 'tcc-modal';
+            resetModal.style.zIndex = '15000';
+            resetModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>🔄 Réinitialiser l'exposition</h3>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h4>⚠️ Attention</h4>
+                        <p>Vous êtes sur le point de réinitialiser votre plan d'exposition graduelle.</p>
+                        
+                        <div class="reset-info">
+                            <h5>📊 Votre progression actuelle :</h5>
+                            <ul>
+                                <li>✅ <strong>${completedSteps}</strong> étapes terminées</li>
+                                <li>📅 <strong>${activeMissions}</strong> missions planifiées</li>
+                                <li>📚 Historique de vos réussites sauvegardé</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="reset-options">
+                            <h5>🎯 Que souhaitez-vous faire ?</h5>
+                            <div class="reset-choice">
+                                <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                                    <input type="radio" name="resetType" value="soft" checked>
+                                    <span><strong>🔄 Recommencer les étapes</strong><br>
+                                    <small>Garde l'historique, remet les étapes à zéro</small></span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                                    <input type="radio" name="resetType" value="hard">
+                                    <span><strong>🗑️ Effacement complet</strong><br>
+                                    <small>Supprime tout : étapes, missions, historique</small></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                            <button class="btn-secondary" onclick="cancelReset()">❌ Annuler</button>
+                            <button class="btn-primary" onclick="confirmReset()" style="background: #f44336;">🔄 Confirmer</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(resetModal);
+            resetModal.style.display = 'flex';
+        }
+
+        // Annuler la réinitialisation
+        function cancelReset() {
+            const resetModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (resetModal) {
+                resetModal.remove();
+            }
+        }
+
+        // Confirmer la réinitialisation (version TCC)
+        function confirmReset() {
+            const resetType = document.querySelector('input[name="resetType"]:checked').value;
+            const resetModal = document.querySelector('.tcc-modal[style*="15000"]');
+            
+            if (resetType === 'soft') {
+                // Recommencer les étapes, garder l'historique
+                let progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+                progressData.completedSteps = [];
+                progressData.inProgressSteps = []; // Réinitialiser aussi les étapes en cours
+                progressData.missions = progressData.missions ? progressData.missions.filter(m => m.status === 'completed') : [];
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                showNotification('🔄 Étapes réinitialisées ! Historique conservé', 'success');
+            } else {
+                // Effacement complet
+                localStorage.removeItem('exposure-progress');
+                showNotification('🗑️ Plan d\'exposition complètement réinitialisé', 'success');
+            }
+            
+            if (resetModal) {
+                resetModal.remove();
+            }
+            
+            // Actualiser l'interface
+            setTimeout(() => {
+                closeTCCModal();
+                startPracticalExercises();
+            }, 1000);
+        }
+
+        // Créer un nouveau plan d'exposition
+        function createNewExposurePlan() {
+            if (confirm('Voulez-vous créer un nouveau plan d\'exposition pour une autre peur ?')) {
+                closeTCCModal();
+                setTimeout(() => {
+                    startExposureExercise();
+                }, 500);
+            }
+        }
+
+        // Configuration des rappels de mission
+        function setupMissionReminders() {
+            const reminderModal = document.createElement('div');
+            reminderModal.className = 'tcc-modal';
+            reminderModal.style.zIndex = '15000';
+            reminderModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>🔔 Rappels de Mission</h3>
+                    </div>
+                    <div style="padding: 30px;">
+                        <h4>📱 Notifications personnalisées</h4>
+                        <p>Configurez des rappels pour ne pas oublier vos missions d'exposition :</p>
+                        
+                        <div class="reminder-settings">
+                            <div class="reminder-option">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="reminder-daily" checked>
+                                    <span><strong>📅 Rappel quotidien</strong><br>
+                                    <small>Tous les jours à 9h : "Pensez à votre mission d'exposition !"</small></span>
+                                </label>
+                            </div>
+                            
+                            <div class="reminder-option">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="reminder-mission">
+                                    <span><strong>⏰ Rappel de mission</strong><br>
+                                    <small>Le jour de votre mission : "C'est le moment de votre défi !"</small></span>
+                                </label>
+                            </div>
+                            
+                            <div class="reminder-option">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="checkbox" id="reminder-encouragement">
+                                    <span><strong>💪 Messages d'encouragement</strong><br>
+                                    <small>Messages motivants aléatoires</small></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="reminder-preview">
+                            <h5>📝 Aperçu des notifications :</h5>
+                            <div class="notification-preview">
+                                🔔 "Bonjour ! N'oubliez pas votre mission d'exposition aujourd'hui. Vous pouvez le faire ! 💪"
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                            <button class="btn-secondary" onclick="closeReminderModal()">❌ Fermer</button>
+                            <button class="btn-primary" onclick="activateReminders()">🔔 Activer les rappels</button>
+                        </div>
+                        
+                        <div class="reminder-note">
+                            <p style="font-size: 0.9rem; color: #666; text-align: center; margin-top: 15px;">
+                                💡 <strong>Note :</strong> Les rappels utilisent les notifications du navigateur. 
+                                Assurez-vous d'autoriser les notifications pour Pass Anxiété.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(reminderModal);
+            reminderModal.style.display = 'flex';
+        }
+
+        // Fermer la modal de rappels
+        function closeReminderModal() {
+            const reminderModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (reminderModal) {
+                reminderModal.remove();
+            }
+        }
+
+        // Activer les rappels
+        function activateReminders() {
+            const daily = document.getElementById('reminder-daily').checked;
+            const mission = document.getElementById('reminder-mission').checked;
+            const encouragement = document.getElementById('reminder-encouragement').checked;
+            
+            // Demander permission pour les notifications
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        // Sauvegarder les préférences
+                        const reminderSettings = {
+                            daily: daily,
+                            mission: mission,
+                            encouragement: encouragement,
+                            enabled: true
+                        };
+                        localStorage.setItem('exposure-reminders', JSON.stringify(reminderSettings));
+                        
+                        // Programmer les rappels
+                        scheduleReminders(reminderSettings);
+                        
+                        showNotification('🔔 Rappels activés ! Vous recevrez des notifications', 'success');
+                        
+                        // Test immédiat
+                        setTimeout(() => {
+                            new Notification('🎯 Pass Anxiété', {
+                                body: 'Rappels activés ! Vous êtes sur la bonne voie pour surmonter vos peurs. 💪',
+                                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">🎯</text></svg>'
+                            });
+                        }, 1000);
+                        
+                    } else {
+                        showNotification('❌ Notifications refusées. Activez-les dans les paramètres du navigateur.', 'warning');
+                    }
+                });
+            } else {
+                showNotification('❌ Votre navigateur ne supporte pas les notifications', 'warning');
+            }
+            
+            closeReminderModal();
+        }
+
+        // Programmer les rappels
+        function scheduleReminders(settings) {
+            // Annuler les anciens rappels
+            if (window.exposureReminders) {
+                window.exposureReminders.forEach(reminder => clearInterval(reminder));
+            }
+            window.exposureReminders = [];
+            
+            if (settings.daily) {
+                // Rappel quotidien à 9h
+                const dailyReminder = setInterval(() => {
+                    const now = new Date();
+                    if (now.getHours() === 9 && now.getMinutes() === 0) {
+                        const messages = [
+                            'Bonjour ! Pensez à votre mission d\'exposition aujourd\'hui. 🌅',
+                            'Une nouvelle journée pour progresser ! Votre mission vous attend. 💪',
+                            'Rappel bienveillant : votre défi d\'exposition peut transformer votre journée ! ✨'
+                        ];
+                        const message = messages[Math.floor(Math.random() * messages.length)];
+                        
+                        new Notification('🎯 Pass Anxiété - Rappel quotidien', {
+                            body: message,
+                            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">📅</text></svg>'
+                        });
+                    }
+                }, 60000); // Vérifier chaque minute
+                
+                window.exposureReminders.push(dailyReminder);
+            }
+            
+            if (settings.encouragement) {
+                // Messages d'encouragement aléatoires
+                const encouragementReminder = setInterval(() => {
+                    const messages = [
+                        'Vous faites un travail formidable ! Continuez à progresser. 🌟',
+                        'Chaque petit pas compte. Vous êtes plus fort que vos peurs ! 💪',
+                        'Rappel : vous avez déjà surmonté tant de défis. Celui-ci aussi passera ! ✨',
+                        'Votre courage inspire ! Continuez sur cette voie. 🚀'
+                    ];
+                    const message = messages[Math.floor(Math.random() * messages.length)];
+                    
+                    new Notification('💪 Pass Anxiété - Encouragement', {
+                        body: message,
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FF9800"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">💪</text></svg>'
+                    });
+                }, 4 * 60 * 60 * 1000); // Toutes les 4 heures
+                
+                window.exposureReminders.push(encouragementReminder);
+            }
+            
+            // Rappels de mission spécifiques
+            if (settings.mission) {
+                checkMissionReminders();
+            }
+        }
+
+        // Vérifier les rappels de mission
+        function checkMissionReminders() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            if (!progressData.missions) return;
+            
+            progressData.missions.forEach(mission => {
+                if (mission.status === 'planned') {
+                    const missionDate = new Date(mission.targetDate);
+                    const today = new Date();
+                    
+                    // Rappel le jour de la mission
+                    if (missionDate.toDateString() === today.toDateString()) {
+                        setTimeout(() => {
+                            new Notification('🎯 Pass Anxiété - Mission du jour !', {
+                                body: `C'est le moment de votre défi : ${mission.exercise.substring(0, 50)}... Vous pouvez le faire ! 💪`,
+                                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%232196F3"/><text x="50" y="60" text-anchor="middle" fill="white" font-size="30">🎯</text></svg>'
+                            });
+                        }, 2000);
+                    }
+                }
+            });
+        }
+
+        // Voir l'historique d'exposition
+        function viewExposureHistory() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            
+            const historyModal = document.createElement('div');
+            historyModal.className = 'tcc-modal';
+            historyModal.style.zIndex = '15000';
+            historyModal.innerHTML = `
+                <div class="tcc-modal-content" style="max-width: 600px;">
+                    <div class="modal-header">
+                        <h3>📈 Historique d'Exposition</h3>
+                        <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+                    </div>
+                    <div style="padding: 30px;">
+                        <div class="history-stats">
+                            <h4>📊 Vos statistiques globales :</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-number">${progressData.completedSteps ? progressData.completedSteps.length : 0}</div>
+                                    <div class="stat-label">Étapes terminées</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">${progressData.missions ? progressData.missions.filter(m => m.status === 'completed').length : 0}</div>
+                                    <div class="stat-label">Missions réussies</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">${progressData.missions ? progressData.missions.filter(m => m.status === 'planned').length : 0}</div>
+                                    <div class="stat-label">Missions planifiées</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detailed-history">
+                            <h4>📚 Historique détaillé :</h4>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                ${generateSessionHistory(progressData)}
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn-secondary" onclick="closeHistoryModal()">✅ Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(historyModal);
+            historyModal.style.display = 'flex';
+        }
+
+        // Fermer la modal d'historique
+        function closeHistoryModal() {
+            const historyModal = document.querySelector('.tcc-modal[style*="15000"]');
+            if (historyModal) {
+                historyModal.remove();
+            }
+        }
+
+        // ============ OUTILS DE DEBUG ET SYNCHRONISATION ============
+
+        // Vérifier et corriger la synchronisation des données (version TCC)
+        function checkAndFixSynchronization() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            let needsUpdate = false;
+            
+            // Initialiser les étapes terminées si inexistantes
+            if (!progressData.completedSteps) {
+                progressData.completedSteps = [];
+                needsUpdate = true;
+            }
+            
+            // Initialiser les étapes en cours si inexistantes
+            if (!progressData.inProgressSteps) {
+                progressData.inProgressSteps = [];
+                needsUpdate = true;
+            }
+            
+            // Vérifier les missions terminées avec succès qui ne sont pas dans completedSteps
+            if (progressData.missions) {
+                progressData.missions.forEach(mission => {
+                    if (mission.status === 'completed' && mission.successLevel !== 'partial') {
+                        const anxietyReduction = mission.anxietyAnticipated - (mission.anxietyActual || mission.anxietyAnticipated);
+                        const isSuccessful = anxietyReduction >= 1 || (mission.anxietyActual || 10) <= 4;
+                        
+                        if (isSuccessful && !progressData.completedSteps.includes(mission.step)) {
+                            progressData.completedSteps.push(mission.step);
+                            
+                            // Retirer des étapes en cours si elle y était
+                            progressData.inProgressSteps = progressData.inProgressSteps.filter(step => step !== mission.step);
+                            
+                            needsUpdate = true;
+                            console.log('🔧 Synchronisation: ajout étape terminée', mission.step);
+                        }
+                    }
+                });
+                
+                // Trier les étapes terminées
+                if (needsUpdate) {
+                    progressData.completedSteps.sort((a, b) => a - b);
+                }
+            }
+            
+            // Nettoyer les doublons dans inProgressSteps
+            if (progressData.inProgressSteps.length > 0) {
+                const uniqueInProgress = [...new Set(progressData.inProgressSteps)];
+                if (uniqueInProgress.length !== progressData.inProgressSteps.length) {
+                    progressData.inProgressSteps = uniqueInProgress;
+                    needsUpdate = true;
+                }
+            }
+            
+            // Sauvegarder si des corrections ont été apportées
+            if (needsUpdate) {
+                localStorage.setItem('exposure-progress', JSON.stringify(progressData));
+                console.log('✅ Synchronisation TCC corrigée:', {
+                    completed: progressData.completedSteps,
+                    inProgress: progressData.inProgressSteps
+                });
+                showNotification('🔧 Données synchronisées automatiquement', 'info');
+            }
+            
+            return progressData;
+        }
+
+        // Afficher l'état actuel pour debug (version TCC)
+        function showDebugInfo() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            
+            console.log('=== DEBUG EXPOSITION GRADUELLE TCC ===');
+            console.log('Étapes terminées (TCC):', progressData.completedSteps || []);
+            console.log('Étapes en cours (TCC):', progressData.inProgressSteps || []);
+            console.log('Missions totales:', progressData.missions ? progressData.missions.length : 0);
+            console.log('Missions terminées:', progressData.missions ? progressData.missions.filter(m => m.status === 'completed').length : 0);
+            console.log('Missions planifiées:', progressData.missions ? progressData.missions.filter(m => m.status === 'planned').length : 0);
+            
+            if (progressData.missions) {
+                console.log('--- Détail missions ---');
+                progressData.missions.forEach(mission => {
+                    console.log(`Mission ${mission.step}: ${mission.status} (${mission.exercise?.substring(0, 30)}...)`);
+                });
+            }
+            
+            // Calculer l'étape actuelle
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            console.log('Étape actuelle calculée:', currentStep);
+            
+            // États TCC
+            console.log('--- États TCC ---');
+            for (let i = 1; i <= 5; i++) {
+                const isCompleted = progressData.completedSteps && progressData.completedSteps.includes(i);
+                const isInProgress = progressData.inProgressSteps && progressData.inProgressSteps.includes(i);
+                const hasMission = progressData.missions && progressData.missions.find(m => m.step === i && m.status === 'planned');
+                
+                let status = '⏸️ En attente';
+                if (isCompleted) status = '✅ Terminé (TCC)';
+                else if (isInProgress) status = '⏳ En cours (TCC)';
+                else if (hasMission) status = '📅 Mission planifiée';
+                else if (i === currentStep) status = '🎯 Actuel';
+                
+                console.log(`Étape ${i}: ${status}`);
+            }
+            console.log('======================================');
+            
+            // Afficher aussi dans l'interface pour l'utilisateur
+            showNotification('🔧 Informations de debug affichées dans la console (F12)', 'info');
+        }
+
+        // Télécharger la fiche mission (version avec anxiété corrigée)
+        function downloadMissionCard() {
+            const progressData = JSON.parse(localStorage.getItem('exposure-progress') || '{}');
+            const planData = JSON.parse(localStorage.getItem('exposure-plan') || '{}');
+            
+            // Déterminer la vraie étape actuelle basée sur les missions terminées
+            let currentStep = 1;
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                currentStep = Math.max(...progressData.completedSteps) + 1;
+            }
+            
+            // Si toutes les étapes sont terminées
+            if (currentStep > 5) {
+                showNotification('🎉 Toutes les étapes sont terminées ! Félicitations !', 'success');
+                return;
+            }
+            
+            if (!planData.mainFear || !planData.steps[currentStep - 1]) {
+                showNotification('Aucun plan d\'exposition trouvé pour cette étape', 'warning');
+                return;
+            }
+            
+            // **CORRECTION PRINCIPALE** : Récupérer la vraie anxiété du curseur ou de l'étape
+            let realAnxietyLevel = '5'; // Valeur par défaut
+            
+            // 1. Essayer de récupérer du curseur actuel si disponible
+            const anxietySlider = document.getElementById('anxiety-anticipated');
+            if (anxietySlider && anxietySlider.value) {
+                realAnxietyLevel = anxietySlider.value;
+                console.log('📊 Anxiété prise du curseur:', realAnxietyLevel);
+            } else {
+                // 2. Récupérer de l'anxiété de l'étape définie dans le plan
+                const stepAnxiety = planData.anxietyLevels ? planData.anxietyLevels[currentStep - 1] : null;
+                if (stepAnxiety) {
+                    realAnxietyLevel = stepAnxiety.toString();
+                    console.log('📊 Anxiété prise du plan étape:', realAnxietyLevel);
+                } else {
+                    // 3. Calculer l'anxiété progressive par étape (2, 4, 6, 8, 10)
+                    realAnxietyLevel = (currentStep * 2).toString();
+                    console.log('📊 Anxiété calculée progressive:', realAnxietyLevel);
+                }
+            }
+            
+            // Récupérer les autres données du formulaire
+            const timeframe = document.getElementById('mission-timeframe')?.value || 'this-week';
+            const customDate = document.getElementById('custom-date')?.value;
+            const missionTime = document.getElementById('mission-time')?.value || 'afternoon';
+            
+            // Calculer la date cible
+            let targetDate = new Date();
+            switch(timeframe) {
+                case 'today': break;
+                case 'tomorrow': targetDate.setDate(targetDate.getDate() + 1); break;
+                case 'this-week': targetDate.setDate(targetDate.getDate() + 3); break;
+                case 'next-week': targetDate.setDate(targetDate.getDate() + 7); break;
+                case 'this-month': targetDate.setDate(targetDate.getDate() + 14); break;
+                case 'custom': if (customDate) targetDate = new Date(customDate); break;
+            }
+            
+            const timeOptions = {
+                'morning': '🌅 Matin (8h-12h)',
+                'afternoon': '🌞 Après-midi (12h-18h)', 
+                'evening': '🌆 Soirée (18h-22h)',
+                'flexible': '🕐 Moment flexible'
+            };
+            
+            // Récupérer les stratégies sélectionnées
+            const strategies = [];
+            if (document.getElementById('strategy-breathing')?.checked) strategies.push('🌬️ Exercices de respiration');
+            if (document.getElementById('strategy-friend')?.checked) strategies.push('👥 Accompagné d\'un ami');
+            if (document.getElementById('strategy-escape')?.checked) strategies.push('🚪 Plan de sortie préparé');
+            if (document.getElementById('strategy-reward')?.checked) strategies.push('🎁 Récompense après l\'exercice');
+            
+            // Créer le contenu de la fiche mission
+            let missionContent = '🎯 FICHE MISSION - EXPOSITION GRADUELLE\n';
+            missionContent += '=' .repeat(60) + '\n\n';
+            
+            missionContent += `📋 MISSION #${currentStep}\n`;
+            missionContent += '-' .repeat(20) + '\n';
+            missionContent += `Peur travaillée : ${planData.mainFear}\n`;
+            missionContent += `Étape actuelle : ${currentStep}/5\n`;
+            missionContent += `Étapes terminées : ${progressData.completedSteps ? progressData.completedSteps.length : 0}\n\n`;
+            
+            missionContent += '🎯 MON DÉFI :\n';
+            missionContent += '-' .repeat(15) + '\n';
+            missionContent += `${planData.steps[currentStep - 1]}\n\n`;
+            
+            missionContent += '📅 PLANIFICATION :\n';
+            missionContent += '-' .repeat(20) + '\n';
+            missionContent += `Date cible : ${formatMissionDate(targetDate.toISOString())}\n`;
+            missionContent += `Moment : ${timeOptions[missionTime]}\n`;
+            missionContent += `💗 Anxiété anticipée : ${realAnxietyLevel}/10 🎯\n`;
+            missionContent += `📊 Difficulté étape : ${getDifficultyText(currentStep)}\n\n`;
+            
+            if (strategies.length > 0) {
+                missionContent += '💡 MES STRATÉGIES DE SOUTIEN :\n';
+                missionContent += '-' .repeat(30) + '\n';
+                strategies.forEach(strategy => {
+                    missionContent += `• ${strategy}\n`;
+                });
+                missionContent += '\n';
+            }
+            
+            // Ajouter l'historique des étapes précédentes
+            if (progressData.completedSteps && progressData.completedSteps.length > 0) {
+                missionContent += '📈 MES PROGRÈS PRÉCÉDENTS :\n';
+                missionContent += '-' .repeat(25) + '\n';
+                progressData.completedSteps.forEach(stepNum => {
+                    missionContent += `✅ Étape ${stepNum} : ${planData.steps[stepNum - 1] || 'Non définie'}\n`;
+                });
+                
+                // Ajouter les niveaux d'anxiété des étapes précédentes si disponibles
+                if (progressData.missions) {
+                    missionContent += '\n📊 Historique anxiété :\n';
+                    progressData.missions.filter(m => m.status === 'completed').forEach(mission => {
+                        const reduction = mission.anxietyAnticipated - (mission.anxietyActual || mission.anxietyAnticipated);
+                        missionContent += `   Étape ${mission.step}: ${mission.anxietyAnticipated}/10 → ${mission.anxietyActual || '?'}/10 (${reduction >= 0 ? '-' : '+'}${Math.abs(reduction)})\n`;
+                    });
+                }
+                missionContent += '\n';
+            }
+            
+            missionContent += '💪 CONSEILS POUR RÉUSSIR :\n';
+            missionContent += '-' .repeat(25) + '\n';
+            missionContent += '• Respirez profondément avant de commencer\n';
+            missionContent += '• Rappelez-vous que l\'anxiété va diminuer\n';
+            missionContent += '• Utilisez vos stratégies de soutien si nécessaire\n';
+            missionContent += '• Chaque petit pas compte énormément\n';
+            missionContent += '• Soyez fier de votre courage et de vos progrès\n\n';
+            
+            missionContent += '📝 PENDANT LA MISSION :\n';
+            missionContent += '-' .repeat(22) + '\n';
+            missionContent += '□ Noter l\'heure de début\n';
+            missionContent += `□ Observer mon niveau d\'anxiété (objectif: descendre sous ${realAnxietyLevel}/10)\n`;
+            missionContent += '□ Appliquer mes stratégies si besoin\n';
+            missionContent += '□ Continuer même si c\'est difficile\n';
+            missionContent += '□ Noter l\'heure de fin\n\n';
+            
+            missionContent += '📝 APRÈS LA MISSION :\n';
+            missionContent += '-' .repeat(20) + '\n';
+            missionContent += '□ Noter mon niveau d\'anxiété final (1-10)\n';
+            missionContent += '□ Évaluer ma réussite (partiel/réussi/excellent)\n';
+            missionContent += '□ Retourner dans l\'app Pass Anxiété\n';
+            missionContent += '□ Valider l\'étape et passer à la suivante\n';
+            missionContent += '□ Me féliciter pour mon courage ! 🎉\n\n';
+            
+            missionContent += '🏆 MOTIVATION PERSONNELLE :\n';
+            missionContent += '-' .repeat(25) + '\n';
+            missionContent += 'Cette mission me rapproche de ma liberté !\n';
+            missionContent += 'Chaque exposition me rend plus fort(e).\n';
+            missionContent += `J'ai déjà réussi ${progressData.completedSteps ? progressData.completedSteps.length : 0} étape(s) !\n`;
+            missionContent += `Mon niveau d'anxiété de ${realAnxietyLevel}/10 va diminuer !\n`;
+            missionContent += 'Je PEUX le faire ! 💪✨\n\n';
+            
+            missionContent += '📞 EN CAS DE DIFFICULTÉ :\n';
+            missionContent += '-' .repeat(22) + '\n';
+            missionContent += '• Utilisez l\'app Pass Anxiété - Mode Crise\n';
+            missionContent += '• Pratiquez la respiration 4-7-8\n';
+            missionContent += '• Rappelez-vous : "Cette anxiété va passer"\n';
+            missionContent += '• Contactez votre soutien si nécessaire\n\n';
+            
+            missionContent += `📅 Fiche créée le : ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}\n`;
+            missionContent += `💗 Niveau d'anxiété anticipé enregistré : ${realAnxietyLevel}/10\n`;
+            missionContent += `📱 Application Pass Anxiété - Exposition Graduelle\n`;
+            
+            // Télécharger le fichier
+            const blob = new Blob([missionContent], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mission-exposition-etape-${currentStep}-anxiete-${realAnxietyLevel}-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification(`📄 Fiche mission téléchargée ! Anxiété ${realAnxietyLevel}/10 incluse`, 'success');
+        }
+
+        // Annuler le vidage
+        function cancelClearJournal() {
+            console.log('❌ Vidage annulé');
+            const confirmModal = document.querySelector('.tcc-modal[style*="20000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+        }
+
+        // Confirmer le vidage
+        function confirmClearJournal() {
+            console.log('🗑️ Vidage confirmé');
+            
+            // Supprimer les données
+            localStorage.removeItem('success-journal');
+            
+            // Fermer la modal de confirmation
+            const confirmModal = document.querySelector('.tcc-modal[style*="20000"]');
+            if (confirmModal) {
+                confirmModal.remove();
+            }
+            
+            showNotification('🗑️ Journal vidé avec succès !', 'success');
+            
+            // Fermer et rouvrir le journal pour actualiser
+            closeTCCModal();
+            setTimeout(() => {
+                showSuccessJournal();
+            }, 300);
+            
+            console.log('✅ Journal vidé et interface actualisée');
+        }
+
+        // Mise à jour du suivi pour inclure TCC
+        function updateTrackingScreen() {
+            const usage = DataManager.getToolUsage();
+            const anxiety = DataManager.getAnxietyHistory();
+            
+            const totalSessions = usage.length;
+            
+            const toolCounts = {};
+            usage.forEach(e => {
+                toolCounts[e.tool] = (toolCounts[e.tool] || 0) + 1;
+            });
+            const favTool = Object.keys(toolCounts).reduce((a, b) => 
+                toolCounts[a] > toolCounts[b] ? a : b, '');
+            
+            const avgAnxiety = anxiety.length > 0 ?
+                (anxiety.reduce((sum, e) => sum + e.level, 0) / anxiety.length).toFixed(1) : 0;
+            
+            // Série consécutive
+            const today = new Date().toISOString().split('T')[0];
+            const uniqueDates = [...new Set(usage.map(e => 
+                new Date(e.timestamp).toISOString().split('T')[0]
+            ))].sort().reverse();
+            
+            let streak = 0;
+            for (let i = 0; i < uniqueDates.length; i++) {
+                const expectedDate = new Date();
+                expectedDate.setDate(expectedDate.getDate() - i);
+                const expectedDateStr = expectedDate.toISOString().split('T')[0];
+                
+                if (uniqueDates[i] === expectedDateStr) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            document.getElementById('total-sessions').textContent = totalSessions;
+            
+            const toolNames = {
+                'emdr': 'EMDR',
+                'breathing': 'Respiration',
+                'crisis': 'Mode Crise',
+                'tcc-thoughts': 'TCC Pensées',
+                'tcc-emotions': 'TCC Émotions',
+                'tcc-journal': 'Journal TCC'
+            };
+            document.getElementById('favorite-tool').textContent = 
+                toolNames[favTool] || '-';
+            
+            document.getElementById('avg-anxiety').textContent = 
+                avgAnxiety > 0 ? avgAnxiety + '/10' : '-';
+            
+            document.getElementById('streak-days').textContent = streak;
+        }
+
+        // ============ FIN FONCTIONS TCC ============
+
+        // ============ FONCTIONS HYPNOTHÉRAPIE ============
+
+// Configuration des fichiers audio avec durées RÉELLES
+const hypnoConfig = {
+    6: {
+        title: 'Session Courte',
+        audioUrl: './audio/hypnotherapie/hypnose_session_courte.mp3',
+        backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+        realDuration: 469, // 7:49 minutes réelles
+        displayDuration: '7:49 min'
+    },
+    10: {
+        title: 'Session Standard',
+        audioUrl: './audio/hypnotherapie/hypnose_session_standard.mp3',
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 602, // 10:02 minutes réelles
+        displayDuration: '10:02 min'
+    },
+    20: {
+        title: 'Session Complète',
+        audioUrl: './audio/hypnotherapie/hypnose_session_complete.mp3',
+        backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+        realDuration: 1109, // 18:29 minutes réelles
+        displayDuration: '18:29 min'
+    }
+};
+
+const meditationConfig = {
+    6: {
+        title: 'Méditation Express',
+        audioUrl: './audio/meditation/meditation_express.mp3',
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 458, // 7:38 minutes réelles
+        displayDuration: '7:38 min'
+    },
+    10: {
+        title: 'Méditation Guidée',
+        audioUrl: './audio/meditation/meditation_guidee.mp3',
+        backgroundMusic: './audio/musiques/Wind_Among_the_Trees.mp3',
+        realDuration: 662, // 11:02 minutes réelles
+        displayDuration: '11:02 min'
+    },
+    20: {
+        title: 'Méditation Profonde',
+        audioUrl: './audio/meditation/meditation_profonde.mp3',
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 1206, // 20:06 minutes réelles
+        displayDuration: '20:06 min'
+    }
+};
+
+// Liste des musiques disponibles pour changer la musique de fond
+const availableMusic = [
+    { name: 'Wind Among Trees', file: './audio/musiques/Wind_Among_the_Trees.mp3' },
+    { name: 'Calme Intérieur', file: './audio/musiques/Calme_Intrieur.mp3' }
+];
+
+let currentHypnoMusicIndex = 0;
+let currentMeditationMusicIndex = 1;
+
+// Variables globales pour l'audio
+let currentHypnoAudio = null;
+let currentHypnoBackground = null;
+let currentMeditationAudio = null;
+let currentMeditationBackground = null;
+let hypnoProgressInterval = null;
+let meditationProgressInterval = null;
+let meditationBreathingInterval = null;
+let hypnoBackgroundEnabled = true;
+let meditationBackgroundEnabled = true;
+
+// Fonction utilitaire pour formater le temps
+function formatTime(seconds) {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return minutes + ':' + secs.toString().padStart(2, '0');
+}
+
+// 1) Démarrer une session d'hypnothérapie
+function startHypnotherapySession(duration) {
+    goToScreen('hypnotherapy-session-screen');
+
+    const config = hypnoConfig[duration];
+
+    // Vérification de configuration
+    if (!config) {
+        console.error('Configuration non trouvée pour durée:', duration);
+        alert('Erreur: Session non configurée');
+        return;
+    }
+
+    // Nettoyer les anciens audios
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+
+    // UI avec durées réelles
+    document.getElementById('hypno-session-title').textContent =
+        config.title + ' - ' + config.displayDuration;
+    document.getElementById('hypno-total-time').textContent = config.displayDuration;
+    document.getElementById('hypno-current-time').textContent = '0:00';
+    document.getElementById('hypno-progress').style.width = '0%';
+
+    // Audio principal (voix)
+    currentHypnoAudio = new Audio(config.audioUrl);
+    const voiceSlider = document.getElementById('hypno-volume');
+    currentHypnoAudio.volume = voiceSlider ? voiceSlider.value / 100 : 0.8;
+    currentHypnoAudio.preload = 'auto';
+
+    // Musique de fond
+    if (hypnoBackgroundEnabled) {
+        currentHypnoBackground = new Audio(config.backgroundMusic);
+        const musicSlider = document.getElementById('hypno-music-volume');
+        const baseVolume = musicSlider ? musicSlider.value / 100 : 0.3;
+        currentHypnoBackground.volume = baseVolume * 0.4;
+        currentHypnoBackground.loop = true;
+        currentHypnoBackground.preload = 'auto';
+    }
+
+    // Événements audio principal
+    currentHypnoAudio.addEventListener('loadeddata', function () {
+        const actualDuration = currentHypnoAudio.duration || config.realDuration;
+        document.getElementById('hypno-total-time').textContent =
+            formatTime(actualDuration);
+    });
+
+    currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
+    currentHypnoAudio.addEventListener('ended', onHypnoSessionEnd);
+    currentHypnoAudio.addEventListener('error', function (e) {
+        console.error('Erreur audio hypno:', e);
+        alert('Erreur de chargement audio: ' + config.audioUrl);
+    });
+
+    if (currentHypnoBackground) {
+        currentHypnoBackground.addEventListener('error', function (e) {
+            console.warn('Musique de fond hypno non disponible', e);
+        });
+    }
+
+    // Log d'usage
+    DataManager.logToolUsage(
+        'hypnotherapy-' + duration + 'min-' + config.displayDuration
+    );
+}
+
+// 2) Lecture / pause hypnose
+function toggleHypnoPlayback() {
+    const btn = document.getElementById('hypno-play-pause');
+
+    if (!currentHypnoAudio) {
+        console.error('Aucun audio hypno chargé');
+        alert('Erreur: aucune session chargée. Retournez à la sélection.');
+        return;
+    }
+
+    if (currentHypnoAudio.paused) {
+        currentHypnoAudio
+            .play()
+            .then(() => {
+                btn.textContent = '⏸️ Pause';
+                if (currentHypnoBackground && hypnoBackgroundEnabled) {
+                    currentHypnoBackground.play().catch((e) => {
+                        console.warn('Musique de fond hypno non lue:', e);
+                    });
+                }
+            })
+            .catch((e) => {
+                console.error('Erreur lecture hypno:', e);
+                alert("Impossible de lire l'audio.");
+            });
+    } else {
+        currentHypnoAudio.pause();
+        btn.textContent = '▶️ Commencer';
+        if (currentHypnoBackground) {
+            currentHypnoBackground.pause();
+        }
+    }
+}
+
+// 3) Activer / couper la musique de fond hypnose
+function toggleHypnoBackground() {
+    hypnoBackgroundEnabled = !hypnoBackgroundEnabled;
+    const btn = document.getElementById('hypno-music-toggle');
+
+    if (!btn) {
+        console.error('Bouton musique hypno non trouvé');
+        return;
+    }
+
+    if (hypnoBackgroundEnabled) {
+        btn.textContent = '🎵 Musique : ON';
+        btn.classList.remove('disabled');
+
+        // Si session en cours, démarrer la musique
+        if (currentHypnoBackground && currentHypnoAudio && !currentHypnoAudio.paused) {
+            currentHypnoBackground.play().catch((e) => {
+                console.warn('Impossible de jouer la musique de fond hypno', e);
+            });
+        }
+    } else {
+        btn.textContent = '🎵 Musique : OFF';
+        btn.classList.add('disabled');
+
+        // Arrêter la musique
+        if (currentHypnoBackground) {
+            currentHypnoBackground.pause();
+        }
+    }
+}
+
+// 4) Volume voix hypnose
+function updateHypnoVolume() {
+    const slider = document.getElementById('hypno-volume');
+    if (!slider) return;
+
+    const volume = slider.value / 100;
+    if (currentHypnoAudio) {
+        currentHypnoAudio.volume = volume;
+    }
+
+    // Mettre à jour l'affichage
+    const display = document.querySelector('#hypno-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// 5) Volume musique hypnose
+function updateHypnoMusicVolume() {
+    const slider = document.getElementById('hypno-music-volume');
+    if (!slider) return;
+
+    const volume = slider.value / 100;
+    if (currentHypnoBackground) {
+        currentHypnoBackground.volume = volume * 0.4; // musique plus douce
+    }
+
+    // Mettre à jour l'affichage
+    const display = document.querySelector('#hypno-music-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// Progression hypnose
+function updateHypnoProgress() {
+    if (!currentHypnoAudio) return;
+
+    const currentTime = currentHypnoAudio.currentTime || 0;
+    const duration = currentHypnoAudio.duration || 1;
+
+    const progress = (currentTime / duration) * 100;
+    document.getElementById('hypno-progress').style.width = progress + '%';
+    document.getElementById('hypno-current-time').textContent =
+        formatTime(currentTime);
+}
+
+// 6) Fin de session hypnose
+function onHypnoSessionEnd() {
+    if (hypnoProgressInterval) {
+        clearInterval(hypnoProgressInterval);
+        hypnoProgressInterval = null;
+    }
+
+    const btn = document.getElementById('hypno-play-pause');
+    if (btn) btn.textContent = '✅ Terminé';
+
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+    }
+
+    setTimeout(() => {
+        alert("🌟 Session d'hypnothérapie terminée ! Prenez un moment pour intégrer cette expérience.");
+        goToScreen('hypnotherapy-screen');
+    }, 1000);
+}
+
+// 7) Arrêt manuel hypnose
+function stopHypnotherapySession() {
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+    if (hypnoProgressInterval) {
+        clearInterval(hypnoProgressInterval);
+        hypnoProgressInterval = null;
+    }
+    const btn = document.getElementById('hypno-play-pause');
+    if (btn) btn.textContent = '▶️ Commencer';
+    goToScreen('hypnotherapy-screen');
+}
+
+// ============ FONCTIONS MÉDITATION ============
+
+// Démarrer une session de méditation
+function startMeditationSession(duration) {
+    goToScreen('meditation-session-screen');
+
+    const config = meditationConfig[duration];
+
+    if (!config) {
+        console.error('Configuration méditation non trouvée pour durée:', duration);
+        alert('Erreur: Session de méditation non configurée');
+        return;
+    }
+
+    // Nettoyer les anciens audios
+    if (currentMeditationAudio) {
+        currentMeditationAudio.pause();
+        currentMeditationAudio = null;
+    }
+    if (currentMeditationBackground) {
+        currentMeditationBackground.pause();
+        currentMeditationBackground = null;
+    }
+
+    // UI avec durées réelles
+    document.getElementById('meditation-session-title').textContent =
+        config.title + ' - ' + config.displayDuration;
+    document.getElementById('meditation-total-time').textContent =
+        config.displayDuration;
+    document.getElementById('meditation-current-time').textContent = '0:00';
+    document.getElementById('meditation-progress').style.width = '0%';
+
+    // Audio principal
+    currentMeditationAudio = new Audio(config.audioUrl);
+    const voiceSlider = document.getElementById('meditation-volume');
+    currentMeditationAudio.volume = voiceSlider ? voiceSlider.value / 100 : 0.8;
+    currentMeditationAudio.preload = 'auto';
+
+    // Musique de fond
+    if (meditationBackgroundEnabled) {
+        currentMeditationBackground = new Audio(config.backgroundMusic);
+        const musicSlider = document.getElementById('meditation-music-volume');
+        const baseVolume = musicSlider ? musicSlider.value / 100 : 0.3;
+        currentMeditationBackground.volume = baseVolume * 0.4;
+        currentMeditationBackground.loop = true;
+        currentMeditationBackground.preload = 'auto';
+    }
+
+    // Événements audio principal
+    currentMeditationAudio.addEventListener('loadeddata', function () {
+        const actualDuration =
+            currentMeditationAudio.duration || config.realDuration;
+        document.getElementById('meditation-total-time').textContent =
+            formatTime(actualDuration);
+    });
+
+    currentMeditationAudio.addEventListener(
+        'timeupdate',
+        updateMeditationProgress
+    );
+    currentMeditationAudio.addEventListener('ended', onMeditationSessionEnd);
+    currentMeditationAudio.addEventListener('error', function (e) {
+        console.error('Erreur audio méditation:', e);
+        alert('Erreur de chargement audio: ' + config.audioUrl);
+    });
+
+    if (currentMeditationBackground) {
+        currentMeditationBackground.addEventListener('error', function (e) {
+            console.warn('Musique de fond méditation non disponible', e);
+        });
+    }
+
+    // Démarrer l'animation de respiration
+    startBreathingAnimation();
+
+    // Log d'usage
+    DataManager.logToolUsage(
+        'meditation-' + duration + 'min-' + config.displayDuration
+    );
+}
+
+// Animation de respiration pour la méditation
+function startBreathingAnimation() {
+    const circle = document.getElementById('meditation-circle');
+    const instruction = document.getElementById('meditation-instruction');
+    let breathingIn = true;
+
+    function breathCycle() {
+        if (breathingIn) {
+            circle.classList.add('breathe-in');
+            instruction.textContent = 'Inspirez doucement.';
+        } else {
+            circle.classList.remove('breathe-in');
+            instruction.textContent = 'Expirez lentement.';
+        }
+        breathingIn = !breathingIn;
+    }
+
+    // Réinitialiser si nécessaire
+    if (meditationBreathingInterval) {
+        clearInterval(meditationBreathingInterval);
+    }
+
+    meditationBreathingInterval = setInterval(breathCycle, 7000);
+    breathCycle();
+}
+
+// Lecture / pause méditation
+function toggleMeditationPlayback() {
+    const btn = document.getElementById('meditation-play-pause');
+
+    if (!currentMeditationAudio) {
+        alert('Erreur: aucune session de méditation chargée.');
+        return;
+    }
+
+    if (currentMeditationAudio.paused) {
+        currentMeditationAudio
+            .play()
+            .then(() => {
+                btn.textContent = '⏸️ Pause';
+                if (currentMeditationBackground && meditationBackgroundEnabled) {
+                    currentMeditationBackground.play().catch((e) => {
+                        console.warn(
+                            'Musique de fond méditation non lue:',
+                            e
+                        );
+                    });
+                }
+            })
+            .catch((e) => {
+                console.error('Erreur lecture méditation:', e);
+                alert("Impossible de lire l'audio.");
+            });
+    } else {
+        currentMeditationAudio.pause();
+        btn.textContent = '▶️ Commencer';
+        if (currentMeditationBackground) {
+            currentMeditationBackground.pause();
+        }
+    }
+}
+
+// Progression méditation
+function updateMeditationProgress() {
+    if (!currentMeditationAudio) return;
+
+    const currentTime = currentMeditationAudio.currentTime || 0;
+    const duration = currentMeditationAudio.duration || 1;
+
+    const progress = (currentTime / duration) * 100;
+    document.getElementById('meditation-progress').style.width =
+        progress + '%';
+    document.getElementById('meditation-current-time').textContent =
+        formatTime(currentTime);
+}
+
+// Fin de session méditation
+function onMeditationSessionEnd() {
+    if (meditationProgressInterval) {
+        clearInterval(meditationProgressInterval);
+        meditationProgressInterval = null;
+    }
+
+    const btn = document.getElementById('meditation-play-pause');
+    if (btn) btn.textContent = '✅ Terminé';
+
+    if (currentMeditationBackground) {
+        currentMeditationBackground.pause();
+    }
+
+    if (meditationBreathingInterval) {
+        clearInterval(meditationBreathingInterval);
+        meditationBreathingInterval = null;
+    }
+
+    setTimeout(() => {
+        alert('🧘 Session de méditation terminée.');
+        goToScreen('meditation-screen');
+    }, 1000);
+}
+
+// Arrêt manuel méditation
+function stopMeditationSession() {
+    if (currentMeditationAudio) {
+        currentMeditationAudio.pause();
+        currentMeditationAudio = null;
+    }
+    if (currentMeditationBackground) {
+        currentMeditationBackground.pause();
+        currentMeditationBackground = null;
+    }
+    if (meditationProgressInterval) {
+        clearInterval(meditationProgressInterval);
+        meditationProgressInterval = null;
+    }
+    if (meditationBreathingInterval) {
+        clearInterval(meditationBreathingInterval);
+        meditationBreathingInterval = null;
+    }
+    const btn = document.getElementById('meditation-play-pause');
+    if (btn) btn.textContent = '▶️ Commencer';
+    goToScreen('meditation-screen');
+}
+
+// Volume voix méditation
+function updateMeditationVolume() {
+    const slider = document.getElementById('meditation-volume');
+    if (!slider) return;
+
+    const volume = slider.value / 100;
+    if (currentMeditationAudio) {
+        currentMeditationAudio.volume = volume;
+    }
+    const display = document.querySelector('#meditation-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// Volume musique méditation
+function updateMeditationMusicVolume() {
+    const slider = document.getElementById('meditation-music-volume');
+    if (!slider) return;
+
+    const volume = slider.value / 100;
+    if (currentMeditationBackground) {
+        currentMeditationBackground.volume = volume * 0.4;
+    }
+    const display = document.querySelector('#meditation-music-volume + .volume-display');
+    if (display) {
+        display.textContent = Math.round(volume * 100) + '%';
+    }
+}
+
+// Changer la musique d'hypnose
+function changeHypnoMusic() {
+    if (!hypnoBackgroundEnabled) return;
+
+    currentHypnoMusicIndex = (currentHypnoMusicIndex + 1) % availableMusic.length;
+    const newMusic = availableMusic[currentHypnoMusicIndex];
+
+    if (currentHypnoBackground) {
+        const wasPlaying = !currentHypnoBackground.paused;
+        currentHypnoBackground.pause();
+
+        currentHypnoBackground = new Audio(newMusic.file);
+        const slider = document.getElementById('hypno-music-volume');
+        const volume = slider ? slider.value / 100 : 0.3;
+        currentHypnoBackground.volume = volume * 0.4;
+        currentHypnoBackground.loop = true;
+        currentHypnoBackground.preload = 'auto';
+
+        if (wasPlaying && currentHypnoAudio && !currentHypnoAudio.paused) {
+            currentHypnoBackground.play().catch(e => {
+                console.warn('Impossible de jouer la nouvelle musique', e);
+            });
+        }
+    }
+
+    if (typeof showNotification === 'function') {
+        showNotification('Musique changée: ' + newMusic.name, 'info');
+    }
+    console.log('Musique hypno changée pour:', newMusic.name);
+}
+
+// Changer la musique de méditation
+function changeMeditationMusic() {
+    if (!meditationBackgroundEnabled) return;
+
+    currentMeditationMusicIndex = (currentMeditationMusicIndex + 1) % availableMusic.length;
+    const newMusic = availableMusic[currentMeditationMusicIndex];
+
+    if (currentMeditationBackground) {
+        const wasPlaying = !currentMeditationBackground.paused;
+        currentMeditationBackground.pause();
+
+        currentMeditationBackground = new Audio(newMusic.file);
+        const slider = document.getElementById('meditation-music-volume');
+        const volume = slider ? slider.value / 100 : 0.3;
+        currentMeditationBackground.volume = volume * 0.4;
+        currentMeditationBackground.loop = true;
+        currentMeditationBackground.preload = 'auto';
+
+        if (wasPlaying && currentMeditationAudio && !currentMeditationAudio.paused) {
+            currentMeditationBackground.play().catch(e => {
+                console.warn('Impossible de jouer la nouvelle ambiance', e);
+            });
+        }
+    }
+
+    if (typeof showNotification === 'function') {
+        showNotification('Ambiance changée: ' + newMusic.name, 'info');
+    }
+    console.log('Musique méditation changée pour:', newMusic.name);
+}
+
+// Gestion crise de panique depuis les techniques TCC
+function managePanicAttack() {
+    // Aller sur l'écran Mode Crise
+    goToScreen('crisis-screen');
+
+    // Notification spéciale pour crise de panique
+    setTimeout(() => {
+        if (typeof showNotification === 'function') {
+            showNotification('Mode crise de panique activé. Respirez avec moi.', 'warning');
+        }
+
+        // Démarrer automatiquement la respiration d'urgence anti-panique
+        setTimeout(() => {
+            // Utilise la logique existante de sélection et démarrage
+            startCrisisBreathing('anti-panic');
+        }, 1000);
+    }, 500);
+
+    console.log('Gestion crise de panique activée');
+}
+
+// Hypnose de crise - Scan corporel d'urgence
+function startEmergencyScan() {
+    // Aller à l'écran hypnothérapie en mode crise
+    goToScreen('hypnotherapy-session-screen');
+
+    // Configuration spéciale pour la crise
+    const criseConfig = {
+        title: "Scan Corporel d'Urgence",
+        audioUrl: './audio/crise/scan_corporel_urgence.mp3',
+        backgroundMusic: './audio/musiques/Calme_Intrieur.mp3',
+        realDuration: 226, // 3:46 minutes réelles
+        displayDuration: '3:46 min'
+    };
+
+    // Nettoyer les anciens audios
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+
+    // Configuration de l'interface
+    document.getElementById('hypno-session-title').textContent =
+        criseConfig.title + ' - ' + criseConfig.displayDuration;
+    document.getElementById('hypno-total-time').textContent = criseConfig.displayDuration;
+    document.getElementById('hypno-current-time').textContent = '0:00';
+    document.getElementById('hypno-progress').style.width = '0%';
+
+    // Créer l'audio de crise
+    currentHypnoAudio = new Audio(criseConfig.audioUrl);
+    const voiceSlider = document.getElementById('hypno-volume');
+    currentHypnoAudio.volume = voiceSlider ? voiceSlider.value / 100 : 0.9;
+    currentHypnoAudio.preload = 'auto';
+
+    // Créer la musique de fond (plus douce pour crise)
+    if (hypnoBackgroundEnabled) {
+        currentHypnoBackground = new Audio(criseConfig.backgroundMusic);
+        const musicSlider = document.getElementById('hypno-music-volume');
+        const baseVolume = musicSlider ? musicSlider.value / 100 : 0.3;
+        currentHypnoBackground.volume = baseVolume * 0.3; // encore plus doux
+        currentHypnoBackground.loop = true;
+        currentHypnoBackground.preload = 'auto';
+    }
+
+    // Événements audio
+    currentHypnoAudio.addEventListener('loadeddata', function () {
+        const actualDuration = currentHypnoAudio.duration || criseConfig.realDuration;
+        document.getElementById('hypno-total-time').textContent = formatTime(actualDuration);
+    });
+
+    currentHypnoAudio.addEventListener('timeupdate', updateHypnoProgress);
+    currentHypnoAudio.addEventListener('ended', function () {
+        const btn = document.getElementById('hypno-play-pause');
+        if (btn) btn.textContent = '✅ Terminé';
+
+        if (currentHypnoBackground) {
+            currentHypnoBackground.pause();
+        }
+
+        setTimeout(() => {
+            if (typeof showNotification === 'function') {
+                showNotification('Scan corporel terminé. Vous devriez vous sentir plus calme.', 'success');
+            }
+            setTimeout(() => {
+                goToScreen('crisis-screen');
+            }, 2000);
+        }, 1000);
+    });
+
+    currentHypnoAudio.addEventListener('error', function (e) {
+        console.error('Erreur audio crise:', e);
+        alert("Erreur: Impossible de charger l'audio de crise");
+    });
+
+    // Notification spéciale
+    if (typeof showNotification === 'function') {
+        showNotification("Scan corporel d'urgence prêt. Installez-vous confortablement.", 'info');
+    }
+
+    // Log
+    DataManager.logToolUsage('emergency-scan-3min-46s');
+    console.log('Session de crise prête: Scan corporel 3:46');
+}
+
+// Bouton retour intelligent (mode crise vs hypno normal)
+function returnFromHypnoSession() {
+    const titleEl = document.getElementById('hypno-session-title');
+    const title = titleEl ? titleEl.textContent : '';
+
+    // Arrêter les audios en cours
+    if (currentHypnoAudio) {
+        currentHypnoAudio.pause();
+        currentHypnoAudio = null;
+    }
+    if (currentHypnoBackground) {
+        currentHypnoBackground.pause();
+        currentHypnoBackground = null;
+    }
+    if (hypnoProgressInterval) {
+        clearInterval(hypnoProgressInterval);
+        hypnoProgressInterval = null;
+    }
+
+    if (title.includes('Urgence') || title.includes('Crise')) {
+        goToScreen('crisis-screen');
+    } else {
+        goToScreen('hypnotherapy-screen');
+    }
+}
+
+// Fonction de test pour le système hypno
+function testHypnoSystem() {
+    console.log('TEST SYSTÈME HYPNO:');
+    console.log('- currentHypnoAudio:', currentHypnoAudio);
+    console.log('- currentHypnoBackground:', currentHypnoBackground);
+    console.log('- hypnoBackgroundEnabled:', hypnoBackgroundEnabled);
+    console.log('- Bouton play:', document.getElementById('hypno-play-pause'));
+    console.log('- Bouton musique:', document.getElementById('hypno-music-toggle'));
+    console.log('- Slider voix:', document.getElementById('hypno-volume'));
+    console.log('- Slider musique:', document.getElementById('hypno-music-volume'));
+}
+
+// ============ FIN FONCTIONS HYPNO/MÉDITATION ============
+
+
+        // ============ FONCTIONS MODE CRISE AMÉLIORÉ ============
+
+        let emergencyBreathingInterval = null;
+        let emergencyCycleCount = 0;
+
+        // Afficher les actions selon le niveau de crise
+        function showCrisisActions(level) {
+            // Masquer tous les groupes d'actions
+            document.querySelectorAll('.crisis-actions-group').forEach(group => {
+                group.style.display = 'none';
+            });
+            
+            // Afficher le groupe correspondant
+            const targetGroup = document.getElementById(level + '-actions');
+            if (targetGroup) {
+                targetGroup.style.display = 'block';
+                targetGroup.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Log d'usage
+            DataManager.logToolUsage('crisis-' + level);
+            
+            console.log(`🚨 Mode crise ${level} activé`);
+        }
+
+        // Techniques de respiration d'urgence - ATTENTE DU BOUTON COMMENCER
+        let selectedBreathingType = null;
+
+        function startCrisisBreathing(type) {
+            // Stocker le type de respiration choisi
+            selectedBreathingType = type;
+            
+            // Aller sur l'écran mais NE PAS démarrer
+            goToScreen('emergency-breathing-screen');
+            
+            // Préparer l'interface selon le type
+            const instruction = document.getElementById('emergency-breathing-text');
+            const counter = document.getElementById('emergency-cycle-count');
+            const total = document.getElementById('emergency-cycle-total');
+            
+            if (type === '4-7-8') {
+                instruction.textContent = '🌱 Technique 4-7-8 - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/8';
+            } else if (type === 'anti-panic') {
+                instruction.textContent = '🆘 Respiration Anti-Panique - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/10';
+            } else if (type === 'severe') {
+                instruction.textContent = '🚨 Contrôle Hyperventilation - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/12';
+            } else {
+                instruction.textContent = '🚨 Contrôle Hyperventilation - Appuyez sur "Commencer" quand vous êtes prêt';
+                counter.textContent = '0';
+                total.textContent = '/12';
+            }
+        }
+
+        // Respiration 4-7-8 pour calmer - ANIMATION AUX DURÉES EXACTES
+        function startBreathing478() {
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            
+            let cycle = 0;
+            const maxCycles = 8;
+            let isRunning = true;
+            
+            // Nettoyage préventif avec log
+            circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+            console.log('🌱 4-7-8 démarré - cercle nettoyé');
+            
+            function doCycle() {
+                if (!isRunning || cycle >= maxCycles) {
+                    instruction.textContent = '✅ Exercice terminé - Vous devriez vous sentir mieux';
+                    circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('✅ 4-7-8 terminé');
+                    return;
+                }
+                
+                cycle++;
+                counter.textContent = cycle;
+                console.log(`🔄 Cycle ${cycle}/8 commencé`);
+                
+                // ===== PHASE 1: INSPIRATION (4 secondes exactes) =====
+                instruction.textContent = `🌱 Inspirez par le nez... (${cycle}/8)`;
+                // ANIMATION SUIT LA DURÉE EXACTE : 4 secondes
+                circle.classList.remove('exhale', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                circle.classList.add('duration-4s', 'inhale');
+                console.log('🌱 INSPIRATION 4s - classe duration-4s + inhale ajoutée');
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 2: RÉTENTION (7 secondes exactes) =====
+                    instruction.textContent = '🫁 Retenez votre souffle... 7 secondes';
+                    // ANIMATION RESTE en inspiration - PAS DE CHANGEMENT
+                    console.log('🫁 RÉTENTION 7s - animation reste en inspiration');
+                    
+                }, 7000); // EXACTEMENT 4 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 3: EXPIRATION (8 secondes exactes) =====
+                    instruction.textContent = '🌸 Expirez par la bouche... 8 secondes';
+                    // ANIMATION SUIT LA DURÉE EXACTE : 8 secondes
+                    circle.classList.remove('inhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-10s');
+                    circle.classList.add('duration-8s', 'exhale');
+                    console.log('🌸 EXPIRATION 8s - classe duration-8s + exhale ajoutée');
+                    
+                }, 11000); // EXACTEMENT 4+7 = 11 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 4: PAUSE (3 secondes) =====
+                    if (cycle >= maxCycles) {
+                        instruction.textContent = '✅ Exercice terminé - Vous devriez vous sentir mieux';
+                        circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                        console.log('✅ Exercice terminé - animation nettoyée');
+                        return;
+                    }
+                    
+                    instruction.textContent = `💪 Cycle ${cycle} terminé. Préparez-vous...`;
+                    // ANIMATION REDEVIENT NEUTRE IMMÉDIATEMENT
+                    circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('💪 PAUSE - animation neutre');
+                    
+                    setTimeout(() => {
+                        if (isRunning) doCycle();
+                    }, 3000);
+                    
+                }, 19000); // EXACTEMENT 4+7+8 = 19 secondes
+            }
+            
+            // Démarrage avec compte à rebours
+            instruction.textContent = '🆘 Technique 4-7-8 - Début dans 3...';
+            console.log('🆘 Démarrage 4-7-8 avec compte à rebours');
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '2...';
+            }, 1000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '1...';
+            }, 2000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = 'C\'est parti ! Suivez le rythme...';
+                setTimeout(() => {
+                    if (isRunning) doCycle();
+                }, 1000);
+            }, 3000);
+            
+            // Fonction d'arrêt
+            window.stopCurrent478 = () => {
+                isRunning = false;
+                console.log('🛑 4-7-8 arrêté par l\'utilisateur');
+            };
+        }
+
+        // Respiration anti-panique - ANIMATION AUX DURÉES EXACTES
+        function startPanicBreathing() {
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            
+            let cycle = 0;
+            const maxCycles = 10;
+            let isRunning = true;
+            
+            // Nettoyage préventif avec log
+            circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+            console.log('🆘 Anti-panique démarré - cercle nettoyé');
+            
+            function doCycle() {
+                if (!isRunning || cycle >= maxCycles) {
+                    instruction.textContent = '✅ Votre respiration est maintenant régulée et calme';
+                    circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('✅ Anti-panique terminé');
+                    return;
+                }
+                
+                cycle++;
+                counter.textContent = cycle;
+                console.log(`🔄 Cycle ${cycle}/10 commencé`);
+                
+                // ===== PHASE 1: INSPIRATION (5 secondes exactes) =====
+                instruction.textContent = `🌱 Inspirez lentement par le nez... (${cycle}/10)`;
+                // ANIMATION SUIT LA DURÉE EXACTE : 5 secondes
+                circle.classList.remove('exhale', 'duration-4s', 'duration-7s', 'duration-8s', 'duration-10s');
+                circle.classList.add('duration-5s', 'inhale');
+                console.log('🌱 INSPIRATION 5s - classe duration-5s + inhale ajoutée');
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 2: EXPIRATION (7 secondes exactes) =====
+                    instruction.textContent = '🌸 Expirez doucement par la bouche... 7 secondes';
+                    // ANIMATION SUIT LA DURÉE EXACTE : 7 secondes
+                    circle.classList.remove('inhale', 'duration-4s', 'duration-5s', 'duration-8s', 'duration-10s');
+                    circle.classList.add('duration-7s', 'exhale');
+                    console.log('🌸 EXPIRATION 7s - classe duration-7s + exhale ajoutée');
+                    
+                }, 5000); // EXACTEMENT 5 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 3: PAUSE (3 secondes) =====
+                    if (cycle >= maxCycles) {
+                        instruction.textContent = '✅ Votre respiration est maintenant régulée et calme';
+                        circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                        console.log('✅ Exercice terminé - animation nettoyée');
+                        return;
+                    }
+                    
+                    instruction.textContent = `💪 Excellent ! ${cycle} cycles - Vous reprenez le contrôle`;
+                    // ANIMATION REDEVIENT NEUTRE IMMÉDIATEMENT
+                    circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('💪 PAUSE - animation neutre');
+                    
+                    setTimeout(() => {
+                        if (isRunning) doCycle();
+                    }, 3000);
+                    
+                }, 12000); // EXACTEMENT 5+7 = 12 secondes
+            }
+            
+            // Démarrage avec compte à rebours
+            instruction.textContent = '🆘 Anti-panique - Début dans 3...';
+            console.log('🆘 Démarrage anti-panique avec compte à rebours');
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '2...';
+            }, 1000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '1...';
+            }, 2000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = 'C\'est parti ! Respirez avec moi, très calmement...';
+                setTimeout(() => {
+                    if (isRunning) doCycle();
+                }, 1000);
+            }, 3000);
+            
+            // Fonction d'arrêt
+            window.stopCurrentPanic = () => {
+                isRunning = false;
+                console.log('🛑 Anti-panique arrêté par l\'utilisateur');
+            };
+        }
+
+        // Technique de grounding 5-4-3-2-1
+        function startGrounding() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '🌍 Ancrage 5-4-3-2-1';
+            
+            const content = `
+                <div class="grounding-technique">
+                    <h2>Technique d'Ancrage au Présent</h2>
+                    <div class="grounding-step active" id="step-5">
+                        <h3>👀 Nommez 5 choses que vous VOYEZ</h3>
+                        <p>Regardez autour de vous et décrivez 5 objets précis</p>
+                        <div class="grounding-examples">Ex: "Une lampe bleue", "Mes chaussures noires", "Un livre rouge"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(4)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-4">
+                        <h3>🤲 Nommez 4 choses que vous TOUCHEZ</h3>
+                        <p>Touchez et décrivez la texture de 4 objets</p>
+                        <div class="grounding-examples">Ex: "Mon téléphone lisse", "La table rugueuse"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(3)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-3">
+                        <h3>👂 Nommez 3 choses que vous ENTENDEZ</h3>
+                        <p>Concentrez-vous sur 3 sons différents</p>
+                        <div class="grounding-examples">Ex: "Le tic-tac de l'horloge", "Des voitures au loin"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(2)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-2">
+                        <h3>👃 Nommez 2 choses que vous SENTEZ</h3>
+                        <p>Identifiez 2 odeurs ou parfums</p>
+                        <div class="grounding-examples">Ex: "L'odeur du café", "Mon parfum"</div>
+                        <button class="btn-primary" onclick="nextGroundingStep(1)">Suivant →</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-1">
+                        <h3>👅 Nommez 1 chose que vous GOÛTEZ</h3>
+                        <p>Concentrez-vous sur le goût dans votre bouche</p>
+                        <div class="grounding-examples">Ex: "Le goût mentholé de mon dentifrice"</div>
+                        <button class="btn-primary" onclick="completeGrounding()">Terminer ✅</button>
+                    </div>
+                    
+                    <div class="grounding-step" id="step-complete">
+                        <h3>🎉 Excellente Technique !</h3>
+                        <p>Vous êtes maintenant ancré dans le présent. Votre esprit s'est reconnecté avec la réalité.</p>
+                        <div class="success-message">Cette technique aide à sortir des pensées catastrophiques et à revenir au moment présent.</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        function nextGroundingStep(step) {
+            document.querySelectorAll('.grounding-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step-' + step).classList.add('active');
+        }
+
+        function completeGrounding() {
+            document.querySelectorAll('.grounding-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step-complete').classList.add('active');
+        }
+
+        // Technique du froid
+        function startColdWater() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '❄️ Technique du Froid';
+            
+            const content = `
+                <div class="cold-technique">
+                    <h2>Activation du Nerf Vague</h2>
+                    <div class="cold-instructions">
+                        <div class="cold-step">
+                            <span class="step-icon">🚿</span>
+                            <h3>1. Eau Froide</h3>
+                            <p>Faites couler de l'eau froide sur vos poignets pendant 30 secondes</p>
+                        </div>
+                        
+                        <div class="cold-step">
+                            <span class="step-icon">🧊</span>
+                            <h3>2. Nuque et Tempes</h3>
+                            <p>Appliquez de l'eau froide sur votre nuque et vos tempes</p>
+                        </div>
+                        
+                        <div class="cold-step">
+                            <span class="step-icon">😌</span>
+                            <h3>3. Respirez</h3>
+                            <p>Prenez 3 respirations profondes pendant l'application</p>
+                        </div>
+                    </div>
+                    
+                    <div class="science-explanation">
+                        <h4>🧠 Pourquoi ça marche ?</h4>
+                        <p>Le froid active le système nerveux parasympathique via le nerf vague, ce qui:</p>
+                        <ul>
+                            <li>Ralentit le rythme cardiaque</li>
+                            <li>Diminue la production de cortisol</li>
+                            <li>Calme l'état d'hypervigilance</li>
+                            <li>Procure un soulagement en 60-90 secondes</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Relaxation progressive pour crise modérée
+        function startProgressiveRelaxation() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '🧘‍♀️ Relaxation Progressive';
+            
+            const content = `
+                <div class="relaxation-technique">
+                    <h2>Détente Musculaire Guidée</h2>
+                    <div class="relaxation-timer">
+                        <div class="timer-display" id="relaxation-timer">8:00</div>
+                        <button class="btn-primary" onclick="startRelaxationTimer()">Commencer la Relaxation</button>
+                    </div>
+                    
+                    <div class="relaxation-instructions" id="relaxation-text">
+                        Installez-vous confortablement et fermez les yeux...
+                    </div>
+                    
+                    <div class="muscle-groups">
+                        <h4>🎯 Groupes Musculaires (Dans l'ordre) :</h4>
+                        <ol>
+                            <li>Pieds et mollets</li>
+                            <li>Cuisses et fessiers</li>
+                            <li>Abdomen et dos</li>
+                            <li>Mains et avant-bras</li>
+                            <li>Épaules et cou</li>
+                            <li>Visage et tête</li>
+                        </ol>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Aide spécialisée pour tétanie
+        function startTetanieHelp() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '🤲 Aide Tétanie';
+            
+            const content = `
+                <div class="tetanie-help">
+                    <h2>Gestion Crise de Tétanie</h2>
+                    
+                    <div class="warning-box">
+                        <h3>⚠️ Important</h3>
+                        <p>Si les symptômes persistent ou s'aggravent, contactez immédiatement le 15</p>
+                    </div>
+                    
+                    <div class="tetanie-steps">
+                        <div class="step-card">
+                            <h3>1. 🫁 Respiration Contrôlée</h3>
+                            <p><strong>Respirez dans un sac en papier</strong> ou joignez vos mains en coupe devant votre bouche</p>
+                            <ul>
+                                <li>Inspiration lente 4 secondes</li>
+                                <li>Pause 2 secondes</li>
+                                <li>Expiration lente 6 secondes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3>2. 🤲 Massage des Mains</h3>
+                            <p><strong>Massez vigoureusement :</strong></p>
+                            <ul>
+                                <li>La paume de vos mains</li>
+                                <li>Entre les doigts</li>
+                                <li>Les poignets en cercle</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3>3. 🦵 Étirements Doux</h3>
+                            <p><strong>Étirez progressivement :</strong></p>
+                            <ul>
+                                <li>Ouvrez et fermez les mains lentement</li>
+                                <li>Bougez doucement les orteils</li>
+                                <li>Rotation douce des épaules</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3>4. 🌡️ Réchauffement</h3>
+                            <p><strong>Réchauffez les extrémités :</strong></p>
+                            <ul>
+                                <li>Frottez vos mains ensemble</li>
+                                <li>Bougez pieds et mains</li>
+                                <li>Couvrez-vous si possible</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Aide pour tachycardie
+        function startTachycardiaHelp() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '💓 Aide Tachycardie';
+            
+            const content = `
+                <div class="tachycardia-help">
+                    <h2>Techniques de Ralentissement Cardiaque</h2>
+                    
+                    <div class="warning-box">
+                        <h3>🚨 Attention</h3>
+                        <p>Si votre rythme cardiaque dépasse 150 bpm ou si vous ressentez des douleurs thoraciques, appelez le 15 immédiatement</p>
+                    </div>
+                    
+                    <div class="tachycardia-techniques">
+                        <div class="technique-card">
+                            <h3>1. 🧊 Manœuvre de Valsalva Douce</h3>
+                            <p><strong>Technique du "souffle froid" :</strong></p>
+                            <ul>
+                                <li>Inspirez profondément</li>
+                                <li>Soufflez doucement comme pour refroidir une soupe chaude</li>
+                                <li>Maintenez 10-15 secondes</li>
+                                <li>Répétez 3 fois</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <h3>2. ❄️ Réflexe de Plongée</h3>
+                            <p><strong>Stimulation du nerf vague :</strong></p>
+                            <ul>
+                                <li>Aspergez d'eau très froide votre visage</li>
+                                <li>Ou appliquez une poche de glace sur les yeux fermés</li>
+                                <li>Maintenez 15-30 secondes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <h3>3. 🙏 Massage Carotidien Doux</h3>
+                            <p><strong>ATTENTION: Seulement si vous savez faire :</strong></p>
+                            <ul>
+                                <li>Massage très doux du cou (côté droit)</li>
+                                <li>Pression légère 5-10 secondes</li>
+                                <li>JAMAIS les deux côtés ensemble</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <h3>4. 🧘‍♀️ Position Anti-Tachycardie</h3>
+                            <p><strong>Position optimale :</strong></p>
+                            <ul>
+                                <li>Allongez-vous, jambes surélevées</li>
+                                <li>Tête légèrement inclinée vers le bas</li>
+                                <li>Respiration abdominale lente</li>
+                                <li>Relaxation complète</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Appel d'urgence
+        function callEmergency() {
+            if (confirm('Voulez-vous appeler le 15 (SAMU) maintenant ?')) {
+                window.location.href = 'tel:15';
+            }
+        }
+
+        // Contact support
+        function contactSupport() {
+            if (confirm('Voulez-vous appeler le 3114 (ligne de crise gratuite) ?')) {
+                window.location.href = 'tel:3114';
+            }
+        }
+
+        // Test de réalité pour crise modérée
+        function startRealityCheck() {
+            goToScreen('specialized-techniques-screen');
+            document.getElementById('technique-title').textContent = '✅ Test de Réalité';
+            
+            const content = `
+                <div class="reality-check">
+                    <h2>Décatastrophisation Cognitive</h2>
+                    
+                    <div class="check-questions">
+                        <div class="question-card">
+                            <h3>🤔 Questions à vous poser :</h3>
+                            <div class="question-list">
+                                <div class="question-item">
+                                    <strong>1. Suis-je réellement en danger de mort ?</strong>
+                                    <p class="answer">Non, c'est de l'anxiété, pas un danger réel</p>
+                                </div>
+                                
+                                <div class="question-item">
+                                    <strong>2. Est-ce que le pire scénario que j'imagine va vraiment arriver ?</strong>
+                                    <p class="answer">Très probablement non, c'est mon anxiété qui exagère</p>
+                                </div>
+                                
+                                <div class="question-item">
+                                    <strong>3. Ai-je déjà survécu à cette sensation ?</strong>
+                                    <p class="answer">Oui, et je vais m'en sortir cette fois aussi</p>
+                                </div>
+                                
+                                <div class="question-item">
+                                    <strong>4. Que dirais-je à un ami qui vit la même chose ?</strong>
+                                    <p class="answer">Je lui dirais que ça va passer, qu'il est fort</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="affirmation-card">
+                            <h3>💪 Affirmations Positives :</h3>
+                            <ul>
+                                <li>"Cette crise est temporaire"</li>
+                                <li>"Je suis en sécurité"</li>
+                                <li>"Mon corps sait comment se calmer"</li>
+                                <li>"J'ai les ressources pour gérer cela"</li>
+                                <li>"Dans une heure, je me sentirai mieux"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="goToScreen('crisis-screen')">Retour Mode Crise</button>
+                </div>
+            `;
+            
+            document.getElementById('technique-content').innerHTML = content;
+        }
+
+        // Respiration sévère (hyperventilation) - ANIMATION AUX DURÉES EXACTES
+        function startSevereBreathing() {
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            
+            let cycle = 0;
+            const maxCycles = 12;
+            let isRunning = true;
+            
+            // Nettoyage préventif avec log
+            circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+            console.log('🚨 Anti-hyperventilation démarré - cercle nettoyé');
+            
+            function severeCycle() {
+                if (!isRunning || cycle >= maxCycles) {
+                    instruction.textContent = '✅ Hyperventilation contrôlée - Vous respirez maintenant normalement';
+                    circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('✅ Anti-hyperventilation terminé');
+                    return;
+                }
+                
+                cycle++;
+                counter.textContent = cycle;
+                console.log(`🔄 Cycle ${cycle}/12 commencé`);
+                
+                // ===== PHASE 1: INSPIRATION ULTRA-LENTE (7 secondes exactes) =====
+                instruction.textContent = `🐌 Inspirez TRÈS lentement par le nez... (${cycle}/12)`;
+                // ANIMATION SUIT LA DURÉE EXACTE : 7 secondes
+                circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-8s', 'duration-10s');
+                circle.classList.add('duration-7s', 'inhale');
+                console.log('🐌 INSPIRATION 7s - classe duration-7s + inhale ajoutée');
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 2: RÉTENTION (4 secondes exactes) =====
+                    instruction.textContent = '⏸️ Retenez doucement... 4 secondes';
+                    // ANIMATION RESTE en inspiration - PAS DE CHANGEMENT
+                    console.log('⏸️ RÉTENTION 4s - animation reste en inspiration');
+                    
+                }, 7000); // EXACTEMENT 7 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 3: EXPIRATION ULTRA-LENTE (10 secondes exactes) =====
+                    instruction.textContent = '🐌 Expirez TRÈS lentement par la bouche... 10 secondes';
+                    // ANIMATION SUIT LA DURÉE EXACTE : 10 secondes
+                    circle.classList.remove('inhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s');
+                    circle.classList.add('duration-10s', 'exhale');
+                    console.log('🐌 EXPIRATION 10s - classe duration-10s + exhale ajoutée');
+                    
+                }, 11000); // EXACTEMENT 7+4 = 11 secondes
+                
+                setTimeout(() => {
+                    if (!isRunning) return;
+                    
+                    // ===== PHASE 4: PAUSE (4 secondes) =====
+                    if (cycle >= maxCycles) {
+                        instruction.textContent = '✅ Hyperventilation contrôlée - Vous respirez maintenant normalement';
+                        circle.classList.remove('inhale', 'exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                        console.log('✅ Exercice terminé - animation nettoyée');
+                        return;
+                    }
+                    
+                    instruction.textContent = `💪 Excellent contrôle ! ${cycle}/12 - Vous maîtrisez votre respiration`;
+                    // ANIMATION REDEVIENT NEUTRE IMMÉDIATEMENT
+                    circle.classList.remove('exhale', 'duration-4s', 'duration-5s', 'duration-7s', 'duration-8s', 'duration-10s');
+                    console.log('💪 PAUSE - animation neutre');
+                    
+                    setTimeout(() => {
+                        if (isRunning) severeCycle();
+                    }, 7000);
+                    
+                }, 21000); // EXACTEMENT 7+4+10 = 21 secondes
+            }
+            
+            // Démarrage ultra-rassurant avec compte à rebours
+            instruction.textContent = '🆘 Contrôle hyperventilation - Début dans 3...';
+            console.log('🆘 Démarrage anti-hyperventilation avec compte à rebours');
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '2...';
+            }, 1000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = '1...';
+            }, 2000);
+            
+            setTimeout(() => {
+                if (!isRunning) return;
+                instruction.textContent = 'C\'est parti ! Suivez mon rythme ultra-lent...';
+                setTimeout(() => {
+                    if (isRunning) severeCycle();
+                }, 1000);
+            }, 3000);
+            
+            // Fonction d'arrêt
+            window.stopCurrentSevere = () => {
+                isRunning = false;
+                console.log('🛑 Anti-hyperventilation arrêté par l\'utilisateur');
+            };
+        }
+
+        // Arrêter respiration d'urgence - ARRÊT IMMÉDIAT ET PROPRE
+        function stopEmergencyBreathing() {
+            // Arrêter toutes les fonctions en cours
+            if (window.stopCurrent478) window.stopCurrent478();
+            if (window.stopCurrentPanic) window.stopCurrentPanic();
+            if (window.stopCurrentSevere) window.stopCurrentSevere();
+            
+            // Nettoyer TOUS les timeouts du navigateur (méthode radicale mais efficace)
+            const maxTimeoutId = setTimeout(() => {}, 0);
+            for (let i = 0; i <= maxTimeoutId; i++) {
+                clearTimeout(i);
+            }
+            
+            const instruction = document.getElementById('emergency-breathing-text');
+            const circle = document.getElementById('emergency-circle');
+            const counter = document.getElementById('emergency-cycle-count');
+            const startBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-primary');
+            const stopBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-secondary');
+            
+            // Reset interface immédiat
+            if (instruction) instruction.textContent = 'Exercice arrêté - Respirez naturellement';
+            if (circle) circle.classList.remove('inhale', 'exhale');
+            if (counter) counter.textContent = '0';
+            
+            // Reset boutons
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            console.log('🛑 Respiration d\'urgence arrêtée - Arrêt immédiat');
+        }
+
+        // Démarrer respiration d'urgence - SELON TYPE SÉLECTIONNÉ
+        function startEmergencyBreathing() {
+            // Arrêter toute respiration en cours
+            stopEmergencyBreathing();
+            
+            // Changer le bouton
+            const startBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-primary');
+            const stopBtn = document.querySelector('#emergency-breathing-screen,meditation-screen,hypnotherapy-screen,tcc-screen,thoughts-screen,emotions-screen,journal-screen,techniques-screen .btn-secondary');
+            
+            if (startBtn) startBtn.style.display = 'none';
+            if (stopBtn) stopBtn.style.display = 'inline-block';
+            
+            // Démarrer selon le type sélectionné
+            setTimeout(() => {
+                if (selectedBreathingType === '4-7-8') {
+                    startBreathing478();
+                } else if (selectedBreathingType === 'anti-panic') {
+                    startPanicBreathing();
+                } else if (selectedBreathingType === 'severe') {
+                    startSevereBreathing();
+                } else {
+                    // Par défaut, anti-hyperventilation
+                    startSevereBreathing();
+                }
+            }, 500);
+        }
+
+        // ============ FIN FONCTIONS MODE CRISE ============
+
+        // ============ FONCTIONS COHÉRENCE CARDIAQUE SYNCHRONISÉE ============
+
+        let coherenceInterval = null;
+        let coherenceTimeInterval = null;
+        let coherenceCycles = 0;
+        let coherenceTimeRemaining = 300; // 5 minutes en secondes
+
+        // Démarrer la cohérence cardiaque
+        function startCoherenceCardiaque() {
+            const bubble = document.getElementById('breathing-bubble');
+            const instruction = document.getElementById('breathing-instruction');
+            const phase = document.getElementById('breathing-phase');
+            const cycleCount = document.getElementById('cycle-count');
+            const timeDisplay = document.getElementById('time-remaining');
+            const startBtn = document.getElementById('start-breathing-btn');
+            const stopBtn = document.getElementById('stop-breathing-btn');
+            
+            // Reset et initialisation
+            coherenceCycles = 0;
+            coherenceTimeRemaining = 300;
+            
+            // Interface
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            
+            console.log('🫁 Démarrage cohérence cardiaque');
+            
+            // Fonction de cycle respiration
+            function breathingCycle() {
+                if (coherenceCycles >= 30) {
+                    // Fin de session
+                    instruction.textContent = '✅ Session terminée ! Excellent travail !';
+                    phase.textContent = 'Session complète - Bienfaits activés';
+                    bubble.classList.remove('inhale', 'exhale');
+                    stopCoherenceCardiaque();
+                    
+                    // Log de fin
+                    DataManager.logToolUsage('coherence-complete');
+                    return;
+                }
+                
+                coherenceCycles++;
+                cycleCount.textContent = coherenceCycles;
+                
+                // PHASE 1: INSPIRATION (5 secondes)
+                instruction.textContent = '🌱 Inspirez lentement par le nez...';
+                phase.textContent = 'Phase: Inspiration';
+                bubble.classList.remove('exhale');
+                bubble.classList.add('inhale');
+                
+                // Après 5 secondes: EXPIRATION
+                setTimeout(() => {
+                    if (!coherenceInterval) return; // Vérifier si pas arrêté
+                    
+                    instruction.textContent = '🌸 Expirez doucement par la bouche...';
+                    phase.textContent = 'Phase: Expiration';
+                    bubble.classList.remove('inhale');
+                    bubble.classList.add('exhale');
+                }, 5000);
+                
+                // Programmer le cycle suivant après 10 secondes (5+5)
+                setTimeout(() => {
+                    if (coherenceInterval) {
+                        breathingCycle();
+                    }
+                }, 10000);
+            }
+            
+            // Compte à rebours du temps
+            function updateTimer() {
+                const minutes = Math.floor(coherenceTimeRemaining / 60);
+                const seconds = coherenceTimeRemaining % 60;
+                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                coherenceTimeRemaining--;
+                
+                if (coherenceTimeRemaining < 0) {
+                    stopCoherenceCardiaque();
+                }
+            }
+            
+            // Démarrer les timers
+            coherenceInterval = setTimeout(() => {
+                instruction.textContent = 'Préparez-vous... La session commence';
+                phase.textContent = 'Phase: Préparation';
+                
+                setTimeout(breathingCycle, 2000); // Commencer après 2 secondes
+            }, 1000);
+            
+            coherenceTimeInterval = setInterval(updateTimer, 1000);
+            
+            // Log de démarrage
+            DataManager.logToolUsage('coherence-start');
+        }
+
+        // Arrêter la cohérence cardiaque
+        function stopCoherenceCardiaque() {
+            if (coherenceInterval) {
+                clearTimeout(coherenceInterval);
+                coherenceInterval = null;
+            }
+            
+            if (coherenceTimeInterval) {
+                clearInterval(coherenceTimeInterval);
+                coherenceTimeInterval = null;
+            }
+            
+            const bubble = document.getElementById('breathing-bubble');
+            const instruction = document.getElementById('breathing-instruction');
+            const phase = document.getElementById('breathing-phase');
+            const startBtn = document.getElementById('start-breathing-btn');
+            const stopBtn = document.getElementById('stop-breathing-btn');
+            
+            // Reset interface
+            bubble.classList.remove('inhale', 'exhale');
+            instruction.textContent = 'Session arrêtée - Reprenez quand vous voulez';
+            phase.textContent = 'Phase: Arrêt';
+            
+            // Boutons
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+            
+            console.log('🫁 Cohérence cardiaque arrêtée');
+        }
+
+        // Reset complet
+        function resetCoherenceCardiaque() {
+            stopCoherenceCardiaque();
+            
+            // Reset compteurs
+            coherenceCycles = 0;
+            coherenceTimeRemaining = 300;
+            
+            document.getElementById('cycle-count').textContent = '0';
+            document.getElementById('time-remaining').textContent = '5:00';
+            document.getElementById('breathing-instruction').textContent = 'Prêt à commencer la cohérence cardiaque';
+            document.getElementById('breathing-phase').textContent = 'Phase: Préparation';
+            
+            console.log('🔄 Cohérence cardiaque reset');
+        }
+
+        // ============ FIN COHÉRENCE CARDIAQUE ============
+
+        // ============ FONCTIONS ASTUCES & RESSOURCES ============
+
+        // Gestion des onglets dans la section astuces
+        document.addEventListener('DOMContentLoaded', function() {
+            // Écouteurs pour les onglets de catégories
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const tipsContents = document.querySelectorAll('.tips-content');
+            
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const category = tab.dataset.category;
+                    
+                    // Retirer la classe active de tous les onglets et contenus
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    tipsContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Ajouter la classe active à l'onglet cliqué
+                    tab.classList.add('active');
+                    
+                    // Afficher le contenu correspondant
+                    const targetContent = document.querySelector(`[data-category="${category}"].tips-content`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    
+                    // Log d'usage
+                    DataManager.logToolUsage('tips-category-' + category);
+                    console.log(`📚 Consultation astuces: ${category}`);
+                });
+            });
+        });
+
+        // Fonction pour copier un numéro d'urgence
+        function copyEmergencyNumber(number) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(number).then(() => {
+                    showNotification('📋 Numéro copié: ' + number, 'success');
+                });
+            } else {
+                // Fallback pour les anciens navigateurs
+                const textArea = document.createElement('textarea');
+                textArea.value = number;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('📋 Numéro copié: ' + number, 'success');
+            }
+            
+            DataManager.logToolUsage('emergency-number-copied');
+        }
+
+        // Amélioration: ajouter clics sur les numéros d'urgence pour copie
+        document.addEventListener('DOMContentLoaded', function() {
+            const emergencyNumbers = document.querySelectorAll('.emergency-number');
+            emergencyNumbers.forEach(numberElement => {
+                numberElement.style.cursor = 'pointer';
+                numberElement.title = 'Cliquer pour copier le numéro';
+                
+                numberElement.addEventListener('click', () => {
+                    const number = numberElement.textContent.trim();
+                    copyEmergencyNumber(number);
+                });
+            });
+
+            // ============ GESTION BOUTON ORIENTATION ============
+            // S'assurer que le bouton "J'ai compris" fonctionne
+            const orientationBtn = document.querySelector('#orientation-recommendation .rec-btn');
+            if (orientationBtn) {
+                orientationBtn.addEventListener('click', function() {
+                    console.log('🔧 Bouton J\'ai compris cliqué');
+                    hideOrientationRecommendation();
+                });
+                console.log('✅ Bouton orientation initialisé');
+            }
+
+            // ============ GESTION BOUTONS OUTILS ============
+            // Gestionnaire pour tous les boutons d'outils y compris thérapeute
+            document.querySelectorAll('.tool-card').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tool = this.getAttribute('data-tool');
+                    console.log('🔧 Outil sélectionné:', tool);
+                    
+                    const screenMap = {
+                        'crisis': 'crisis-screen',
+                        'breathing': 'breathing-screen',
+                        'emdr': 'emdr-distance', // Écran EMDR complet original
+                        'hypnotherapy': 'hypnotherapy-screen',
+                        'meditation': 'meditation-screen',
+                        'tips': 'tips-screen',
+                        'tracking': 'tracking-screen',
+                        'tcc': 'tcc-screen',
+                        'thoughts': 'thoughts-screen',
+                        'emotions': 'emotions-screen',
+                        'journal': 'journal-screen',
+                        'techniques': 'techniques-screen',
+                        'thoughts-history': 'thoughts-history-screen',
+                        'therapist': 'therapist-screen',
+                        'ai': 'ai-screen'
+                    };
+                    
+                    if (screenMap[tool]) {
+                        goToScreen(screenMap[tool]);
+                        
+                        // Log d'usage pour tous les outils
+                        DataManager.logToolUsage(tool + '-visit');
+                        console.log(`🔧 Visite de l'outil: ${tool}`);
+                        
+                        // Log spécial pour le thérapeute
+                        if (tool === 'therapist') {
+                            console.log('👨‍⚕️ Visite du profil thérapeute');
+                        }
+                    } else {
+                        showNotification('Cette fonctionnalité sera bientôt disponible !', 'info');
+                    }
+                });
+            });
+        });
+
+        // Fonction pour afficher une notification
+        function showNotification(message, type = 'info') {
+            // Créer l'élément notification s'il n'existe pas
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    color: white;
+                    font-weight: 600;
+                    z-index: 10000;
+                    opacity: 0;
+                    transform: translateX(100px);
+                    transition: all 0.3s ease;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            // Styles selon le type
+            const bgColors = {
+                success: '#28a745',
+                error: '#dc3545',
+                warning: '#ffc107',
+                info: '#17a2b8'
+            };
+            
+            notification.style.background = bgColors[type] || bgColors.info;
+            notification.textContent = message;
+            
+            // Afficher
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Masquer après 3 secondes
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+            }, 3000);
+        }
+
+        // ============ FIN FONCTIONS ASTUCES ============
+
+        // ============ NOUVELLES FONCTIONS EMDR AMÉLIORÉES ============
+
+        // Définir les fonctions globalement pour qu'elles soient accessibles
+        window.stopEMDRSessionImproved = function() {
+            console.log('🛑 Bouton Stop cliqué');
+            
+            // Arrêter l'animation immédiatement
+            if (emdrInterval) {
+                clearInterval(emdrInterval);
+                emdrInterval = null;
+            }
+            if (emdrTimerInterval) {
+                clearInterval(emdrTimerInterval);
+                emdrTimerInterval = null;
+            }
+            if (questionInterval) {
+                clearInterval(questionInterval);
+                questionInterval = null;
+            }
+            
+            // Les instructions CSS se gérent automatiquement
+            console.log('📝 Instructions gérées par CSS automatiquement');
+            
+            // Remettre les boutons dans l'état initial
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                    DataManager.logToolUsage('emdr');
+                }
+                // Utiliser la nouvelle fonction pour aller à l'évaluation
+                if (typeof goToEMDREvaluation === 'function') {
+                    goToEMDREvaluation();
+                } else if (typeof goToScreen === 'function') {
+                    goToScreen('emdr-evaluation');
+                } else {
+                    console.error('❌ Fonction de navigation non trouvée');
+                    alert('Erreur : impossible de naviguer vers l\'évaluation');
+                }
+            } else {
+                // Si l'utilisateur annule, NE PAS redémarrer automatiquement
+                // Laisser juste les boutons dans l'état initial
+                console.log('🔄 Arrêt annulé - session prête à redémarrer manuellement');
+            }
+        };
+
+        window.returnToMainMenu = function() {
+            console.log('🏠 Bouton Menu cliqué');
+            
+            // Vérifier d'abord si des animations sont en cours
+            const animationActive = !!(emdrInterval || emdrTimerInterval || questionInterval);
+            console.log('Animation active:', animationActive);
+            
+            if (animationActive) {
+                if (confirm('Voulez-vous vraiment quitter la session EMDR ?\n\nLa session en cours sera perdue.')) {
+                    // Arrêter toutes les animations
+                    if (emdrInterval) {
+                        clearInterval(emdrInterval);
+                        emdrInterval = null;
+                    }
+                    if (emdrTimerInterval) {
+                        clearInterval(emdrTimerInterval);
+                        emdrTimerInterval = null;
+                    }
+                    if (questionInterval) {
+                        clearInterval(questionInterval);
+                        questionInterval = null;
+                    }
+                    
+                    // Les instructions CSS se gérent automatiquement
+                    console.log('📝 Instructions gérées par CSS automatiquement');
+                    
+                    // Naviguer vers le menu
+                    navigateToMainScreen();
+                } else {
+                    console.log('🔄 Retour annulé');
+                }
+            } else {
+                // Pas d'animation en cours, naviguer directement
+                navigateToMainScreen();
+            }
+        };
+
+        // Fonction helper pour la navigation
+        function navigateToMainScreen() {
+            console.log('🔄 Navigation vers l\'écran principal...');
+            
+            // S'assurer de sortir du plein écran
+            if (typeof isFullscreen !== 'undefined' && isFullscreen) {
+                console.log('📺 Sortie du plein écran...');
+                if (typeof exitFullscreen === 'function') {
+                    exitFullscreen().then(() => {
+                        performNavigation();
+                    }).catch(() => {
+                        console.log('⚠️ Erreur sortie plein écran, navigation quand même');
+                        performNavigation();
+                    });
+                } else {
+                    console.log('⚠️ Fonction exitFullscreen non trouvée');
+                    performNavigation();
+                }
+            } else {
+                performNavigation();
+            }
+        }
+
+        // Fonction pour effectuer la navigation réelle
+        function performNavigation() {
+            console.log('🎯 Tentative de navigation...');
+            
+            // Essayer différentes méthodes de navigation avec le bon ID
+            if (typeof window.goToScreen === 'function') {
+                console.log('✅ Utilisation de window.goToScreen');
+                window.goToScreen('home-screen');
+            } else if (typeof goToScreen === 'function') {
+                console.log('✅ Utilisation de goToScreen');
+                goToScreen('home-screen');
+            } else {
+                console.log('⚠️ Fonctions de navigation non trouvées - méthode manuelle');
+                // Méthode manuelle de navigation
+                const currentScreen = document.querySelector('.screen.active');
+                const homeScreen = document.getElementById('home-screen');
+                
+                if (currentScreen) {
+                    currentScreen.classList.remove('active');
+                    console.log('📱 Écran actuel masqué:', currentScreen.id);
+                }
+                if (homeScreen) {
+                    homeScreen.classList.add('active');
+                    console.log('🏠 Écran principal affiché');
+                } else {
+                    console.error('❌ Écran principal (home-screen) non trouvé');
+                    // Essayer avec main-screen au cas où
+                    const mainScreen = document.getElementById('main-screen');
+                    if (mainScreen) {
+                        mainScreen.classList.add('active');
+                        console.log('🏠 Écran main-screen affiché (fallback)');
+                    } else {
+                        console.error('❌ Aucun écran principal trouvé');
+                        alert('Erreur : impossible de revenir au menu principal');
+                    }
+                }
+            }
+        }
+
+        window.startEMDRAnimationImproved = function() {
+            console.log('🎬 Démarrage animation EMDR améliorée');
+            
+            // Gérer l'affichage des boutons
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) {
+                startBtn.style.display = 'none';
+                console.log('👁️ Bouton Démarrer caché');
+            }
+            if (stopBtn) {
+                stopBtn.style.display = 'inline-block';
+                console.log('🛑 Bouton Arrêter affiché');
+            }
+            
+            // S'assurer que les variables globales sont définies
+            if (typeof window.emdrInterval === 'undefined') {
+                window.emdrInterval = null;
+            }
+            if (typeof window.emdrTimerInterval === 'undefined') {
+                window.emdrTimerInterval = null;
+            }
+            if (typeof window.questionInterval === 'undefined') {
+                window.questionInterval = null;
+            }
+            
+            // Les instructions EMDR normales se transformeront automatiquement en plein écran grâce au CSS
+            console.log('📝 Instructions EMDR utilisent le CSS responsive pour le plein écran');
+            
+            // Chercher la fonction originale globalement
+            if (typeof window.startEMDRAnimation === 'function') {
+                console.log('✅ Fonction startEMDRAnimation trouvée globalement');
+                try {
+                    window.startEMDRAnimation();
+                } catch (error) {
+                    console.error('❌ Erreur lors du démarrage EMDR original:', error);
+                    manualStartEMDR();
+                }
+            } else if (typeof startEMDRAnimationOriginal === 'function') {
+                console.log('✅ Fonction startEMDRAnimation originale sauvegardée trouvée');
+                try {
+                    startEMDRAnimationOriginal();
+                } catch (error) {
+                    console.error('❌ Erreur lors du démarrage EMDR sauvegardé:', error);
+                    manualStartEMDR();
+                }
+            } else {
+                console.log('❌ Fonction EMDR originale non trouvée - démarrage manuel');
+                manualStartEMDR();
+            }
+        };
+
+        // Fonction pour remplacer startEMDRSession originale
+        function startEMDRSessionImproved() {
+            sudBefore = parseInt(document.getElementById('sud-before').value);
+            const mode = document.getElementById('emdr-mode').value;
+            
+            // Redimensionner le canvas avant de commencer
+            setTimeout(() => {
+                resizeEMDRCanvas();
+            }, 100);
+            
+            // NOUVEAU: Initialiser notre système Fixed
+            if (!window.emdrSeries) {
+                window.emdrSeries = {
+                    current: 1,
+                    total: 1,
+                    timeRemaining: 120,
+                    mode: mode,
+                    timer: null,
+                    animation: null
+                };
+            }
+            
+            // Configurer selon le mode avec NOTRE système
+            switch(mode) {
+                case 'professional':
+                    window.emdrSeries.total = 1;  // Une seule session
+                    window.emdrSeries.timeRemaining = 720; // 12 minutes
+                    window.totalSeries = 1;  // Pour l'affichage
+                    emdrTimeRemaining = 720; // Pour compatibilité
+                    break;
+                case 'quick':
+                    window.emdrSeries.total = 1;
+                    window.emdrSeries.timeRemaining = 120; // 2 minutes
+                    window.totalSeries = 1;
+                    emdrTimeRemaining = 120;
+                    break;
+                case 'standard':
+                    window.emdrSeries.total = 1;  // Une seule session continue
+                    window.emdrSeries.timeRemaining = 300; // 5 minutes (2,5 × 2)
+                    window.totalSeries = 1;  // Pour l'affichage
+                    emdrTimeRemaining = 300; // Pour compatibilité
+                    break;
+            }
+            
+            window.emdrSeries.mode = mode;
+            window.emdrSeries.current = 1;
+            
+            window.currentSeries = 1;
+            document.getElementById('current-series-portrait').textContent = window.emdrSeries.current;
+            document.getElementById('total-series-portrait').textContent = window.emdrSeries.total;
+            
+            goToScreen('emdr-session');
+            
+            // Afficher immédiatement le bon timer
+            setTimeout(() => {
+                updateTimer();
+            }, 100);
+            
+            // Initialiser l'interface EMDR
+            setTimeout(() => {
+                initializeEMDRInterface();
+            }, 200);
+            
+            // PAS de démarrage automatique - l'utilisateur doit cliquer sur "Démarrer"
+            console.log('🎯 Session EMDR prête - Cliquez sur le bouton Démarrer');
+        }
+
+        // Fonction pour revenir au menu principal depuis EMDR
+        function returnToMainMenu() {
+            console.log('🏠 Bouton Menu cliqué');
+            
+            if (emdrInterval || emdrTimerInterval || questionInterval) {
+                if (confirm('Voulez-vous vraiment quitter la session EMDR ?\n\nLa session en cours sera perdue.')) {
+                    stopEMDRAnimation();
+                    // S'assurer de sortir du plein écran
+                    if (isFullscreen) {
+                        exitFullscreen().then(() => {
+                            goToScreen('main-screen');
+                        }).catch(() => {
+                            goToScreen('main-screen');
+                        });
+                    } else {
+                        goToScreen('main-screen');
+                    }
+                    console.log('🏠 Retour au menu principal depuis EMDR (session arrêtée)');
+                }
+            } else {
+                // S'assurer de sortir du plein écran
+                if (isFullscreen) {
+                    exitFullscreen().then(() => {
+                        goToScreen('main-screen');
+                    }).catch(() => {
+                        goToScreen('main-screen');
+                    });
+                } else {
+                    goToScreen('main-screen');
+                }
+                console.log('🏠 Retour au menu principal depuis EMDR (pas de session active)');
+            }
+        }
+
+        // Améliorer la fonction stopEMDRSession pour mieux gérer les boutons
+        function stopEMDRSessionImproved() {
+            stopEMDRAnimation();
+            
+            // Remettre les boutons dans l'état initial
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                DataManager.logToolUsage('emdr');
+                // Utiliser la nouvelle fonction pour aller à l'évaluation
+                goToEMDREvaluation();
+            } else {
+                // Si l'utilisateur annule, remettre le bouton Stop visible
+                if (startBtn) startBtn.style.display = 'none';
+                if (stopBtn) stopBtn.style.display = 'inline-block';
+                startEMDRAnimation();
+            }
+        }
+
+        // Améliorer startEMDRAnimation pour gérer les boutons
+        function startEMDRAnimationImproved() {
+            console.log('🎬 Démarrage animation EMDR améliorée');
+            
+            // Gérer l'affichage des boutons
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            
+            if (startBtn) {
+                startBtn.style.display = 'none';
+                console.log('👁️ Bouton Démarrer caché');
+            }
+            if (stopBtn) {
+                stopBtn.style.display = 'inline-block';
+                console.log('🛑 Bouton Arrêter affiché');
+            }
+            
+            // Chercher la fonction originale globalement
+            if (typeof window.startEMDRAnimation === 'function') {
+                console.log('✅ Fonction startEMDRAnimation trouvée globalement');
+                window.startEMDRAnimation();
+            } else if (startEMDRAnimationOriginal) {
+                console.log('✅ Fonction startEMDRAnimation originale sauvegardée trouvée');
+                startEMDRAnimationOriginal();
+            } else {
+                console.log('❌ Fonction EMDR originale non trouvée - démarrage manuel');
+                // Démarrage manuel de base
+                manualStartEMDR();
+            }
+        }
+
+        // Fonction de démarrage EMDR manuel en cas de problème
+        function manualStartEMDR() {
+            console.log('🔧 Démarrage EMDR manuel');
+            
+            const dot = document.getElementById('emdr-dot-portrait');
+            const canvas = document.getElementById('emdr-canvas-portrait');
+            
+            if (!dot || !canvas) {
+                console.error('❌ Éléments EMDR introuvables pour démarrage manuel');
+                return;
+            }
+
+            // S'assurer que les variables globales existent
+            window.emdrInterval = null;
+            window.emdrTimerInterval = null;
+            window.questionInterval = null;
+
+            // Arrêter toute animation existante
+            if (window.emdrInterval) {
+                clearInterval(window.emdrInterval);
+            }
+            if (window.emdrTimerInterval) {
+                clearInterval(window.emdrTimerInterval);
+            }
+            if (window.questionInterval) {
+                clearInterval(window.questionInterval);
+            }
+
+            // Les instructions floating seront créées automatiquement lors du passage en plein écran
+            console.log('📝 Instructions floating seront créées lors du plein écran');
+
+            // Paramètres de base
+            let direction = 1;
+            let currentX = 25;
+            const cycleDuration = 2500; // Vitesse moyenne
+            let timeRemaining = 120; // 2 minutes par défaut
+
+            function animate() {
+                const isFullscreen = document.getElementById('emdr-session').classList.contains('emdr-fullscreen');
+                
+                let canvasWidth = isFullscreen ? window.innerWidth : canvas.offsetWidth;
+                const canvasHeight = isFullscreen ? window.innerHeight : canvas.offsetHeight;
+                
+                const minX = 25;
+                const maxX = canvasWidth - 25;
+                const increment = (maxX - minX) / (cycleDuration / 50);
+                
+                currentX += increment * direction;
+                
+                if (currentX >= maxX) {
+                    currentX = maxX;
+                    direction = -1;
+                } else if (currentX <= minX) {
+                    currentX = minX;
+                    direction = 1;
+                }
+                
+                dot.style.left = (currentX - 25) + 'px';
+                dot.style.top = (canvasHeight / 2 - 25) + 'px';
+            }
+
+            function updateTimer() {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                const timer = document.getElementById('session-timer-portrait');
+                if (timer) timer.textContent = timeStr;
+            }
+
+            // Démarrer l'animation
+            window.emdrInterval = setInterval(animate, 50);
+
+            // Afficher le timer initial
+            updateTimer();
+            
+            // Démarrer le timer
+            updateTimer();
+            window.emdrTimerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimer();
+                
+                if (timeRemaining <= 0) {
+                    console.log('⏰ Timer EMDR terminé - Série:', currentSeries, 'Total:', totalSeries);
+                    
+                    // Arrêter l'animation
+                    if (window.emdrInterval) {
+                        clearInterval(window.emdrInterval);
+                        window.emdrInterval = null;
+                    }
+                    if (window.emdrTimerInterval) {
+                        clearInterval(window.emdrTimerInterval);
+                        window.emdrTimerInterval = null;
+                    }
+                    
+                    // Appeler completeSeries pour gérer les séries
+                    if (typeof window.completeSeries === 'function') {
+                        console.log('📞 Appel de window.completeSeries');
+                        window.// SÉRIE SUIVANTE GÉRÉE DIRECTEMENT ICI
+                    console.log("⏰ Série terminée:", currentSeries, "/", totalSeries);
+                    
+                    if (window.currentSeries >= window.totalSeries) {
+                        console.log("✅ Toutes les séries terminées");
+                        DataManager.logToolUsage("emdr");
+                        goToScreen("emdr-evaluation");
+                    } else {
+                        console.log("➡️ Passage à la série suivante");
+                        if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                            window.currentSeries++;
+                            document.getElementById("current-series-portrait").textContent = window.currentSeries;
+                            
+                            const mode = document.getElementById("emdr-mode").value;
+                            switch(mode) {
+                                case "professional":
+                                    emdrTimeRemaining = 180;
+                                    break;
+                                case "standard":
+                                    emdrTimeRemaining = 150;
+                                    break;
+                                case "quick":
+                                    emdrTimeRemaining = 120;
+                                    break;
+                                default:
+                                    emdrTimeRemaining = 150;
+                            }
+                            
+                            console.log("🔄 Redémarrage série", currentSeries, "avec", emdrTimeRemaining, "secondes");
+                            startEMDRAnimation();
+                        } else {
+                            DataManager.logToolUsage("emdr");
+                            goToScreen("emdr-evaluation");
+                        }
+                    }
+                    } else {
+                        console.error('❌ completeSeries non accessible');
+                        // Fallback - remettre les boutons
+                        const startBtn = document.getElementById('start-emdr-btn');
+                        const stopBtn = document.getElementById('stop-emdr-btn');
+                        if (startBtn) startBtn.style.display = 'inline-block';
+                        if (stopBtn) stopBtn.style.display = 'none';
+                        
+                        alert('✨ Session EMDR terminée !');
+                    }
+                }
+            }, 1000);
+            
+            console.log('✅ Animation EMDR manuelle démarrée');
+        }
+
+        // Fonction pour créer les instructions floating SEULEMENT en plein écran
+        function createFloatingInstructions() {
+            console.log('📝 Vérification du mode plein écran...');
+            
+            // Vérifier si on est vraiment en plein écran
+            const emdrSession = document.getElementById('emdr-session');
+            const isFullscreenMode = emdrSession && emdrSession.classList.contains('emdr-fullscreen');
+            
+            if (!isFullscreenMode) {
+                console.log('⚠️ Pas en plein écran - instructions floating NON créées');
+                return;
+            }
+            
+            console.log('📝 Mode plein écran confirmé - création des instructions floating...');
+            
+            // Supprimer les instructions existantes
+            const existingInstructions = document.querySelectorAll('.floating-instruction, #emdr-floating-instruction');
+            existingInstructions.forEach(el => {
+                el.remove();
+                console.log('🗑️ Instruction existante supprimée');
+            });
+            
+            // Créer une nouvelle instruction floating
+            const instruction = document.createElement('div');
+            instruction.className = 'floating-instruction';
+            instruction.id = 'emdr-floating-instruction';
+            instruction.textContent = 'Suivez le point avec vos yeux, sans bouger la tête';
+            
+            // Styles pour assurer la visibilité EN PLEIN ÉCRAN UNIQUEMENT
+            instruction.style.cssText = `
+                position: fixed !important;
+                bottom: 30px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                background: rgba(0,0,0,0.7) !important;
+                color: white !important;
+                padding: 10px 20px !important;
+                border-radius: 20px !important;
+                font-size: 0.9rem !important;
+                font-weight: 500 !important;
+                text-align: center !important;
+                z-index: 10000 !important;
+                backdrop-filter: blur(5px) !important;
+                border: 1px solid rgba(255,255,255,0.2) !important;
+                box-shadow: 0 2px 15px rgba(0,0,0,0.3) !important;
+                max-width: 350px !important;
+                line-height: 1.3 !important;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: none !important;
+            `;
+            
+            // L'ajouter au body SEULEMENT si on est en plein écran
+            document.body.appendChild(instruction);
+            
+            console.log('✅ Instructions floating créées pour le plein écran');
+        }
+
+        // Fonction pour nettoyer les instructions floating
+        function cleanupFloatingInstructions() {
+            const instructions = document.querySelectorAll('.floating-instruction, #emdr-floating-instruction');
+            instructions.forEach(el => el.remove());
+            console.log('🧹 Instructions floating nettoyées');
+        }
+
+        // Sauvegarder la fonction startEMDRAnimation originale
+        let startEMDRAnimationOriginal = null;
+
+        // Améliorer la sortie du plein écran pour l'évaluation
+        function exitFullscreenForEvaluation() {
+            if (isFullscreen) {
+                return exitFullscreen().then(() => {
+                    console.log('✅ Plein écran quitté pour l\'évaluation');
+                });
+            }
+            return Promise.resolve();
+        }
+
+        // Améliorer la fonction completeSeries pour gérer le plein écran
+        function completeSeriesImproved() {
+            if (window.currentSeries >= window.totalSeries) {
+                DataManager.logToolUsage('emdr');
+                // Utiliser la nouvelle fonction pour aller à l'évaluation
+                goToEMDREvaluation();
+            } else {
+                if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                    window.currentSeries++;
+                    document.getElementById('current-series-portrait').textContent = currentSeries;
+                    
+                    const mode = document.getElementById('emdr-mode').value;
+                    switch(mode) {
+                        case 'professional':
+                            emdrTimeRemaining = 180;
+                            break;
+                        case 'standard':
+                            emdrTimeRemaining = 150;
+                            break;
+                        case 'quick':
+                            emdrTimeRemaining = 120;
+                            break;
+                        default:
+                            emdrTimeRemaining = 150;
+                    }
+                    
+                    startEMDRAnimation();
+                } else {
+                    DataManager.logToolUsage('emdr');
+                    // Utiliser la nouvelle fonction pour aller à l'évaluation
+                    goToEMDREvaluation();
+                }
+            }
+        }
+
+        // Initialisation pour remplacer les fonctions existantes
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initialisation EMDR améliorée...');
+            
+            // Sauvegarder la fonction originale si elle existe
+            setTimeout(() => {
+                if (typeof window.startEMDRAnimation === 'function') {
+                    startEMDRAnimationOriginal = window.startEMDRAnimation;
+                    console.log('✅ Fonction startEMDRAnimation sauvegardée');
+                } else {
+                    console.log('⚠️ Fonction startEMDRAnimation non trouvée');
+                }
+                
+                // Remplacer la fonction startEMDRSession originale
+                if (typeof window.startEMDRSession === 'function') {
+                    window.startEMDRSession = startEMDRSessionImproved;
+                    console.log('✅ Fonction startEMDRSession remplacée');
+                }
+
+                // Forcer le remplacement de completeSeries
+                window.completeSeries = function() {
+                    console.log('🔄 SÉRIE TERMINÉE - Série actuelle:', typeof currentSeries !== 'undefined' ? currentSeries : 'undefined', 'Total séries:', typeof totalSeries !== 'undefined' ? totalSeries : 'undefined');
+                    
+                    if (typeof currentSeries === 'undefined' || typeof totalSeries === 'undefined') {
+                        console.error('❌ Variables currentSeries ou totalSeries non définies');
+                        // Utiliser la fonction d'évaluation par défaut
+                        if (typeof goToEMDREvaluation === 'function') {
+                            goToEMDREvaluation();
+                        } else {
+                            goToScreen('emdr-evaluation');
+                        }
+                        return;
+                    }
+                    
+                    if (window.currentSeries >= window.totalSeries) {
+                        console.log('✅ TOUTES LES SÉRIES TERMINÉES - Passage à l\'évaluation');
+                        if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                            DataManager.logToolUsage('emdr');
+                        }
+                        if (typeof goToEMDREvaluation === 'function') {
+                            goToEMDREvaluation();
+                        } else {
+                            goToScreen('emdr-evaluation');
+                        }
+                    } else {
+                        console.log('➡️ SÉRIE SUIVANTE - Passage de', currentSeries, 'à', currentSeries + 1);
+                        if (confirm(`Série ${window.currentSeries}/${window.totalSeries} terminée.\n\nQue remarquez-vous ?\n- Nouvelles pensées ?\n- Émotions différentes ?\n- Sensations corporelles ?\n\nContinuer avec la série ${currentSeries + 1} ?`)) {
+                            window.currentSeries++;
+                            document.getElementById('current-series-portrait').textContent = currentSeries;
+                            
+                            const mode = document.getElementById('emdr-mode').value;
+                            console.log('🔧 Mode:', mode, '- Configuration temps pour série', currentSeries);
+                            
+                            switch(mode) {
+                                case 'professional':
+                                    emdrTimeRemaining = 180; // 3 minutes
+                                    console.log('⏱️ Mode professionnel: 180 secondes');
+                                    break;
+                                case 'standard':
+                                    emdrTimeRemaining = 150; // 2,5 minutes
+                                    console.log('⏱️ Mode standard: 150 secondes');
+                                    break;
+                                case 'quick':
+                                    emdrTimeRemaining = 120; // 2 minutes
+                                    console.log('⏱️ Mode rapide: 120 secondes');
+                                    break;
+                                default:
+                                    emdrTimeRemaining = 150;
+                                    console.log('⏱️ Mode par défaut: 150 secondes');
+                            }
+                            
+                            // Redémarrer l'animation
+                            if (typeof window.startEMDRAnimation === 'function') {
+                                console.log('🎬 Redémarrage avec startEMDRAnimation');
+                                startEMDRAnimation();
+                            } else if (typeof startEMDRAnimationImproved === 'function') {
+                                console.log('🎬 Redémarrage avec startEMDRAnimationImproved');
+                                startEMDRAnimationImproved();
+                            } else {
+                                console.error('❌ Aucune fonction de démarrage trouvée');
+                            }
+                        } else {
+                            console.log('🚫 Utilisateur a annulé - Passage à l\'évaluation');
+                            if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                                DataManager.logToolUsage('emdr');
+                            }
+                            if (typeof goToEMDREvaluation === 'function') {
+                                goToEMDREvaluation();
+                            } else {
+                                goToScreen('emdr-evaluation');
+                            }
+                        }
+                    }
+                };
+                
+                console.log('✅ completeSeries forcément remplacée avec logging détaillé');
+
+                // Tester les fonctions EMDR
+                testEMDRFunctions();
+                
+                // Forcer l'assignation des boutons
+                forceAssignEMDRButtons();
+                
+                // Test final
+                setTimeout(() => {
+                    console.log('🔍 Test final après assignation...');
+                    testEMDRFunctions();
+                    
+                    // Information sur les modes EMDR
+                    console.log('📋 MODES EMDR CONFIGURÉS:');
+                    console.log('- Professionnel: 4 séries × 3 min = 12 min');
+                    console.log('- Standard: 2 séries × 2.5 min = 5 min');
+                    console.log('- Rapide: 1 série × 2 min = 2 min');
+                    console.log('💡 Tapez debugEMDRSeries() pour diagnostiquer');
+                }, 500);
+                
+                console.log('✅ Initialisation EMDR terminée');
+            }, 500);
+
+            // Ajouter gestionnaire pour sortir automatiquement du plein écran
+            const originalGoToScreen = window.goToScreen;
+            if (originalGoToScreen) {
+                window.goToScreen = function(screenId) {
+                    // Si on quitte l'écran EMDR et qu'on est en plein écran
+                    if (isFullscreen && 
+                        (screenId !== 'emdr-session' && screenId !== 'emdr-distance' && screenId !== 'emdr-preparation')) {
+                        console.log('🔄 Sortie automatique du plein écran (changement d\'écran)');
+                        exitFullscreen().then(() => {
+                            originalGoToScreen(screenId);
+                        }).catch(() => {
+                            // En cas d'erreur, continuer quand même
+                            originalGoToScreen(screenId);
+                        });
+                    } else {
+                        originalGoToScreen(screenId);
+                    }
+                };
+            }
+
+            // Gestionnaire pour la touche Échap en plein écran
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && isFullscreen) {
+                    console.log('⌨️ Touche Échap détectée - Sortie du plein écran');
+                    exitFullscreen();
+                }
+            });
+
+            // Gestionnaire pour les changements d'état du plein écran
+            document.addEventListener('fullscreenchange', function() {
+                if (!document.fullscreenElement && isFullscreen) {
+                    console.log('📺 Sortie détectée du plein écran par l\'utilisateur');
+                    isFullscreen = false;
+                    const emdrSession = document.getElementById('emdr-session');
+                    if (emdrSession) {
+                        emdrSession.classList.remove('emdr-fullscreen');
+                    }
+                    updateFullscreenButtons('📺 Plein Écran');
+                    // Les instructions CSS se gèrent automatiquement
+                    console.log('📝 Instructions CSS gérées automatiquement');
+                }
+            });
+        });
+
+        // ============ FIN NOUVELLES FONCTIONS EMDR ============
+
+        // ============ TEST ET DEBUG FONCTIONS EMDR ============
+        
+        // Test des fonctions EMDR
+        function testEMDRFunctions() {
+            console.log('🧪 Test des fonctions EMDR...');
+            
+            console.log('stopEMDRSessionImproved:', typeof window.stopEMDRSessionImproved);
+            console.log('returnToMainMenu:', typeof window.returnToMainMenu);
+            console.log('startEMDRAnimationImproved:', typeof window.startEMDRAnimationImproved);
+            
+            // Test direct des boutons
+            const startBtn = document.getElementById('start-emdr-btn');
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            
+            console.log('Bouton Start trouvé:', !!startBtn);
+            console.log('Bouton Stop trouvé:', !!stopBtn);
+            console.log('Bouton Menu trouvé:', !!menuBtn);
+            
+            if (stopBtn) {
+                console.log('Onclick Stop actuel:', stopBtn.getAttribute('onclick'));
+            }
+            if (menuBtn) {
+                console.log('Onclick Menu actuel:', menuBtn.getAttribute('onclick'));
+            }
+
+            // Diagnostic des écrans disponibles
+            console.log('🔍 Écrans disponibles:');
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                const isActive = screen.classList.contains('active');
+                console.log(`- ${screen.id}: ${isActive ? 'ACTIF' : 'inactif'}`);
+            });
+        }
+
+        // Forcer l'assignation des fonctions aux boutons
+        function forceAssignEMDRButtons() {
+            console.log('🔧 Assignation forcée des boutons EMDR...');
+            
+            const stopBtn = document.getElementById('stop-emdr-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            const startBtn = document.getElementById('start-emdr-btn');
+            
+            if (stopBtn) {
+                stopBtn.onclick = function() {
+                    console.log('🛑 Stop cliqué via onclick');
+                    window.stopEMDRSessionImproved();
+                };
+                console.log('✅ Bouton Stop assigné');
+            }
+            
+            if (menuBtn) {
+                menuBtn.onclick = function() {
+                    console.log('🏠 Menu cliqué via onclick');
+                    window.returnToMainMenu();
+                };
+                console.log('✅ Bouton Menu assigné');
+            }
+            
+            if (startBtn) {
+                startBtn.onclick = function() {
+                    console.log('▶️ Start cliqué via onclick');
+                    window.startEMDRAnimationImproved();
+                };
+                console.log('✅ Bouton Start assigné');
+            }
+        }
+
+        // ============ FIN TEST ET DEBUG ============
+
+        // ============ FONCTION DIAGNOSTIC NAVIGATION ============
+        
+        // Fonction globale pour diagnostiquer les problèmes de navigation
+        window.debugNavigation = function() {
+            console.log('🔍 DIAGNOSTIC NAVIGATION');
+            console.log('========================');
+            
+            // Vérifier les fonctions de navigation
+            console.log('goToScreen (global):', typeof window.goToScreen);
+            console.log('goToScreen (local):', typeof goToScreen);
+            
+            // Lister tous les écrans
+            const screens = document.querySelectorAll('.screen');
+            console.log(`📱 ${screens.length} écrans trouvés:`);
+            screens.forEach((screen, index) => {
+                const isActive = screen.classList.contains('active');
+                const isVisible = screen.style.display !== 'none';
+                console.log(`${index + 1}. ${screen.id}: ${isActive ? '🟢 ACTIF' : '⚫ inactif'} ${isVisible ? '👁️ visible' : '🙈 caché'}`);
+            });
+            
+            // Test de navigation vers home-screen
+            console.log('🧪 Test navigation vers home-screen...');
+            try {
+                performNavigation();
+                console.log('✅ Navigation testée');
+            } catch (error) {
+                console.error('❌ Erreur navigation:', error);
+            }
+        };
+
+        // ============ FIN DIAGNOSTIC NAVIGATION ============
+
+        // ============ FONCTION DEBUG SÉRIES EMDR ============
+        
+        // Fonction pour débugger les séries EMDR
+        window.debugEMDRSeries = function() {
+            console.log('🔍 DEBUG SÉRIES EMDR');
+            console.log('====================');
+            
+            const mode = document.getElementById('emdr-mode') ? document.getElementById('emdr-mode').value : 'non défini';
+            console.log('Mode sélectionné:', mode);
+            console.log('Série actuelle:', typeof currentSeries !== 'undefined' ? currentSeries : 'non défini');
+            console.log('Total séries:', typeof totalSeries !== 'undefined' ? totalSeries : 'non défini');
+            console.log('Temps restant:', typeof emdrTimeRemaining !== 'undefined' ? emdrTimeRemaining : 'non défini');
+            
+            console.log('Fonction completeSeries type:', typeof window.completeSeries);
+            console.log('Fonction completeSeriesImproved type:', typeof completeSeriesImproved);
+            
+            // Test de la logique
+            if (typeof currentSeries !== 'undefined' && typeof totalSeries !== 'undefined') {
+                console.log('Est-ce la dernière série ?', window.currentSeries >= window.totalSeries);
+                console.log('Séries restantes:', totalSeries - currentSeries);
+            }
+        };
+
+        // ============ FIN DEBUG SÉRIES EMDR ============
+
+        // ============ FONCTION TEST SIMPLE ============
+        
+        // Test simple des variables EMDR
+        window.testEMDR = function() {
+            console.log('=== TEST EMDR ===');
+            console.log('currentSeries:', typeof currentSeries !== 'undefined' ? currentSeries : 'UNDEFINED');
+            console.log('totalSeries:', typeof totalSeries !== 'undefined' ? totalSeries : 'UNDEFINED'); 
+            console.log('emdrTimeRemaining:', typeof emdrTimeRemaining !== 'undefined' ? emdrTimeRemaining : 'UNDEFINED');
+            console.log('Mode sélectionné:', document.getElementById('emdr-mode') ? document.getElementById('emdr-mode').value : 'ELEMENT NON TROUVÉ');
+            
+            // Force le passage à la série suivante pour test
+            if (typeof currentSeries !== 'undefined' && typeof totalSeries !== 'undefined') {
+                console.log('🧪 Test: passage forcé à la série suivante');
+                if (currentSeries < totalSeries) {
+                    window.currentSeries++;
+                    document.getElementById('current-series-portrait').textContent = currentSeries;
+                    console.log('✅ Série forcée à:', currentSeries);
+                }
+            }
+        };
+
+        // ============ FIN FONCTION TEST ============
+
+        // ============ DIAGNOSTIC COMPLET ============
+        
+        window.diagnosticEMDR = function() {
+            console.clear();
+            console.log("🔧 === DIAGNOSTIC COMPLET EMDR ===");
+            
+            // 1. Variables globales
+            console.log("📊 VARIABLES GLOBALES:");
+            console.log("   window.currentSeries =", window.currentSeries, "(type:", typeof window.currentSeries, ")");
+            console.log("   window.totalSeries =", window.totalSeries, "(type:", typeof window.totalSeries, ")");
+            
+            // 2. Interface
+            console.log("🖥️ INTERFACE:");
+            const mode = document.getElementById('emdr-mode');
+            console.log("   Mode sélectionné =", mode ? mode.value : "ÉLÉMENT NON TROUVÉ");
+            const currentDisplay = document.getElementById('current-series-portrait');
+            const totalDisplay = document.getElementById('total-series-portrait');
+            console.log("   Affichage série actuelle =", currentDisplay ? currentDisplay.textContent : "NON TROUVÉ");
+            console.log("   Affichage total séries =", totalDisplay ? totalDisplay.textContent : "NON TROUVÉ");
+            
+            // 3. Test de la condition critique
+            console.log("🧪 TEST CONDITION:");
+            const condition = window.currentSeries >= window.totalSeries;
+            console.log("   (", window.currentSeries, ">=", window.totalSeries, ") =", condition);
+            if (condition) {
+                console.log("   ❌ PROBLÈME: Condition vraie → ira directement à l'évaluation");
+                console.log("   💡 Solution: currentSeries devrait être < totalSeries");
+            } else {
+                console.log("   ✅ OK: Condition fausse → passera à la série suivante");
+            }
+            
+            // 4. Fonctions disponibles
+            console.log("🛠️ FONCTIONS DE TEST:");
+            console.log("   fixEMDRVariables() - Corrige les variables");
+            console.log("   simulateSeriesEnd() - Simule la fin d'une série");
+            console.log("   resetEMDR() - Remet à zéro");
+        };
+
+        // Fonction pour corriger les variables
+        window.fixEMDRVariables = function() {
+            const mode = document.getElementById('emdr-mode').value;
+            window.currentSeries = 1;
+            
+            switch(mode) {
+                case 'professional':
+                    window.totalSeries = 4;
+                    break;
+                case 'standard':
+                    window.totalSeries = 2;
+                    break;
+                case 'quick':
+                    window.totalSeries = 1;
+                    break;
+            }
+            
+            document.getElementById('current-series-portrait').textContent = window.currentSeries;
+            document.getElementById('total-series-portrait').textContent = window.totalSeries;
+            
+            console.log("✅ Variables corrigées:", window.currentSeries, "/", window.totalSeries);
+        };
+
+        // Fonction pour simuler la fin d'une série
+        window.simulateSeriesEnd = function() {
+            console.log("🎭 Simulation fin de série...");
+            
+            if (window.currentSeries >= window.totalSeries) {
+                console.log("➡️ Ira à l'évaluation");
+            } else {
+                console.log("➡️ Passera à la série", window.currentSeries + 1);
+                window.currentSeries++;
+                document.getElementById('current-series-portrait').textContent = window.currentSeries;
+            }
+        };
+
+        // ============ FIN DIAGNOSTIC COMPLET ============
+
+        // ============ SOLUTION DEFINITIVE EMDR ============
+        
+        // Variables globales EMDR (forcées)
+        window.emdrSeries = {
+            current: 1,
+            total: 4,
+            timeRemaining: 180,
+            mode: 'professional',
+            timer: null,
+            animation: null
+        };
+
+        // Forcer la variable emdrTimeRemaining globale aussi
+        window.emdrTimeRemaining = 180;
+
+        // Fonction de démarrage EMDR qui fonctionne VRAIMENT
+        window.startEMDRFixed = function() {
+            console.log("🔥 === DÉMARRAGE EMDR FIXED ===");
+            
+            // 1. Récupérer le mode
+            const mode = document.getElementById('emdr-mode').value;
+            window.emdrSeries.mode = mode;
+            
+            // 2. Configurer selon le mode
+            switch(mode) {
+                case 'professional':
+                    window.emdrSeries.total = 1;  // Une seule session longue
+                    window.emdrSeries.timeRemaining = 720; // 12 minutes (3min × 4)
+                    window.emdrTimeRemaining = 720; // Forcer aussi la variable globale
+                    break;
+                case 'standard':
+                    window.emdrSeries.total = 1;  // Une seule session continue
+                    window.emdrSeries.timeRemaining = 300; // 5 minutes (2,5min × 2)
+                    window.emdrTimeRemaining = 300;
+                    break;
+                case 'quick':
+                    window.emdrSeries.total = 1;
+                    window.emdrSeries.timeRemaining = 120;
+                    window.emdrTimeRemaining = 120;
+                    break;
+            }
+            
+            // 3. Réinitialiser la série actuelle
+            window.emdrSeries.current = 1;
+            
+            console.log("⚙️ Configuration:", window.emdrSeries);
+            
+            // 4. Mettre à jour l'interface
+            document.getElementById('current-series-portrait').textContent = window.emdrSeries.current;
+            document.getElementById('total-series-portrait').textContent = window.emdrSeries.total;
+            
+            // 5. Démarrer l'animation et le timer
+            startEMDRTimerFixed();
+            
+            // 6. Masquer le bouton démarrer, afficher arrêter
+            document.getElementById('start-emdr-btn').style.display = 'none';
+            document.getElementById('stop-emdr-btn').style.display = 'inline-block';
+        };
+
+        // Timer EMDR qui gère correctement les séries
+        function startEMDRTimerFixed() {
+            console.log("⏱️ Démarrage timer série", window.emdrSeries.current, "/", window.emdrSeries.total);
+            
+            // Démarrer l'animation visuelle (utiliser l'existante)
+            const speed = document.getElementById('emdr-speed').value;
+            startVisualAnimation(speed);
+            
+            // Afficher le timer initial
+            updateTimerFixed();
+            
+            // Démarrer le décompte
+            window.emdrSeries.timer = setInterval(() => {
+                window.emdrSeries.timeRemaining--;
+                window.emdrTimeRemaining = window.emdrSeries.timeRemaining; // Synchroniser
+                updateTimerFixed();
+                
+                if (window.emdrSeries.timeRemaining <= 0) {
+                    endSeriesFixed();
+                }
+            }, 1000);
+        }
+
+        // Mise à jour de l'affichage du timer
+        function updateTimerFixed() {
+            const minutes = Math.floor(window.emdrSeries.timeRemaining / 60);
+            const seconds = window.emdrSeries.timeRemaining % 60;
+            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timer = document.getElementById('session-timer-portrait');
+            if (timer) timer.textContent = timeStr;
+        }
+
+        // Gestion de la fin d'une série
+        function endSeriesFixed() {
+            console.log("🏁 Fin de session", window.emdrSeries.mode);
+            
+            // Arrêter le timer
+            if (window.emdrSeries.timer) {
+                clearInterval(window.emdrSeries.timer);
+                window.emdrSeries.timer = null;
+            }
+            
+            // Arrêter l'animation
+            stopVisualAnimation();
+            
+            // Message selon le mode
+            let message = '';
+            switch(window.emdrSeries.mode) {
+                case 'professional':
+                    message = '🎉 Session EMDR professionnelle terminée !\n\n12 minutes de traitement EMDR complétées.\nPassage à l\'évaluation finale...';
+                    break;
+                case 'standard':
+                    message = '✨ Session EMDR standard terminée !\n\n5 minutes de traitement EMDR complétées.\nPassage à l\'évaluation finale...';
+                    break;
+                case 'quick':
+                    message = '⚡ Session EMDR rapide terminée !\n\n2 minutes de traitement EMDR complétées.\nPassage à l\'évaluation finale...';
+                    break;
+                default:
+                    message = '✨ Session EMDR terminée !';
+            }
+            
+            alert(message);
+            
+            // Remettre les boutons
+            document.getElementById('start-emdr-btn').style.display = 'inline-block';
+            document.getElementById('stop-emdr-btn').style.display = 'none';
+            
+            // Aller à l'évaluation
+            DataManager.logToolUsage('emdr');
+            goToScreen('emdr-evaluation');
+        }
+
+        // Fonctions pour démarrer/arrêter l'animation visuelle
+        function startVisualAnimation(speed) {
+            // Utiliser le code d'animation existant mais sans le timer
+            const canvas = document.getElementById('emdr-canvas');
+            const dot = document.getElementById('emdr-dot');
+            
+            if (!canvas || !dot) return;
+            
+            let direction = 1;
+            let position = 0;
+            const maxPosition = canvas.offsetWidth - 50;
+            const animationSpeed = parseInt(speed) || 50;
+            
+            function animate() {
+                position += direction * 3;
+                
+                if (position >= maxPosition || position <= 0) {
+                    direction *= -1;
+                }
+                
+                dot.style.left = position + 'px';
+            }
+            
+            window.emdrSeries.animation = setInterval(animate, animationSpeed);
+        }
+
+        function stopVisualAnimation() {
+            if (window.emdrSeries.animation) {
+                clearInterval(window.emdrSeries.animation);
+                window.emdrSeries.animation = null;
+            }
+        }
+
+        // Fonction d'arrêt EMDR
+        window.stopEMDRFixed = function() {
+            console.log("🛑 Arrêt EMDR demandé");
+            
+            if (confirm('Voulez-vous vraiment arrêter la session ?\n\nVous pourrez passer à l\'évaluation finale.')) {
+                // Arrêter tout
+                if (window.emdrSeries.timer) {
+                    clearInterval(window.emdrSeries.timer);
+                    window.emdrSeries.timer = null;
+                }
+                stopVisualAnimation();
+                
+                // Remettre les boutons
+                document.getElementById('start-emdr-btn').style.display = 'inline-block';
+                document.getElementById('stop-emdr-btn').style.display = 'none';
+                
+                // Aller à l'évaluation
+                DataManager.logToolUsage('emdr');
+                goToScreen('emdr-evaluation');
+            }
+        };
+
+        // ============ FIN SOLUTION DEFINITIVE ============
+
+        // ============ FONCTION SCROLL AUTOMATIQUE ============
+        
+        // Fonction pour scroller en haut de la page
+        function scrollToTop() {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+
+        // ============ FIN FONCTION SCROLL ============
+
+        // (Ancienne surcharge supprimée - remplacée par la version directe plus bas)
+
+        // ============ FONCTION NAVIGATION EMDR ÉVALUATION ============
+        
+        // Fonction spécifique pour aller à l'évaluation EMDR
+        function goToEMDREvaluation() {
+            console.log('🎯 Navigation vers évaluation EMDR...');
+            
+            // S'assurer de sortir du plein écran avant l'évaluation
+            if (isFullscreen) {
+                console.log('📺 Sortie du plein écran pour évaluation...');
+                exitFullscreen().then(() => {
+                    console.log('✅ Plein écran quitté, navigation vers évaluation');
+                    goToScreen('emdr-evaluation');
+                }).catch((error) => {
+                    console.log('⚠️ Erreur sortie plein écran:', error);
+                    // Essayer la navigation quand même
+                    goToScreen('emdr-evaluation');
+                });
+            } else {
+                console.log('📋 Navigation directe vers évaluation (pas en plein écran)');
+                goToScreen('emdr-evaluation');
+            }
+        }
+
+        // ============ FIN FONCTION NAVIGATION EMDR ============
+
+        // ============ FONCTIONS NAVIGATION ÉVALUATION EMDR ============
+
+        // Fonction pour revenir à la session EMDR depuis l'évaluation
+        function returnToEMDRSession() {
+            if (confirm('Voulez-vous vraiment revenir à la session EMDR ?\n\nVotre évaluation en cours sera perdue.')) {
+                console.log('🔙 Retour à la session EMDR depuis évaluation');
+                goToScreen('emdr-session');
+            
+            // Afficher immédiatement le bon timer
+            setTimeout(() => {
+                updateTimer();
+            }, 100);
+            }
+        }
+
+        // Fonction pour terminer complètement la session EMDR et revenir au menu
+        function finishEMDRSession() {
+            console.log('✅ Session EMDR terminée - Retour au menu principal');
+            DataManager.logToolUsage('emdr-completed');
+            goToScreen('main-screen');
+        }
+
+        // Fonction améliorée pour remplacer le bouton "Terminer" existant
+        window.completeEMDREvaluation = function() {
+            console.log('✅ Évaluation EMDR terminée - Retour au menu principal');
+            
+            // Sauvegarder l'évaluation si elle a été faite
+            const sudAfter = document.getElementById('sud-after');
+            if (sudAfter && sudAfter.value !== '5') {
+                console.log('💾 Évaluation sauvegardée:', sudAfter.value);
+                if (typeof DataManager !== 'undefined' && DataManager.add) {
+                    DataManager.add('emdrSessions', {
+                        sudBefore: sudBefore || 5,
+                        sudAfter: parseInt(sudAfter.value),
+                        date: new Date().toISOString()
+                    });
+                }
+            }
+            
+            // Utiliser la fonction de navigation robuste
+            navigateToMainScreen();
+        };
+
+        // ============ FIN FONCTIONS NAVIGATION ÉVALUATION ============
+
+        // ============ FONCTION INITIALISATION INTERFACE EMDR ============
+
+        // Fonction pour initialiser correctement l'interface EMDR
+        function initializeEMDRInterface() {
+            const portraitVersion = document.getElementById('portrait-version');
+            if (portraitVersion) {
+                // S'assurer que l'interface est visible
+                portraitVersion.style.display = 'block';
+                
+                // Initialiser l'état des boutons
+                const startBtn = document.getElementById('start-emdr-btn');
+                const stopBtn = document.getElementById('stop-emdr-btn');
+                
+                if (startBtn) startBtn.style.display = 'inline-block';
+                if (stopBtn) stopBtn.style.display = 'none';
+                
+                // Réassigner les fonctions aux boutons (au cas où)
+                setTimeout(() => {
+                    forceAssignEMDRButtons();
+                    console.log('🔄 Boutons réassignés lors de l\'initialisation de l\'interface');
+                }, 100);
+                
+                console.log('✅ Interface EMDR initialisée');
+            }
+        }
+
+        // ============ FIN FONCTION INITIALISATION EMDR ============
+
+        // ============ AMÉLIORATIONS FINALES - EXÉCUTION IMMÉDIATE ============
+        
+        // 1. SCROLL AUTOMATIQUE INTELLIGENT (non-agressif)
+        console.log('🔄 Installation scroll intelligent...');
+        
+        // Fonction scroll centralisée
+        function forceScrollToTop() {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+            console.log('⬆️ Scroll vers le haut');
+        }
+        
+        // Variable pour éviter les conflits
+        let isNavigating = false;
+        
+        // Intercepter les clics SEULEMENT sur les éléments de navigation
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+            
+            // Détecter si c'est un élément de navigation
+            const isNavElement = target.classList.contains('tool-card') ||
+                                target.hasAttribute('data-tool') ||
+                                target.hasAttribute('data-back') ||
+                                target.classList.contains('btn-back-icon') ||
+                                (target.onclick && target.onclick.toString().includes('goToScreen'));
+            
+            if (isNavElement) {
+                console.log('🖱️ Navigation détectée:', target.textContent?.slice(0, 30) || 'Element sans texte');
+                isNavigating = true;
+                
+                // Scroll après délai pour laisser le temps à l'écran de changer
+                setTimeout(() => {
+                    forceScrollToTop();
+                    isNavigating = false;
+                }, 300);
+            }
+        });
+        
+        // Observer SEULEMENT les changements d'écran
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('screen') && target.classList.contains('active')) {
+                        console.log('🔄 Écran activé:', target.id);
+                        
+                        // Scroll seulement si on navigue
+                        setTimeout(() => {
+                            forceScrollToTop();
+                        }, 200);
+                    }
+                }
+            });
+        });
+        
+        // Commencer l'observation
+        observer.observe(document.body, {
+            attributes: true,
+            subtree: true,
+            attributeFilter: ['class']
+        });
+        
+        console.log('✅ Scroll intelligent installé');
+        
+        // 2. BOUTON MENTIONS LÉGALES — discret dans le footer de l'accueil uniquement
+        setTimeout(function() {
+            // Ajouter un lien discret dans le bas de l'écran home-screen uniquement
+            var homeScreen = document.getElementById('home-screen');
+            if (!homeScreen) return;
+
+            var footer = document.createElement('div');
+            footer.style.cssText = 'text-align:center;padding:15px 0 25px;margin-top:10px;';
+            footer.innerHTML = '<button onclick="goToScreen(\'legal-screen\')" style="'
+                + 'background:none;border:none;color:#aaa;font-size:0.75rem;'
+                + 'cursor:pointer;text-decoration:underline;font-family:inherit;'
+                + 'padding:8px 16px;">⚖️ Mentions légales</button>';
+
+            var container = homeScreen.querySelector('.container');
+            if (container) {
+                container.appendChild(footer);
+            }
+            console.log('✅ Lien mentions légales ajouté en bas de l\'accueil');
+        }, 500);
+        
+        // 3. CRÉER L'ÉCRAN MENTIONS LÉGALES
+        console.log('📄 Création de l\'écran mentions légales...');
+        
+        setTimeout(() => {
+            // Créer l'écran
+            const legalScreen = document.createElement('div');
+            legalScreen.id = 'legal-screen';
+            legalScreen.className = 'screen';
+            legalScreen.innerHTML = `
+                <header class="tool-header">
+                    <button class="btn-back-icon" onclick="goToScreen('home-screen')">←</button>
+                    <h1>Mentions Légales</h1>
+                </header>
+                <div class="container">
+                    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+                        
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">📋 Informations Générales</h2>
+                            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #2196F3;">
+                                <h3 style="color: #2196F3; margin-top: 0;">Nature de l'Application</h3>
+                                <p style="line-height: 1.6; color: #555;">Cette application ("Pass Anxiété") est un outil d'auto-assistance psychologique pour la gestion de l'anxiété, du stress et des traumatismes légers.</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #e74c3c; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;">⚠️ Avertissements Importants</h2>
+                            <div style="background: linear-gradient(135deg, #fff5f5, #ffebee); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #e74c3c;">
+                                <h3 style="color: #e74c3c; margin-top: 0;">🔴 Cette application NE remplace PAS :</h3>
+                                <ul style="line-height: 1.6; color: #555;">
+                                    <li>Une consultation médicale professionnelle</li>
+                                    <li>Un diagnostic psychiatrique ou psychologique</li>
+                                    <li>Un traitement médical prescrit</li>
+                                    <li>Une psychothérapie avec un professionnel qualifié</li>
+                                    <li>Une intervention d'urgence en cas de crise suicidaire</li>
+                                </ul>
+                                <h3 style="color: #e74c3c;">🚨 En cas d'urgence :</h3>
+                                <ul style="line-height: 1.6; color: #555;">
+                                    <li><strong>SAMU :</strong> 15</li>
+                                    <li><strong>Pompiers :</strong> 18</li>
+                                    <li><strong>Police :</strong> 17</li>
+                                    <li><strong>SOS Amitié :</strong> 09 72 39 40 50</li>
+                                    <li><strong>Suicide Écoute :</strong> 01 45 39 40 00</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">🔒 Responsabilité</h2>
+                            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #2196F3;">
+                                <p style="line-height: 1.6; color: #555;"><strong>Utilisation à vos risques.</strong> Les développeurs ne peuvent être tenus responsables de l'efficacité des techniques ou des effets secondaires.</p>
+                                <h3 style="color: #2196F3;">Contre-indications :</h3>
+                                <ul style="line-height: 1.6; color: #555;">
+                                    <li>Troubles psychotiques actifs</li>
+                                    <li>Épisodes maniaques</li>
+                                    <li>Troubles dissociatifs sévères</li>
+                                    <li>Épilepsie (pour les techniques visuelles)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 30px;">
+                            <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">📱 Données</h2>
+                            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #2196F3;">
+                                <p style="line-height: 1.6; color: #555;"><strong>Stockage 100% local.</strong> Aucune donnée n'est transmise à des serveurs externes. Vos données restent sur votre appareil.</p>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 20px; text-align: center; border: 2px dashed #2196F3;">
+                            <p><strong style="color: #2196F3;">Dernière mise à jour :</strong> Novembre 2025</p>
+                            <p><em>En utilisant cette application, vous acceptez ces conditions.</em></p>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+            
+            // Insérer l'écran dans la page
+            document.body.appendChild(legalScreen);
+            console.log('✅ Écran mentions légales créé');
+            
+        }, 1000);
+        
+        console.log('🎉 Toutes les améliorations installées !');
+        
+        // Fonction globale pour forcer le scroll (utilisable manuellement)
+        window.forceScrollTop = function() {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+            console.log('📍 Scroll forcé manuellement');
+        };
+        
+        console.log('💡 Fonction disponible: forceScrollTop() si besoin');
+        
+        // ============ STYLES SUIVI COLORÉS ============
+        
+        // Ajouter les styles colorés pour l'écran de suivi
+        setTimeout(() => {
+            const trackingStyles = document.createElement('style');
+            trackingStyles.textContent = `
+                /* Améliorations écran de suivi */
+                .stat-card {
+                    position: relative !important;
+                    overflow: hidden !important;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+                }
+                
+                .stat-card:hover {
+                    transform: translateY(-5px) !important;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+                }
+                
+                .stat-card.sessions {
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-card.favorite {
+                    background: linear-gradient(135deg, #FF6B6B 0%, #E91E63 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-card.anxiety {
+                    background: linear-gradient(135deg, #4ECDC4 0%, #00BCD4 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-card.streak {
+                    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%) !important;
+                    color: white !important;
+                }
+                
+                .stat-icon {
+                    font-size: 2.5rem;
+                    margin-bottom: 10px;
+                    opacity: 0.9;
+                }
+                
+                .stat-number {
+                    color: inherit !important;
+                    margin: 10px 0 5px 0 !important;
+                }
+                
+                .stat-text {
+                    color: inherit !important;
+                    margin: 10px 0 5px 0 !important;
+                }
+                
+                .stat-subtitle {
+                    font-size: 0.85rem;
+                    opacity: 0.8;
+                    margin-top: 5px;
+                }
+                
+                .progress-section {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    margin: 25px 0;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                }
+                
+                .progress-section h3 {
+                    color: #2196F3;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                
+                .progress-chart {
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    padding: 20px;
+                }
+                
+                .chart-placeholder {
+                    display: flex;
+                    align-items: end;
+                    justify-content: space-between;
+                    height: 120px;
+                    margin-bottom: 10px;
+                    gap: 8px;
+                }
+                
+                .chart-bar {
+                    flex: 1;
+                    border-radius: 6px 6px 0 0;
+                    min-height: 20px;
+                    transition: all 0.3s ease;
+                }
+                
+                .chart-bar:hover {
+                    opacity: 0.8;
+                    transform: scaleY(1.1);
+                }
+                
+                .chart-labels {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.8rem;
+                    color: #666;
+                    padding: 0 5px;
+                }
+                
+                .achievements-section {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 25px;
+                    margin: 25px 0;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                }
+                
+                .achievements-section h3 {
+                    color: #4CAF50;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                
+                .badges-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 15px;
+                }
+                
+                .achievement-badge {
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    padding: 15px;
+                    text-align: center;
+                    transition: all 0.3s ease;
+                    border: 2px solid transparent;
+                }
+                
+                .achievement-badge.earned {
+                    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                    color: white;
+                    border-color: #4CAF50;
+                }
+                
+                .achievement-badge.locked {
+                    background: #e9ecef;
+                    color: #6c757d;
+                    border-color: #dee2e6;
+                }
+                
+                .badge-icon {
+                    font-size: 2rem;
+                    margin-bottom: 8px;
+                }
+                
+                .badge-title {
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    margin-bottom: 5px;
+                }
+                
+                .badge-desc {
+                    font-size: 0.75rem;
+                    opacity: 0.8;
+                }
+            `;
+            document.head.appendChild(trackingStyles);
+            console.log('🎨 Styles colorés de suivi ajoutés');
+        }, 500);
+        
+        // ============ FIN STYLES SUIVI COLORÉS ============
+        
+        // ============ AMÉLIORATION CONTENU SUIVI ============
+        
+        // Fonction pour améliorer l'écran de suivi
+        function enhanceTrackingScreen() {
+            const trackingScreen = document.getElementById('tracking-screen');
+            if (!trackingScreen) return;
+            
+            // Ajouter les classes colorées aux cartes existantes
+            const statCards = trackingScreen.querySelectorAll('.stat-card');
+            if (statCards.length >= 4) {
+                statCards[0].classList.add('sessions');
+                statCards[0].innerHTML = `
+                    <div class="stat-icon">🏆</div>
+                    <h3>Sessions totales</h3>
+                    <p class="stat-number" id="total-sessions">0</p>
+                    <div class="stat-subtitle">séances réalisées</div>
+                `;
+                
+                statCards[1].classList.add('favorite');
+                statCards[1].innerHTML = `
+                    <div class="stat-icon">❤️</div>
+                    <h3>Outil favori</h3>
+                    <p class="stat-text" id="favorite-tool">-</p>
+                    <div class="stat-subtitle">votre préféré</div>
+                `;
+                
+                statCards[2].classList.add('anxiety');
+                statCards[2].innerHTML = `
+                    <div class="stat-icon">😌</div>
+                    <h3>Niveau d'anxiété</h3>
+                    <p class="stat-number" id="avg-anxiety">-</p>
+                    <div class="stat-subtitle">niveau moyen</div>
+                `;
+                
+                statCards[3].classList.add('streak');
+                statCards[3].innerHTML = `
+                    <div class="stat-icon">🔥</div>
+                    <h3>Série actuelle</h3>
+                    <p class="stat-number" id="streak-days">0</p>
+                    <div class="stat-subtitle">jours consécutifs</div>
+                `;
+            }
+            
+            // Ajouter le graphique et les badges après la grille de stats
+            const statsGrid = trackingScreen.querySelector('.stats-grid');
+            if (statsGrid && !trackingScreen.querySelector('.progress-section')) {
+                const additionalContent = `
+                    <!-- Section graphique d'évolution -->
+                    <div class="progress-section">
+                        <h3>📈 Évolution de votre bien-être</h3>
+                        <div class="progress-chart">
+                            <div class="chart-placeholder">
+                                <div class="chart-bar" style="height: 60%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 45%; background: #2196F3;"></div>
+                                <div class="chart-bar" style="height: 80%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 35%; background: #FF9800;"></div>
+                                <div class="chart-bar" style="height: 25%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 70%; background: #4CAF50;"></div>
+                                <div class="chart-bar" style="height: 20%; background: #4CAF50;"></div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Lun</span>
+                                <span>Mar</span>
+                                <span>Mer</span>
+                                <span>Jeu</span>
+                                <span>Ven</span>
+                                <span>Sam</span>
+                                <span>Dim</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #666; text-align: center; margin-top: 10px;">
+                                🟢 Excellent  🔵 Bon  🟠 Moyen  🔴 Difficile
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Badges et accomplissements -->
+                    <div class="achievements-section">
+                        <h3>🏅 Vos Accomplissements</h3>
+                        <div class="badges-grid">
+                            <div class="achievement-badge earned">
+                                <div class="badge-icon">🎯</div>
+                                <div class="badge-title">Premier Pas</div>
+                                <div class="badge-desc">Première session réalisée</div>
+                            </div>
+                            <div class="achievement-badge locked">
+                                <div class="badge-icon">🔥</div>
+                                <div class="badge-title">Assidu</div>
+                                <div class="badge-desc">7 jours consécutifs</div>
+                            </div>
+                            <div class="achievement-badge locked">
+                                <div class="badge-icon">💪</div>
+                                <div class="badge-title">Guerrier</div>
+                                <div class="badge-desc">50 sessions totales</div>
+                            </div>
+                            <div class="achievement-badge locked">
+                                <div class="badge-icon">🌟</div>
+                                <div class="badge-title">Maître Zen</div>
+                                <div class="badge-desc">Niveau anxiété &lt; 3</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                statsGrid.insertAdjacentHTML('afterend', additionalContent);
+            }
+            
+            // Améliorer le titre de la section
+            const statsHeader = trackingScreen.querySelector('.stats-header h2');
+            if (statsHeader) {
+                statsHeader.innerHTML = '🎯 Vos Statistiques';
+                statsHeader.insertAdjacentHTML('afterend', '<p style="color: #666; font-size: 0.9rem; margin-top: 5px;">Suivez vos progrès et célébrez vos victoires !</p>');
+            }
+            
+            console.log('🎨 Écran de suivi amélioré avec couleurs');
+        }
+        
+        // Améliorer l'écran de suivi au chargement et lors de la navigation
+        setTimeout(() => {
+            enhanceTrackingScreen();
+            
+            // Améliorer aussi à chaque fois qu'on va sur l'écran de suivi
+            const originalGoToScreen2 = window.goToScreen;
+            window.goToScreen = function(screenId) {
+                if (originalGoToScreen2) {
+                    originalGoToScreen2(screenId);
+                }
+                
+                if (screenId === 'tracking-screen') {
+                    setTimeout(() => {
+                        enhanceTrackingScreen();
+                    }, 100);
+                }
+                
+                // Scroll automatique
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                }, 200);
+            };
+        }, 1000);
+        
+        // ============ FIN AMÉLIORATION CONTENU SUIVI ============
+        
+        // ============ CORRECTIF BOUTONS EMDR MOBILE ============
+        
+        // Améliorer le positionnement des boutons EMDR en mode plein écran mobile
+        setTimeout(() => {
+            const mobileButtonsStyles = document.createElement('style');
+            mobileButtonsStyles.textContent = `
+                /* BOUTONS PLEIN ÉCRAN: SYMBOLES UNIQUEMENT, ULTRA-COMPACTS */
+                @media (max-width: 768px) {
+                    .emdr-fullscreen .control-btn {
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 16px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        text-align: center !important;
+                        line-height: 1 !important;
+                        min-width: 30px !important;
+                        max-width: 30px !important;
+                        overflow: hidden !important;
+                    }
+                    
+                    /* Remplacer complètement le contenu par les symboles */
+                    .emdr-fullscreen .control-btn.start {
+                        font-size: 14px !important;
+                    }
+                    .emdr-fullscreen .control-btn.start::after {
+                        content: "▶" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.stop {
+                        font-size: 12px !important;
+                    }
+                    .emdr-fullscreen .control-btn.stop::after {
+                        content: "⏹" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.fullscreen {
+                        font-size: 12px !important;
+                    }
+                    .emdr-fullscreen .control-btn.fullscreen::after {
+                        content: "📱" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.menu {
+                        font-size: 14px !important;
+                    }
+                    .emdr-fullscreen .control-btn.menu::after {
+                        content: "🏠" !important;
+                        position: absolute !important;
+                        color: white !important;
+                    }
+                    
+                    /* Masquer complètement le texte original */
+                    .emdr-fullscreen .control-btn {
+                        text-indent: -9999px !important;
+                        color: transparent !important;
+                        font-size: 0 !important;
+                    }
+                    
+                    .emdr-fullscreen .session-controls {
+                        gap: 4px !important;
+                        padding: 4px !important;
+                    }
+                }
+                
+                @media (max-width: 768px) and (orientation: portrait) {
+                    .emdr-fullscreen .control-btn {
+                        width: 28px !important;
+                        height: 28px !important;
+                        border-radius: 5px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.start::after,
+                    .emdr-fullscreen .control-btn.menu::after {
+                        font-size: 12px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.stop::after,
+                    .emdr-fullscreen .control-btn.fullscreen::after {
+                        font-size: 11px !important;
+                    }
+                }
+                
+                @media (max-width: 768px) and (orientation: landscape) {
+                    .emdr-fullscreen .control-btn {
+                        width: 26px !important;
+                        height: 26px !important;
+                        border-radius: 4px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.start::after,
+                    .emdr-fullscreen .control-btn.menu::after {
+                        font-size: 11px !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn.stop::after,
+                    .emdr-fullscreen .control-btn.fullscreen::after {
+                        font-size: 10px !important;
+                    }
+                    
+                    .emdr-fullscreen .session-controls {
+                        gap: 6px !important;
+                    }
+                }
+            `;
+            document.head.appendChild(mobileButtonsStyles);
+            console.log('📱 Styles boutons EMDR mobile corrigés');
+        }, 600);
+        
+        // ============ FIN CORRECTIF BOUTONS EMDR MOBILE ============
+        
+        // ============ SOLUTION ULTRA-AGRESSIVE ANTI-VEILLE ============
+        
+        // Solution multiple pour empêcher la mise en veille
+        function initAntiSleepSolution() {
+            console.log('🔋 Initialisation solution anti-veille...');
+            
+            // 1. Wake Lock API (si supporté)
+            let wakeLock = null;
+            async function activateWakeLock() {
+                try {
+                    if ('wakeLock' in navigator) {
+                        if (wakeLock) {
+                            await wakeLock.release();
+                        }
+                        wakeLock = await navigator.wakeLock.request('screen');
+                        console.log('✅ Wake Lock API activé');
+                        return true;
+                    }
+                } catch (err) {
+                    console.log('❌ Wake Lock failed:', err);
+                }
+                return false;
+            }
+            
+            // 2. Vidéo invisible (solution de backup)
+            function createInvisibleVideo() {
+                const video = document.createElement('video');
+                video.id = 'anti-sleep-video';
+                video.style.cssText = `
+                    position: fixed;
+                    top: -1px;
+                    left: -1px;
+                    width: 1px;
+                    height: 1px;
+                    opacity: 0;
+                    pointer-events: none;
+                    z-index: -1;
+                `;
+                video.muted = true;
+                video.loop = true;
+                video.autoplay = true;
+                
+                // Créer une source vidéo minimale (1 pixel transparent)
+                const canvas = document.createElement('canvas');
+                canvas.width = 1;
+                canvas.height = 1;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = 'transparent';
+                ctx.fillRect(0, 0, 1, 1);
+                
+                video.srcObject = canvas.captureStream(1); // 1 FPS minimum
+                document.body.appendChild(video);
+                
+                video.play().then(() => {
+                    console.log('✅ Vidéo anti-veille activée');
+                }).catch(err => {
+                    console.log('❌ Vidéo anti-veille failed:', err);
+                });
+                
+                return video;
+            }
+            
+            // 3. Audio silencieux (solution iOS/mobile)
+            function createSilentAudio() {
+                const audio = document.createElement('audio');
+                audio.id = 'anti-sleep-audio';
+                audio.style.cssText = `
+                    position: fixed;
+                    top: -1px;
+                    left: -1px;
+                    width: 1px;
+                    height: 1px;
+                    opacity: 0;
+                    pointer-events: none;
+                    z-index: -1;
+                `;
+                audio.loop = true;
+                audio.volume = 0.01; // Volume très bas mais pas 0
+                
+                // Son silencieux encodé en base64
+                audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0/LnfSMGJIHO8diJNwgZZ7zs559NEAxPqOPxtmUcBjiOXY=';
+                
+                document.body.appendChild(audio);
+                
+                audio.play().then(() => {
+                    console.log('✅ Audio anti-veille activé');
+                }).catch(err => {
+                    console.log('❌ Audio anti-veille failed:', err);
+                });
+                
+                return audio;
+            }
+            
+            // 4. Simulation d'activité utilisateur
+            function simulateUserActivity() {
+                // Mouvement de souris invisible minimal
+                setInterval(() => {
+                    const event = new MouseEvent('mousemove', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true,
+                        clientX: Math.random() * 2,
+                        clientY: Math.random() * 2
+                    });
+                    document.dispatchEvent(event);
+                }, 30000); // Toutes les 30 secondes
+                
+                console.log('✅ Simulation activité utilisateur activée');
+            }
+            
+            // 5. Réactivation périodique
+            function periodicReactivation() {
+                setInterval(async () => {
+                    // Réactiver Wake Lock si nécessaire
+                    if ('wakeLock' in navigator && (!wakeLock || wakeLock.released)) {
+                        await activateWakeLock();
+                    }
+                    
+                    // Vérifier vidéo
+                    const video = document.getElementById('anti-sleep-video');
+                    if (video && video.paused) {
+                        video.play().catch(() => {});
+                    }
+                    
+                    // Vérifier audio
+                    const audio = document.getElementById('anti-sleep-audio');
+                    if (audio && audio.paused) {
+                        audio.play().catch(() => {});
+                    }
+                    
+                    console.log('🔋 Réactivation anti-veille');
+                }, 60000); // Toutes les minutes
+            }
+            
+            // Initialiser toutes les solutions
+            setTimeout(async () => {
+                await activateWakeLock();
+                createInvisibleVideo();
+                createSilentAudio();
+                simulateUserActivity();
+                periodicReactivation();
+                
+                console.log('🛡️ Solution anti-veille complète activée');
+            }, 1000);
+            
+            // Gestion des changements de visibilité
+            document.addEventListener('visibilitychange', async () => {
+                if (document.visibilityState === 'visible') {
+                    setTimeout(async () => {
+                        await activateWakeLock();
+                        console.log('🔋 Wake Lock réactivé après retour');
+                    }, 100);
+                }
+            });
+            
+            // Gestion des interactions utilisateur
+            ['click', 'touchstart', 'keypress'].forEach(eventType => {
+                document.addEventListener(eventType, async () => {
+                    if (!wakeLock || wakeLock.released) {
+                        await activateWakeLock();
+                    }
+                }, { passive: true });
+            });
+        }
+        
+        // Démarrer la solution anti-veille
+        initAntiSleepSolution();
+        
+        // ============ FIN SOLUTION ULTRA-AGRESSIVE ANTI-VEILLE ============
+        
+        // ============ CORRECTIF FORCÉ BOUTONS PAYSAGE ============
+        
+        // Solution forcée pour corriger les boutons en mode paysage
+        function forceButtonsPositionLandscape() {
+            // Vérifier si on est en plein écran et en paysage
+            const emdrSession = document.getElementById('emdr-session');
+            const isFullscreen = emdrSession && emdrSession.classList.contains('emdr-fullscreen');
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isFullscreen && isLandscape && isMobile) {
+                const controls = document.querySelector('.emdr-fullscreen .session-controls');
+                if (controls) {
+                    // Forcer la position centrée en haut
+                    controls.style.setProperty('position', 'fixed', 'important');
+                    controls.style.setProperty('top', '8px', 'important');
+                    controls.style.setProperty('left', '50%', 'important');
+                    controls.style.setProperty('right', 'auto', 'important');
+                    controls.style.setProperty('bottom', 'auto', 'important');
+                    controls.style.setProperty('transform', 'translateX(-50%)', 'important');
+                    controls.style.setProperty('width', '90%', 'important');
+                    controls.style.setProperty('max-width', '90vw', 'important');
+                    controls.style.setProperty('display', 'flex', 'important');
+                    controls.style.setProperty('flex-direction', 'row', 'important');
+                    controls.style.setProperty('justify-content', 'space-around', 'important');
+                    controls.style.setProperty('gap', '10px', 'important');
+                    controls.style.setProperty('padding', '6px 15px', 'important');
+                    controls.style.setProperty('background', 'rgba(0,0,0,0.85)', 'important');
+                    controls.style.setProperty('border-radius', '25px', 'important');
+                    controls.style.setProperty('z-index', '10001', 'important');
+                    
+                    console.log('📱 Boutons forcés en position paysage centrée');
+                    
+                    // Ajuster les boutons individuels
+                    const buttons = controls.querySelectorAll('.control-btn');
+                    buttons.forEach(btn => {
+                        btn.style.setProperty('flex', '1', 'important');
+                        btn.style.setProperty('max-width', '120px', 'important');
+                        btn.style.setProperty('padding', '6px 8px', 'important');
+                        btn.style.setProperty('font-size', '0.7rem', 'important');
+                        btn.style.setProperty('border-radius', '15px', 'important');
+                        btn.style.setProperty('white-space', 'nowrap', 'important');
+                    });
+                }
+            }
+        }
+        
+        // Appliquer la correction à plusieurs moments
+        setTimeout(() => {
+            forceButtonsPositionLandscape();
+            
+            // Observer les changements d'orientation
+            window.addEventListener('resize', () => {
+                setTimeout(forceButtonsPositionLandscape, 100);
+            });
+            
+            // Observer les changements de plein écran
+            document.addEventListener('fullscreenchange', () => {
+                setTimeout(forceButtonsPositionLandscape, 200);
+            });
+            
+            // Appliquer quand on clique sur plein écran
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                    setTimeout(forceButtonsPositionLandscape, 300);
+                });
+            }
+            
+            console.log('📱 Correctif boutons paysage installé');
+        }, 1500);
+        
+        // Ajouter aussi des styles CSS ultra-prioritaires
+        setTimeout(() => {
+            const forceStyles = document.createElement('style');
+            forceStyles.innerHTML = `
+                /* FORCAGE ABSOLU - Mode paysage mobile plein écran */
+                @media (max-width: 768px) and (orientation: landscape) {
+                    .emdr-fullscreen .session-controls {
+                        position: fixed !important;
+                        top: 8px !important;
+                        left: 50% !important;
+                        right: auto !important;
+                        bottom: auto !important;
+                        transform: translateX(-50%) !important;
+                        width: 90% !important;
+                        max-width: 90vw !important;
+                        display: flex !important;
+                        flex-direction: row !important;
+                        justify-content: space-around !important;
+                        gap: 10px !important;
+                        padding: 6px 15px !important;
+                        background: rgba(0,0,0,0.85) !important;
+                        border-radius: 25px !important;
+                        z-index: 10002 !important;
+                    }
+                    
+                    .emdr-fullscreen .control-btn {
+                        flex: 1 !important;
+                        max-width: 120px !important;
+                        padding: 6px 8px !important;
+                        font-size: 0.7rem !important;
+                        border-radius: 15px !important;
+                        white-space: nowrap !important;
+                    }
+                }
+            `;
+            document.head.appendChild(forceStyles);
+            console.log('🎯 Styles forcés ultra-prioritaires ajoutés');
+        }, 500);
+        
+        // ============ FIN CORRECTIF FORCÉ BOUTONS PAYSAGE ============
+        
+        // ============ BOUTONS SYMBOLES UNIQUEMENT EN PLEIN ÉCRAN ============
+        
+        // Fonction pour transformer les boutons en symboles uniquement
+        function setButtonsToSymbolsOnly() {
+            const controls = document.querySelector('.emdr-fullscreen .session-controls');
+            if (!controls) return;
+            
+            const buttons = controls.querySelectorAll('.control-btn');
+            buttons.forEach(btn => {
+                if (btn.classList.contains('start')) {
+                    btn.textContent = '▶';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 14px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                } else if (btn.classList.contains('stop')) {
+                    btn.textContent = '⏹';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 12px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                } else if (btn.classList.contains('fullscreen')) {
+                    btn.textContent = '📱';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 12px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                } else if (btn.classList.contains('menu')) {
+                    btn.textContent = '🏠';
+                    btn.style.cssText += `
+                        width: 30px !important;
+                        height: 30px !important;
+                        padding: 0 !important;
+                        border-radius: 6px !important;
+                        font-size: 14px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        min-width: 30px !important;
+                    `;
+                }
+            });
+            
+            // Réduire l'espacement du container
+            controls.style.cssText += `
+                gap: 4px !important;
+                padding: 4px !important;
+            `;
+            
+            console.log('✅ Boutons transformés en symboles uniquement');
+        }
+        
+        // Fonction pour remettre le texte normal
+        function restoreButtonsText() {
+            const controls = document.querySelector('.session-controls');
+            if (!controls) return;
+            
+            const buttons = controls.querySelectorAll('.control-btn');
+            buttons.forEach(btn => {
+                if (btn.classList.contains('start')) {
+                    btn.innerHTML = '▶️ Démarrer';
+                } else if (btn.classList.contains('stop')) {
+                    btn.innerHTML = '■ Arrêter';
+                } else if (btn.classList.contains('fullscreen')) {
+                    btn.innerHTML = '📺 Plein Écran';
+                } else if (btn.classList.contains('menu')) {
+                    btn.innerHTML = '🏠 Menu';
+                }
+                
+                // Remettre les styles normaux
+                btn.style.width = '';
+                btn.style.height = '';
+                btn.style.padding = '';
+                btn.style.fontSize = '';
+                btn.style.minWidth = '';
+            });
+            
+            console.log('✅ Boutons remis avec texte normal');
+        }
+        
+        // Surcharger la fonction toggleFullscreen pour modifier les boutons
+        setTimeout(() => {
+            const originalToggleFullscreen = window.toggleFullscreen;
+            
+            window.toggleFullscreen = async function() {
+                if (originalToggleFullscreen) {
+                    await originalToggleFullscreen();
+                }
+                
+                // Après le basculement, vérifier si on est en plein écran
+                setTimeout(() => {
+                    const emdrSession = document.getElementById('emdr-session');
+                    const isFullscreenMode = emdrSession && emdrSession.classList.contains('emdr-fullscreen');
+                    
+                    if (isFullscreenMode) {
+                        setButtonsToSymbolsOnly();
+                    } else {
+                        restoreButtonsText();
+                    }
+                }, 200);
+            };
+            
+            console.log('🔧 Fonction toggleFullscreen surchargée pour symboles');
+        }, 1500);
+        
+        // Observer les changements de classe pour automatiser
+        setTimeout(() => {
+            const emdrSession = document.getElementById('emdr-session');
+            if (emdrSession) {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const hasFullscreen = emdrSession.classList.contains('emdr-fullscreen');
+                            
+                            setTimeout(() => {
+                                if (hasFullscreen) {
+                                    setButtonsToSymbolsOnly();
+                                } else {
+                                    restoreButtonsText();
+                                }
+                            }, 100);
+                        }
+                    });
+                });
+                
+                observer.observe(emdrSession, {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+                
+                console.log('👁️ Observer boutons symboles installé');
+            }
+        }, 1600);
+        
+        // ============ FIN BOUTONS SYMBOLES UNIQUEMENT EN PLEIN ÉCRAN ============
+        
+        // ============ ASSURER POSITION NORMALE BOUTONS ============
+        
+        // Remettre les boutons SOUS le canvas en mode normal (position correcte)
+        setTimeout(() => {
+            const normalModeStyles = document.createElement('style');
+            normalModeStyles.innerHTML = `
+                /* MODE NORMAL - Boutons SOUS le canvas (position correcte) */
+                .emdr-container {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                
+                .emdr-container .session-controls {
+                    position: relative !important;
+                    top: auto !important;
+                    left: auto !important;
+                    right: auto !important;
+                    bottom: auto !important;
+                    transform: none !important;
+                    width: 100% !important;
+                    max-width: 500px !important;
+                    margin: 25px auto 0 auto !important;
+                    padding: 15px 20px !important;
+                    background: rgba(248, 249, 250, 0.95) !important;
+                    border-radius: 20px !important;
+                    display: flex !important;
+                    flex-direction: row !important;
+                    justify-content: center !important;
+                    flex-wrap: wrap !important;
+                    gap: 10px !important;
+                    z-index: 1 !important;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+                }
+                
+                .emdr-container .control-btn {
+                    padding: 10px 18px !important;
+                    font-size: 0.9rem !important;
+                    border-radius: 18px !important;
+                    min-width: 100px !important;
+                    flex: none !important;
+                    white-space: nowrap !important;
+                    font-weight: 500 !important;
+                    transition: all 0.3s ease !important;
+                }
+                
+                .emdr-container .control-btn:hover {
+                    transform: translateY(-2px) !important;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+                }
+                
+                .emdr-container .control-btn.start {
+                    background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+                    color: white !important;
+                }
+                
+                .emdr-container .control-btn.stop {
+                    background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+                    color: white !important;
+                }
+                
+                .emdr-container .control-btn.fullscreen {
+                    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+                    color: white !important;
+                }
+                
+                .emdr-container .control-btn.menu {
+                    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+                    color: white !important;
+                }
+                
+                /* Responsive mode normal mobile */
+                @media (max-width: 768px) {
+                    .emdr-container .session-controls {
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        margin: 20px auto 0 auto !important;
+                        padding: 15px !important;
+                        gap: 12px !important;
+                        max-width: 300px !important;
+                    }
+                    
+                    .emdr-container .control-btn {
+                        width: 100% !important;
+                        max-width: 200px !important;
+                        padding: 12px 20px !important;
+                        font-size: 0.95rem !important;
+                    }
+                }
+                
+                /* Canvas sans marge haute - espace libre pour session info */
+                .emdr-container #emdr-canvas-portrait {
+                    margin-top: 0 !important;
+                    position: relative;
+                    z-index: 1;
+                }
+                
+                /* Session info en haut libre */
+                .session-info-portrait {
+                    top: 10px !important;
+                    left: 10px !important;
+                    right: 10px !important;
+                    z-index: 10 !important;
+                }
+                
+                /* Instructions entre canvas et boutons */
+                .emdr-instruction {
+                    margin: 15px 0 5px 0 !important;
+                    z-index: 1;
+                    position: relative;
+                    text-align: center;
+                    font-style: italic;
+                    color: #666;
+                }
+            `;
+            document.head.appendChild(normalModeStyles);
+            console.log('📐 Boutons repositionnés SOUS le canvas (corrigé)');
+        }, 700);
+        
+        // ============ FIN ASSURER POSITION NORMALE BOUTONS ============
+        
+        // ============ CORRECTIF SORTIE PLEIN ÉCRAN ============
+        
+        // Fonction pour remettre les boutons en position normale après sortie plein écran
+        function resetButtonsToNormalMode() {
+            console.log('🔄 Remise en position normale des boutons...');
+            
+            const controls = document.querySelector('.session-controls');
+            if (controls) {
+                // Forcer le retour au mode normal
+                controls.style.removeProperty('position');
+                controls.style.removeProperty('top');
+                controls.style.removeProperty('left'); 
+                controls.style.removeProperty('right');
+                controls.style.removeProperty('bottom');
+                controls.style.removeProperty('transform');
+                controls.style.removeProperty('width');
+                controls.style.removeProperty('max-width');
+                controls.style.removeProperty('z-index');
+                
+                // Réappliquer les styles mode normal
+                controls.style.setProperty('position', 'relative', 'important');
+                controls.style.setProperty('margin', '25px auto 0 auto', 'important');
+                controls.style.setProperty('width', '100%', 'important');
+                controls.style.setProperty('max-width', '500px', 'important');
+                controls.style.setProperty('background', 'rgba(248, 249, 250, 0.95)', 'important');
+                controls.style.setProperty('padding', '15px 20px', 'important');
+                controls.style.setProperty('border-radius', '20px', 'important');
+                controls.style.setProperty('display', 'flex', 'important');
+                controls.style.setProperty('justify-content', 'center', 'important');
+                controls.style.setProperty('gap', '10px', 'important');
+                controls.style.setProperty('box-shadow', '0 4px 15px rgba(0,0,0,0.1)', 'important');
+                
+                console.log('✅ Boutons remis en position normale');
+            }
+        }
+        
+        // Surcharger la fonction exitFullscreen existante
+        setTimeout(() => {
+            // Sauvegarder la fonction originale
+            const originalExitFullscreen = window.exitFullscreen;
+            
+            // Créer une nouvelle version qui remet les boutons en place
+            window.exitFullscreen = async function() {
+                console.log('📺 Sortie du plein écran avec remise en place des boutons...');
+                
+                // Appeler la fonction originale
+                if (originalExitFullscreen) {
+                    await originalExitFullscreen();
+                }
+                
+                // Remettre les boutons en position normale
+                setTimeout(() => {
+                    resetButtonsToNormalMode();
+                }, 100);
+                
+                setTimeout(() => {
+                    resetButtonsToNormalMode();
+                }, 300);
+            };
+            
+            console.log('🔧 Fonction exitFullscreen surchargée');
+        }, 1000);
+        
+        // Observer les changements de classe fullscreen pour déclencher la remise en place
+        setTimeout(() => {
+            const emdrSession = document.getElementById('emdr-session');
+            if (emdrSession) {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const hasFullscreen = emdrSession.classList.contains('emdr-fullscreen');
+                            
+                            if (!hasFullscreen) {
+                                console.log('👁️ Détection sortie plein écran via observer');
+                                setTimeout(resetButtonsToNormalMode, 100);
+                            }
+                        }
+                    });
+                });
+                
+                observer.observe(emdrSession, {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+                
+                console.log('👁️ Observer de classe fullscreen installé');
+            }
+        }, 1200);
+        
+        // ============ FIN CORRECTIF SORTIE PLEIN ÉCRAN ============
+        
+        // ============ FIN AMÉLIORATIONS FINALES ============
+
+        // ============ ÉCRAN MENTIONS LÉGALES ============
+        
+        // (Ancien code DOMContentLoaded supprimé - remplacé par la version directe plus bas)
+
+        // ============ FIN ÉCRAN MENTIONS LÉGALES ============
+    
+
+            // ============================================================
+            //   ASSISTANT "LIA" — Pass Anxiété Pro, version locale sécurisée
+            // ============================================================
+            const LIA_MODULES = {
+                crisis: {
+                    icon: '🚨',
+                    title: 'Mode Crise',
+                    desc: 'Techniques d\'urgence immédiates : respiration anti-panique, ancrage 5-4-3-2-1 et apaisement rapide.',
+                    tip: '💨 Commencez doucement. L’objectif n’est pas de forcer le calme, mais de retrouver un point d’appui.',
+                    screen: 'crisis-screen',
+                    gradient: 'linear-gradient(135deg, #f44336, #e91e63)'
+                },
+                emdr: {
+                    icon: '👁️',
+                    title: 'EMDR Professionnel',
+                    desc: 'Session de mouvements oculaires pour travailler sur un souvenir, une situation ou une charge émotionnelle persistante.',
+                    tip: '🧠 Commencez par évaluer votre niveau de détresse avant la session.',
+                    screen: 'emdr-distance',
+                    gradient: 'linear-gradient(135deg, #667eea, #764ba2)'
+                },
+                breathing: {
+                    icon: '💓',
+                    title: 'Cohérence Cardiaque',
+                    desc: 'Respiration guidée pour réguler le système nerveux et retrouver progressivement un état plus stable.',
+                    tip: '❤️ Quelques minutes peuvent déjà aider à faire redescendre la tension.',
+                    screen: 'breathing-screen',
+                    gradient: 'linear-gradient(135deg, #4CAF50, #8BC34A)'
+                },
+                tcc: {
+                    icon: '🧠',
+                    title: 'TCC — Restructuration cognitive',
+                    desc: 'Travail sur les pensées automatiques, les ruminations et les scénarios catastrophe.',
+                    tip: '💭 Notez la pensée exacte, puis cherchez une formulation plus équilibrée.',
+                    screen: 'tcc-screen',
+                    gradient: 'linear-gradient(135deg, #FF9800, #F57C00)'
+                },
+                meditation: {
+                    icon: '🧘',
+                    title: 'Méditation guidée',
+                    desc: 'Session de présence et de recentrage pour calmer le mental et revenir à l’instant présent.',
+                    tip: '🌿 Laissez passer les pensées comme des nuages. Rien à réussir, seulement revenir.',
+                    screen: 'meditation-screen',
+                    gradient: 'linear-gradient(135deg, #9C27B0, #673AB7)'
+                },
+                hypnotherapy: {
+                    icon: '🌀',
+                    title: 'Hypnothérapie guidée',
+                    desc: 'Session d’hypnose thérapeutique pour une relaxation profonde et un travail intérieur doux.',
+                    tip: '🎧 Installez-vous dans un endroit calme, idéalement avec un casque.',
+                    screen: 'hypnotherapy-screen',
+                    gradient: 'linear-gradient(135deg, #3F51B5, #2196F3)'
+                },
+                journal: {
+                    icon: '📝',
+                    title: 'Journal de bord TCC',
+                    desc: 'Écriture thérapeutique pour clarifier vos émotions, vos déclencheurs et votre progression.',
+                    tip: '✍️ Écrire même quelques lignes peut remettre de l’ordre dans le brouillard intérieur.',
+                    screen: 'journal-screen',
+                    gradient: 'linear-gradient(135deg, #009688, #4CAF50)'
+                }
+            };
+
+            let liaCurrentModule = null;
+            let liaIsWaiting = false;
+            let liaHistory = [];
+
+            function liaShowSub(name) {
+                ['liaWelcome','liaChat','liaRedirect'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.remove('active');
+                });
+                const target = document.getElementById('lia' + name.charAt(0).toUpperCase() + name.slice(1));
+                if (target) target.classList.add('active');
+
+                const inputZone = document.getElementById('liaInputZone');
+                if (inputZone) inputZone.style.display = (name === 'chat') ? 'block' : 'none';
+            }
+
+            function liaStartChat(msg) {
+                liaShowSub('chat');
+                liaHistory = [];
+                liaAddMsg('user', msg);
+                liaCallAI(msg);
+            }
+
+            function liaOpenFreeChat() {
+                liaShowSub('chat');
+                liaHistory = [];
+                liaAddMsg('ai', 'Prenez votre temps 🌿 Décrivez-moi ce que vous ressentez, je suis là pour vous écouter.');
+                setTimeout(() => document.getElementById('liaInput')?.focus(), 100);
+            }
+
+            function liaAddMsg(role, text, cards) {
+                const container = document.getElementById('liaMessages');
+                if (!container) return;
+
+                const div = document.createElement('div');
+                div.className = `lia-msg ${role}`;
+
+                const av = document.createElement('div');
+                av.className = 'lia-msg-av';
+                av.textContent = role === 'ai' ? '🌸' : '👤';
+
+                const bubble = document.createElement('div');
+                bubble.className = 'lia-msg-bubble';
+                bubble.textContent = String(text || '').replace(/REDIRECT:\w+/g, '').trim();
+
+                if (cards && cards.length > 0) {
+                    const cardsDiv = document.createElement('div');
+                    cardsDiv.className = 'lia-redirect-cards';
+                    cards.forEach(c => {
+                        const btn = document.createElement('button');
+                        btn.className = 'lia-rcard';
+                        const icon = document.createElement('span');
+                        icon.className = 'lri';
+                        icon.textContent = c.icon;
+                        const txt = document.createElement('span');
+                        txt.className = 'lrt';
+                        const strong = document.createElement('strong');
+                        strong.textContent = c.title;
+                        const small = document.createElement('small');
+                        small.textContent = c.sub;
+                        txt.appendChild(strong);
+                        txt.appendChild(small);
+                        const arrow = document.createElement('span');
+                        arrow.textContent = '›';
+                        btn.appendChild(icon);
+                        btn.appendChild(txt);
+                        btn.appendChild(arrow);
+                        btn.onclick = () => liaShowRedirect(c.key);
+                        cardsDiv.appendChild(btn);
+                    });
+                    bubble.appendChild(cardsDiv);
+                }
+
+                if (role === 'ai') {
+                    div.appendChild(av);
+                    div.appendChild(bubble);
+                } else {
+                    div.appendChild(bubble);
+                    div.appendChild(av);
+                }
+
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            function liaShowTyping() {
+                const container = document.getElementById('liaMessages');
+                if (!container) return;
+                const div = document.createElement('div');
+                div.className = 'lia-msg ai';
+                div.id = 'liaTyping';
+                const av = document.createElement('div');
+                av.className = 'lia-msg-av';
+                av.textContent = '🌸';
+                const b = document.createElement('div');
+                b.className = 'lia-msg-bubble lia-typing';
+                b.innerHTML = '<span></span><span></span><span></span>';
+                div.appendChild(av);
+                div.appendChild(b);
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            function liaHideTyping() {
+                document.getElementById('liaTyping')?.remove();
+            }
+
+            function liaSend() {
+                if (liaIsWaiting) return;
+                const input = document.getElementById('liaInput');
+                const text = (input?.value || '').trim();
+                if (!text) return;
+                input.value = '';
+                input.style.height = 'auto';
+                liaAddMsg('user', text);
+                liaCallAI(text);
+            }
+
+            function liaDetectModule(text) {
+                const msg = String(text || '').toLowerCase();
+                const has = words => words.some(w => msg.includes(w));
+
+                if (has(['crise', 'panique', 'angoisse intense', 'hyperventilation', 'urgence', 'j’étouffe', "j'etouffe", 'tachycardie', 'tétanie'])) return 'crisis';
+                if (has(['trauma', 'traumatisme', 'souvenir', 'choc', 'emdr', 'flashback', 'agression', 'accident'])) return 'emdr';
+                if (has(['pensée', 'pensee', 'rumination', 'boucle', 'catastrophe', 'négative', 'negative', 'obsession', 'je pense trop'])) return 'tcc';
+                if (has(['fatigue', 'épuisé', 'epuise', 'relaxation profonde', 'hypnose', 'lâcher prise', 'lacher prise'])) return 'hypnotherapy';
+                if (has(['méditation', 'meditation', 'calme', 'recentrer', 'pleine conscience', 'ressourcer'])) return 'meditation';
+                if (has(['écrire', 'ecrire', 'journal', 'exprimer', 'faire le point', 'poser mes émotions', 'poser mes emotions'])) return 'journal';
+                return 'breathing';
+            }
+
+            function liaCallAI(userMsg) {
+                if (liaIsWaiting) return;
+                liaIsWaiting = true;
+                const sendBtn = document.getElementById('liaSendBtn');
+                if (sendBtn) sendBtn.disabled = true;
+                liaShowTyping();
+
+                liaHistory.push({ role: 'user', content: userMsg });
+
+                // Timeout de sécurité : si pas de réponse en 10 sec → fallback
+                const timeoutId = setTimeout(() => {
+                    liaHideTyping();
+                    liaHistory.pop(); // retirer le message sans réponse
+                    const fallbackCards = [
+                        { key: 'crisis',    icon: '🚨', title: 'Mode Crise',          sub: 'Pour les urgences et paniques' },
+                        { key: 'breathing', icon: '💓', title: 'Cohérence Cardiaque', sub: 'Pour se calmer rapidement' },
+                        { key: 'tcc',       icon: '🧠', title: 'TCC',                 sub: 'Pour les pensées négatives' }
+                    ];
+                    liaAddMsg('ai',
+                        'Je rencontre une difficulté de connexion. Voici les modules qui peuvent vous aider :',
+                        fallbackCards
+                    );
+                    liaIsWaiting = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                }, 10000);
+
+                fetch('/.netlify/functions/claude', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 350,
+                        system: LIA_SYSTEM,
+                        messages: liaHistory
+                    })
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    clearTimeout(timeoutId);
+
+                    const aiText = (data.content && data.content[0] && data.content[0].text)
+                        ? data.content[0].text
+                        : null;
+
+                    if (!aiText) throw new Error('Réponse vide');
+
+                    liaHistory.push({ role: 'assistant', content: aiText });
+                    liaHideTyping();
+
+                    const match = aiText.match(/REDIRECT:(\w+)/);
+                    if (match && LIA_MODULES[match[1]]) {
+                        liaAddMsg('ai', aiText);
+                        setTimeout(function() { liaShowRedirect(match[1]); }, 1000);
+                    } else {
+                        liaAddMsg('ai', aiText);
+                    }
+
+                    liaIsWaiting = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                })
+                .catch(function(err) {
+                    clearTimeout(timeoutId);
+                    console.error('Lia API error:', err);
+                    liaHideTyping();
+
+                    // Fallback local par mots-clés si l'API est indisponible
+                    var detected = liaDetectModule(userMsg);
+                    var mod = LIA_MODULES[detected];
+                    if (mod) {
+                        liaAddMsg('ai',
+                            'Je ne peux pas me connecter en ce moment, mais j\'ai analysé votre message. Je vous recommande ce module :'
+                        );
+                        setTimeout(function() { liaShowRedirect(detected); }, 800);
+                    } else {
+                        var fallbackCards = [
+                            { key: 'crisis',    icon: '🚨', title: 'Mode Crise',          sub: 'Pour les urgences et paniques' },
+                            { key: 'breathing', icon: '💓', title: 'Cohérence Cardiaque', sub: 'Pour se calmer rapidement' },
+                            { key: 'tcc',       icon: '🧠', title: 'TCC',                 sub: 'Pour les pensées négatives' }
+                        ];
+                        liaAddMsg('ai',
+                            'Je rencontre une difficulté de connexion. Voici les modules qui peuvent vous aider :',
+                            fallbackCards
+                        );
+                    }
+
+                    liaIsWaiting = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                });
+            }
+
+            function liaShowRedirect(moduleKey) {
+                const mod = LIA_MODULES[moduleKey];
+                if (!mod) return;
+                liaCurrentModule = moduleKey;
+
+                const icon = document.getElementById('liaModIcon');
+                const title = document.getElementById('liaModTitle');
+                const desc = document.getElementById('liaModDesc');
+                const tip = document.getElementById('liaModTip');
+
+                if (icon) {
+                    icon.textContent = mod.icon;
+                    icon.style.background = mod.gradient;
+                }
+                if (title) title.textContent = mod.title;
+                if (desc) desc.textContent = mod.desc;
+                if (tip) {
+                    tip.textContent = mod.tip || '';
+                    tip.style.display = mod.tip ? 'block' : 'none';
+                }
+
+                liaShowSub('redirect');
+            }
+
+            function liaGoToModule() {
+                const mod = LIA_MODULES[liaCurrentModule];
+                if (!mod) return;
+                if (typeof DataManager !== 'undefined' && DataManager.logToolUsage) {
+                    DataManager.logToolUsage('ai-' + liaCurrentModule);
+                }
+                if (typeof goToScreen === 'function') goToScreen(mod.screen);
+            }
+
+            function liaReset() {
+                liaHistory = [];
+                liaCurrentModule = null;
+                liaIsWaiting = false;
+                const msgs = document.getElementById('liaMessages');
+                if (msgs) msgs.innerHTML = '';
+                const input = document.getElementById('liaInput');
+                if (input) {
+                    input.value = '';
+                    input.style.height = 'auto';
+                }
+                const sendBtn = document.getElementById('liaSendBtn');
+                if (sendBtn) sendBtn.disabled = false;
+                liaShowSub('welcome');
+            }
+
+            document.getElementById('liaInput')?.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 110) + 'px';
+            });
+
+            function updateTrackingScreen() {
+                if (typeof DataManager === 'undefined') return;
+                const usage = DataManager.getToolUsage ? DataManager.getToolUsage() : [];
+                const anxiety = DataManager.getAnxietyHistory ? DataManager.getAnxietyHistory() : [];
+
+                // Statistiques
+                const total = usage.length;
+                const counts = {};
+                usage.forEach(e => { counts[e.tool] = (counts[e.tool] || 0) + 1; });
+                const fav = Object.keys(counts).length
+                    ? Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b)
+                    : null;
+                const avgAnx = anxiety.length
+                    ? (anxiety.reduce((s, e) => s + e.level, 0) / anxiety.length).toFixed(1)
+                    : null;
+
+                // Série consécutive
+                const dates = [...new Set(usage.map(e =>
+                    new Date(e.timestamp).toISOString().split('T')[0]
+                ))].sort().reverse();
+                let streak = 0;
+                for (let i = 0; i < dates.length; i++) {
+                    const expected = new Date();
+                    expected.setDate(expected.getDate() - i);
+                    if (dates[i] === expected.toISOString().split('T')[0]) streak++;
+                    else break;
+                }
+
+                // Mettre à jour les chiffres
+                const toolNames = {
+                    emdr: 'EMDR', breathing: 'Respiration', crisis: 'Mode Crise',
+                    'tcc-thoughts': 'TCC Pensées', 'tcc-emotions': 'TCC Émotions',
+                    'tcc-journal': 'Journal TCC', meditation: 'Méditation',
+                    hypnotherapy: 'Hypnothérapie', ai: 'Assistant Lia'
+                };
+                const elMap = {
+                    'total-sessions': total,
+                    'streak-days': streak,
+                    'avg-anxiety': avgAnx ? avgAnx + '/10' : '-',
+                    'favorite-tool': fav ? (toolNames[fav] || fav) : '-'
+                };
+                Object.entries(elMap).forEach(([id, val]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = val;
+                });
+
+                // Graphique 7 jours basé sur les vraies données
+                const chartContainer = document.querySelector('#tracking-screen .chart-placeholder');
+                if (!chartContainer) return;
+
+                const days7 = [];
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    const dStr = d.toISOString().split('T')[0];
+                    const entries = anxiety.filter(e =>
+                        new Date(e.timestamp).toISOString().split('T')[0] === dStr
+                    );
+                    const avg = entries.length
+                        ? entries.reduce((s, e) => s + e.level, 0) / entries.length
+                        : null;
+                    days7.push({
+                        label: d.toLocaleDateString('fr-FR', { weekday: 'short' }),
+                        avg,
+                        hasData: entries.length > 0
+                    });
+                }
+
+                if (!days7.some(d => d.hasData)) {
+                    chartContainer.innerHTML = '<p style="text-align:center;color:#6b7c93;font-style:italic;padding:20px;">📊 Utilisez l\'app pour voir votre graphique évoluer.</p>';
+                    return;
+                }
+
+                function barColor(val) {
+                    if (val === null) return '#e0e0e0';
+                    if (val <= 3) return '#4CAF50';
+                    if (val <= 5) return '#8BC34A';
+                    if (val <= 7) return '#FF9800';
+                    return '#f44336';
+                }
+
+                chartContainer.style.position = 'relative';
+                chartContainer.style.marginBottom = '28px';
+                chartContainer.innerHTML = days7.map(d => `
+                    <div style="flex:1;border-radius:5px 5px 0 0;min-height:8px;cursor:pointer;position:relative;
+                        height:${d.avg !== null ? Math.max(10, d.avg * 10) : 10}%;
+                        background:${barColor(d.avg)};"
+                        title="${d.label}: ${d.avg !== null ? d.avg.toFixed(1) + '/10' : 'Aucune donnée'}">
+                    </div>
+                `).join('') + `
+                    <div style="position:absolute;bottom:-22px;left:0;right:0;display:flex;justify-content:space-between;font-size:0.68rem;color:#6b7c93;">
+                        ${days7.map(d => `<span style="flex:1;text-align:center;">${d.label}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            window.updateTrackingScreen = updateTrackingScreen;
+            // ============================================================
+            //   FIN ASSISTANT "LIA"
+            // ============================================================
+</script>
+</body>
+</html>
