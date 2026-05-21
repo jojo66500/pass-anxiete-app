@@ -18432,19 +18432,55 @@ function testHypnoSystem() {
                 const sendBtn = document.getElementById('liaSendBtn');
                 if (sendBtn) sendBtn.disabled = true;
                 liaShowTyping();
+
                 liaHistory.push({ role: 'user', content: userMsg });
 
-                setTimeout(() => {
+                fetch('/.netlify/functions/claude', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 350,
+                        system: LIA_SYSTEM,
+                        messages: liaHistory
+                    })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    const aiText = data.content?.[0]?.text
+                        || 'Je vous écoute. Pouvez-vous me décrire plus précisément ce que vous ressentez ?';
+
+                    liaHistory.push({ role: 'assistant', content: aiText });
                     liaHideTyping();
-                    const moduleKey = liaDetectModule(userMsg);
-                    const mod = LIA_MODULES[moduleKey];
-                    const msg = `Merci de l’avoir exprimé 🌿 D’après ce que vous décrivez, je vous propose de commencer par le module ${mod.title}.`;
-                    liaHistory.push({ role: 'assistant', content: msg });
-                    liaAddMsg('ai', msg);
-                    setTimeout(() => liaShowRedirect(moduleKey), 850);
+
+                    const match = aiText.match(/REDIRECT:(\w+)/);
+                    if (match && LIA_MODULES[match[1]]) {
+                        liaAddMsg('ai', aiText);
+                        setTimeout(() => liaShowRedirect(match[1]), 1000);
+                    } else {
+                        liaAddMsg('ai', aiText);
+                    }
+
                     liaIsWaiting = false;
                     if (sendBtn) sendBtn.disabled = false;
-                }, 650);
+                })
+                .catch(err => {
+                    console.error('Lia API error:', err);
+                    liaHideTyping();
+                    const fallbackCards = [
+                        { key: 'crisis', icon: '🚨', title: 'Mode Crise', sub: 'Pour les urgences et paniques' },
+                        { key: 'breathing', icon: '💓', title: 'Cohérence Cardiaque', sub: 'Pour se calmer rapidement' },
+                        { key: 'tcc', icon: '🧠', title: 'TCC', sub: 'Pour les pensées négatives' }
+                    ];
+                    liaAddMsg('ai',
+                        'Je rencontre une difficulté de connexion. Voici les modules qui peuvent vous aider :',
+                        fallbackCards
+                    );
+                    liaIsWaiting = false;
+                    if (sendBtn) sendBtn.disabled = false;
+                });
             }
 
             function liaShowRedirect(moduleKey) {
@@ -18501,18 +18537,26 @@ function testHypnoSystem() {
                 this.style.height = Math.min(this.scrollHeight, 110) + 'px';
             });
 
-            function updateTrackingScreenFixed() {
+            function updateTrackingScreen() {
                 if (typeof DataManager === 'undefined') return;
                 const usage = DataManager.getToolUsage ? DataManager.getToolUsage() : [];
                 const anxiety = DataManager.getAnxietyHistory ? DataManager.getAnxietyHistory() : [];
 
+                // Statistiques
                 const total = usage.length;
                 const counts = {};
                 usage.forEach(e => { counts[e.tool] = (counts[e.tool] || 0) + 1; });
-                const fav = Object.keys(counts).length ? Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b) : null;
-                const avgAnx = anxiety.length ? (anxiety.reduce((s, e) => s + Number(e.level || 0), 0) / anxiety.length).toFixed(1) : null;
+                const fav = Object.keys(counts).length
+                    ? Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b)
+                    : null;
+                const avgAnx = anxiety.length
+                    ? (anxiety.reduce((s, e) => s + e.level, 0) / anxiety.length).toFixed(1)
+                    : null;
 
-                const dates = [...new Set(usage.map(e => new Date(e.timestamp).toISOString().split('T')[0]))].sort().reverse();
+                // Série consécutive
+                const dates = [...new Set(usage.map(e =>
+                    new Date(e.timestamp).toISOString().split('T')[0]
+                ))].sort().reverse();
                 let streak = 0;
                 for (let i = 0; i < dates.length; i++) {
                     const expected = new Date();
@@ -18521,24 +18565,25 @@ function testHypnoSystem() {
                     else break;
                 }
 
-                const labels = {
-                    emdr:'EMDR', breathing:'Respiration', crisis:'Mode Crise',
-                    'tcc-thoughts':'TCC Pensées', 'tcc-emotions':'TCC Émotions',
-                    'tcc-journal':'Journal TCC', meditation:'Méditation',
-                    hypnotherapy:'Hypnothérapie', ai:'Assistant Lia'
+                // Mettre à jour les chiffres
+                const toolNames = {
+                    emdr: 'EMDR', breathing: 'Respiration', crisis: 'Mode Crise',
+                    'tcc-thoughts': 'TCC Pensées', 'tcc-emotions': 'TCC Émotions',
+                    'tcc-journal': 'Journal TCC', meditation: 'Méditation',
+                    hypnotherapy: 'Hypnothérapie', ai: 'Assistant Lia'
                 };
-
-                const els = {
+                const elMap = {
                     'total-sessions': total,
                     'streak-days': streak,
                     'avg-anxiety': avgAnx ? avgAnx + '/10' : '-',
-                    'favorite-tool': fav ? (labels[fav] || fav) : '-'
+                    'favorite-tool': fav ? (toolNames[fav] || fav) : '-'
                 };
-                Object.entries(els).forEach(([id, val]) => {
+                Object.entries(elMap).forEach(([id, val]) => {
                     const el = document.getElementById(id);
                     if (el) el.textContent = val;
                 });
 
+                // Graphique 7 jours basé sur les vraies données
                 const chartContainer = document.querySelector('#tracking-screen .chart-placeholder');
                 if (!chartContainer) return;
 
@@ -18547,14 +18592,21 @@ function testHypnoSystem() {
                     const d = new Date();
                     d.setDate(d.getDate() - i);
                     const dStr = d.toISOString().split('T')[0];
-                    const dayEntries = anxiety.filter(e => new Date(e.timestamp).toISOString().split('T')[0] === dStr);
-                    const avg = dayEntries.length ? dayEntries.reduce((s, e) => s + Number(e.level || 0), 0) / dayEntries.length : null;
-                    const label = d.toLocaleDateString('fr-FR', { weekday: 'short' });
-                    days7.push({ label, avg, hasData: dayEntries.length > 0 });
+                    const entries = anxiety.filter(e =>
+                        new Date(e.timestamp).toISOString().split('T')[0] === dStr
+                    );
+                    const avg = entries.length
+                        ? entries.reduce((s, e) => s + e.level, 0) / entries.length
+                        : null;
+                    days7.push({
+                        label: d.toLocaleDateString('fr-FR', { weekday: 'short' }),
+                        avg,
+                        hasData: entries.length > 0
+                    });
                 }
 
                 if (!days7.some(d => d.hasData)) {
-                    chartContainer.innerHTML = '<div class="tracking-empty-state">📊 Commencez à utiliser l\'app pour voir votre graphique d\'anxiété évoluer au fil des jours.</div>';
+                    chartContainer.innerHTML = '<p style="text-align:center;color:#6b7c93;font-style:italic;padding:20px;">📊 Utilisez l\'app pour voir votre graphique évoluer.</p>';
                     return;
                 }
 
@@ -18566,22 +18618,22 @@ function testHypnoSystem() {
                     return '#f44336';
                 }
 
+                chartContainer.style.position = 'relative';
+                chartContainer.style.marginBottom = '28px';
                 chartContainer.innerHTML = days7.map(d => `
-                    <div class="tracking-bar"
-                        style="height:${d.avg !== null ? Math.max(10, d.avg * 10) : 10}%;background:${barColor(d.avg)};"
-                        data-val="${d.avg !== null ? d.avg.toFixed(1) + '/10' : 'Aucune donnée'}"
+                    <div style="flex:1;border-radius:5px 5px 0 0;min-height:8px;cursor:pointer;position:relative;
+                        height:${d.avg !== null ? Math.max(10, d.avg * 10) : 10}%;
+                        background:${barColor(d.avg)};"
                         title="${d.label}: ${d.avg !== null ? d.avg.toFixed(1) + '/10' : 'Aucune donnée'}">
                     </div>
                 `).join('') + `
-                    <div style="width:100%;position:absolute;bottom:-22px;left:0;display:flex;justify-content:space-between;font-size:0.68rem;color:#6b7c93;">
+                    <div style="position:absolute;bottom:-22px;left:0;right:0;display:flex;justify-content:space-between;font-size:0.68rem;color:#6b7c93;">
                         ${days7.map(d => `<span style="flex:1;text-align:center;">${d.label}</span>`).join('')}
                     </div>
                 `;
-                chartContainer.style.position = 'relative';
-                chartContainer.style.marginBottom = '28px';
             }
 
-            window.updateTrackingScreen = updateTrackingScreenFixed;
+            window.updateTrackingScreen = updateTrackingScreen;
             // ============================================================
             //   FIN ASSISTANT "LIA"
             // ============================================================
